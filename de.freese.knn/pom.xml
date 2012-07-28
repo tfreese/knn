@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>de.freese</groupId>
+		<artifactId>maven-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<!--relativePath>../maven-parent</relativePath-->
+	</parent>
+
+	<groupId>de.freese.knn</groupId>
+	<artifactId>knn-parent</artifactId>
+	<packaging>pom</packaging>
+
+	<name>${project.artifactId}</name>
+	<description>Künstliches neuronales Netz (Artificial neural network).</description>
+	<url>https://github.com/tfreese/knn</url>
+	<inceptionYear>2010</inceptionYear>
+
+	<!--modules>
+		<module>agentportal-jpa</module>
+		<module>agentportal-ejb</module>
+	</modules-->
+	
+	<scm>
+		<url>${project.url}</url>
+		<connection>scm:git:git://github.com/tfreese/knn.git</connection>
+		<developerConnection>scm:git:https://github.com/tfreese/knn.git</developerConnection>
+	</scm>
+	
+	<organization>
+		<name>Thomas Freese</name>
+		<url>https://github.com/tfreese</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>tfreese</id>
+			<name>Thomas Freese</name>
+			<email>commercial@freese-home.de </email>
+			<url>${project.organization.url}</url>
+			<roles>
+				<role>developer</role>
+				<role>architect</role>
+			</roles>
+			<timezone>+2</timezone>
+		</developer>
+	</developers>	
+
+	<build>
+		<plugins>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+	</dependencyManagement>
+
+</project>
