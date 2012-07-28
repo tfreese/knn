@@ -6,7 +6,7 @@
 		<groupId>de.freese</groupId>
 		<artifactId>maven-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<!--relativePath>../maven-parent</relativePath-->
+		<!--relativePath>../maven-parent</relativePath -->
 	</parent>
 
 	<groupId>de.freese.knn</groupId>
@@ -18,17 +18,17 @@
 	<url>https://github.com/tfreese/knn</url>
 	<inceptionYear>2010</inceptionYear>
 
-	<!--modules>
-		<module>agentportal-jpa</module>
-		<module>agentportal-ejb</module>
-	</modules-->
-	
+	<modules>
+		<module>de.freese.knn.net</module>
+		<module>de.freese.knn.demo</module>
+	</modules>
+
 	<scm>
 		<url>${project.url}</url>
 		<connection>scm:git:git://github.com/tfreese/knn.git</connection>
 		<developerConnection>scm:git:https://github.com/tfreese/knn.git</developerConnection>
 	</scm>
-	
+
 	<organization>
 		<name>Thomas Freese</name>
 		<url>https://github.com/tfreese</url>
@@ -46,7 +46,7 @@
 			</roles>
 			<timezone>+2</timezone>
 		</developer>
-	</developers>	
+	</developers>
 
 	<build>
 		<plugins>
