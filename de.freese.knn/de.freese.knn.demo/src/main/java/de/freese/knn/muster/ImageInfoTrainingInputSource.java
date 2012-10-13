@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.freese.base.utils.image.info.ImageInfo;
+import de.freese.base.core.image.info.ImageInfo;
 import de.freese.knn.net.trainer.ITrainingInputSource;
 
 /**

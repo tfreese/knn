@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.freese.base.model.visitor.IVisitor;
+import de.freese.base.core.visitor.IVisitor;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.neuron.INeuron;
 import de.freese.knn.net.neuron.Neuron;
@@ -131,7 +131,7 @@ public abstract class AbstractLayer implements ILayer
 	}
 
 	/**
-	 * @see de.freese.base.model.visitor.IVisitable#visit(de.freese.base.model.visitor.IVisitor)
+	 * @see de.freese.base.core.visitor.IVisitable#visit(de.freese.base.core.visitor.IVisitor)
 	 */
 	@Override
 	public void visit(final IVisitor visitor)

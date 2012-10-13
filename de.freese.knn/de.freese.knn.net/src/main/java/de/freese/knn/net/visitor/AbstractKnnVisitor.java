@@ -3,7 +3,7 @@ package de.freese.knn.net.visitor;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.freese.base.model.visitor.AbstractVisitor;
+import de.freese.base.core.visitor.AbstractVisitor;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.ILayer;
 import de.freese.knn.net.layer.input.InputLayer;
@@ -79,7 +79,7 @@ public abstract class AbstractKnnVisitor extends AbstractVisitor
 	}
 
 	/**
-	 * @see de.freese.base.model.visitor.IVisitor#visitObject(java.lang.Object)
+	 * @see de.freese.base.core.visitor.IVisitor#visitObject(java.lang.Object)
 	 */
 	@Override
 	public void visitObject(final Object object)

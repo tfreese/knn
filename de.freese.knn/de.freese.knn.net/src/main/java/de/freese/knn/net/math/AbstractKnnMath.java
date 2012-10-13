@@ -197,7 +197,7 @@ public abstract class AbstractKnnMath implements IKnnMath
 	}
 
 	/**
-	 * @see de.freese.base.model.release.IReleaseable#release()
+	 * @see de.freese.base.core.release.IReleaseable#release()
 	 */
 	@Override
 	public void release()

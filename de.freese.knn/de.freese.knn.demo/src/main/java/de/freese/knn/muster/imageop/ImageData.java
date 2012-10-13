@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import de.freese.base.utils.ImageUtils;
+import de.freese.base.core.ImageUtils;
 
 /**
  * Enthält die Bildinformationen.

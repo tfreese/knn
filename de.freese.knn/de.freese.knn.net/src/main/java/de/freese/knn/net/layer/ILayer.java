@@ -5,7 +5,7 @@ package de.freese.knn.net.layer;
 
 import java.util.List;
 
-import de.freese.base.model.visitor.IVisitable;
+import de.freese.base.core.visitor.IVisitable;
 import de.freese.knn.net.function.IFunction;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.neuron.INeuron;

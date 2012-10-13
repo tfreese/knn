@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
-import de.freese.base.utils.image.info.ImageInfo;
+import de.freese.base.core.image.info.ImageInfo;
 
 /**
  * TestKlasse für {@link ImageInfo}.

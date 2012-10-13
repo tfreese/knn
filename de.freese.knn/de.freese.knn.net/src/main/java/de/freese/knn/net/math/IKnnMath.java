@@ -6,7 +6,7 @@ package de.freese.knn.net.math;
 
 import java.util.List;
 
-import de.freese.base.model.release.IReleaseable;
+import de.freese.base.core.release.IReleaseable;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.ILayer;
 import de.freese.knn.net.matrix.IValueInitializer;

@@ -12,9 +12,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.freese.base.model.release.IReleaseable;
-import de.freese.base.model.visitor.IVisitable;
-import de.freese.base.model.visitor.IVisitor;
+import de.freese.base.core.release.IReleaseable;
+import de.freese.base.core.visitor.IVisitable;
+import de.freese.base.core.visitor.IVisitor;
 import de.freese.knn.net.layer.ILayer;
 import de.freese.knn.net.layer.input.InputLayer;
 import de.freese.knn.net.layer.output.OutputLayer;
@@ -255,7 +255,7 @@ public class NeuralNet implements IVisitable, IReleaseable
 	}
 
 	/**
-	 * @see de.freese.base.model.release.IReleaseable#release()
+	 * @see de.freese.base.core.release.IReleaseable#release()
 	 */
 	@Override
 	public void release()
@@ -293,7 +293,7 @@ public class NeuralNet implements IVisitable, IReleaseable
 	}
 
 	/**
-	 * @see de.freese.base.model.visitor.IVisitable#visit(de.freese.base.model.visitor.IVisitor)
+	 * @see de.freese.base.core.visitor.IVisitable#visit(de.freese.base.core.visitor.IVisitor)
 	 */
 	@Override
 	public void visit(final IVisitor visitor)
