@@ -51,18 +51,22 @@ public class TestPersisterBinary
 		trainer.train(neuralNetwork, trainingInputSource);
 
 		// Speichern
-		OutputStream outputStream = new BufferedOutputStream(new FileOutputStream("NeuralNet.bin"));
-		neuralNetwork.save(outputStream);
-		outputStream.close();
+		try (OutputStream outputStream =
+				new BufferedOutputStream(new FileOutputStream("NeuralNet.bin")))
+		{
+			neuralNetwork.save(outputStream);
+		}
 
 		neuralNetwork.release();
 
 		// Laden
 		neuralNetwork = new NeuralNet(new ForkJoinKnnMath());
 
-		InputStream inputStream = new BufferedInputStream(new FileInputStream("NeuralNet.bin"));
-		neuralNetwork.load(inputStream);
-		inputStream.close();
+		try (InputStream inputStream =
+				new BufferedInputStream(new FileInputStream("NeuralNet.bin")))
+		{
+			neuralNetwork.load(inputStream);
+		}
 
 		// Netz testen
 		double[] inputs = trainingInputSource.getInputAt(0);

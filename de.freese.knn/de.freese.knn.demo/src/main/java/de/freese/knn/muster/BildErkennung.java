@@ -65,9 +65,10 @@ public class BildErkennung
 			Toolkit.getDefaultToolkit().beep();
 
 			// Speichern
-			OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(nnFile));
-			neuralNet.save(outputStream);
-			outputStream.close();
+			try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(nnFile)))
+			{
+				neuralNet.save(outputStream);
+			}
 		}
 		// else
 		// {
