@@ -3,10 +3,10 @@
  */
 package de.freese.knn;
 
-import org.junit.Test;
-
 import de.freese.knn.net.function.FunctionSigmoide;
 import de.freese.knn.net.function.IFunction;
+
+import org.junit.Test;
 
 /**
  * Testklasse der Mathematik.
@@ -24,8 +24,8 @@ public class TestMath
 	}
 
 	/**
-	 * 
-	 */
+     *
+     */
 	@Test
 	public void testSigmoide()
 	{

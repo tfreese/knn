@@ -13,7 +13,7 @@
 	<artifactId>knn-parent</artifactId>
 	<packaging>pom</packaging>
 
-	<name>${project.artifactId}</name>
+	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Künstliches neuronales Netz (Artificial neural network).</description>
 	<url>https://github.com/tfreese/knn</url>
 	<inceptionYear>2010</inceptionYear>
