@@ -3,6 +3,13 @@
  */
 package de.freese.knn.buttons;
 
+import de.freese.knn.net.NeuralNet;
+import de.freese.knn.net.layer.hidden.SigmoidLayer;
+import de.freese.knn.net.layer.input.InputLayer;
+import de.freese.knn.net.layer.output.OutputLayer;
+import de.freese.knn.net.math.forkjoin.ForkJoinKnnMath;
+import de.freese.knn.net.trainer.NetTrainer;
+import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,19 +22,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
-
-import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.hidden.SigmoidLayer;
-import de.freese.knn.net.layer.input.InputLayer;
-import de.freese.knn.net.layer.output.OutputLayer;
-import de.freese.knn.net.math.forkjoin.ForkJoinKnnMath;
-import de.freese.knn.net.trainer.NetTrainer;
-import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 
 /**
  * GUI.
@@ -47,9 +45,7 @@ public class KNN_Demo extends JFrame
 		@Override
 		public void actionPerformed(final ActionEvent e)
 		{
-			double[] outputVector =
-					KNN_Demo.this.neuralNetwork.getOutput(KNN_Demo.this.matrixPanel
-							.getInputVector());
+			double[] outputVector = KNN_Demo.this.neuralNetwork.getOutput(KNN_Demo.this.matrixPanel.getInputVector());
 
 			double output = Double.MIN_VALUE;
 			double value = Double.NaN;
@@ -105,17 +101,17 @@ public class KNN_Demo extends JFrame
 	/**
 	 * 
 	 */
+	private JLabel[] labelsOutput = new JLabel[10];
+
+	/**
+	 * 
+	 */
 	private MatrixPanel matrixPanel = null;
 
 	/**
 	 *
 	 */
 	private NeuralNet neuralNetwork = null;
-
-	/**
-	 * 
-	 */
-	private JLabel[] labelsOutput = new JLabel[10];
 
 	/**
 	 * Creates a new {@link KNN_Demo} object.
