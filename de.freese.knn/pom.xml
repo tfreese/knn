@@ -48,11 +48,6 @@
 		</developer>
 	</developers>
 
-	<build>
-		<plugins>
-		</plugins>
-	</build>
-
 	<dependencyManagement>
 	</dependencyManagement>
 
