@@ -20,4 +20,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>target</name>
+			<type>2</type>
+			<locationURI>TARGET_DIR/de.freese.knn-knn-net</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
