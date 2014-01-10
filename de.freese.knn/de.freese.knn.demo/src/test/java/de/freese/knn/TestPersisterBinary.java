@@ -3,15 +3,7 @@
  */
 package de.freese.knn;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
-
-import de.freese.knn.buttons.TestTrainingInputSource;
+import de.freese.knn.buttons.MatrixTrainingInputSource;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.hidden.SigmoidLayer;
 import de.freese.knn.net.layer.input.InputLayer;
@@ -20,6 +12,13 @@ import de.freese.knn.net.math.forkjoin.ForkJoinKnnMath;
 import de.freese.knn.net.trainer.ITrainingInputSource;
 import de.freese.knn.net.trainer.LoggerNetTrainerListener;
 import de.freese.knn.net.trainer.NetTrainer;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 /**
  * Klasse zum Test des BinaryPersisters.
@@ -46,13 +45,12 @@ public class TestPersisterBinary
 
 		NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
 		// trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
-		ITrainingInputSource trainingInputSource = new TestTrainingInputSource();
 		trainer.addNetTrainerListener(new LoggerNetTrainerListener());
+		ITrainingInputSource trainingInputSource = new MatrixTrainingInputSource();
 		trainer.train(neuralNetwork, trainingInputSource);
 
 		// Speichern
-		try (OutputStream outputStream =
-				new BufferedOutputStream(new FileOutputStream("NeuralNet.bin")))
+		try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream("NeuralNet.bin")))
 		{
 			neuralNetwork.save(outputStream);
 		}
@@ -62,8 +60,7 @@ public class TestPersisterBinary
 		// Laden
 		neuralNetwork = new NeuralNet(new ForkJoinKnnMath());
 
-		try (InputStream inputStream =
-				new BufferedInputStream(new FileInputStream("NeuralNet.bin")))
+		try (InputStream inputStream = new BufferedInputStream(new FileInputStream("NeuralNet.bin")))
 		{
 			neuralNetwork.load(inputStream);
 		}

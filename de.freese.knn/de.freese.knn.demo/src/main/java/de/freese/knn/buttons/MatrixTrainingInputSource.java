@@ -14,7 +14,7 @@ import de.freese.knn.net.trainer.ITrainingInputSource;
  * 
  * @author Thomas Freese
  */
-public class TestTrainingInputSource implements ITrainingInputSource
+public class MatrixTrainingInputSource implements ITrainingInputSource
 {
 	/**
 	 * 
@@ -27,9 +27,9 @@ public class TestTrainingInputSource implements ITrainingInputSource
 	private List<double[]> outputList = new ArrayList<>();
 
 	/**
-	 * Creates a new {@link TestTrainingInputSource} object.
+	 * Creates a new {@link MatrixTrainingInputSource} object.
 	 */
-	public TestTrainingInputSource()
+	public MatrixTrainingInputSource()
 	{
 		super();
 

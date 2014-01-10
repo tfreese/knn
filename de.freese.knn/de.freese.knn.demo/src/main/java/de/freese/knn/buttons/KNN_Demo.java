@@ -177,7 +177,7 @@ public class KNN_Demo extends JFrame
 		NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
 		trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
 		// trainer.addNetTrainerListener(new LoggerNetTrainerListener());
-		trainer.train(this.neuralNetwork, new TestTrainingInputSource());
+		trainer.train(this.neuralNetwork, new MatrixTrainingInputSource());
 
 		getContentPane().add(this.matrixPanel, BorderLayout.CENTER);
 		getContentPane().add(this.labelRecognized, BorderLayout.SOUTH);
