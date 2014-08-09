@@ -3,10 +3,9 @@
  */
 package de.freese.knn;
 
-import gnu.trove.map.TObjectDoubleMap;
-import gnu.trove.map.hash.TObjectDoubleHashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
@@ -15,7 +14,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import de.freese.knn.net.NeuralNet;
+import de.freese.knn.net.layer.hidden.SigmoidLayer;
+import de.freese.knn.net.layer.input.InputLayer;
+import de.freese.knn.net.layer.output.OutputLayer;
+import de.freese.knn.net.math.forkjoin.ForkJoinKnnMath;
 import de.freese.knn.net.trainer.ITrainingInputSource;
+import de.freese.knn.net.trainer.LoggerNetTrainerListener;
+import de.freese.knn.net.trainer.NetTrainer;
 
 /**
  * Klasse zum Test des BinaryPersisters.
@@ -31,22 +37,22 @@ public class TestMailSpamFilter implements ITrainingInputSource
 	public static void main(final String[] args) throws Exception
 	{
 		TestMailSpamFilter spamFilter = new TestMailSpamFilter();
-		spamFilter.cleanUp();
+		// spamFilter.cleanUp();
 
-		// NeuralNet neuralNetwork = new NeuralNet(new ForkJoinKnnMath());
-		// neuralNetwork.addLayer(new InputLayer(10184));
-		// neuralNetwork.addLayer(new SigmoidLayer(20000));
-		// neuralNetwork.addLayer(new OutputLayer(1));
-		// neuralNetwork.connectLayer();
-		// double teachFactor = 0.5D;
-		// double momentum = 0.5D;
-		// double maximumError = 0.05D;
-		// int maximumIteration = 10000;
-		//
-		// NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
-		// // trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
-		// trainer.addNetTrainerListener(new LoggerNetTrainerListener());
-		// trainer.train(neuralNetwork, spamFilter);
+		NeuralNet neuralNetwork = new NeuralNet(new ForkJoinKnnMath());
+		neuralNetwork.addLayer(new InputLayer(spamFilter.token.size()));
+		neuralNetwork.addLayer(new SigmoidLayer(20000));
+		neuralNetwork.addLayer(new OutputLayer(1));
+		neuralNetwork.connectLayer();
+		double teachFactor = 0.5D;
+		double momentum = 0.5D;
+		double maximumError = 0.05D;
+		int maximumIteration = 10000;
+
+		NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
+		// trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
+		trainer.addNetTrainerListener(new LoggerNetTrainerListener());
+		trainer.train(neuralNetwork, spamFilter);
 
 		spamFilter.closeDataSource();
 	}
@@ -64,7 +70,7 @@ public class TestMailSpamFilter implements ITrainingInputSource
 	/**
 	 * 
 	 */
-	private TObjectDoubleMap<String> tokenMap = null;
+	private List<String> token = null;
 
 	/**
 	 * Erstellt ein neues {@link TestMailSpamFilter} Object.
@@ -81,24 +87,7 @@ public class TestMailSpamFilter implements ITrainingInputSource
 		this.jdbcTemplate = new JdbcTemplate(ds);
 
 		this.messages = this.jdbcTemplate.queryForList("select message_id, is_spam from message");
-		this.tokenMap = this.jdbcTemplate.query("select token from token", new ResultSetExtractor<TObjectDoubleMap<String>>()
-		{
-			/**
-			 * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
-			 */
-			@Override
-			public TObjectDoubleMap<String> extractData(final ResultSet rs) throws SQLException, DataAccessException
-			{
-				TObjectDoubleMap<String> map = new TObjectDoubleHashMap<String>();
-
-				while (rs.next())
-				{
-					map.put(rs.getString("token"), 0.0D);
-				}
-
-				return map;
-			}
-		});
+		this.token = this.jdbcTemplate.queryForList("select token from token order by token", String.class);
 	}
 
 	/**
@@ -120,6 +109,8 @@ public class TestMailSpamFilter implements ITrainingInputSource
 				System.out.printf("%s: %d deleted%n", t, deleted);
 			}
 		}
+
+		// select count(*), is_spam from message group by is_spam
 	}
 
 	/**
@@ -145,8 +136,8 @@ public class TestMailSpamFilter implements ITrainingInputSource
 	{
 		String messageID = (String) this.messages.get(index).get("MESSAGE_ID");
 
-		final TObjectDoubleMap<String> map = new TObjectDoubleHashMap<>();
-		map.putAll(this.tokenMap);
+		final double[] input = new double[this.token.size()];
+		Arrays.fill(input, 0.0D);
 
 		this.jdbcTemplate.query("select token from message_token where message_id = ?", new ResultSetExtractor<Void>()
 		{
@@ -158,7 +149,8 @@ public class TestMailSpamFilter implements ITrainingInputSource
 			{
 				while (rs.next())
 				{
-					map.adjustValue(rs.getString("token"), 1.0D);
+					int index = TestMailSpamFilter.this.token.indexOf(rs.getString("token"));
+					input[index] = 1.0D;
 				}
 
 				return null;
@@ -174,7 +166,7 @@ public class TestMailSpamFilter implements ITrainingInputSource
 		// group by token, spam
 		// order by token asc
 
-		return this.tokenMap.values();
+		return input;
 	}
 
 	/**
