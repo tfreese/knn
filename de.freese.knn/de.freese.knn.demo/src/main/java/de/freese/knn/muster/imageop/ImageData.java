@@ -5,12 +5,9 @@ package de.freese.knn.muster.imageop;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
-
 import javax.imageio.ImageIO;
-
 import de.freese.base.core.ImageUtils;
 
 /**
@@ -64,14 +61,13 @@ public class ImageData
 		URL url = ClassLoader.getSystemResource(fileName);
 		BufferedImage bufferedImage = ImageIO.read(url);
 
-		bufferedImage = ImageUtils.scaleImage(bufferedImage, 100, 100);
+		bufferedImage = ImageUtils.scaleImageAbsolut(bufferedImage, 100, 100);
 
 		// GIF ist das einzige Format was funktioniert
-		String[] splits = fileName.split("[.]");
-		File file = new File(splits[0] + ".gif");
-		ImageIO.write(bufferedImage, "gif", file);
-
-		bufferedImage = ImageIO.read(file);
+		// String[] splits = fileName.split("[.]");
+		// File file = new File(splits[0] + ".gif");
+		// ImageIO.write(bufferedImage, "gif", file);
+		// bufferedImage = ImageIO.read(file);
 
 		this.sourceImage = bufferedImage;
 

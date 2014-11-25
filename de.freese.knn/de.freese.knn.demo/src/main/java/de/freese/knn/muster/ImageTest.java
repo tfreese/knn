@@ -10,14 +10,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-
 import de.freese.knn.muster.imageop.ImageData;
 
 /**
@@ -53,13 +51,10 @@ public class ImageTest extends JFrame
 		}
 
 		/**
-		 * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable,
-		 *      java.lang.Object, boolean, boolean, int, int)
+		 * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
 		 */
 		@Override
-		public Component getTableCellRendererComponent(final JTable table, final Object value,
-														final boolean isSelected,
-														final boolean hasFocus, final int row,
+		public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row,
 														final int column)
 		{
 			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

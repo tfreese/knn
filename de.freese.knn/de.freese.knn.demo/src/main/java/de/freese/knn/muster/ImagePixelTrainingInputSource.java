@@ -6,7 +6,6 @@ package de.freese.knn.muster;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import de.freese.knn.muster.imageop.ImageData;
 import de.freese.knn.net.trainer.ITrainingInputSource;
 
@@ -18,8 +17,8 @@ import de.freese.knn.net.trainer.ITrainingInputSource;
 public class ImagePixelTrainingInputSource implements ITrainingInputSource
 {
 	/**
-	 *
-	 */
+     *
+     */
 	private final List<ImageData> imageData = new ArrayList<>();
 
 	/**
@@ -33,13 +32,13 @@ public class ImagePixelTrainingInputSource implements ITrainingInputSource
 
 		this.imageData.add(new ImageData("Ampel.gif"));
 		this.imageData.add(new ImageData("Bahnkreuz.gif"));
-		// this.imageData.add(new ImageData("BigBrother.jpg"));
+		this.imageData.add(new ImageData("BigBrother.jpg"));
 		this.imageData.add(new ImageData("Einbahn.gif"));
 		this.imageData.add(new ImageData("Klippe.gif"));
-		// this.imageData.add(new ImageData("Seaside.jpg"));
+		this.imageData.add(new ImageData("Seaside.jpg"));
 		this.imageData.add(new ImageData("Stop.gif"));
-		// this.imageData.add(new ImageData("Sylvester.jpg"));
-		// this.imageData.add(new ImageData("winnt.bmp"));
+		this.imageData.add(new ImageData("Sylvester.jpg"));
+		this.imageData.add(new ImageData("winnt.bmp"));
 	}
 
 	/**
