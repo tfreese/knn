@@ -33,6 +33,12 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
 	 */
 	private final IValueInitializer valueInitializer;
 
+	
+	/**
+	 * 
+	 */
+	 private int from, to;
+
 	/**
 	 * Erstellt ein neues {@link ForkJoinInitializeTask} Object.
 	 * 
@@ -47,24 +53,27 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
 		this.valueInitializer = valueInitializer;
 	}
 
+	private ForkJoinInitializeTask(final List<ILayer> layers, final IValueInitializer valueInitializer, int from, int to)
+	{
+		this(layers, valueInitializer);
+		this.from = from;
+		this.to = to;
+	}
 	/**
 	 * @see java.util.concurrent.RecursiveAction#compute()
 	 */
 	@Override
 	protected void compute()
 	{
-		if (this.layers.size() == 1)
+		if (to - from == 1)
 		{
-			AbstractKnnMath.initialize(this.layers, this.valueInitializer);
+			AbstractKnnMath.initialize(this.layers.get(to - from), this.valueInitializer);
 		}
 		else
 		{
-			int middle = this.layers.size() / 2;
-			List<ILayer> list1 = this.layers.subList(0, middle);
-			List<ILayer> list2 = this.layers.subList(middle, this.layers.size());
-
-			ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(list1, this.valueInitializer);
-			ForkJoinInitializeTask task2 = new ForkJoinInitializeTask(list2, this.valueInitializer);
+			int middle = from + to / 2;
+			ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(this.layers, this.valueInitializer, from, middle);
+			ForkJoinInitializeTask task2 = new ForkJoinInitializeTask(this.layers, this.valueInitializer, from + middle, to);
 
 			invokeAll(task1, task2);
 		}
