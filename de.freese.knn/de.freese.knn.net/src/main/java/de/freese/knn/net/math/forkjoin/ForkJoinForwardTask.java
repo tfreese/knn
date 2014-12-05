@@ -38,6 +38,11 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
 	private final double[] outputs;
 
 	/**
+	 * 
+	 */
+	private int from, to;
+
+	/**
 	 * Erstellt ein neues {@link ForkJoinForwardTask} Object.
 	 * 
 	 * @param neurons {@link List}
@@ -53,24 +58,33 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
 		this.outputs = outputs;
 	}
 
+	ForkJoinForwardTask(final List<INeuron> neurons, final double[] inputs, final double[] outputs, int from, int to)
+	{
+		this(neurons, inputs, outputs)
+		this.from = from;
+		this.to = to;
+	}
+
 	/**
 	 * @see java.util.concurrent.RecursiveAction#compute()
 	 */
 	@Override
 	protected void compute()
 	{
-		if (this.neurons.size() < 20)
+		if ((to - from) < 20)
 		{
-			AbstractKnnMath.forward(this.neurons, this.inputs, this.outputs);
+			List<INeuron> neurons = new ArrauList<INeuron>();
+			for (int i = from; i < to; i++) {
+				neurons.add(this.neurons.get(i));
+			}
+			AbstractKnnMath.backward(neurons, this.errors, this.layerErrors);
 		}
 		else
 		{
-			int middle = this.neurons.size() / 2;
-			List<INeuron> list1 = this.neurons.subList(0, middle);
-			List<INeuron> list2 = this.neurons.subList(middle, this.neurons.size());
-
-			ForkJoinForwardTask task1 = new ForkJoinForwardTask(list1, this.inputs, this.outputs);
-			ForkJoinForwardTask task2 = new ForkJoinForwardTask(list2, this.inputs, this.outputs);
+			int middle = from + to / 2;
+			
+			ForkJoinForwardTask task1 = new ForkJoinForwardTask(this.neurons, this.inputs, this.outputs, from, middle);
+			ForkJoinForwardTask task2 = new ForkJoinForwardTask(this.neurons, this.inputs, this.outputs, from + middle, to);
 
 			invokeAll(task1, task2);
 		}
