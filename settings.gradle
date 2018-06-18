@@ -1,0 +1,4 @@
+rootProject.name = "knn"
+
+include "knn-net"
+include "knn-demo"

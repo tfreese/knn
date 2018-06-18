@@ -1,0 +1,40 @@
+allprojects {
+    apply plugin: "base"
+    
+    group = "de.freese.knn"
+    version = "0.0.1-SNAPSHOT"
+}
+
+description = "Künstliches neuronales Netz (Artificial neural network)" 
+
+subprojects {
+    apply plugin: "java"
+
+    dependencies {
+        compile("org.slf4j:slf4j-api:$version_slf4j")
+        
+        testCompile("junit:junit:$version_junit")
+    }
+}
+
+project("knn-net") {
+    description = "Künstliches neurales Netz"
+    
+    dependencies {
+        compile("de.freese.base:base-core:$project.version") 
+    }    
+}
+
+project("knn-demo") {
+    description = "Demos für künstliche neurale Netze"
+    
+    dependencies {
+        compile project(":knn-net")
+        compile("org.apache.commons:commons-lang3:$version_commons_lang")
+        compile("org.springframework:spring-jdbc:$version_spring")
+		
+        runtime("org.slf4j:slf4j-simple:$version_slf4j")
+		
+        testCompile("mysql:mysql-connector-java:$version_mysql")
+    }  
+}
