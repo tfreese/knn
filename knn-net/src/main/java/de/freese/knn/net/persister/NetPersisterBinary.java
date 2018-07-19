@@ -74,10 +74,7 @@ public class NetPersisterBinary extends AbstractNetPersister
                 int.class
         });
 
-        ILayer layer = (ILayer) constructor.newInstance(new Object[]
-        {
-                new Integer(size)
-        });
+        ILayer layer = (ILayer) constructor.newInstance(size);
 
         // BIAS Gewichte der Neuronen
         for (INeuron neuron : layer.getNeurons())
