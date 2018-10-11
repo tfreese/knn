@@ -88,6 +88,7 @@ public class KNN_Demo extends JFrame
     /**
      * @param args String[]
      */
+    @SuppressWarnings("unused")
     public static void main(final String[] args)
     {
         new KNN_Demo();
@@ -118,6 +119,7 @@ public class KNN_Demo extends JFrame
      *
      * @throws HeadlessException Falls was schief geht.
      */
+    @SuppressWarnings("resource")
     public KNN_Demo() throws HeadlessException
     {
         super();

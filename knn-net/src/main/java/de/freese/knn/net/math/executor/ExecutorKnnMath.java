@@ -100,16 +100,27 @@ public class ExecutorKnnMath extends AbstractKnnMath implements AutoCloseable
             ExecutorService executorService = (ExecutorService) this.executor;
             executorService.shutdown();
 
-            while (!executorService.isTerminated())
+            try
             {
-                try
+                // Wait a while for existing tasks to terminate.
+                if (!executorService.awaitTermination(10, TimeUnit.SECONDS))
                 {
-                    executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+                    executorService.shutdownNow(); // Cancel currently executing tasks
+
+                    // Wait a while for tasks to respond to being cancelled
+                    if (!executorService.awaitTermination(5, TimeUnit.SECONDS))
+                    {
+                        System.err.println("Pool did not terminate");
+                    }
                 }
-                catch (InterruptedException ex)
-                {
-                    getLogger().error(null, ex);
-                }
+            }
+            catch (InterruptedException iex)
+            {
+                // (Re-)Cancel if current thread also interrupted
+                executorService.shutdownNow();
+
+                // Preserve interrupt status
+                // Thread.currentThread().interrupt();
             }
         }
     }
