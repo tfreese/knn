@@ -40,9 +40,9 @@ public class TestPersisterBinary
 
         try ( // @formatter:off
               NeuralNet neuralNet = new NeuralNetBuilder()
-                  .layer(new InputLayer(54))
-                  .layer(new HiddenLayer(25, new FunctionSigmoide()))
-                  .layer(new OutputLayer(10))
+                  .layerInput(new InputLayer(54))
+                  .layerHidden(new HiddenLayer(25, new FunctionSigmoide()))
+                  .layerOutput(new OutputLayer(10))
                   .build();
                // @formatter:on
              DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(knnFile))))

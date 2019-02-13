@@ -5,7 +5,7 @@ package de.freese.knn.net.persister;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import de.freese.knn.net.NeuralNet;
+import java.util.function.Supplier;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.Matrix;
 
@@ -44,15 +44,15 @@ public abstract class AbstractNetPersister implements NetPersister
     protected abstract Matrix loadMatrix(DataInputStream dis) throws Exception;
 
     /**
-     * @see de.freese.knn.net.persister.NetPersister#save(java.io.DataOutputStream, de.freese.knn.net.NeuralNet)
+     * @see de.freese.knn.net.persister.NetPersister#save(java.io.DataOutputStream, java.util.function.Supplier)
      */
     @Override
-    public void save(final DataOutputStream dos, final NeuralNet neuralNet) throws Exception
+    public void save(final DataOutputStream dos, final Supplier<Layer[]> layerSupplier) throws Exception
     {
         // Anzahl Layer
-        dos.writeInt(neuralNet.getLayer().length);
+        Layer[] layers = layerSupplier.get();
 
-        Layer[] layers = neuralNet.getLayer();
+        dos.writeInt(layers.length);
 
         for (int i = 0; i < layers.length; i++)
         {

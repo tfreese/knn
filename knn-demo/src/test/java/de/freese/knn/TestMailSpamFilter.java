@@ -39,9 +39,9 @@ public class TestMailSpamFilter implements TrainingInputSource
 
         try ( // @formatter:off
               NeuralNet neuralNet = new NeuralNetBuilder()
-                  .layer(new InputLayer(spamFilter.token.size()))
-                  .layer(new HiddenLayer(20000, new FunctionSigmoide()))
-                  .layer(new OutputLayer(1))
+                  .layerInput(new InputLayer(spamFilter.token.size()))
+                  .layerHidden(new HiddenLayer(20000, new FunctionSigmoide()))
+                  .layerOutput(new OutputLayer(1))
                   .build()
               // @formatter:on
         )

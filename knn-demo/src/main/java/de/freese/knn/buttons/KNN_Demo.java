@@ -152,9 +152,9 @@ public class KNN_Demo extends JFrame
         this.neuralNetwork = new NeuralNetBuilder()
                 //.knnMath(new KnnMathStream())
                 //.valueInitializer(new ValueInitializerRandom())
-                .layer(new InputLayer(54))
-                .layer(new HiddenLayer(25, new FunctionSigmoide()))
-                .layer(new OutputLayer(10))
+                .layerInput(new InputLayer(54))
+                .layerHidden(new HiddenLayer(25, new FunctionSigmoide()))
+                .layerOutput(new OutputLayer(10))
                 .build();
         // @formatter:on
 

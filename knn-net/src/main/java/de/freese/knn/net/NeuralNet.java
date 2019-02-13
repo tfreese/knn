@@ -13,8 +13,10 @@ import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.math.KnnMath;
+import de.freese.knn.net.math.stream.KnnMathStream;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.matrix.ValueInitializer;
+import de.freese.knn.net.matrix.ValueInitializerRandom;
 import de.freese.knn.net.persister.NetPersister;
 import de.freese.knn.net.persister.NetPersisterBinary;
 import de.freese.knn.net.util.visitor.Visitable;
@@ -53,6 +55,9 @@ public class NeuralNet implements Visitable, AutoCloseable
     public NeuralNet()
     {
         super();
+
+        this.knnMath = new KnnMathStream();
+        this.valueInitializer = new ValueInitializerRandom();
     }
 
     /**
@@ -61,7 +66,7 @@ public class NeuralNet implements Visitable, AutoCloseable
      *
      * @param layer {@link Layer}
      */
-    public void addLayer(final Layer layer)
+    void addLayer(final Layer layer)
     {
         // Array vergrößern.
         Layer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
@@ -185,7 +190,7 @@ public class NeuralNet implements Visitable, AutoCloseable
      */
     public void load(final DataInputStream dis, final NetPersister netPersister) throws Exception
     {
-        netPersister.load(dis, this);
+        netPersister.load(dis, this::addLayer);
     }
 
     /**
@@ -208,7 +213,7 @@ public class NeuralNet implements Visitable, AutoCloseable
      */
     public void save(final DataOutputStream dos, final NetPersister netPersister) throws Exception
     {
-        netPersister.save(dos, this);
+        netPersister.save(dos, this::getLayer);
     }
 
     /**

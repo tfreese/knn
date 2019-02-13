@@ -6,7 +6,7 @@ package de.freese.knn.net.persister;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.lang.reflect.Constructor;
-import de.freese.knn.net.NeuralNet;
+import java.util.function.Consumer;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.neuron.Neuron;
@@ -29,23 +29,23 @@ public class NetPersisterBinary extends AbstractNetPersister
     }
 
     /**
-     * @see de.freese.knn.net.persister.NetPersister#load(java.io.DataInputStream, de.freese.knn.net.NeuralNet)
+     * @see de.freese.knn.net.persister.NetPersister#load(java.io.DataInputStream, java.util.function.Consumer)
      */
     @Override
-    public void load(final DataInputStream dis, final NeuralNet neuralNet) throws Exception
+    public void load(final DataInputStream dis, final Consumer<Layer> layerConsumer) throws Exception
     {
         // Anzahl Layer lesen
         int layerCount = dis.readInt();
 
         Layer leftLayer = loadLayer(dis);
-        neuralNet.addLayer(leftLayer);
+        layerConsumer.accept(leftLayer);
 
         for (int i = 0; i < (layerCount - 1); i++)
         {
             Matrix matrix = loadMatrix(dis);
 
             Layer rightLayer = loadLayer(dis);
-            neuralNet.addLayer(rightLayer);
+            layerConsumer.accept(rightLayer);
 
             // Layer verknüpfen
             leftLayer.setOutputMatrix(matrix);

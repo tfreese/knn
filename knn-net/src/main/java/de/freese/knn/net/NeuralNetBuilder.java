@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
-import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.math.KnnMath;
 import de.freese.knn.net.math.stream.KnnMathStream;
@@ -23,12 +22,22 @@ public class NeuralNetBuilder
     /**
      *
      */
+    private final List<HiddenLayer> hiddenLayers = new ArrayList<>();
+
+    /**
+     *
+     */
+    private InputLayer inputLayer = null;
+
+    /**
+     *
+     */
     private KnnMath knnMath = null;
 
     /**
      *
      */
-    private final List<Layer> layer = new ArrayList<>();
+    private OutputLayer outputLayer = null;
 
     /**
      *
@@ -46,11 +55,11 @@ public class NeuralNetBuilder
     /**
      * @return {@link NeuralNet}
      */
-    @SuppressWarnings("resource")
     public NeuralNet build()
     {
         NeuralNet neuralNet = new NeuralNet();
 
+        // KnnMath
         if (this.knnMath != null)
         {
             neuralNet.setKnnMath(this.knnMath);
@@ -60,6 +69,7 @@ public class NeuralNetBuilder
             neuralNet.setKnnMath(new KnnMathStream());
         }
 
+        // ValueInitializer
         if (this.valueInitializer != null)
         {
             neuralNet.setValueInitializer(this.valueInitializer);
@@ -69,33 +79,32 @@ public class NeuralNetBuilder
             neuralNet.setValueInitializer(new ValueInitializerRandom());
         }
 
-        if (this.layer.size() < 3)
+        // InputLayer
+        if (this.inputLayer == null)
         {
-            throw new IllegalStateException("neuralNetwork need min. 3 Layer: InputLayer, HiddenLayer, OutputLayer");
+            throw new IllegalStateException("InputLayer required");
         }
 
-        if (!(this.layer.get(0) instanceof InputLayer))
+        neuralNet.addLayer(this.inputLayer);
+
+        // HiddenLayer
+        if (!(this.hiddenLayers.isEmpty()))
         {
-            throw new IllegalStateException("first layer must be an InputLayer");
+            throw new IllegalStateException("HiddenLayer required");
         }
 
-        for (int i = 1; i < (this.layer.size() - 1); i++)
-        {
-            if (!(this.layer.get(i) instanceof HiddenLayer))
-            {
-                throw new IllegalStateException("HiddenLayer expected, found " + this.layer.get(i).getClass().getSimpleName());
-            }
-        }
-
-        if (!(this.layer.get(this.layer.size() - 1) instanceof OutputLayer))
-        {
-            throw new IllegalStateException("last layer must be an OutputLayer");
-        }
-
-        for (Layer l : this.layer)
+        for (HiddenLayer l : this.hiddenLayers)
         {
             neuralNet.addLayer(l);
         }
+
+        // OutputLayer
+        if (this.outputLayer == null)
+        {
+            throw new IllegalStateException("OutputLayer required");
+        }
+
+        neuralNet.addLayer(this.outputLayer);
 
         neuralNet.connectLayer();
 
@@ -114,12 +123,34 @@ public class NeuralNetBuilder
     }
 
     /**
-     * @param layer {@link Layer}
+     * @param hiddenLayer {@link HiddenLayer}
      * @return {@link NeuralNetBuilder}
      */
-    public NeuralNetBuilder layer(final Layer layer)
+    public NeuralNetBuilder layerHidden(final HiddenLayer hiddenLayer)
     {
-        this.layer.add(layer);
+        this.hiddenLayers.add(hiddenLayer);
+
+        return this;
+    }
+
+    /**
+     * @param inputLayer {@link InputLayer}
+     * @return {@link NeuralNetBuilder}
+     */
+    public NeuralNetBuilder layerInput(final InputLayer inputLayer)
+    {
+        this.inputLayer = inputLayer;
+
+        return this;
+    }
+
+    /**
+     * @param outputLayer {@link OutputLayer}
+     * @return {@link NeuralNetBuilder}
+     */
+    public NeuralNetBuilder layerOutput(final OutputLayer outputLayer)
+    {
+        this.outputLayer = outputLayer;
 
         return this;
     }
