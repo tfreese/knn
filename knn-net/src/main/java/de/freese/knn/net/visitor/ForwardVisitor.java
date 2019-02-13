@@ -5,9 +5,9 @@
 package de.freese.knn.net.visitor;
 
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.ILayer;
-import de.freese.knn.net.layer.input.InputLayer;
-import de.freese.knn.net.layer.output.OutputLayer;
+import de.freese.knn.net.layer.InputLayer;
+import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.layer.OutputLayer;
 
 /**
  * Durchläuft vorwärts das Netz und sammelt die Outputs der Layer ein.
@@ -51,12 +51,12 @@ public class ForwardVisitor extends AbstractKnnVisitor
     /**
      * Liefert die Output-Daten des Layers.
      * 
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      * @return double[]
      */
-    double[] getOutputs(final ILayer layer)
+    double[] getOutputs(final Layer layer)
     {
-        ILayer key = this.trainingMode ? layer : null;
+        Layer key = this.trainingMode ? layer : null;
 
         return getValues().get(key);
     }
@@ -74,10 +74,10 @@ public class ForwardVisitor extends AbstractKnnVisitor
     /**
      * Setzt die Output-Daten des Layers.
      * 
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      * @param outputs double[]
      */
-    public void setOutputs(final ILayer layer, final double[] outputs)
+    public void setOutputs(final Layer layer, final double[] outputs)
     {
         if (this.trainingMode)
         {
@@ -89,16 +89,16 @@ public class ForwardVisitor extends AbstractKnnVisitor
     }
 
     /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitHiddenLayer(de.freese.knn.net.layer.ILayer)
+     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitHiddenLayer(de.freese.knn.net.layer.Layer)
      */
     @Override
-    protected void visitHiddenLayer(final ILayer layer)
+    protected void visitHiddenLayer(final Layer layer)
     {
         getMath().forward(layer, this);
     }
 
     /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitInputLayer(de.freese.knn.net.layer.input.InputLayer)
+     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitInputLayer(de.freese.knn.net.layer.InputLayer)
      */
     @Override
     protected void visitInputLayer(final InputLayer layer)
@@ -114,14 +114,14 @@ public class ForwardVisitor extends AbstractKnnVisitor
     {
         super.visitKNN(knn);
 
-        ILayer[] layers = knn.getLayer();
+        Layer[] layers = knn.getLayer();
 
         // Vorwärts
         visitArray(layers);
     }
 
     /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitOutputLayer(de.freese.knn.net.layer.output.OutputLayer)
+     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitOutputLayer(de.freese.knn.net.layer.OutputLayer)
      */
     @Override
     protected void visitOutputLayer(final OutputLayer layer)

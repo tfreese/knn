@@ -4,26 +4,51 @@
 package de.freese.knn.net.function;
 
 /**
- * Verrechnen der Eingangswerte durch die lineare Funktion.
- * 
+ * Verrechnen der Eingangswerte durch eine lineare Funktion: value * factor.
+ *
  * @author Thomas Freese
  */
-public class FunctionLinear implements IFunction
+public class FunctionLinear implements Function
 {
-	/**
-	 * Creates a new {@link FunctionLinear} object.
-	 */
-	public FunctionLinear()
-	{
-		super();
-	}
+    /**
+     *
+     */
+    private final double factor;
 
-	/**
-	 * @see de.freese.knn.net.function.IFunction#calculate(double)
-	 */
-	@Override
-	public double calculate(final double value)
-	{
-		return value;
-	}
+    /**
+     * Creates a new {@link FunctionLinear} object.
+     */
+    public FunctionLinear()
+    {
+        this(1.0D);
+    }
+
+    /**
+     * Creates a new {@link FunctionLinear} object.
+     *
+     * @param factor double
+     */
+    public FunctionLinear(final double factor)
+    {
+        super();
+
+        this.factor = factor;
+    }
+
+    /**
+     * @see de.freese.knn.net.function.Function#calculate(double)
+     */
+    @Override
+    public double calculate(final double value)
+    {
+        return value * getFactor();
+    }
+
+    /**
+     * @return double
+     */
+    public double getFactor()
+    {
+        return this.factor;
+    }
 }

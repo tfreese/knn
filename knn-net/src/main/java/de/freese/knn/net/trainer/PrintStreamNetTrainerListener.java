@@ -6,7 +6,7 @@ package de.freese.knn.net.trainer;
 import java.io.PrintStream;
 
 /**
- * {@link INetTrainerListener} fuer die Ausgabe auf einen {@link PrintStream}.
+ * {@link NetTrainerListener} fuer die Ausgabe auf einen {@link PrintStream}.
  * 
  * @author Thomas Freese
  */
@@ -43,7 +43,7 @@ public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener
 	}
 
 	/**
-	 * @see de.freese.knn.net.trainer.INetTrainerListener#trainingCycleEnded(de.freese.knn.net.trainer.NetTrainerCycleEndedEvent)
+	 * @see de.freese.knn.net.trainer.NetTrainerListener#trainingCycleEnded(de.freese.knn.net.trainer.NetTrainerCycleEndedEvent)
 	 */
 	@Override
 	public void trainingCycleEnded(final NetTrainerCycleEndedEvent event)

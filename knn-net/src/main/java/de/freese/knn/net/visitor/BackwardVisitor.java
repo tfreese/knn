@@ -5,9 +5,9 @@
 package de.freese.knn.net.visitor;
 
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.ILayer;
-import de.freese.knn.net.layer.input.InputLayer;
-import de.freese.knn.net.layer.output.OutputLayer;
+import de.freese.knn.net.layer.InputLayer;
+import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.TrainingContext;
@@ -62,10 +62,10 @@ public class BackwardVisitor extends AbstractKnnVisitor
     /**
      * Liefert die vorherige Gewichtsänderungen der Neuronen.
      * 
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      * @return double[][]
      */
-    public double[][] getDeltaWeights(final ILayer layer)
+    public double[][] getDeltaWeights(final Layer layer)
     {
         Matrix matrix = layer.getOutputMatrix();
 
@@ -75,10 +75,10 @@ public class BackwardVisitor extends AbstractKnnVisitor
     /**
      * Setzt die Fehler-Daten des Layers.
      * 
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      * @return double[]
      */
-    public double[] getErrors(final ILayer layer)
+    public double[] getErrors(final Layer layer)
     {
         return getValues().get(layer);
     }
@@ -121,10 +121,10 @@ public class BackwardVisitor extends AbstractKnnVisitor
     /**
      * Setzt die Output-Daten des Layers.
      * 
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      * @return double[]
      */
-    public double[] getOutputs(final ILayer layer)
+    public double[] getOutputs(final Layer layer)
     {
         return this.forwardVisitor.getOutputs(layer);
     }
@@ -142,10 +142,10 @@ public class BackwardVisitor extends AbstractKnnVisitor
     /**
      * Setzt die Fehler-Daten des Layers.
      * 
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      * @param errors double[]
      */
-    public void setErrors(final ILayer layer, final double[] errors)
+    public void setErrors(final Layer layer, final double[] errors)
     {
         getValues().put(layer, errors);
 
@@ -164,16 +164,16 @@ public class BackwardVisitor extends AbstractKnnVisitor
     }
 
     /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitHiddenLayer(de.freese.knn.net.layer.ILayer)
+     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitHiddenLayer(de.freese.knn.net.layer.Layer)
      */
     @Override
-    protected void visitHiddenLayer(final ILayer layer)
+    protected void visitHiddenLayer(final Layer layer)
     {
         getMath().backward(layer, this);
     }
 
     /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitInputLayer(de.freese.knn.net.layer.input.InputLayer)
+     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitInputLayer(de.freese.knn.net.layer.InputLayer)
      */
     @Override
     protected void visitInputLayer(final InputLayer layer)
@@ -189,7 +189,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
     {
         super.visitKNN(knn);
 
-        ILayer[] layers = knn.getLayer();
+        Layer[] layers = knn.getLayer();
 
         // Rückwärts
         for (int i = layers.length - 1; i >= 0; i--)
@@ -199,7 +199,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
     }
 
     /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitOutputLayer(de.freese.knn.net.layer.output.OutputLayer)
+     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitOutputLayer(de.freese.knn.net.layer.OutputLayer)
      */
     @Override
     protected void visitOutputLayer(final OutputLayer layer)

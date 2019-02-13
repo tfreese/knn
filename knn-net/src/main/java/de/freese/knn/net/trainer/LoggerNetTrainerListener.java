@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@link INetTrainerListener} fuer die Ausgabe auf einen {@link PrintStream}.
+ * {@link NetTrainerListener} fuer die Ausgabe auf einen {@link PrintStream}.
  * 
  * @author Thomas Freese
  */
@@ -40,7 +40,7 @@ public class LoggerNetTrainerListener extends AbstractNetTrainerListener
 	}
 
 	/**
-	 * @see de.freese.knn.net.trainer.INetTrainerListener#trainingCycleEnded(de.freese.knn.net.trainer.NetTrainerCycleEndedEvent)
+	 * @see de.freese.knn.net.trainer.NetTrainerListener#trainingCycleEnded(de.freese.knn.net.trainer.NetTrainerCycleEndedEvent)
 	 */
 	@Override
 	public void trainingCycleEnded(final NetTrainerCycleEndedEvent event)

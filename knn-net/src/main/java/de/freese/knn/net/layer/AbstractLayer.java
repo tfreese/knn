@@ -3,9 +3,11 @@
  */
 package de.freese.knn.net.layer;
 
+import java.util.Objects;
+import de.freese.knn.net.function.Function;
 import de.freese.knn.net.matrix.Matrix;
-import de.freese.knn.net.neuron.INeuron;
 import de.freese.knn.net.neuron.Neuron;
+import de.freese.knn.net.neuron.NeuronDefault;
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
@@ -13,8 +15,13 @@ import de.freese.knn.net.neuron.NeuronList;
  *
  * @author Thomas Freese
  */
-public abstract class AbstractLayer implements ILayer
+public abstract class AbstractLayer implements Layer
 {
+    /**
+     *
+     */
+    private final Function function;
+
     /**
      *
      */
@@ -39,8 +46,9 @@ public abstract class AbstractLayer implements ILayer
      * Creates a new {@link AbstractLayer} object.
      *
      * @param size int
+     * @param function {@link Function}
      */
-    public AbstractLayer(final int size)
+    public AbstractLayer(final int size, final Function function)
     {
         super();
 
@@ -50,7 +58,9 @@ public abstract class AbstractLayer implements ILayer
         }
 
         this.size = size;
-        this.neurons = new NeuronList(new INeuron[size]);
+        this.neurons = new NeuronList(new Neuron[size]);
+
+        this.function = Objects.requireNonNull(function, "function required");
         createNeurons(this.neurons);
     }
 
@@ -63,12 +73,21 @@ public abstract class AbstractLayer implements ILayer
     {
         for (int i = 0; i < neurons.size(); i++)
         {
-            neurons.set(i, new Neuron(this, i));
+            neurons.set(i, new NeuronDefault(this, i));
         }
     }
 
     /**
-     * @see de.freese.knn.net.layer.ILayer#getInputMatrix()
+     * @see de.freese.knn.net.layer.Layer#getFunction()
+     */
+    @Override
+    public Function getFunction()
+    {
+        return this.function;
+    }
+
+    /**
+     * @see de.freese.knn.net.layer.Layer#getInputMatrix()
      */
     @Override
     public Matrix getInputMatrix()
@@ -77,7 +96,7 @@ public abstract class AbstractLayer implements ILayer
     }
 
     /**
-     * @see de.freese.knn.net.layer.ILayer#getNeurons()
+     * @see de.freese.knn.net.layer.Layer#getNeurons()
      */
     @Override
     public NeuronList getNeurons()
@@ -86,7 +105,7 @@ public abstract class AbstractLayer implements ILayer
     }
 
     /**
-     * @see de.freese.knn.net.layer.ILayer#getOutputMatrix()
+     * @see de.freese.knn.net.layer.Layer#getOutputMatrix()
      */
     @Override
     public Matrix getOutputMatrix()
@@ -95,7 +114,7 @@ public abstract class AbstractLayer implements ILayer
     }
 
     /**
-     * @see de.freese.knn.net.layer.ILayer#getSize()
+     * @see de.freese.knn.net.layer.Layer#getSize()
      */
     @Override
     public int getSize()
@@ -104,7 +123,7 @@ public abstract class AbstractLayer implements ILayer
     }
 
     /**
-     * @see de.freese.knn.net.layer.ILayer#setInputMatrix(de.freese.knn.net.matrix.Matrix)
+     * @see de.freese.knn.net.layer.Layer#setInputMatrix(de.freese.knn.net.matrix.Matrix)
      */
     @Override
     public void setInputMatrix(final Matrix matrix)
@@ -113,7 +132,7 @@ public abstract class AbstractLayer implements ILayer
     }
 
     /**
-     * @see de.freese.knn.net.layer.ILayer#setOutputMatrix(de.freese.knn.net.matrix.Matrix)
+     * @see de.freese.knn.net.layer.Layer#setOutputMatrix(de.freese.knn.net.matrix.Matrix)
      */
     @Override
     public void setOutputMatrix(final Matrix matrix)

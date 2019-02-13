@@ -7,10 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.ILayer;
-import de.freese.knn.net.matrix.IValueInitializer;
+import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.matrix.Matrix;
-import de.freese.knn.net.neuron.INeuron;
+import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.visitor.BackwardVisitor;
 
 /**
@@ -18,16 +18,16 @@ import de.freese.knn.net.visitor.BackwardVisitor;
  *
  * @author Thomas Freese
  */
-public abstract class AbstractKnnMath implements IKnnMath
+public abstract class AbstractKnnMath implements KnnMath
 {
     /**
      * Mathematik für die Eingangsfehler eines Layers.
      *
-     * @param neuron {@link INeuron}
+     * @param neuron {@link Neuron}
      * @param errors double[]
      * @param layerErrors double[]
      */
-    public static void backward(final INeuron neuron, final double[] errors, final double[] layerErrors)
+    public static void backward(final Neuron neuron, final double[] errors, final double[] layerErrors)
     {
         int layerIndex = neuron.getLayerIndex();
         double error = 0.0D;
@@ -48,11 +48,11 @@ public abstract class AbstractKnnMath implements IKnnMath
     /**
      * Mathematik für die Ausgangswerte eines Layers.
      *
-     * @param neuron {@link INeuron}
+     * @param neuron {@link Neuron}
      * @param inputs double[]
      * @param outputs double[]
      */
-    public static void forward(final INeuron neuron, final double[] inputs, final double[] outputs)
+    public static void forward(final Neuron neuron, final double[] inputs, final double[] outputs)
     {
         int layerIndex = neuron.getLayerIndex();
         double eingangsSumme = 0.0D;
@@ -91,10 +91,10 @@ public abstract class AbstractKnnMath implements IKnnMath
     /**
      * Initialisiert die BIAS-Gewichte der Neuronen eines Layers.
      *
-     * @param layer {@link ILayer}
-     * @param valueInitializer {@link IValueInitializer}
+     * @param layer {@link Layer}
+     * @param valueInitializer {@link ValueInitializer}
      */
-    public static void initialize(final ILayer layer, final IValueInitializer valueInitializer)
+    public static void initialize(final Layer layer, final ValueInitializer valueInitializer)
     {
         // BIAS Gewichte.
         layer.getNeurons().forEach(neuron -> neuron.setInputBIAS(valueInitializer.createNextValue()));
@@ -119,14 +119,14 @@ public abstract class AbstractKnnMath implements IKnnMath
     /**
      * Aktualisiert die Gewichte der Neuronen eines Layers passend zum Ausgangsfehler.
      *
-     * @param neuron {@link INeuron}
+     * @param neuron {@link Neuron}
      * @param teachFactor double
      * @param momentum double
      * @param leftOutputs double[]
      * @param deltaWeights double[][]
      * @param rightErrors double[]
      */
-    public static void refreshLayerWeights(final INeuron neuron, final double teachFactor, final double momentum,
+    public static void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum,
             final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors)
     {
         int layerIndex = neuron.getLayerIndex();
@@ -188,7 +188,7 @@ public abstract class AbstractKnnMath implements IKnnMath
     }
 
     /**
-     * @see de.freese.knn.net.math.IKnnMath#getNetError(double[], double[])
+     * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
      */
     @Override
     public double getNetError(final double[] outputs, final double[] outputTargets)
@@ -206,10 +206,10 @@ public abstract class AbstractKnnMath implements IKnnMath
     }
 
     /**
-     * @see de.freese.knn.net.math.IKnnMath#setOutputError(de.freese.knn.net.layer.ILayer, de.freese.knn.net.visitor.BackwardVisitor)
+     * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void setOutputError(final ILayer layer, final BackwardVisitor visitor)
+    public void setOutputError(final Layer layer, final BackwardVisitor visitor)
     {
         double[] outputs = visitor.getOutputs(layer);
         double[] errors = new double[outputs.length];

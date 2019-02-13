@@ -5,9 +5,9 @@ package de.freese.knn.net.math.forkjoin;
 
 import java.util.Arrays;
 import java.util.concurrent.RecursiveAction;
-import de.freese.knn.net.layer.ILayer;
+import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
-import de.freese.knn.net.matrix.IValueInitializer;
+import de.freese.knn.net.matrix.ValueInitializer;
 
 /**
  * Initialisiert die BIAS-Gewichte der Neuronen eines Layers.
@@ -29,7 +29,7 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
-    private final ILayer[] layers;
+    private final Layer[] layers;
 
     /**
      *
@@ -39,15 +39,15 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
-    private final IValueInitializer valueInitializer;
+    private final ValueInitializer valueInitializer;
 
     /**
      * Erstellt ein neues {@link ForkJoinInitializeTask} Object.
      *
-     * @param layers {@link ILayer}[]
-     * @param valueInitializer {@link IValueInitializer}
+     * @param layers {@link Layer}[]
+     * @param valueInitializer {@link ValueInitializer}
      */
-    ForkJoinInitializeTask(final ILayer[] layers, final IValueInitializer valueInitializer)
+    ForkJoinInitializeTask(final Layer[] layers, final ValueInitializer valueInitializer)
     {
         this(layers, valueInitializer, 0, layers.length);
     }
@@ -55,12 +55,12 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      * Erstellt ein neues {@link ForkJoinInitializeTask} Object.
      *
-     * @param layers {@link ILayer}[]
-     * @param valueInitializer {@link IValueInitializer}
+     * @param layers {@link Layer}[]
+     * @param valueInitializer {@link ValueInitializer}
      * @param from int
      * @param to int
      */
-    private ForkJoinInitializeTask(final ILayer[] layers, final IValueInitializer valueInitializer, final int from, final int to)
+    private ForkJoinInitializeTask(final Layer[] layers, final ValueInitializer valueInitializer, final int from, final int to)
     {
         super();
 
@@ -78,9 +78,9 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     {
         if ((this.to - this.from) < 2)
         {
-            ILayer[] l = Arrays.copyOfRange(this.layers, this.from, this.to);
+            Layer[] l = Arrays.copyOfRange(this.layers, this.from, this.to);
 
-            for (ILayer layer : l)
+            for (Layer layer : l)
             {
                 AbstractKnnMath.initialize(layer, this.valueInitializer);
             }

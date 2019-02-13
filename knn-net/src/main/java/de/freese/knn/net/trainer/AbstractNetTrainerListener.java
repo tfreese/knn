@@ -4,11 +4,11 @@
 package de.freese.knn.net.trainer;
 
 /**
- * Basisklasse des {@link INetTrainerListener}.
+ * Basisklasse des {@link NetTrainerListener}.
  * 
  * @author Thomas Freese
  */
-public abstract class AbstractNetTrainerListener implements INetTrainerListener
+public abstract class AbstractNetTrainerListener implements NetTrainerListener
 {
 	/**
 	 * Welches wievielte Event soll geloggt werden ?

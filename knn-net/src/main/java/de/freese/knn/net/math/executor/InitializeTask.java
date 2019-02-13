@@ -5,9 +5,9 @@ package de.freese.knn.net.math.executor;
 
 import java.util.concurrent.CountDownLatch;
 
-import de.freese.knn.net.layer.ILayer;
+import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
-import de.freese.knn.net.matrix.IValueInitializer;
+import de.freese.knn.net.matrix.ValueInitializer;
 
 /**
  * Initialisiert die BIAS-Gewichte der Neuronen eines Layers.
@@ -24,21 +24,21 @@ class InitializeTask implements Runnable
     /**
      *
      */
-    private final ILayer layer;
+    private final Layer layer;
 
     /**
      *
      */
-    private final IValueInitializer valueInitializer;
+    private final ValueInitializer valueInitializer;
 
     /**
      * Erstellt ein neues {@link InitializeTask} Object.
      *
      * @param latch {@link CountDownLatch}
-     * @param valueInitializer {@link IValueInitializer}
-     * @param layer {@link ILayer}
+     * @param valueInitializer {@link ValueInitializer}
+     * @param layer {@link Layer}
      */
-    InitializeTask(final CountDownLatch latch, final IValueInitializer valueInitializer, final ILayer layer)
+    InitializeTask(final CountDownLatch latch, final ValueInitializer valueInitializer, final Layer layer)
     {
         super();
 

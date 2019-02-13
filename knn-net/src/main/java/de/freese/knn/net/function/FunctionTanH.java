@@ -8,7 +8,7 @@ package de.freese.knn.net.function;
  * 
  * @author Thomas Freese
  */
-public class FunctionTanH implements IFunction
+public class FunctionTanH implements Function
 {
 	/**
 	 * Creates a new {@link FunctionTanH} object.
@@ -19,7 +19,7 @@ public class FunctionTanH implements IFunction
 	}
 
 	/**
-	 * @see de.freese.knn.net.function.IFunction#calculate(double)
+	 * @see de.freese.knn.net.function.Function#calculate(double)
 	 */
 	@Override
 	public double calculate(final double value)

@@ -4,22 +4,22 @@
 
 package de.freese.knn.net.neuron;
 
-import de.freese.base.core.collection.stream.SplitableArray;
-import de.freese.knn.net.layer.ILayer;
+import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.util.stream.DefaultSplitableArray;
 
 /**
- * Liste der Neuronen eines {@link ILayer}.
+ * Liste der Neuronen eines {@link Layer}.
  *
  * @author Thomas Freese
  */
-public class NeuronList extends SplitableArray<INeuron>
+public class NeuronList extends DefaultSplitableArray<Neuron>
 {
     /**
      * Erstellt ein neues {@link NeuronList} Object.
      *
-     * @param array {@link INeuron}[]
+     * @param array {@link Neuron}[]
      */
-    public NeuronList(final INeuron[] array)
+    public NeuronList(final Neuron[] array)
     {
         super(array);
     }
@@ -27,17 +27,17 @@ public class NeuronList extends SplitableArray<INeuron>
     /**
      * Erstellt ein neues {@link NeuronList} Object.
      *
-     * @param array {@link INeuron}[]
+     * @param array {@link Neuron}[]
      * @param indexStart int
      * @param indexEnd int
      */
-    public NeuronList(final INeuron[] array, final int indexStart, final int indexEnd)
+    public NeuronList(final Neuron[] array, final int indexStart, final int indexEnd)
     {
         super(array, indexStart, indexEnd);
     }
 
     /**
-     * @see de.freese.base.core.collection.stream.SplitableArray#subList(int, int)
+     * @see de.freese.knn.net.util.stream.DefaultSplitableArray#subList(int, int)
      */
     @Override
     public NeuronList subList(final int fromIndex, final int toIndex)

@@ -6,7 +6,7 @@ package de.freese.knn.net.persister;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.ILayer;
+import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.Matrix;
 
 /**
@@ -15,7 +15,7 @@ import de.freese.knn.net.matrix.Matrix;
  *
  * @author Thomas Freese
  */
-public abstract class AbstractNetPersister implements INetPersister
+public abstract class AbstractNetPersister implements NetPersister
 {
     /**
      * Creates a new {@link AbstractNetPersister} object.
@@ -29,10 +29,10 @@ public abstract class AbstractNetPersister implements INetPersister
      * Liest einen Layer in den Stream.
      *
      * @param dis {@link DataInputStream}
-     * @return {@link ILayer}
+     * @return {@link Layer}
      * @throws Exception Falls was schief geht.
      */
-    protected abstract ILayer loadLayer(DataInputStream dis) throws Exception;
+    protected abstract Layer loadLayer(DataInputStream dis) throws Exception;
 
     /**
      * Liest eine Matrix in den Stream.
@@ -44,7 +44,7 @@ public abstract class AbstractNetPersister implements INetPersister
     protected abstract Matrix loadMatrix(DataInputStream dis) throws Exception;
 
     /**
-     * @see de.freese.knn.net.persister.INetPersister#save(java.io.DataOutputStream, de.freese.knn.net.NeuralNet)
+     * @see de.freese.knn.net.persister.NetPersister#save(java.io.DataOutputStream, de.freese.knn.net.NeuralNet)
      */
     @Override
     public void save(final DataOutputStream dos, final NeuralNet neuralNet) throws Exception
@@ -52,11 +52,11 @@ public abstract class AbstractNetPersister implements INetPersister
         // Anzahl Layer
         dos.writeInt(neuralNet.getLayer().length);
 
-        ILayer[] layers = neuralNet.getLayer();
+        Layer[] layers = neuralNet.getLayer();
 
         for (int i = 0; i < layers.length; i++)
         {
-            ILayer layer = layers[i];
+            Layer layer = layers[i];
             saveLayer(dos, layer);
 
             if (i < (layers.length - 1))
@@ -72,10 +72,10 @@ public abstract class AbstractNetPersister implements INetPersister
      * Schreibt einen Layer in den Stream.
      *
      * @param dos {@link DataOutputStream}
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      * @throws Exception Falls was schief geht.
      */
-    protected abstract void saveLayer(DataOutputStream dos, ILayer layer) throws Exception;
+    protected abstract void saveLayer(DataOutputStream dos, Layer layer) throws Exception;
 
     /**
      * Schreibt eine Matrix in den Stream.

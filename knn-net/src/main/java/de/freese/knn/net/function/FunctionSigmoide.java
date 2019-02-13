@@ -5,75 +5,69 @@ package de.freese.knn.net.function;
 
 /**
  * Verrechnen der Eingangswerte durch die Sigmoid Funktion.
- * 
+ *
  * @author Thomas Freese
  */
-public class FunctionSigmoide implements IFunction
+public class FunctionSigmoide implements Function
 {
-	/**
-	 * X-Durchgang fuer y = 0.5
-	 */
-	private double durchgang = 0.0D;
+    /**
+     * X-Durchgang fuer y = 0.5
+     */
+    private final double durchgang;
 
-	/**
-	 * Steigung -> 0 Treppenfunktion
-	 */
-	private double steigung = 1.0D;
+    /**
+     * Steigung -> 0 Treppenfunktion
+     */
+    private final double steigung;
 
-	/**
-	 * Creates a new {@link FunctionSigmoide} object.
-	 */
-	public FunctionSigmoide()
-	{
-		super();
-	}
+    /**
+     * Creates a new {@link FunctionSigmoide} object.
+     */
+    public FunctionSigmoide()
+    {
+        this(0.0D, 1.0D);
+    }
 
-	/**
-	 * X-Durchgang fuer y = 0.5.
-	 * 
-	 * @param durchgang double
-	 */
-	public void setDurchgang(final double durchgang)
-	{
-		this.durchgang = durchgang;
-	}
+    /**
+     * Creates a new {@link FunctionSigmoide} object.
+     * 
+     * @param durchgang double
+     * @param steigung double
+     */
+    public FunctionSigmoide(final double durchgang, final double steigung)
+    {
+        super();
 
-	/**
-	 * X-Durchgang fuer y = 0.5.
-	 * 
-	 * @return double
-	 */
-	public double getDurchgang()
-	{
-		return this.durchgang;
-	}
+        this.durchgang = durchgang;
+        this.steigung = steigung;
+    }
 
-	/**
-	 * Steigung -> 0 Treppenfunktion.
-	 * 
-	 * @param steigung double
-	 */
-	public void setSteigung(final double steigung)
-	{
-		this.steigung = steigung;
-	}
+    /**
+     * @see de.freese.knn.net.function.Function#calculate(double)
+     */
+    @Override
+    public double calculate(final double value)
+    {
+        return (1.0D / (1.0D + Math.exp(-((value - getDurchgang()) / getSteigung()))));
+    }
 
-	/**
-	 * Steigung -> 0 Treppenfunktion.
-	 * 
-	 * @return double
-	 */
-	public double getSteigung()
-	{
-		return this.steigung;
-	}
+    /**
+     * X-Durchgang fuer y = 0.5.
+     * 
+     * @return double
+     */
+    public double getDurchgang()
+    {
+        return this.durchgang;
+    }
 
-	/**
-	 * @see de.freese.knn.net.function.IFunction#calculate(double)
-	 */
-	@Override
-	public double calculate(final double value)
-	{
-		return (1.0D / (1.0D + Math.exp(-((value - this.durchgang) / this.steigung))));
-	}
+    /**
+     * Steigung -> 0 Treppenfunktion.
+     * 
+     * @return double
+     */
+    public double getSteigung()
+    {
+        return this.steigung;
+    }
 }

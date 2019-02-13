@@ -8,7 +8,7 @@ package de.freese.knn.net.function;
  * 
  * @author Thomas Freese
  */
-public class FunctionGauss implements IFunction
+public class FunctionGauss implements Function
 {
 	/**
 	 * Creates a new {@link FunctionGauss} object.
@@ -19,7 +19,7 @@ public class FunctionGauss implements IFunction
 	}
 
 	/**
-	 * @see de.freese.knn.net.function.IFunction#calculate(double)
+	 * @see de.freese.knn.net.function.Function#calculate(double)
 	 */
 	@Override
 	public double calculate(final double value)

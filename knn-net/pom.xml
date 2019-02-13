@@ -17,11 +17,6 @@
 
     <dependencies>
         <!-- compile scope -->
-        <dependency>
-            <groupId>de.freese.base</groupId>
-            <artifactId>base-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- runtime scope -->
         <!-- provided scope -->
         <!-- test scope -->

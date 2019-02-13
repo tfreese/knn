@@ -20,10 +20,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.hidden.SigmoidLayer;
-import de.freese.knn.net.layer.input.InputLayer;
-import de.freese.knn.net.layer.output.OutputLayer;
-import de.freese.knn.net.math.executor.ExecutorKnnMath;
+import de.freese.knn.net.NeuralNetBuilder;
+import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.layer.HiddenLayer;
+import de.freese.knn.net.layer.InputLayer;
+import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 
@@ -119,7 +120,6 @@ public class KNN_Demo extends JFrame
      *
      * @throws HeadlessException Falls was schief geht.
      */
-    @SuppressWarnings("resource")
     public KNN_Demo() throws HeadlessException
     {
         super();
@@ -144,21 +144,19 @@ public class KNN_Demo extends JFrame
                 }
             }
         });
+
         setResizable(true);
         setLayout(new BorderLayout());
 
-        // this.neuralNetwork = new NeuralNet();
-        // this.neuralNetwork = new NeuralNet(new SimpleKnnMath());
-        this.neuralNetwork = new NeuralNet(new ExecutorKnnMath());
-        // this.neuralNetwork = new NeuralNet(new ForkJoinKnnMath());
-        // this.neuralNetwork = new NeuralNet(new ForkJoinKnnMath(), new
-        // ConstantValueInitializer(0.5D));
-        // this.neuralNetwork = new NeuralNet(new StreamKnnMath());
-
-        this.neuralNetwork.addLayer(new InputLayer(54));
-        this.neuralNetwork.addLayer(new SigmoidLayer(25));
-        this.neuralNetwork.addLayer(new OutputLayer(10));
-        this.neuralNetwork.connectLayer();
+        // @formatter:off
+        this.neuralNetwork = new NeuralNetBuilder()
+                //.knnMath(new KnnMathStream())
+                //.valueInitializer(new ValueInitializerRandom())
+                .layer(new InputLayer(54))
+                .layer(new HiddenLayer(25, new FunctionSigmoide()))
+                .layer(new OutputLayer(10))
+                .build();
+        // @formatter:on
 
         this.matrixPanel = new MatrixPanel(new ToggleButtonListener());
         this.labelRecognized = new JLabel("Erkannt als: ");

@@ -2,12 +2,12 @@ package de.freese.knn.net.visitor;
 
 import java.util.HashMap;
 import java.util.Map;
-import de.freese.base.core.visitor.Visitor;
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.ILayer;
-import de.freese.knn.net.layer.input.InputLayer;
-import de.freese.knn.net.layer.output.OutputLayer;
-import de.freese.knn.net.math.IKnnMath;
+import de.freese.knn.net.layer.InputLayer;
+import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.layer.OutputLayer;
+import de.freese.knn.net.math.KnnMath;
+import de.freese.knn.net.util.visitor.Visitor;
 
 /**
  * Basisklasse eines Netz-Visitors.
@@ -19,12 +19,12 @@ public abstract class AbstractKnnVisitor implements Visitor
     /**
      *
      */
-    private IKnnMath knnMath = null;
+    private KnnMath knnMath = null;
 
     /**
      *
      */
-    private Map<ILayer, double[]> values = new HashMap<>();
+    private Map<Layer, double[]> values = new HashMap<>();
 
     /**
      * Erstellt ein neues {@link AbstractKnnVisitor} Object.
@@ -44,9 +44,9 @@ public abstract class AbstractKnnVisitor implements Visitor
     }
 
     /**
-     * @return {@link IKnnMath}
+     * @return {@link KnnMath}
      */
-    protected IKnnMath getMath()
+    protected KnnMath getMath()
     {
         return this.knnMath;
     }
@@ -54,15 +54,15 @@ public abstract class AbstractKnnVisitor implements Visitor
     /**
      * @return {@link Map}<ILayer,double[]>
      */
-    protected Map<ILayer, double[]> getValues()
+    protected Map<Layer, double[]> getValues()
     {
         return this.values;
     }
 
     /**
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      */
-    protected abstract void visitHiddenLayer(final ILayer layer);
+    protected abstract void visitHiddenLayer(final Layer layer);
 
     /**
      * @param layer {@link InputLayer}
@@ -78,7 +78,7 @@ public abstract class AbstractKnnVisitor implements Visitor
     }
 
     /**
-     * @see de.freese.base.core.visitor.Visitor#visitObject(java.lang.Object)
+     * @see de.freese.knn.net.util.visitor.Visitor#visitObject(java.lang.Object)
      */
     @Override
     public void visitObject(final Object object)
@@ -95,9 +95,9 @@ public abstract class AbstractKnnVisitor implements Visitor
         {
             visitOutputLayer((OutputLayer) object);
         }
-        else if (object instanceof ILayer)
+        else if (object instanceof Layer)
         {
-            visitHiddenLayer((ILayer) object);
+            visitHiddenLayer((Layer) object);
         }
     }
 

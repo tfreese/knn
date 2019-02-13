@@ -7,9 +7,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.lang.reflect.Constructor;
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.ILayer;
+import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.Matrix;
-import de.freese.knn.net.neuron.INeuron;
+import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
@@ -29,7 +29,7 @@ public class NetPersisterBinary extends AbstractNetPersister
     }
 
     /**
-     * @see de.freese.knn.net.persister.INetPersister#load(java.io.DataInputStream, de.freese.knn.net.NeuralNet)
+     * @see de.freese.knn.net.persister.NetPersister#load(java.io.DataInputStream, de.freese.knn.net.NeuralNet)
      */
     @Override
     public void load(final DataInputStream dis, final NeuralNet neuralNet) throws Exception
@@ -37,14 +37,14 @@ public class NetPersisterBinary extends AbstractNetPersister
         // Anzahl Layer lesen
         int layerCount = dis.readInt();
 
-        ILayer leftLayer = loadLayer(dis);
+        Layer leftLayer = loadLayer(dis);
         neuralNet.addLayer(leftLayer);
 
         for (int i = 0; i < (layerCount - 1); i++)
         {
             Matrix matrix = loadMatrix(dis);
 
-            ILayer rightLayer = loadLayer(dis);
+            Layer rightLayer = loadLayer(dis);
             neuralNet.addLayer(rightLayer);
 
             // Layer verknüpfen
@@ -59,7 +59,7 @@ public class NetPersisterBinary extends AbstractNetPersister
      * @see de.freese.knn.net.persister.AbstractNetPersister#loadLayer(java.io.DataInputStream)
      */
     @Override
-    protected ILayer loadLayer(final DataInputStream dis) throws Exception
+    protected Layer loadLayer(final DataInputStream dis) throws Exception
     {
         // Klassentyp
         String layerClazzName = dis.readUTF();
@@ -74,10 +74,10 @@ public class NetPersisterBinary extends AbstractNetPersister
                 int.class
         });
 
-        ILayer layer = (ILayer) constructor.newInstance(size);
+        Layer layer = (Layer) constructor.newInstance(size);
 
         // BIAS Gewichte der Neuronen
-        for (INeuron neuron : layer.getNeurons())
+        for (Neuron neuron : layer.getNeurons())
         {
             neuron.setInputBIAS(dis.readDouble());
         }
@@ -109,10 +109,10 @@ public class NetPersisterBinary extends AbstractNetPersister
     }
 
     /**
-     * @see de.freese.knn.net.persister.AbstractNetPersister#saveLayer(java.io.DataOutputStream, de.freese.knn.net.layer.ILayer)
+     * @see de.freese.knn.net.persister.AbstractNetPersister#saveLayer(java.io.DataOutputStream, de.freese.knn.net.layer.Layer)
      */
     @Override
-    protected void saveLayer(final DataOutputStream dos, final ILayer layer) throws Exception
+    protected void saveLayer(final DataOutputStream dos, final Layer layer) throws Exception
     {
         // Klassentyp
         dos.writeUTF(layer.getClass().getName());
@@ -122,7 +122,7 @@ public class NetPersisterBinary extends AbstractNetPersister
         dos.writeInt(neurons.size());
 
         // BIAS Gewichte
-        for (INeuron neuron : neurons)
+        for (Neuron neuron : neurons)
         {
             dos.writeDouble(neuron.getInputBIAS());
         }

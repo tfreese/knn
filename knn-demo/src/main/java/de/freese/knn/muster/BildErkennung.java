@@ -9,12 +9,14 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.hidden.SigmoidLayer;
-import de.freese.knn.net.layer.input.InputLayer;
-import de.freese.knn.net.layer.output.OutputLayer;
-import de.freese.knn.net.trainer.ITrainingInputSource;
+import de.freese.knn.net.NeuralNetBuilder;
+import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.layer.HiddenLayer;
+import de.freese.knn.net.layer.InputLayer;
+import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
+import de.freese.knn.net.trainer.TrainingInputSource;
 
 /**
  * Testklasse.
@@ -30,7 +32,7 @@ public class BildErkennung
      */
     public static void main(final String[] args) throws Exception
     {
-        ITrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
+        TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
         // final ITrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
         File knnFile = new File("ImageNeuralNet.bin");
 
@@ -40,14 +42,15 @@ public class BildErkennung
         // if (!nnFile.exists())
 
         // Speichern
-        try (NeuralNet neuralNet = new NeuralNet();
+        try ( // @formatter:off
+              NeuralNet neuralNet = new NeuralNetBuilder()
+                  .layer(new InputLayer(36))
+                  .layer(new HiddenLayer(50, new FunctionSigmoide()))
+                  .layer(new OutputLayer(10))
+                  .build();
+             // @formatter:on
              DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(knnFile))))
         {
-            neuralNet.addLayer(new InputLayer(36));
-            neuralNet.addLayer(new SigmoidLayer(50));
-            neuralNet.addLayer(new OutputLayer(10));
-            neuralNet.connectLayer();
-
             final double teachFactor = 0.5D;
             final double momentum = 0.5D;
             final double maximumError = 0.01D;

@@ -3,13 +3,6 @@
  */
 package de.freese.knn;
 
-import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.hidden.SigmoidLayer;
-import de.freese.knn.net.layer.input.InputLayer;
-import de.freese.knn.net.layer.output.OutputLayer;
-import de.freese.knn.net.trainer.ITrainingInputSource;
-import de.freese.knn.net.trainer.LoggerNetTrainerListener;
-import de.freese.knn.net.trainer.NetTrainer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,18 +10,26 @@ import javax.sql.DataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import de.freese.knn.net.NeuralNet;
+import de.freese.knn.net.NeuralNetBuilder;
+import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.layer.HiddenLayer;
+import de.freese.knn.net.layer.InputLayer;
+import de.freese.knn.net.layer.OutputLayer;
+import de.freese.knn.net.trainer.LoggerNetTrainerListener;
+import de.freese.knn.net.trainer.NetTrainer;
+import de.freese.knn.net.trainer.TrainingInputSource;
 
 /**
  * Klasse zum Test des BinaryPersisters.
  *
  * @author Thomas Freese
  */
-public class TestMailSpamFilter implements ITrainingInputSource
+public class TestMailSpamFilter implements TrainingInputSource
 {
 
     /**
      * @param args String[]
-     *
      * @throws Exception Falls was schief geht.
      */
     public static void main(final String[] args) throws Exception
@@ -36,12 +37,15 @@ public class TestMailSpamFilter implements ITrainingInputSource
         TestMailSpamFilter spamFilter = new TestMailSpamFilter();
         // spamFilter.cleanUp();
 
-        try (NeuralNet neuralNet = new NeuralNet())
+        try ( // @formatter:off
+              NeuralNet neuralNet = new NeuralNetBuilder()
+                  .layer(new InputLayer(spamFilter.token.size()))
+                  .layer(new HiddenLayer(20000, new FunctionSigmoide()))
+                  .layer(new OutputLayer(1))
+                  .build()
+              // @formatter:on
+        )
         {
-            neuralNet.addLayer(new InputLayer(spamFilter.token.size()));
-            neuralNet.addLayer(new SigmoidLayer(20000));
-            neuralNet.addLayer(new OutputLayer(1));
-            neuralNet.connectLayer();
             double teachFactor = 0.5D;
             double momentum = 0.5D;
             double maximumError = 0.05D;
@@ -79,7 +83,7 @@ public class TestMailSpamFilter implements ITrainingInputSource
         super();
 
         SingleConnectionDataSource ds = new SingleConnectionDataSource();
-        //ds.setDriverClassName("com.mysql.jdbc.Driver");
+        // ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setDriverClassName("org.mariadb.jdbc.Driver");
         ds.setUrl("jdbc:mariadb://localhost:3306/tommy?user=tommy&password=tommy");
         ds.setSuppressClose(true);
@@ -130,7 +134,7 @@ public class TestMailSpamFilter implements ITrainingInputSource
     }
 
     /**
-     * @see de.freese.knn.net.trainer.ITrainingInputSource#getInputAt(int)
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
      */
     @Override
     public double[] getInputAt(final int index)
@@ -140,16 +144,15 @@ public class TestMailSpamFilter implements ITrainingInputSource
         final double[] input = new double[this.token.size()];
         Arrays.fill(input, 0.0D);
 
-        this.jdbcTemplate.query("select token from message_token where message_id = ?", rs ->
-                            {
-                                while (rs.next())
-                                {
-                                    int i = TestMailSpamFilter.this.token.indexOf(rs.getString("token"));
-                                    input[i] = 1.0D;
-                                }
+        this.jdbcTemplate.query("select token from message_token where message_id = ?", rs -> {
+            while (rs.next())
+            {
+                int i = TestMailSpamFilter.this.token.indexOf(rs.getString("token"));
+                input[i] = 1.0D;
+            }
 
-                                return null;
-                            }, messageID);
+            return null;
+        }, messageID);
 
         // token: 10184
         // SELECT * FROM message_token WHERE message_id = '<001b01ce0f36$5148a8d0$f3d9fa70$@profcon.de>' ORDER BY token
@@ -163,7 +166,7 @@ public class TestMailSpamFilter implements ITrainingInputSource
     }
 
     /**
-     * @see de.freese.knn.net.trainer.ITrainingInputSource#getOutputAt(int)
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
      */
     @Override
     public double[] getOutputAt(final int index)
@@ -171,14 +174,14 @@ public class TestMailSpamFilter implements ITrainingInputSource
         Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
         double[] output = new double[]
         {
-            isSpam ? 1.0D : 0.0D
+                isSpam ? 1.0D : 0.0D
         };
 
         return output;
     }
 
     /**
-     * @see de.freese.knn.net.trainer.ITrainingInputSource#getSize()
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
      */
     @Override
     public int getSize()

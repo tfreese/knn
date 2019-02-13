@@ -8,7 +8,7 @@ package de.freese.knn.net.function;
  * 
  * @author Thomas Freese
  */
-public class FunctionLogarithmic implements IFunction
+public class FunctionLogarithmic implements Function
 {
 	/**
 	 * Creates a new {@link FunctionLogarithmic} object.
@@ -19,7 +19,7 @@ public class FunctionLogarithmic implements IFunction
 	}
 
 	/**
-	 * @see de.freese.knn.net.function.IFunction#calculate(double)
+	 * @see de.freese.knn.net.function.Function#calculate(double)
 	 */
 	@Override
 	public double calculate(final double value)

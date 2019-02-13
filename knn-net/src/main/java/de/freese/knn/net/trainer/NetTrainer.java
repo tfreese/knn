@@ -7,7 +7,7 @@ import javax.swing.event.EventListenerList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.freese.knn.net.NeuralNet;
-import de.freese.knn.net.layer.ILayer;
+import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
@@ -60,7 +60,7 @@ public class NetTrainer
 
     /**
      * Creates a new {@link NetTrainer} object.
-     * 
+     *
      * @param teachFactor double
      * @param momentum double
      * @param maximumError double, max. Netzfehler 0-1
@@ -79,18 +79,18 @@ public class NetTrainer
     }
 
     /**
-     * Hinzufügen eines {@link INetTrainerListener}.
-     * 
-     * @param listener {@link INetTrainerListener}
+     * Hinzufügen eines {@link NetTrainerListener}.
+     *
+     * @param listener {@link NetTrainerListener}
      */
-    public void addNetTrainerListener(final INetTrainerListener listener)
+    public void addNetTrainerListener(final NetTrainerListener listener)
     {
-        this.listenerList.add(INetTrainerListener.class, listener);
+        this.listenerList.add(NetTrainerListener.class, listener);
     }
 
     /**
      * Feuert ein Event, wenn ein Lernzyklus beendet ist.
-     * 
+     *
      * @param event {@link NetTrainerCycleEndedEvent}
      */
     private void fireCycleEnded(final NetTrainerCycleEndedEvent event)
@@ -99,30 +99,30 @@ public class NetTrainer
 
         for (int i = listeners.length - 2; i >= 0; i -= 2)
         {
-            if (listeners[i] == INetTrainerListener.class)
+            if (listeners[i] == NetTrainerListener.class)
             {
-                ((INetTrainerListener) listeners[i + 1]).trainingCycleEnded(event);
+                ((NetTrainerListener) listeners[i + 1]).trainingCycleEnded(event);
             }
         }
     }
 
     /**
-     * Entfernen eines {@link INetTrainerListener}.
-     * 
-     * @param listener {@link INetTrainerListener}
+     * Entfernen eines {@link NetTrainerListener}.
+     *
+     * @param listener {@link NetTrainerListener}
      */
-    public void removeNetTrainerListener(final INetTrainerListener listener)
+    public void removeNetTrainerListener(final NetTrainerListener listener)
     {
-        this.listenerList.remove(INetTrainerListener.class, listener);
+        this.listenerList.remove(NetTrainerListener.class, listener);
     }
 
     /**
-     * Trainiert das neurale Netz mit Daten aus dem {@link ITrainingInputSource}.
-     * 
+     * Trainiert das neurale Netz mit Daten aus dem {@link TrainingInputSource}.
+     *
      * @param neuralNet {@link NeuralNet}
-     * @param inputSource {@link ITrainingInputSource}
+     * @param inputSource {@link TrainingInputSource}
      */
-    public void train(final NeuralNet neuralNet, final ITrainingInputSource inputSource)
+    public void train(final NeuralNet neuralNet, final TrainingInputSource inputSource)
     {
         long start = System.currentTimeMillis();
         TrainingContext trainingContext = new TrainingContext();
@@ -169,7 +169,7 @@ public class NetTrainer
     /**
      * Trainiert das neurale Netz mit den Eingangs- und Ausgangsdaten und liefert den Netzfehler.<br>
      * Backpropagation Methode.
-     * 
+     *
      * @param trainingContext {@link TrainingContext}
      * @param neuralNet {@link NeuralNet}
      * @param inputs double[]
@@ -187,13 +187,13 @@ public class NetTrainer
         backwardVisitor.setOutputTargets(outputs);
         neuralNet.visit(backwardVisitor);
 
-        ILayer[] layer = neuralNet.getLayer();
+        Layer[] layer = neuralNet.getLayer();
 
         // Gewichte durch die Hidden- bis zum Inputlayer aktualisieren
         for (int i = layer.length - 1; i > 0; i--)
         {
-            ILayer rightLayer = layer[i];
-            ILayer leftLayer = layer[i - 1];
+            Layer rightLayer = layer[i];
+            Layer leftLayer = layer[i - 1];
 
             neuralNet.getMath().refreshLayerWeights(leftLayer, rightLayer, this.teachFactor, this.momentum, backwardVisitor);
         }

@@ -6,22 +6,22 @@ package de.freese.knn.buttons;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import de.freese.knn.net.trainer.ITrainingInputSource;
+import de.freese.knn.net.trainer.TrainingInputSource;
 
 /**
  * Erstellt TestTrainingsDaten für das {@link MatrixPanel}.
  *
  * @author Thomas Freese
  */
-public class MatrixTrainingInputSource implements ITrainingInputSource
+public class MatrixTrainingInputSource implements TrainingInputSource
 {
     /**
-     * 
+     *
      */
     private final List<double[]> inputList = new ArrayList<>();
 
     /**
-     * 
+     *
      */
     private final List<double[]> outputList = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class MatrixTrainingInputSource implements ITrainingInputSource
 
     /**
      * Erzeugt den Output fuer den Wert.
-     * 
+     *
      * @param value int
      * @return double[]
      */
@@ -280,7 +280,7 @@ public class MatrixTrainingInputSource implements ITrainingInputSource
     }
 
     /**
-     * @see de.freese.knn.net.trainer.ITrainingInputSource#getInputAt(int)
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
      */
     @Override
     public double[] getInputAt(final int index)
@@ -289,7 +289,7 @@ public class MatrixTrainingInputSource implements ITrainingInputSource
     }
 
     /**
-     * @see de.freese.knn.net.trainer.ITrainingInputSource#getOutputAt(int)
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
      */
     @Override
     public double[] getOutputAt(final int index)
@@ -298,7 +298,7 @@ public class MatrixTrainingInputSource implements ITrainingInputSource
     }
 
     /**
-     * @see de.freese.knn.net.trainer.ITrainingInputSource#getSize()
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
      */
     @Override
     public int getSize()

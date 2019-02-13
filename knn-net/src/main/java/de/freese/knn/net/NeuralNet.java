@@ -7,20 +7,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import de.freese.base.core.visitor.Visitable;
-import de.freese.knn.net.layer.ILayer;
-import de.freese.knn.net.layer.input.InputLayer;
-import de.freese.knn.net.layer.output.OutputLayer;
-import de.freese.knn.net.math.IKnnMath;
-import de.freese.knn.net.math.stream.StreamKnnMath;
-import de.freese.knn.net.matrix.IValueInitializer;
+import de.freese.knn.net.layer.InputLayer;
+import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.layer.OutputLayer;
+import de.freese.knn.net.math.KnnMath;
 import de.freese.knn.net.matrix.Matrix;
-import de.freese.knn.net.matrix.RandomValueInitializer;
-import de.freese.knn.net.persister.INetPersister;
+import de.freese.knn.net.matrix.ValueInitializer;
+import de.freese.knn.net.persister.NetPersister;
 import de.freese.knn.net.persister.NetPersisterBinary;
+import de.freese.knn.net.util.visitor.Visitable;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
@@ -38,82 +35,36 @@ public class NeuralNet implements Visitable, AutoCloseable
     /**
      *
      */
-    private final IKnnMath knnMath;
-
-    /**
-     *
-     */
-    private boolean layerConnected = false;
+    private KnnMath knnMath = null;
 
     /**
      * Das Array wird in der #addLayer-Methode entsprechend vergrößert.
      */
-    private ILayer[] layers = new ILayer[0];
+    private Layer[] layers = new Layer[0];
 
     /**
      *
      */
-    private final IValueInitializer valueInitializer;
+    private ValueInitializer valueInitializer = null;
 
     /**
      * Creates a new {@link NeuralNet} object.
      */
     public NeuralNet()
     {
-        this(new StreamKnnMath(), new RandomValueInitializer());
-    }
-
-    /**
-     * Creates a new {@link NeuralNet} object.
-     *
-     * @param knnMath {@link IKnnMath}
-     */
-    public NeuralNet(final IKnnMath knnMath)
-    {
-        this(knnMath, new RandomValueInitializer());
-    }
-
-    /**
-     * Creates a new {@link NeuralNet} object.
-     *
-     * @param knnMath {@link IKnnMath}
-     * @param valueInitializer {@link IValueInitializer}
-     */
-    public NeuralNet(final IKnnMath knnMath, final IValueInitializer valueInitializer)
-    {
         super();
-
-        this.knnMath = Objects.requireNonNull(knnMath, "knnMath required");
-        this.valueInitializer = Objects.requireNonNull(valueInitializer, "valueInitializer required");
     }
 
     /**
      * Fügt einen Layer hinzu.<br>
      * Der erste muss ein {@link InputLayer} sein, der letzte ein {@link OutputLayer}.
      *
-     * @param layer {@link ILayer}
+     * @param layer {@link Layer}
      */
-    public void addLayer(final ILayer layer)
+    public void addLayer(final Layer layer)
     {
-        if (this.layerConnected)
-        {
-            throw new IllegalStateException("Layer already connected");
-        }
-
-        // InputLayer ist immer der erste.
-        if ((this.layers.length == 0) && !(layer instanceof InputLayer))
-        {
-            throw new IllegalArgumentException("InputLayer required");
-        }
-
-        // OutputLayer ist immer der letzte.
-        if ((this.layers.length > 0) && (this.layers[this.layers.length - 1] instanceof OutputLayer))
-        {
-            throw new IllegalArgumentException("OutputLayer already set");
-        }
-
         // Array vergrößern.
-        ILayer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
+        Layer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
 
         array[this.layers.length] = layer;
         this.layers = array;
@@ -138,17 +89,12 @@ public class NeuralNet implements Visitable, AutoCloseable
     /**
      * Verbindet die Layer mit den Matrixobjekten.
      */
-    public void connectLayer()
+    void connectLayer()
     {
-        if (this.layerConnected)
+        for (int i = 0; i < (getLayer().length - 1); i++)
         {
-            throw new IllegalStateException("Layer already connected");
-        }
-
-        for (int i = 0; i < (this.layers.length - 1); i++)
-        {
-            final ILayer leftLayer = this.layers[i];
-            final ILayer rightLayer = this.layers[i + 1];
+            final Layer leftLayer = getLayer()[i];
+            final Layer rightLayer = getLayer()[i + 1];
 
             final Matrix matrix = new Matrix(leftLayer.getNeurons().size(), rightLayer.getNeurons().size());
 
@@ -157,17 +103,7 @@ public class NeuralNet implements Visitable, AutoCloseable
         }
 
         // Gewichte initialisieren
-        getMath().initialize(getValueInitializer(), this.layers);
-
-        finishConnectLayer();
-    }
-
-    /**
-     *
-     */
-    private void finishConnectLayer()
-    {
-        this.layerConnected = true;
+        getMath().initialize(getValueInitializer(), getLayer());
     }
 
     /**
@@ -175,7 +111,7 @@ public class NeuralNet implements Visitable, AutoCloseable
      *
      * @return {@link List}
      */
-    public ILayer[] getLayer()
+    public Layer[] getLayer()
     {
         return this.layers;
     }
@@ -183,9 +119,9 @@ public class NeuralNet implements Visitable, AutoCloseable
     /**
      * Liefert die Mathematik-Implementierung.
      *
-     * @return {@link IKnnMath}
+     * @return {@link KnnMath}
      */
-    public IKnnMath getMath()
+    public KnnMath getMath()
     {
         return this.knnMath;
     }
@@ -218,13 +154,13 @@ public class NeuralNet implements Visitable, AutoCloseable
      */
     private OutputLayer getOutputLayer()
     {
-        return (OutputLayer) this.layers[this.layers.length - 1];
+        return (OutputLayer) getLayer()[getLayer().length - 1];
     }
 
     /**
-     * @return {@link IValueInitializer}
+     * @return {@link ValueInitializer}
      */
-    private IValueInitializer getValueInitializer()
+    private ValueInitializer getValueInitializer()
     {
         return this.valueInitializer;
     }
@@ -244,14 +180,12 @@ public class NeuralNet implements Visitable, AutoCloseable
      * Laden des Netzes aus dem Stream. Der Stream wird NICHT geschlossen !
      *
      * @param dis {@link DataInputStream}
-     * @param netPersister {@link INetPersister}
+     * @param netPersister {@link NetPersister}
      * @throws Exception Falls was schief geht.
      */
-    public void load(final DataInputStream dis, final INetPersister netPersister) throws Exception
+    public void load(final DataInputStream dis, final NetPersister netPersister) throws Exception
     {
         netPersister.load(dis, this);
-
-        finishConnectLayer();
     }
 
     /**
@@ -269,11 +203,27 @@ public class NeuralNet implements Visitable, AutoCloseable
      * Speichern des Netzes in den Stream. Der Stream wird NICHT geschlossen !
      *
      * @param dos {@link DataOutputStream}
-     * @param netPersister {@link INetPersister}
+     * @param netPersister {@link NetPersister}
      * @throws Exception Falls was schief geht.
      */
-    public void save(final DataOutputStream dos, final INetPersister netPersister) throws Exception
+    public void save(final DataOutputStream dos, final NetPersister netPersister) throws Exception
     {
         netPersister.save(dos, this);
+    }
+
+    /**
+     * @param knnMath {@link KnnMath}
+     */
+    void setKnnMath(final KnnMath knnMath)
+    {
+        this.knnMath = knnMath;
+    }
+
+    /**
+     * @param valueInitializer {@link ValueInitializer}
+     */
+    void setValueInitializer(final ValueInitializer valueInitializer)
+    {
+        this.valueInitializer = valueInitializer;
     }
 }

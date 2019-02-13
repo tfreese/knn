@@ -8,7 +8,7 @@ package de.freese.knn.net.function;
  * 
  * @author Thomas Freese
  */
-public class FunctionSinus implements IFunction
+public class FunctionSinus implements Function
 {
 	/**
 	 * Creates a new {@link FunctionSinus} object.
@@ -19,7 +19,7 @@ public class FunctionSinus implements IFunction
 	}
 
 	/**
-	 * @see de.freese.knn.net.function.IFunction#calculate(double)
+	 * @see de.freese.knn.net.function.Function#calculate(double)
 	 */
 	@Override
 	public double calculate(final double value)
