@@ -10,7 +10,7 @@ import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.math.KnnMath;
-import de.freese.knn.net.math.stream.KnnMathStream;
+import de.freese.knn.net.math.KnnMathStream;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.matrix.ValueInitializerRandom;
 
@@ -57,7 +57,16 @@ public class NeuralNetBuilder
      */
     public NeuralNet build()
     {
-        NeuralNet neuralNet = new NeuralNet();
+        return build(true);
+    }
+
+    /**
+     * @param connectLayer boolean
+     * @return {@link NeuralNet}
+     */
+    public NeuralNet build(final boolean connectLayer)
+    {
+        NeuralNetImpl neuralNet = new NeuralNetImpl();
 
         // KnnMath
         if (this.knnMath != null)
@@ -88,7 +97,7 @@ public class NeuralNetBuilder
         neuralNet.addLayer(this.inputLayer);
 
         // HiddenLayer
-        if (!(this.hiddenLayers.isEmpty()))
+        if (this.hiddenLayers.isEmpty())
         {
             throw new IllegalStateException("HiddenLayer required");
         }
@@ -106,7 +115,10 @@ public class NeuralNetBuilder
 
         neuralNet.addLayer(this.outputLayer);
 
-        neuralNet.connectLayer();
+        if (connectLayer)
+        {
+            neuralNet.connectLayer();
+        }
 
         return neuralNet;
     }

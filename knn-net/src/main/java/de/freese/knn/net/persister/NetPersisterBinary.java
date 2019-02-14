@@ -3,11 +3,23 @@
  */
 package de.freese.knn.net.persister;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.lang.reflect.Constructor;
-import java.util.function.Consumer;
+import de.freese.knn.net.NeuralNet;
+import de.freese.knn.net.NeuralNetBuilder;
+import de.freese.knn.net.function.Function;
+import de.freese.knn.net.function.FunctionBinary;
+import de.freese.knn.net.function.FunctionGauss;
+import de.freese.knn.net.function.FunctionLinear;
+import de.freese.knn.net.function.FunctionLogarithmic;
+import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.function.FunctionSinus;
+import de.freese.knn.net.function.FunctionTanH;
+import de.freese.knn.net.layer.HiddenLayer;
+import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.neuron.NeuronList;
@@ -18,7 +30,7 @@ import de.freese.knn.net.neuron.NeuronList;
  *
  * @author Thomas Freese
  */
-public class NetPersisterBinary extends AbstractNetPersister
+public class NetPersisterBinary implements NetPersister
 {
     /**
      * Creates a new {@link NetPersisterBinary} object.
@@ -29,23 +41,33 @@ public class NetPersisterBinary extends AbstractNetPersister
     }
 
     /**
-     * @see de.freese.knn.net.persister.NetPersister#load(java.io.DataInputStream, java.util.function.Consumer)
+     * @see de.freese.knn.net.persister.NetPersister#load(java.io.DataInput)
      */
     @Override
-    public void load(final DataInputStream dis, final Consumer<Layer> layerConsumer) throws Exception
+    public NeuralNet load(final DataInput input) throws Exception
     {
-        // Anzahl Layer lesen
-        int layerCount = dis.readInt();
+        NeuralNetBuilder builder = new NeuralNetBuilder();
 
-        Layer leftLayer = loadLayer(dis);
-        layerConsumer.accept(leftLayer);
+        // Anzahl Layer lesen
+        int layerCount = input.readInt();
+
+        Layer leftLayer = loadLayer(input);
+        builder.layerInput((InputLayer) leftLayer);
 
         for (int i = 0; i < (layerCount - 1); i++)
         {
-            Matrix matrix = loadMatrix(dis);
+            Matrix matrix = loadMatrix(input);
 
-            Layer rightLayer = loadLayer(dis);
-            layerConsumer.accept(rightLayer);
+            Layer rightLayer = loadLayer(input);
+
+            if (i < (layerCount - 2))
+            {
+                builder.layerHidden((HiddenLayer) rightLayer);
+            }
+            else
+            {
+                builder.layerOutput((OutputLayer) rightLayer);
+            }
 
             // Layer verknüpfen
             leftLayer.setOutputMatrix(matrix);
@@ -53,46 +75,127 @@ public class NetPersisterBinary extends AbstractNetPersister
 
             leftLayer = rightLayer;
         }
+
+        return builder.build(false);
     }
 
     /**
-     * @see de.freese.knn.net.persister.AbstractNetPersister#loadLayer(java.io.DataInputStream)
+     * Laden einer Function.
+     *
+     * @param input {@link DataInput}
+     * @return {@link Layer}
+     * @throws Exception Falls was schief geht.
      */
-    @Override
-    protected Layer loadLayer(final DataInputStream dis) throws Exception
+    protected Function loadFunction(final DataInput input) throws Exception
     {
         // Klassentyp
-        String layerClazzName = dis.readUTF();
+        String clazzName = input.readUTF();
+
+        Class<?> clazz = Class.forName(clazzName);
+        Function function = null;
+
+        // Funktions-Parameter
+        if (FunctionBinary.class.equals(clazz))
+        {
+            double threshold = input.readDouble();
+
+            Constructor<?> constructor = clazz.getConstructor(double.class);
+            function = (Function) constructor.newInstance(threshold);
+        }
+        else if (FunctionGauss.class.equals(clazz))
+        {
+            Constructor<?> constructor = clazz.getConstructor();
+            function = (Function) constructor.newInstance();
+        }
+        else if (FunctionLinear.class.equals(clazz))
+        {
+            double factor = input.readDouble();
+
+            Constructor<?> constructor = clazz.getConstructor(double.class);
+            function = (Function) constructor.newInstance(factor);
+        }
+        else if (FunctionLogarithmic.class.equals(clazz))
+        {
+            Constructor<?> constructor = clazz.getConstructor();
+            function = (Function) constructor.newInstance();
+        }
+        else if (FunctionSigmoide.class.equals(clazz))
+        {
+            double durchgang = input.readDouble();
+            double steigung = input.readDouble();
+
+            Constructor<?> constructor = clazz.getConstructor(double.class, double.class);
+            function = (Function) constructor.newInstance(durchgang, steigung);
+        }
+        else if (FunctionSinus.class.equals(clazz))
+        {
+            Constructor<?> constructor = clazz.getConstructor();
+            function = (Function) constructor.newInstance();
+        }
+        else if (FunctionTanH.class.equals(clazz))
+        {
+            Constructor<?> constructor = clazz.getConstructor();
+            function = (Function) constructor.newInstance();
+        }
+        else
+        {
+            throw new UnsupportedOperationException("unkown function type: " + clazz.getName());
+        }
+
+        return function;
+    }
+
+    /**
+     * Laden eines Layers.
+     *
+     * @param input {@link DataInput}
+     * @return {@link Layer}
+     * @throws Exception Falls was schief geht.
+     */
+    protected Layer loadLayer(final DataInput input) throws Exception
+    {
+        // Klassentyp
+        String clazzName = input.readUTF();
 
         // Neuronen
-        int size = dis.readInt();
+        int size = input.readInt();
 
-        Class<?> layerClazz = Class.forName(layerClazzName);
+        Function function = loadFunction(input);
 
-        Constructor<?> constructor = layerClazz.getConstructor(new Class<?>[]
+        Class<?> clazz = Class.forName(clazzName);
+        Layer layer = null;
+
+        if (HiddenLayer.class.equals(clazz))
         {
-                int.class
-        });
-
-        Layer layer = (Layer) constructor.newInstance(size);
+            Constructor<?> constructor = clazz.getConstructor(int.class, Function.class);
+            layer = (Layer) constructor.newInstance(size, function);
+        }
+        else
+        {
+            Constructor<?> constructor = clazz.getConstructor(int.class);
+            layer = (Layer) constructor.newInstance(size);
+        }
 
         // BIAS Gewichte der Neuronen
         for (Neuron neuron : layer.getNeurons())
         {
-            neuron.setInputBIAS(dis.readDouble());
+            neuron.setInputBIAS(input.readDouble());
         }
 
         return layer;
     }
 
     /**
-     * @see de.freese.knn.net.persister.AbstractNetPersister#loadMatrix(java.io.DataInputStream)
+     * Laden einer Matrix.
+     *
+     * @param input {@link DataInput}
+     * @return {@link Matrix}
+     * @throws Exception Falls was schief geht.
      */
-    @Override
-    protected Matrix loadMatrix(final DataInputStream dis) throws Exception
+    protected Matrix loadMatrix(final DataInput input) throws Exception
     {
-        int inputSize = dis.readInt();
-        int outputSize = dis.readInt();
+        int inputSize = input.readInt();
+        int outputSize = input.readInt();
 
         Matrix matrix = new Matrix(inputSize, outputSize);
 
@@ -101,7 +204,7 @@ public class NetPersisterBinary extends AbstractNetPersister
         {
             for (int o = 0; o < outputSize; o++)
             {
-                matrix.getWeights()[i][o] = dis.readDouble();
+                matrix.getWeights()[i][o] = input.readDouble();
             }
         }
 
@@ -109,40 +212,100 @@ public class NetPersisterBinary extends AbstractNetPersister
     }
 
     /**
-     * @see de.freese.knn.net.persister.AbstractNetPersister#saveLayer(java.io.DataOutputStream, de.freese.knn.net.layer.Layer)
+     * @see de.freese.knn.net.persister.NetPersister#save(java.io.DataOutput, de.freese.knn.net.NeuralNet)
      */
     @Override
-    protected void saveLayer(final DataOutputStream dos, final Layer layer) throws Exception
+    public void save(final DataOutput output, final NeuralNet knn) throws Exception
     {
-        // Klassentyp
-        dos.writeUTF(layer.getClass().getName());
+        // Anzahl Layer
+        Layer[] layers = knn.getLayer();
 
-        // Neuronen
-        NeuronList neurons = layer.getNeurons();
-        dos.writeInt(neurons.size());
+        output.writeInt(layers.length);
 
-        // BIAS Gewichte
-        for (Neuron neuron : neurons)
+        for (int i = 0; i < layers.length; i++)
         {
-            dos.writeDouble(neuron.getInputBIAS());
+            Layer layer = layers[i];
+            saveLayer(output, layer);
+
+            if (i < (layers.length - 1))
+            {
+                saveMatrix(output, layer.getOutputMatrix());
+            }
         }
     }
 
     /**
-     * @see de.freese.knn.net.persister.AbstractNetPersister#saveMatrix(java.io.DataOutputStream, de.freese.knn.net.matrix.Matrix)
+     * Speichert einen Layer.
+     *
+     * @param output {@link DataOutput}
+     * @param function {@link Function}
+     * @throws Exception Falls was schief geht.
      */
-    @Override
-    protected void saveMatrix(final DataOutputStream dos, final Matrix matrix) throws Exception
+    protected void saveFunction(final DataOutput output, final Function function) throws Exception
     {
-        dos.writeInt(matrix.getInputSize());
-        dos.writeInt(matrix.getOutputSize());
+        // Klassentyp
+        output.writeUTF(function.getClass().getName());
+
+        // Funktions-Parameter
+        if (function instanceof FunctionBinary)
+        {
+            output.writeDouble(((FunctionBinary) function).getThreshold());
+        }
+        else if (function instanceof FunctionLinear)
+        {
+            output.writeDouble(((FunctionLinear) function).getFactor());
+        }
+        else if (function instanceof FunctionSigmoide)
+        {
+            output.writeDouble(((FunctionSigmoide) function).getDurchgang());
+            output.writeDouble(((FunctionSigmoide) function).getSteigung());
+        }
+    }
+
+    /**
+     * Speichert einen Layer.
+     *
+     * @param output {@link DataOutput}
+     * @param layer {@link Layer}
+     * @throws Exception Falls was schief geht.
+     */
+    protected void saveLayer(final DataOutput output, final Layer layer) throws Exception
+    {
+        // Klassentyp
+        output.writeUTF(layer.getClass().getName());
+
+        // Neuronen
+        NeuronList neurons = layer.getNeurons();
+        output.writeInt(neurons.size());
+
+        // Funktion
+        saveFunction(output, layer.getFunction());
+
+        // BIAS Gewichte
+        for (Neuron neuron : neurons)
+        {
+            output.writeDouble(neuron.getInputBIAS());
+        }
+    }
+
+    /**
+     * Speichert eine Matrix.
+     *
+     * @param output {@link DataOutput}
+     * @param matrix {@link Matrix}
+     * @throws Exception Falls was schief geht.
+     */
+    protected void saveMatrix(final DataOutput output, final Matrix matrix) throws Exception
+    {
+        output.writeInt(matrix.getInputSize());
+        output.writeInt(matrix.getOutputSize());
 
         // Gewichte
         for (int i = 0; i < matrix.getInputSize(); i++)
         {
             for (int o = 0; o < matrix.getOutputSize(); o++)
             {
-                dos.writeDouble(matrix.getWeights()[i][o]);
+                output.writeDouble(matrix.getWeights()[i][o]);
             }
         }
     }

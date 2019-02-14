@@ -15,7 +15,7 @@ import de.freese.knn.net.matrix.Matrix;
  *
  * @author Thomas Freese
  */
-public class NeuronDefault implements Neuron
+public class NeuronImpl implements Neuron
 {
     /**
      * 
@@ -33,12 +33,12 @@ public class NeuronDefault implements Neuron
     private final int layerIndex;
 
     /**
-     * Erstellt ein neues {@link NeuronDefault} Object.
+     * Erstellt ein neues {@link NeuronImpl} Object.
      * 
      * @param layer {@link Layer}
      * @param layerIndex int
      */
-    public NeuronDefault(final Layer layer, final int layerIndex)
+    public NeuronImpl(final Layer layer, final int layerIndex)
     {
         super();
 

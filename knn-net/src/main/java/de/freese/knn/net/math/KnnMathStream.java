@@ -1,13 +1,12 @@
 /**
  * Created on 23.05.2016 17:18:14
  */
-package de.freese.knn.net.math.stream;
+package de.freese.knn.net.math;
 
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.util.stream.spliterator.SplitableArraySpliterator;
 import de.freese.knn.net.visitor.BackwardVisitor;

@@ -18,6 +18,8 @@ import de.freese.knn.net.function.FunctionSigmoide;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
+import de.freese.knn.net.persister.NetPersister;
+import de.freese.knn.net.persister.NetPersisterBinary;
 import de.freese.knn.net.trainer.LoggerNetTrainerListener;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.TrainingInputSource;
@@ -58,20 +60,23 @@ public class TestPersisterBinary
             trainer.train(neuralNet, trainingInputSource);
 
             // Speichern
-            neuralNet.save(dos);
+            NetPersister persister = new NetPersisterBinary();
+            persister.save(dos, neuralNet);
         }
 
         // Laden
-        try (NeuralNet neuralNet = new NeuralNet();
-             DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(knnFile))))
+        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(knnFile))))
         {
-            neuralNet.load(dis);
+            NetPersister persister = new NetPersisterBinary();
 
-            // Netz testen
-            double[] inputs = trainingInputSource.getInputAt(0);
-            double[] outputs = neuralNet.getOutput(inputs);
+            try (NeuralNet neuralNet = persister.load(dis))
+            {
+                // Netz testen
+                double[] inputs = trainingInputSource.getInputAt(0);
+                double[] outputs = neuralNet.getOutput(inputs);
 
-            System.out.println(Arrays.toString(outputs));
+                System.out.println(Arrays.toString(outputs));
+            }
         }
     }
 }

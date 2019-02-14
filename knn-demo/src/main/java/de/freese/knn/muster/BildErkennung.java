@@ -14,6 +14,8 @@ import de.freese.knn.net.function.FunctionSigmoide;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
+import de.freese.knn.net.persister.NetPersister;
+import de.freese.knn.net.persister.NetPersisterBinary;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 import de.freese.knn.net.trainer.TrainingInputSource;
@@ -68,12 +70,18 @@ public class BildErkennung
             Toolkit.getDefaultToolkit().beep();
 
             // Speichern
-            neuralNet.save(dos);
+            NetPersister persister = new NetPersisterBinary();
+            persister.save(dos, neuralNet);
         }
 
         // Laden
-        // try (NeuralNet neuralNet = new NeuralNet())
+        // try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(knnFile))))
         // {
+        // NetPersister persister = new NetPersisterBinary();
+        //
+        // try (NeuralNet neuralNet = persister.load(dis))
+        // {
+        // // Netz testen
         // // Netz testen
         // for (int i = 0; i < trainingInputSource.getSize(); i++)
         // {
@@ -87,6 +95,7 @@ public class BildErkennung
         // }
         //
         // System.out.println();
+        // }
         // }
         // }
 

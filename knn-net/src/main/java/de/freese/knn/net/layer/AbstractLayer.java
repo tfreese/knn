@@ -7,7 +7,7 @@ import java.util.Objects;
 import de.freese.knn.net.function.Function;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.neuron.Neuron;
-import de.freese.knn.net.neuron.NeuronDefault;
+import de.freese.knn.net.neuron.NeuronImpl;
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
@@ -73,7 +73,7 @@ public abstract class AbstractLayer implements Layer
     {
         for (int i = 0; i < neurons.size(); i++)
         {
-            neurons.set(i, new NeuronDefault(this, i));
+            neurons.set(i, new NeuronImpl(this, i));
         }
     }
 

@@ -12,7 +12,7 @@ import de.freese.knn.net.layer.InputLayer;
  * 
  * @author Thomas Freese
  */
-public class NeuronInput extends NeuronDefault
+public class NeuronInput extends NeuronImpl
 {
 	/**
 	 * Erstellt ein neues {@link NeuronInput} Object.
@@ -26,7 +26,7 @@ public class NeuronInput extends NeuronDefault
 	}
 
 	/**
-	 * @see de.freese.knn.net.neuron.NeuronDefault#getInputBIAS()
+	 * @see de.freese.knn.net.neuron.NeuronImpl#getInputBIAS()
 	 */
 	@Override
 	public double getInputBIAS()
@@ -35,7 +35,7 @@ public class NeuronInput extends NeuronDefault
 	}
 
 	/**
-	 * @see de.freese.knn.net.neuron.NeuronDefault#setInputBIAS(double)
+	 * @see de.freese.knn.net.neuron.NeuronImpl#setInputBIAS(double)
 	 */
 	@Override
 	public void setInputBIAS(final double value)
