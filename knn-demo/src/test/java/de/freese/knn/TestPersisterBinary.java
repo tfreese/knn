@@ -5,7 +5,9 @@ package de.freese.knn;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,14 +62,14 @@ public class TestPersisterBinary
             trainer.train(neuralNet, trainingInputSource);
 
             // Speichern
-            NetPersister persister = new NetPersisterBinary();
+            NetPersister<DataInput, DataOutput> persister = new NetPersisterBinary();
             persister.save(dos, neuralNet);
         }
 
         // Laden
         try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(knnFile))))
         {
-            NetPersister persister = new NetPersisterBinary();
+            NetPersister<DataInput, DataOutput> persister = new NetPersisterBinary();
 
             try (NeuralNet neuralNet = persister.load(dis))
             {

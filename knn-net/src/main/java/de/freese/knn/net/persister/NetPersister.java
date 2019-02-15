@@ -11,8 +11,10 @@ import de.freese.knn.net.NeuralNet;
  * Interface um ein neuronales Netz zu Speichern oder zu Laden.
  *
  * @author Thomas Freese
+ * @param <IN> Input-Type
+ * @param <OUT> Output-Type
  */
-public interface NetPersister
+public interface NetPersister<IN, OUT>
 {
     /**
      * Laden des Netzes.
@@ -21,7 +23,7 @@ public interface NetPersister
      * @return {@link NeuralNet}
      * @throws Exception Falls was schief geht.
      */
-    public NeuralNet load(DataInput input) throws Exception;
+    public NeuralNet load(IN input) throws Exception;
 
     /**
      * Speichern des Netzes.
@@ -30,5 +32,5 @@ public interface NetPersister
      * @param knn {@link NeuralNet}
      * @throws Exception Falls was schief geht.
      */
-    public void save(DataOutput output, NeuralNet knn) throws Exception;
+    public void save(OUT output, NeuralNet knn) throws Exception;
 }

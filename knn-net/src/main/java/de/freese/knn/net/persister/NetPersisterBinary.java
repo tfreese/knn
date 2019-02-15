@@ -30,7 +30,7 @@ import de.freese.knn.net.neuron.NeuronList;
  *
  * @author Thomas Freese
  */
-public class NetPersisterBinary implements NetPersister
+public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
 {
     /**
      * Creates a new {@link NetPersisterBinary} object.
@@ -41,7 +41,7 @@ public class NetPersisterBinary implements NetPersister
     }
 
     /**
-     * @see de.freese.knn.net.persister.NetPersister#load(java.io.DataInput)
+     * @see de.freese.knn.net.persister.NetPersister#load(java.lang.Object)
      */
     @Override
     public NeuralNet load(final DataInput input) throws Exception
@@ -212,7 +212,7 @@ public class NetPersisterBinary implements NetPersister
     }
 
     /**
-     * @see de.freese.knn.net.persister.NetPersister#save(java.io.DataOutput, de.freese.knn.net.NeuralNet)
+     * @see de.freese.knn.net.persister.NetPersister#save(java.lang.Object, de.freese.knn.net.NeuralNet)
      */
     @Override
     public void save(final DataOutput output, final NeuralNet knn) throws Exception

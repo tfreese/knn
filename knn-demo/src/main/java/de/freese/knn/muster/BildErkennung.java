@@ -5,6 +5,8 @@ package de.freese.knn.muster;
 
 import java.awt.Toolkit;
 import java.io.BufferedOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,9 +40,6 @@ public class BildErkennung
         // final ITrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
         File knnFile = new File("ImageNeuralNet.bin");
 
-        // neuralNet = new NeuralNet(new ExecutorKnnMath());
-        // neuralNet = new NeuralNet(new ForkJoinKnnMath());
-
         // if (!nnFile.exists())
 
         // Speichern
@@ -70,7 +69,7 @@ public class BildErkennung
             Toolkit.getDefaultToolkit().beep();
 
             // Speichern
-            NetPersister persister = new NetPersisterBinary();
+            NetPersister<DataInput, DataOutput> persister = new NetPersisterBinary();
             persister.save(dos, neuralNet);
         }
 
@@ -81,7 +80,6 @@ public class BildErkennung
         //
         // try (NeuralNet neuralNet = persister.load(dis))
         // {
-        // // Netz testen
         // // Netz testen
         // for (int i = 0; i < trainingInputSource.getSize(); i++)
         // {
