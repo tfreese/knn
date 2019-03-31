@@ -51,19 +51,9 @@
 
     <dependencies>
         <!-- compile scope -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
         <!-- runtime scope -->
         <!-- provided scope -->
         <!-- test scope -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>
