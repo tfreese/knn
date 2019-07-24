@@ -16,7 +16,7 @@
 	<description>Demos für künstliche neurale Netze.</description>
 
 	<properties>
-		<skipTests>true</skipTests>
+		<skipTest>true</skipTest>
 	</properties>
 
 	<dependencies>
