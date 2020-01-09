@@ -1,40 +1,30 @@
-allprojects {
-    apply plugin: "base"
-    
-    group = "de.freese.knn"
-    version = "0.0.1-SNAPSHOT"
-}
-
-description = "Künstliches neuronales Netz (Artificial neural network)" 
+// Tasks im SubModul ausführen: gradle MODUL:clean build
 
 subprojects {
-    apply plugin: "java"
-
-    dependencies {
-        compile("org.slf4j:slf4j-api:$version_slf4j")
-        
-        testCompile("junit:junit:$version_junit")
+	dependencies {
+		implementation(platform("de.freese:maven-bom:$version_mavenBom"))
+		//implementation("org.springframework.boot:spring-boot-starter")
     }
 }
 
 project("knn-net") {
-    description = "Künstliches neurales Netz"
-    
-    dependencies {
-        compile("de.freese.base:base-core:$project.version") 
+	description = "Künstliches neurales Netz"
+	dependencies {
+		implementation("de.freese.base:base-core:$project.archiveVersion")
+		implementation("org.slf4j:slf4j-api")
     }    
 }
 
 project("knn-demo") {
-    description = "Demos für künstliche neurale Netze"
-    
-    dependencies {
-        compile project(":knn-net")
-        compile("org.apache.commons:commons-lang3:$version_commons_lang")
-        compile("org.springframework:spring-jdbc:$version_spring")
-		
-        runtime("org.slf4j:slf4j-simple:$version_slf4j")
-		
-        testCompile("mysql:mysql-connector-java:$version_mysql")
+	description = "Demos für künstliche neurale Netze"
+	dependencies {
+		implementation(project(":knn-net"))
+		implementation("org.apache.commons:commons-lang3")
+		implementation("org.springframework:spring-jdbc")
+
+		runtime("org.slf4j:slf4j-simple")
+
+		testImplementation("mysql:mysql-connector-java")
+		testImplementation("org.springframework:spring-jdbc")
     }  
 }
