@@ -27,7 +27,6 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  */
 public class TestMailSpamFilter implements TrainingInputSource
 {
-
     /**
      * @param args String[]
      * @throws Exception Falls was schief geht.

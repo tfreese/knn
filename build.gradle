@@ -8,11 +8,12 @@ subprojects {
 }
 
 project("knn-net") {
+	apply plugin: 'java-library'
 	description = "Künstliches neurales Netz"
 	dependencies {
-		implementation("de.freese.base:base-core:$project.archiveVersion")
+		api("de.freese.base:base-core:$project.archiveVersion")
 		
-		implementation("org.slf4j:slf4j-api")
+		api("org.slf4j:slf4j-api")
     }    
 }
 
@@ -27,6 +28,7 @@ project("knn-demo") {
 		runtimeOnly("org.slf4j:slf4j-simple")
 
 		testImplementation("mysql:mysql-connector-java")
+		testImplementation("org.junit.jupiter:junit-jupiter-engine")
 		testImplementation("org.springframework:spring-jdbc")
     }  
 }
