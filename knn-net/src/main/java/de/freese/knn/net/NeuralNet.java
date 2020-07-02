@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.KnnMath;
-import de.freese.knn.net.util.visitor.Visitable;
+import de.freese.knn.net.visitor.Visitable;
 
 /**
  * Interface des neuralen Netzes.

@@ -99,43 +99,36 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         {
             double threshold = input.readDouble();
 
-            Constructor<?> constructor = clazz.getConstructor(double.class);
-            function = (Function) constructor.newInstance(threshold);
+            function = new FunctionBinary(threshold);
         }
         else if (FunctionGauss.class.equals(clazz))
         {
-            Constructor<?> constructor = clazz.getConstructor();
-            function = (Function) constructor.newInstance();
+            function = new FunctionGauss();
         }
         else if (FunctionLinear.class.equals(clazz))
         {
             double factor = input.readDouble();
 
-            Constructor<?> constructor = clazz.getConstructor(double.class);
-            function = (Function) constructor.newInstance(factor);
+            function = new FunctionLinear(factor);
         }
         else if (FunctionLogarithmic.class.equals(clazz))
         {
-            Constructor<?> constructor = clazz.getConstructor();
-            function = (Function) constructor.newInstance();
+            function = new FunctionLogarithmic();
         }
         else if (FunctionSigmoide.class.equals(clazz))
         {
             double durchgang = input.readDouble();
             double steigung = input.readDouble();
 
-            Constructor<?> constructor = clazz.getConstructor(double.class, double.class);
-            function = (Function) constructor.newInstance(durchgang, steigung);
+            function = new FunctionSigmoide(durchgang, steigung);
         }
         else if (FunctionSinus.class.equals(clazz))
         {
-            Constructor<?> constructor = clazz.getConstructor();
-            function = (Function) constructor.newInstance();
+            function = new FunctionSinus();
         }
         else if (FunctionTanH.class.equals(clazz))
         {
-            Constructor<?> constructor = clazz.getConstructor();
-            function = (Function) constructor.newInstance();
+            function = new FunctionTanH();
         }
         else
         {

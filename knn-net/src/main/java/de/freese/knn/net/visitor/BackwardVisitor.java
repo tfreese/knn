@@ -20,23 +20,23 @@ import de.freese.knn.net.trainer.TrainingContext;
 public class BackwardVisitor extends AbstractKnnVisitor
 {
     /**
-     * 
+     *
      */
     private final ForwardVisitor forwardVisitor;
 
     /**
-     * 
+     *
      */
     private double[] outputTargets = null;
 
     /**
-     * 
+     *
      */
     private final TrainingContext trainingContext;
 
     /**
      * Erstellt ein neues {@link BackwardVisitor} Object.
-     * 
+     *
      * @param trainingContext {@link TrainingContext} 
      * @param forwardVisitor {@link ForwardVisitor}
      */
@@ -61,7 +61,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
 
     /**
      * Liefert die vorherige Gewichtsänderungen der Neuronen.
-     * 
+     *
      * @param layer {@link Layer}
      * @return double[][]
      */
@@ -74,7 +74,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
 
     /**
      * Setzt die Fehler-Daten des Layers.
-     * 
+     *
      * @param layer {@link Layer}
      * @return double[]
      */
@@ -85,7 +85,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
 
     /**
      * Liefert die Fehler-Daten des letzten Layers.
-     * 
+     *
      * @return double[]
      */
     public double[] getLastErrors()
@@ -95,7 +95,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
 
     /**
      * Liefert die Output-Daten des letzten Layers.
-     * 
+     *
      * @return double[]
      */
     private double[] getLastOutputs()
@@ -105,22 +105,22 @@ public class BackwardVisitor extends AbstractKnnVisitor
 
     /**
      * Liefert den aktuellen Netzfehler.
-     * 
+     *
      * @return double
      */
     public double getNetError()
     {
         double[] outputs = getLastOutputs();
-        double[] outputTargets = getOutputTargets();
+        double[] targets = getOutputTargets();
 
-        double error = getMath().getNetError(outputs, outputTargets);
+        double error = getMath().getNetError(outputs, targets);
 
         return error;
     }
 
     /**
      * Setzt die Output-Daten des Layers.
-     * 
+     *
      * @param layer {@link Layer}
      * @return double[]
      */
@@ -131,7 +131,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
 
     /**
      * Liefert die Ausgabeziele der Neuronen, wird im {@link NetTrainer} benötigt.
-     * 
+     *
      * @return double[]
      */
     public double[] getOutputTargets()
@@ -141,7 +141,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
 
     /**
      * Setzt die Fehler-Daten des Layers.
-     * 
+     *
      * @param layer {@link Layer}
      * @param errors double[]
      */
@@ -155,7 +155,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
 
     /**
      * Setzt die Ausgabeziele der Neuronen, wird im {@link NetTrainer} benötigt.
-     * 
+     *
      * @param outputTargets double[]
      */
     public void setOutputTargets(final double[] outputTargets)

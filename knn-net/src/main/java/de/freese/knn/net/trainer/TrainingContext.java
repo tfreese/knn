@@ -6,54 +6,53 @@ package de.freese.knn.net.trainer;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import de.freese.knn.net.matrix.Matrix;
 
 /**
  * Enthaelt Daten des Netzes fuer den kompletten Trainingslauf.
- * 
+ *
  * @author Thomas Freese
  */
 public class TrainingContext
 {
-	/**
-	 * 
-	 */
-	private Map<Matrix, double[][]> deltaWeights = new HashMap<>();
+    /**
+     * 
+     */
+    private Map<Matrix, double[][]> deltaWeights = new HashMap<>();
 
-	/**
-	 * Erstellt ein neues {@link TrainingContext} Object.
-	 */
-	public TrainingContext()
-	{
-		super();
-	}
+    /**
+     * Erstellt ein neues {@link TrainingContext} Object.
+     */
+    public TrainingContext()
+    {
+        super();
+    }
 
-	/**
-	 * Aufraeumen.
-	 */
-	public void clear()
-	{
-		this.deltaWeights.clear();
-		this.deltaWeights = null;
-	}
+    /**
+     * Aufraeumen.
+     */
+    public void clear()
+    {
+        this.deltaWeights.clear();
+        this.deltaWeights = null;
+    }
 
-	/**
-	 * Liefert die vorherige Gewichtsaenderungen der Matrix-Neuronen.
-	 * 
-	 * @param matrix {@link Matrix}
-	 * @return double[][]
-	 */
-	public double[][] getDeltaWeights(final Matrix matrix)
-	{
-		double[][] deltaWeights = this.deltaWeights.get(matrix);
+    /**
+     * Liefert die vorherige Gewichtsaenderungen der Matrix-Neuronen.
+     * 
+     * @param matrix {@link Matrix}
+     * @return double[][]
+     */
+    public double[][] getDeltaWeights(final Matrix matrix)
+    {
+        double[][] dWeights = this.deltaWeights.get(matrix);
 
-		if (deltaWeights == null)
-		{
-			deltaWeights = new double[matrix.getInputSize()][matrix.getOutputSize()];
-			this.deltaWeights.put(matrix, deltaWeights);
-		}
+        if (dWeights == null)
+        {
+            dWeights = new double[matrix.getInputSize()][matrix.getOutputSize()];
+            this.deltaWeights.put(matrix, dWeights);
+        }
 
-		return deltaWeights;
-	}
+        return dWeights;
+    }
 }

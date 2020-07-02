@@ -18,23 +18,23 @@ import de.freese.knn.net.matrix.Matrix;
 public class NeuronImpl implements Neuron
 {
     /**
-     * 
+     *
      */
     private double inputBIAS = 0.0D;
 
     /**
-     * 
+     *
      */
     private final Layer layer;
 
     /**
-     * 
+     *
      */
     private final int layerIndex;
 
     /**
      * Erstellt ein neues {@link NeuronImpl} Object.
-     * 
+     *
      * @param layer {@link Layer}
      * @param layerIndex int
      */
@@ -67,7 +67,7 @@ public class NeuronImpl implements Neuron
     /**
      * Liefert die Eingangsmatrix des Layers.<br>
      * Der {@link InputLayer} hat keine Eingangsmatrix !
-     * 
+     *
      * @return {@link Matrix}
      */
     protected Matrix getInputMatrix()
@@ -101,9 +101,7 @@ public class NeuronImpl implements Neuron
 
         if (matrix != null)
         {
-            int layerIndex = getLayerIndex();
-
-            return matrix.getWeights()[index][layerIndex];
+            return matrix.getWeights()[index][getLayerIndex()];
         }
 
         return 0.0D;
@@ -121,7 +119,7 @@ public class NeuronImpl implements Neuron
     /**
      * Liefert die Ausgangsmatrix des Layers.<br>
      * Der {@link OutputLayer} hat keine Ausgangsmatrix !
-     * 
+     *
      * @return {@link Matrix}
      */
     protected Matrix getOutputMatrix()
@@ -155,9 +153,7 @@ public class NeuronImpl implements Neuron
 
         if (matrix != null)
         {
-            int layerIndex = getLayerIndex();
-
-            return matrix.getWeights()[layerIndex][index];
+            return matrix.getWeights()[getLayerIndex()][index];
         }
 
         return 0.0D;
@@ -182,9 +178,7 @@ public class NeuronImpl implements Neuron
 
         if (matrix != null)
         {
-            int layerIndex = getLayerIndex();
-
-            matrix.getWeights()[index][layerIndex] = weight;
+            matrix.getWeights()[index][getLayerIndex()] = weight;
         }
     }
 
@@ -198,9 +192,7 @@ public class NeuronImpl implements Neuron
 
         if (matrix != null)
         {
-            int layerIndex = getLayerIndex();
-
-            matrix.getWeights()[layerIndex][index] = weight;
+            matrix.getWeights()[getLayerIndex()][index] = weight;
         }
     }
 

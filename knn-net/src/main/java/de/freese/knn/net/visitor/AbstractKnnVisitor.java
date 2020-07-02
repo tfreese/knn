@@ -7,7 +7,6 @@ import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.math.KnnMath;
-import de.freese.knn.net.util.visitor.Visitor;
 
 /**
  * Basisklasse eines Netz-Visitors.
@@ -78,7 +77,7 @@ public abstract class AbstractKnnVisitor implements Visitor
     }
 
     /**
-     * @see de.freese.knn.net.util.visitor.Visitor#visitObject(java.lang.Object)
+     * @see de.freese.knn.net.visitor.Visitor#visitObject(java.lang.Object)
      */
     @Override
     public void visitObject(final Object object)

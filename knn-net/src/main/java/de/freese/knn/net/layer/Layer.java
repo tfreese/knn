@@ -6,7 +6,7 @@ package de.freese.knn.net.layer;
 import de.freese.knn.net.function.Function;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.neuron.NeuronList;
-import de.freese.knn.net.util.visitor.Visitable;
+import de.freese.knn.net.visitor.Visitable;
 
 /**
  * Interface eines Layers.

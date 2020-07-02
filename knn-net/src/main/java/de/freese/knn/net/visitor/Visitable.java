@@ -1,4 +1,4 @@
-package de.freese.knn.net.util.visitor;
+package de.freese.knn.net.visitor;
 
 /**
  * Interface eines besuchbaren Objektes des Visitor Patterns.

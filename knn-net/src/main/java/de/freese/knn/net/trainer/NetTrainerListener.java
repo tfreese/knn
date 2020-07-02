@@ -7,16 +7,16 @@ import java.util.EventListener;
 
 /**
  * Listener fuer den Trainer des neuralen Netzes.
- * 
+ *
  * @author Thomas Freese
  */
+@FunctionalInterface
 public interface NetTrainerListener extends EventListener
 {
-	/**
-	 * Nachdem ein Lernzyklus beendet ist, wird die Nummer und der Netzfehler des Zykluses
-	 * uebergeben.
-	 * 
-	 * @param event {@link NetTrainerCycleEndedEvent}
-	 */
-	public void trainingCycleEnded(NetTrainerCycleEndedEvent event);
+    /**
+     * Nachdem ein Lernzyklus beendet ist, wird die Nummer und der Netzfehler des Zykluses uebergeben.
+     * 
+     * @param event {@link NetTrainerCycleEndedEvent}
+     */
+    public void trainingCycleEnded(NetTrainerCycleEndedEvent event);
 }

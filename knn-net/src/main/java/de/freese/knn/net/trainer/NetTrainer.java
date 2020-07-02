@@ -26,7 +26,7 @@ public class NetTrainer
     /**
      *
      */
-    private transient EventListenerList listenerList = new EventListenerList();
+    private EventListenerList listenerList = new EventListenerList();
 
     /**
      * Max. Netzfehler 5 %
