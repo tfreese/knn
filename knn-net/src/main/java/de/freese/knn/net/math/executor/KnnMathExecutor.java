@@ -10,12 +10,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
+import de.freese.knn.net.utils.KnnThreadQueueThreadFactory;
+import de.freese.knn.net.utils.KnnUtils;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
@@ -37,16 +38,12 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     private final Executor executor;
 
     /**
-     *
-     */
-    private final int processors;
-
-    /**
      * Erstellt ein neues {@link KnnMathExecutor} Object.
      */
     public KnnMathExecutor()
     {
-        this(Executors.newCachedThreadPool(new KnnThreadQueueThreadFactory()));
+        // this(Executors.newCachedThreadPool(new KnnThreadQueueThreadFactory()));
+        this(Executors.newFixedThreadPool(KnnUtils.DEFAULT_POOL_SIZE, new KnnThreadQueueThreadFactory()));
 
         this.createdExecutor = true;
     }
@@ -61,7 +58,6 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
         super();
 
         this.executor = Objects.requireNonNull(executor, "executor required");
-        this.processors = Runtime.getRuntime().availableProcessors();
     }
 
     /**
@@ -95,33 +91,7 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     {
         if (this.createdExecutor && (this.executor instanceof ExecutorService))
         {
-            getLogger().info("Shutdown ExecutorService");
-
-            ExecutorService executorService = (ExecutorService) this.executor;
-            executorService.shutdown();
-
-            try
-            {
-                // Wait a while for existing tasks to terminate.
-                if (!executorService.awaitTermination(10, TimeUnit.SECONDS))
-                {
-                    executorService.shutdownNow(); // Cancel currently executing tasks
-
-                    // Wait a while for tasks to respond to being cancelled
-                    if (!executorService.awaitTermination(5, TimeUnit.SECONDS))
-                    {
-                        System.err.println("Pool did not terminate");
-                    }
-                }
-            }
-            catch (InterruptedException iex)
-            {
-                // (Re-)Cancel if current thread also interrupted
-                executorService.shutdownNow();
-
-                // Preserve interrupt status
-                // Thread.currentThread().interrupt();
-            }
+            KnnUtils.shutdown((ExecutorService) this.executor, getLogger());
         }
     }
 
@@ -178,19 +148,20 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
      */
     private List<NeuronList> getPartitions(final NeuronList neurons)
     {
+        int poolSize = KnnUtils.DEFAULT_POOL_SIZE;
         List<NeuronList> partitions = new ArrayList<>();
 
-        if ((this.processors == 1) || (neurons.size() <= this.processors))
+        if ((poolSize == 1) || (neurons.size() <= poolSize))
         {
             partitions.add(neurons);
 
             return partitions;
         }
 
-        int size = neurons.size() / this.processors;
+        int size = neurons.size() / poolSize;
         int fromIndex = 0;
 
-        for (int p = 0; p < (this.processors - 1); p++)
+        for (int p = 0; p < (poolSize - 1); p++)
         {
             int toIndex = fromIndex + size;
 

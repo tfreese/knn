@@ -5,11 +5,11 @@ package de.freese.knn.net.math.forkjoin;
 
 import java.util.Objects;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
+import de.freese.knn.net.utils.KnnUtils;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
@@ -35,7 +35,8 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
      */
     public KnnMathForkJoin()
     {
-        this(new ForkJoinPool());
+        this(ForkJoinPool.commonPool());
+        // this(new ForkJoinPool());
 
         this.createdPool = true;
 
@@ -83,21 +84,7 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
     {
         if (this.createdPool)
         {
-            getLogger().info("Shutdown ForkJoinPool");
-
-            this.forkJoinPool.shutdown();
-
-            while (!this.forkJoinPool.isTerminated())
-            {
-                try
-                {
-                    this.forkJoinPool.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
-                }
-                catch (InterruptedException ex)
-                {
-                    getLogger().error(null, ex);
-                }
-            }
+            KnnUtils.shutdown(this.forkJoinPool, getLogger());
         }
     }
 

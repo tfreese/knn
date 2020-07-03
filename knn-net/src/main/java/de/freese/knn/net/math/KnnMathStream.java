@@ -3,12 +3,12 @@
  */
 package de.freese.knn.net.math;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.ValueInitializer;
-import de.freese.knn.net.util.stream.spliterator.SplitableArraySpliterator;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
@@ -38,8 +38,9 @@ public class KnnMathStream extends AbstractKnnMath
 
         // @formatter:off
         layer.getNeurons()
-                .parallelStream()
-                .forEach(neuron -> backward(neuron, errors, layerErrors));
+            .parallelStream()
+            .forEach(neuron -> backward(neuron, errors, layerErrors))
+            ;
         // @formatter:on
 
         visitor.setErrors(layer, layerErrors);
@@ -56,8 +57,9 @@ public class KnnMathStream extends AbstractKnnMath
 
         // @formatter:off
         layer.getNeurons()
-                .parallelStream()
-                .forEach(neuron -> forward(neuron, inputs, outputs));
+            .parallelStream()
+            .forEach(neuron -> forward(neuron, inputs, outputs))
+            ;
         // @formatter:on
 
         visitor.setOutputs(layer, outputs);
@@ -73,7 +75,8 @@ public class KnnMathStream extends AbstractKnnMath
         double error = IntStream.range(0, outputs.length)
                 .parallel()
                 .mapToDouble(i -> getNetError(i, outputs, outputTargets))
-                .sum();
+                .sum()
+                ;
         // @formatter:on
 
         error /= 2.0D;
@@ -89,9 +92,10 @@ public class KnnMathStream extends AbstractKnnMath
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
     {
         // @formatter:off
-        StreamSupport.stream(new SplitableArraySpliterator<>(layers), true)
-                .parallel()
-                .forEach(layer -> initialize(layer, valueInitializer));
+        StreamSupport.stream(Arrays.spliterator(layers), true)
+            .parallel()
+            .forEach(layer -> initialize(layer, valueInitializer))
+            ;
         // @formatter:on
     }
 
@@ -109,8 +113,9 @@ public class KnnMathStream extends AbstractKnnMath
 
         // @formatter:off
         leftLayer.getNeurons()
-                .parallelStream()
-                .forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
+            .parallelStream()
+            .forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
+            ;
         // @formatter:on
     }
 
@@ -125,8 +130,9 @@ public class KnnMathStream extends AbstractKnnMath
 
         // @formatter:off
         IntStream.range(0, outputs.length)
-                .parallel()
-                .forEach(i -> setOutputError(i, outputs, errors, visitor));
+            .parallel()
+            .forEach(i -> setOutputError(i, outputs, errors, visitor))
+            ;
         // @formatter:on
 
         visitor.setErrors(layer, errors);

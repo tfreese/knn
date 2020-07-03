@@ -5,11 +5,10 @@ package de.freese.knn.net.math;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.matrix.Matrix;
+import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.visitor.BackwardVisitor;
 
@@ -32,14 +31,14 @@ public abstract class AbstractKnnMath implements KnnMath
         int layerIndex = neuron.getLayerIndex();
         double error = 0.0D;
 
-        for (int o = 0; o < neuron.getOutputSize(); o++)
+        for (int i = 0; i < neuron.getOutputSize(); i++)
         {
-            double weight = neuron.getOutputWeight(o);
+            double weight = neuron.getOutputWeight(i);
 
-            error += (weight * errors[o]);
+            error += (weight * errors[i]);
 
             // Bias Neuron draufrechnen.
-            error += (neuron.getInputBIAS() * errors[o]);
+            error += (neuron.getInputBIAS() * errors[i]);
         }
 
         layerErrors[layerIndex] = error;
@@ -126,29 +125,29 @@ public abstract class AbstractKnnMath implements KnnMath
      * @param deltaWeights double[][]
      * @param rightErrors double[]
      */
-    public static void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum,
-            final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors)
+    public static void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs,
+                                           final double[][] deltaWeights, final double[] rightErrors)
     {
         int layerIndex = neuron.getLayerIndex();
 
-        for (int o = 0; o < neuron.getOutputSize(); o++)
+        for (int i = 0; i < neuron.getOutputSize(); i++)
         {
-            double weight = neuron.getOutputWeight(o);
-            double deltaWeight = teachFactor * rightErrors[o] * leftOutputs[layerIndex];
+            double weight = neuron.getOutputWeight(i);
+            double deltaWeight = teachFactor * rightErrors[i] * leftOutputs[layerIndex];
 
             // Momentum-Term berücksichtigen (konjugierter Gradientenabstieg).
             // Der Momentum-Term erhöht die Schrittweite auf flachen Niveaus und reduziert
             // in Tälern.
-            deltaWeight += (momentum * deltaWeights[layerIndex][o]);
+            deltaWeight += (momentum * deltaWeights[layerIndex][i]);
 
-            neuron.setOutputWeight(o, weight + deltaWeight);
-            deltaWeights[layerIndex][o] = deltaWeight;
+            neuron.setOutputWeight(i, weight + deltaWeight);
+            deltaWeights[layerIndex][i] = deltaWeight;
 
             // Bias verrechnen, feuert immer.
             // TODO So wie es aussieht müssen die Biasgewichte nicht angepasst werden.
-            // double biasWeight = matrix.getBiasWeights()[column];
-            // double biasDeltaWeight = this.teachFactor * rightErrors[column] * 1;
-            // matrix.getBiasWeights()[column] = biasWeight + biasDeltaWeight;
+            // double biasWeight = matrix.getBiasWeights()[i];
+            // double biasDeltaWeight = this.teachFactor * rightErrors[i] * 1;
+            // matrix.getBiasWeights()[i] = biasWeight + biasDeltaWeight;
         }
     }
 
@@ -188,6 +187,14 @@ public abstract class AbstractKnnMath implements KnnMath
     }
 
     /**
+     * @return {@link Logger}
+     */
+    protected Logger getLogger()
+    {
+        return this.logger;
+    }
+
+    /**
      * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
      */
     @Override
@@ -220,13 +227,5 @@ public abstract class AbstractKnnMath implements KnnMath
         }
 
         visitor.setErrors(layer, errors);
-    }
-
-    /**
-     * @return {@link Logger}
-     */
-    protected Logger getLogger()
-    {
-        return this.logger;
     }
 }

@@ -1,4 +1,4 @@
-package de.freese.knn.net.math.executor;
+package de.freese.knn.net.utils;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,32 +8,32 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Thomas Freese
  */
-class KnnThreadQueueThreadFactory implements ThreadFactory
+public class KnnThreadQueueThreadFactory implements ThreadFactory
 {
     /**
-     * 
+     *
      */
     private static final AtomicInteger queueNumber = new AtomicInteger(1);
 
     /**
-     * 
+     *
      */
     private final ThreadGroup group;
 
     /**
-     * 
+     *
      */
     private final String namePrefix;
 
     /**
-     * 
+     *
      */
     private final AtomicInteger threadNumber = new AtomicInteger(1);
 
     /**
      * Creates a new {@link KnnThreadQueueThreadFactory} object.
      */
-    KnnThreadQueueThreadFactory()
+    public KnnThreadQueueThreadFactory()
     {
         SecurityManager sm = System.getSecurityManager();
 
