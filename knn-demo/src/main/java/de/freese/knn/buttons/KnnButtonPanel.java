@@ -16,7 +16,7 @@ import javax.swing.JToggleButton;
  * 
  * @author Thomas Freese
  */
-public class MatrixPanel extends JPanel
+public class KnnButtonPanel extends JPanel
 {
 	/**
 	 *
@@ -39,11 +39,11 @@ public class MatrixPanel extends JPanel
 	private JToggleButton[] toggleButtons = new JToggleButton[MAT_HEIGHT * MAT_WIDTH];
 
 	/**
-	 * Creates a new {@link MatrixPanel} object.
+	 * Creates a new {@link KnnButtonPanel} object.
 	 * 
 	 * @param actionListener {@link ActionListener}
 	 */
-	public MatrixPanel(final ActionListener actionListener)
+	public KnnButtonPanel(final ActionListener actionListener)
 	{
 		super();
 

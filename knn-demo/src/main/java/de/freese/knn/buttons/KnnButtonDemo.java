@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +32,7 @@ import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
  *
  * @author Thomas Freese
  */
-public class KNN_Demo extends JFrame
+public class KnnButtonDemo extends JFrame
 {
     /**
      * @author Thomas Freese
@@ -46,7 +45,7 @@ public class KNN_Demo extends JFrame
         @Override
         public void actionPerformed(final ActionEvent e)
         {
-            double[] outputVector = KNN_Demo.this.neuralNetwork.getOutput(KNN_Demo.this.matrixPanel.getInputVector());
+            double[] outputVector = KnnButtonDemo.this.neuralNetwork.getOutput(KnnButtonDemo.this.matrixPanel.getInputVector());
 
             double output = Double.MIN_VALUE;
             double value = Double.NaN;
@@ -55,19 +54,19 @@ public class KNN_Demo extends JFrame
             {
                 double rndValue = roundDouble(outputVector[i] * 100, 3);
 
-                KNN_Demo.this.labelsOutput[i].setText(String.valueOf(i) + ": " + rndValue + " %");
+                KnnButtonDemo.this.labelsOutput[i].setText(String.valueOf(i) + ": " + rndValue + " %");
 
                 if (rndValue > 80)
                 {
-                    KNN_Demo.this.labelsOutput[i].setForeground(Color.RED);
+                    KnnButtonDemo.this.labelsOutput[i].setForeground(Color.RED);
                 }
                 else if (rndValue > 50)
                 {
-                    KNN_Demo.this.labelsOutput[i].setForeground(Color.BLUE);
+                    KnnButtonDemo.this.labelsOutput[i].setForeground(Color.BLUE);
                 }
                 else
                 {
-                    KNN_Demo.this.labelsOutput[i].setForeground(Color.BLACK);
+                    KnnButtonDemo.this.labelsOutput[i].setForeground(Color.BLACK);
                 }
 
                 if (outputVector[i] > output)
@@ -77,7 +76,7 @@ public class KNN_Demo extends JFrame
                 }
             }
 
-            KNN_Demo.this.labelRecognized.setText("Erkannt als: " + value);
+            KnnButtonDemo.this.labelRecognized.setText("Erkannt als: " + value);
         }
     }
 
@@ -92,7 +91,7 @@ public class KNN_Demo extends JFrame
     @SuppressWarnings("unused")
     public static void main(final String[] args)
     {
-        new KNN_Demo();
+        new KnnButtonDemo();
     }
 
     /**
@@ -108,7 +107,7 @@ public class KNN_Demo extends JFrame
     /**
      *
      */
-    private MatrixPanel matrixPanel = null;
+    private KnnButtonPanel matrixPanel = null;
 
     /**
      *
@@ -116,11 +115,9 @@ public class KNN_Demo extends JFrame
     private NeuralNet neuralNetwork = null;
 
     /**
-     * Creates a new {@link KNN_Demo} object.
-     *
-     * @throws HeadlessException Falls was schief geht.
+     * Creates a new {@link KnnButtonDemo} object.
      */
-    public KNN_Demo() throws HeadlessException
+    public KnnButtonDemo()
     {
         super();
 
@@ -135,7 +132,7 @@ public class KNN_Demo extends JFrame
             {
                 try
                 {
-                    KNN_Demo.this.neuralNetwork.close();
+                    KnnButtonDemo.this.neuralNetwork.close();
                     System.exit(0);
                 }
                 catch (Exception ex)
@@ -150,7 +147,7 @@ public class KNN_Demo extends JFrame
 
         // @formatter:off
         this.neuralNetwork = new NeuralNetBuilder()
-                //.knnMath(new KnnMathReactor())
+                //.knnMath(new KnnMathExecutor())
                 //.valueInitializer(new ValueInitializerRandom())
                 .layerInput(new InputLayer(54))
                 .layerHidden(new HiddenLayer(25, new FunctionSigmoide()))
@@ -158,7 +155,7 @@ public class KNN_Demo extends JFrame
                 .build();
         // @formatter:on
 
-        this.matrixPanel = new MatrixPanel(new ToggleButtonListener());
+        this.matrixPanel = new KnnButtonPanel(new ToggleButtonListener());
         this.labelRecognized = new JLabel("Erkannt als: ");
 
         JPanel outputPanel = new JPanel();
@@ -180,7 +177,7 @@ public class KNN_Demo extends JFrame
         NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
         trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
         // trainer.addNetTrainerListener(new LoggerNetTrainerListener());
-        trainer.train(this.neuralNetwork, new MatrixTrainingInputSource());
+        trainer.train(this.neuralNetwork, new KnnButtonTrainingInputSource());
 
         getContentPane().add(this.matrixPanel, BorderLayout.CENTER);
         getContentPane().add(this.labelRecognized, BorderLayout.SOUTH);
@@ -216,7 +213,7 @@ public class KNN_Demo extends JFrame
             return 0.0D;
         }
 
-        BigDecimal bigDecimal = new BigDecimal(wert);
+        BigDecimal bigDecimal = BigDecimal.valueOf(wert);
         bigDecimal = bigDecimal.setScale(nachkommaStellen, RoundingMode.HALF_UP);
 
         return bigDecimal.doubleValue();

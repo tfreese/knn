@@ -2,13 +2,13 @@
 /**
  * 02.08.2009
  */
-package de.freese.knn.muster;
+package de.freese.knn.bilderkennung;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
 import de.freese.knn.net.trainer.TrainingInputSource;
-import de.freese.knn.utils.image.info.ImageInfo;
 
 /**
  * @author Thomas Freese

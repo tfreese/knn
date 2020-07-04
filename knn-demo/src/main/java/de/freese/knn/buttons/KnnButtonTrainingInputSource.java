@@ -9,11 +9,11 @@ import java.util.List;
 import de.freese.knn.net.trainer.TrainingInputSource;
 
 /**
- * Erstellt TestTrainingsDaten für das {@link MatrixPanel}.
+ * Erstellt TestTrainingsDaten für das {@link KnnButtonPanel}.
  *
  * @author Thomas Freese
  */
-public class MatrixTrainingInputSource implements TrainingInputSource
+public class KnnButtonTrainingInputSource implements TrainingInputSource
 {
     /**
      *
@@ -26,9 +26,9 @@ public class MatrixTrainingInputSource implements TrainingInputSource
     private final List<double[]> outputList = new ArrayList<>();
 
     /**
-     * Creates a new {@link MatrixTrainingInputSource} object.
+     * Creates a new {@link KnnButtonTrainingInputSource} object.
      */
-    public MatrixTrainingInputSource()
+    public KnnButtonTrainingInputSource()
     {
         super();
 
@@ -57,7 +57,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
     private void createTrainingSet()
     {
         // 0
-        double[] matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        double[] matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0D);
         matrix[7] = 1.0d;
         matrix[8] = 1.0d;
@@ -81,7 +81,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(0));
 
         // 1
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0D);
         matrix[9] = 1.0d;
         matrix[10] = 1.0d;
@@ -104,7 +104,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(1));
 
         // 2
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0D);
         matrix[7] = 1.0D;
         matrix[8] = 1.0D;
@@ -126,7 +126,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(2));
 
         // 3
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0d);
         matrix[7] = 1.0d;
         matrix[8] = 1.0d;
@@ -148,7 +148,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(3));
 
         // 4
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0d);
         matrix[7] = 1.0D;
         matrix[10] = 1.0D;
@@ -167,7 +167,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(4));
 
         // 5
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0d);
         matrix[7] = 1.0d;
         matrix[8] = 1.0d;
@@ -189,7 +189,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(5));
 
         // 6
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0d);
         matrix[7] = 1.0d;
         matrix[8] = 1.0d;
@@ -213,7 +213,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(6));
 
         // 7
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0d);
         matrix[7] = 1.0d;
         matrix[8] = 1.0d;
@@ -229,7 +229,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(7));
 
         // 8
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0d);
         matrix[7] = 1.0d;
         matrix[8] = 1.0d;
@@ -255,7 +255,7 @@ public class MatrixTrainingInputSource implements TrainingInputSource
         this.outputList.add(createOutput(8));
 
         // 9
-        matrix = new double[MatrixPanel.MAT_HEIGHT * MatrixPanel.MAT_WIDTH];
+        matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0d);
         matrix[7] = 1.0d;
         matrix[8] = 1.0d;

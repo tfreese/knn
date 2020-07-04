@@ -1,17 +1,17 @@
 /**
  * Created: 02.10.2011
  */
-package de.freese.knn.net.math.executor;
+package de.freese.knn.net.math;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.utils.KnnThreadQueueThreadFactory;
@@ -20,12 +20,17 @@ import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Mathematik des {@link NeuralNet} mit dem {@link ExecutorService}-Framework.
+ * Mathematik des {@link NeuralNet} mit dem {@link CompletionService}.
  *
  * @author Thomas Freese
  */
-public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
+public class KnnMathCompletionService extends AbstractKnnMath implements AutoCloseable
 {
+    /**
+     *
+     */
+    private final CompletionService<Void> completionService;
+
     /**
      *
      */
@@ -37,9 +42,9 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     private final Executor executor;
 
     /**
-     * Erstellt ein neues {@link KnnMathExecutor} Object.
+     * Erstellt ein neues {@link KnnMathCompletionService} Object.
      */
-    public KnnMathExecutor()
+    public KnnMathCompletionService()
     {
         // this(Executors.newCachedThreadPool(new KnnThreadQueueThreadFactory()));
         // this(Executors.newWorkStealingPool(KnnUtils.DEFAULT_POOL_SIZE));
@@ -49,15 +54,16 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     }
 
     /**
-     * Erstellt ein neues {@link KnnMathExecutor} Object.
+     * Erstellt ein neues {@link KnnMathCompletionService} Object.
      *
      * @param executor {@link Executor}
      */
-    public KnnMathExecutor(final Executor executor)
+    public KnnMathCompletionService(final Executor executor)
     {
         super();
 
         this.executor = Objects.requireNonNull(executor, "executor required");
+        this.completionService = new ExecutorCompletionService<>(executor);
     }
 
     /**
@@ -70,15 +76,16 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
         double[] layerErrors = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
 
         for (NeuronList partition : partitions)
         {
-            BackwardTask task = new BackwardTask(latch, partition, errors, layerErrors);
-            this.executor.execute(task);
+            this.completionService.submit(() -> {
+                partition.forEach(neuron -> backward(neuron, errors, layerErrors));
+                return null;
+            });
         }
 
-        doLatchAwait(latch);
+        waitForCompletionService(partitions.size());
 
         visitor.setErrors(layer, layerErrors);
     }
@@ -96,27 +103,6 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     }
 
     /**
-     * Blockiert den aktuellen Thread, bis der Latch auf 0 ist.
-     *
-     * @param latch {@link CountDownLatch}
-     */
-    private void doLatchAwait(final CountDownLatch latch)
-    {
-        try
-        {
-            latch.await();
-        }
-        catch (RuntimeException rex)
-        {
-            throw rex;
-        }
-        catch (Throwable th)
-        {
-            throw new RuntimeException(th);
-        }
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
      */
     @Override
@@ -126,15 +112,16 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
         double[] outputs = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
 
         for (NeuronList partition : partitions)
         {
-            ForwardTask task = new ForwardTask(latch, partition, inputs, outputs);
-            this.executor.execute(task);
+            this.completionService.submit(() -> {
+                partition.forEach(neuron -> forward(neuron, inputs, outputs));
+                return null;
+            });
         }
 
-        doLatchAwait(latch);
+        waitForCompletionService(partitions.size());
 
         visitor.setOutputs(layer, outputs);
     }
@@ -145,15 +132,15 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
     {
-        CountDownLatch latch = new CountDownLatch(layers.length);
-
         for (Layer layer : layers)
         {
-            InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
-            this.executor.execute(task);
+            this.completionService.submit(() -> {
+                initialize(layer, valueInitializer);
+                return null;
+            });
         }
 
-        doLatchAwait(latch);
+        waitForCompletionService(layers.length);
     }
 
     /**
@@ -169,14 +156,35 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
         double[] rightErrors = visitor.getErrors(rightLayer);
 
         List<NeuronList> partitions = getPartitions(leftLayer.getNeurons());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
 
         for (NeuronList partition : partitions)
         {
-            RefreshWeightsTask task = new RefreshWeightsTask(latch, partition, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
-            this.executor.execute(task);
+            this.completionService.submit(() -> {
+                partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
+                return null;
+            });
         }
 
-        doLatchAwait(latch);
+        waitForCompletionService(partitions.size());
+    }
+
+    /**
+     * Warten bis alle Tasks fertig sind.
+     *
+     * @param count int; Anzahl der Tasks
+     */
+    private void waitForCompletionService(final int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            try
+            {
+                this.completionService.take();
+            }
+            catch (InterruptedException ex)
+            {
+                getLogger().error(null, ex);
+            }
+        }
     }
 }

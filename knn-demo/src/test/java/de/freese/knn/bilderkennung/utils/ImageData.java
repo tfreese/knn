@@ -1,14 +1,13 @@
 /**
  * 12.07.2008
  */
-package de.freese.knn.muster.imageop;
+package de.freese.knn.bilderkennung.utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
-import de.freese.knn.utils.image.ImageUtils;
 
 /**
  * Enthält die Bildinformationen.

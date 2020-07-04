@@ -2,13 +2,13 @@
  * Created: 12.06.2011
  */
 
-package de.freese.knn.muster;
+package de.freese.knn.bilderkennung;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
-import de.freese.knn.utils.image.info.ImageInfo;
+import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
 
 /**
  * TestKlasse für {@link ImageInfo}.

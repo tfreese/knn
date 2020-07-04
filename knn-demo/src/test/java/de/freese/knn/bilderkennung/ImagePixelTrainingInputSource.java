@@ -1,12 +1,12 @@
 /**
  * 15.07.2008
  */
-package de.freese.knn.muster;
+package de.freese.knn.bilderkennung;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import de.freese.knn.muster.imageop.ImageData;
+import de.freese.knn.bilderkennung.utils.ImageData;
 import de.freese.knn.net.trainer.TrainingInputSource;
 
 /**
@@ -19,7 +19,7 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
     /**
      *
      */
-    private final List<ImageData> imageData = new ArrayList<>();
+    private final List<ImageData> imageDatas = new ArrayList<>();
 
     /**
      * Creates a new {@link ImagePixelTrainingInputSource} object.
@@ -30,15 +30,15 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
     {
         super();
 
-        this.imageData.add(new ImageData("Ampel.gif"));
-        this.imageData.add(new ImageData("Bahnkreuz.gif"));
-        this.imageData.add(new ImageData("BigBrother.jpg"));
-        this.imageData.add(new ImageData("Einbahn.gif"));
-        this.imageData.add(new ImageData("Klippe.gif"));
-        this.imageData.add(new ImageData("Seaside.jpg"));
-        this.imageData.add(new ImageData("Stop.gif"));
-        this.imageData.add(new ImageData("Sylvester.jpg"));
-        this.imageData.add(new ImageData("winnt.bmp"));
+        this.imageDatas.add(new ImageData("Ampel.gif"));
+        this.imageDatas.add(new ImageData("Bahnkreuz.gif"));
+        this.imageDatas.add(new ImageData("BigBrother.jpg"));
+        this.imageDatas.add(new ImageData("Einbahn.gif"));
+        this.imageDatas.add(new ImageData("Klippe.gif"));
+        this.imageDatas.add(new ImageData("Seaside.jpg"));
+        this.imageDatas.add(new ImageData("Stop.gif"));
+        this.imageDatas.add(new ImageData("Sylvester.jpg"));
+        this.imageDatas.add(new ImageData("winnt.bmp"));
     }
 
     /**
@@ -48,7 +48,7 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
      */
     public List<ImageData> getImageData()
     {
-        return this.imageData;
+        return this.imageDatas;
     }
 
     /**
@@ -57,7 +57,7 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
     @Override
     public double[] getInputAt(final int index)
     {
-        ImageData imageData = this.imageData.get(index);
+        ImageData imageData = this.imageDatas.get(index);
 
         return imageData.getPixels();
     }
@@ -82,6 +82,6 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
     @Override
     public int getSize()
     {
-        return this.imageData.size();
+        return this.imageDatas.size();
     }
 }

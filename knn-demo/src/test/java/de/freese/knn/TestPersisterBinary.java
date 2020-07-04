@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
-import de.freese.knn.buttons.MatrixTrainingInputSource;
+import de.freese.knn.buttons.KnnButtonTrainingInputSource;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
 import de.freese.knn.net.function.FunctionSigmoide;
@@ -39,8 +39,8 @@ public class TestPersisterBinary
      */
     public static void main(final String[] args) throws Exception
     {
-        TrainingInputSource trainingInputSource = new MatrixTrainingInputSource();
-        File knnFile = new File("NeuralNet.bin");
+        TrainingInputSource trainingInputSource = new KnnButtonTrainingInputSource();
+        File knnFile = new File("ButtonNeuralNet.bin");
 
         try ( // @formatter:off
               NeuralNet neuralNet = new NeuralNetBuilder()

@@ -1,7 +1,7 @@
 /**
  * Created: 02.08.2009
  */
-package de.freese.knn.utils.image.info;
+package de.freese.knn.bilderkennung.utils.image.info;
 
 import java.awt.Color;
 

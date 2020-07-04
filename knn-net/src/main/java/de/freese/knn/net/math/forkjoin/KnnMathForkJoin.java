@@ -35,8 +35,8 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
      */
     public KnnMathForkJoin()
     {
-        this(ForkJoinPool.commonPool());
-        // this(new ForkJoinPool());
+        // this(ForkJoinPool.commonPool());
+        this(new ForkJoinPool(KnnUtils.DEFAULT_POOL_SIZE));
 
         this.createdPool = true;
 
