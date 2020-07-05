@@ -16,7 +16,7 @@ import de.freese.knn.net.matrix.Matrix;
 public class TrainingContext
 {
     /**
-     * 
+     *
      */
     private Map<Matrix, double[][]> deltaWeights = new HashMap<>();
 
@@ -39,19 +39,13 @@ public class TrainingContext
 
     /**
      * Liefert die vorherige Gewichtsaenderungen der Matrix-Neuronen.
-     * 
+     *
      * @param matrix {@link Matrix}
      * @return double[][]
      */
     public double[][] getDeltaWeights(final Matrix matrix)
     {
-        double[][] dWeights = this.deltaWeights.get(matrix);
-
-        if (dWeights == null)
-        {
-            dWeights = new double[matrix.getInputSize()][matrix.getOutputSize()];
-            this.deltaWeights.put(matrix, dWeights);
-        }
+        double[][] dWeights = this.deltaWeights.computeIfAbsent(matrix, key -> new double[matrix.getInputSize()][matrix.getOutputSize()]);
 
         return dWeights;
     }

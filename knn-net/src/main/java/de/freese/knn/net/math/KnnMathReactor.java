@@ -4,7 +4,6 @@
 package de.freese.knn.net.math;
 
 import java.util.Objects;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import de.freese.knn.net.NeuralNet;
@@ -33,7 +32,7 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
     /**
      *
      */
-    private final Executor executor;
+    private final ExecutorService executorService;
 
     /**
      *
@@ -45,8 +44,10 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
      */
     public KnnMathReactor()
     {
-        // this(Executors.newCachedThreadPool(new KnnThreadQueueThreadFactory()));
-        this(Executors.newFixedThreadPool(KnnUtils.DEFAULT_POOL_SIZE, new KnnThreadQueueThreadFactory()));
+        super();
+
+        this.executorService = Executors.newFixedThreadPool(getPoolSize(), new KnnThreadQueueThreadFactory());
+        this.scheduler = Schedulers.fromExecutor(this.executorService);
 
         this.createdExecutor = true;
     }
@@ -54,14 +55,14 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
     /**
      * Erstellt ein neues Object.
      *
-     * @param executor {@link Executor}
+     * @param executorService {@link ExecutorService}
      */
-    public KnnMathReactor(final Executor executor)
+    public KnnMathReactor(final ExecutorService executorService)
     {
         super();
 
-        this.executor = Objects.requireNonNull(executor, "executor required");
-        this.scheduler = Schedulers.fromExecutor(executor);
+        this.executorService = Objects.requireNonNull(executorService, "executorService required");
+        this.scheduler = Schedulers.fromExecutor(executorService);
     }
 
     /**
@@ -75,7 +76,7 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
 
         // @formatter:off
         Flux.fromIterable(layer.getNeurons())
-            .parallel(KnnUtils.DEFAULT_POOL_SIZE)
+            .parallel(getPoolSize())
             .runOn(this.scheduler)
             .subscribe(neuron -> backward(neuron, errors, layerErrors))
             ;
@@ -92,9 +93,9 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
     {
         this.scheduler.dispose();
 
-        if (this.createdExecutor && (this.executor instanceof ExecutorService))
+        if (this.createdExecutor)
         {
-            KnnUtils.shutdown((ExecutorService) this.executor, getLogger());
+            KnnUtils.shutdown(this.executorService, getLogger());
         }
     }
 
@@ -109,7 +110,7 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
 
         // @formatter:off
         Flux.fromIterable(layer.getNeurons())
-            .parallel(KnnUtils.DEFAULT_POOL_SIZE)
+            .parallel(getPoolSize())
             .runOn(this.scheduler)
             .subscribe(neuron -> forward(neuron, inputs, outputs))
             ;
@@ -118,30 +119,31 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
-     */
-    @Override
-    public double getNetError(final double[] outputs, final double[] outputTargets)
-    {
-        // @formatter:off
-        //Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
-        //Flux.fromStream(IntStream.range(0, outputs.length).boxed())
-        double error = Flux.range(0, outputs.length)
-            .parallel(KnnUtils.DEFAULT_POOL_SIZE)
-            .runOn(this.scheduler)
-            .map(i -> getNetError(i, outputs, outputTargets))
-            .reduce((error1, error2) -> error1 + error2)
-            .block()
-            ;
-
-        // Siehe auch MathFlux für math. Operatoren !
-
-        error /= 2.0D;
-
-        return error;
-
-    }
+    // /**
+    // * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
+    // */
+    // @Override
+    // public double getNetError(final double[] outputs, final double[] outputTargets)
+    // {
+    // // Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
+    // // Flux.fromStream(IntStream.range(0, outputs.length).boxed())
+    // //
+    // // Siehe auch MathFlux für math. Operatoren !
+    //
+//        // @formatter:off
+//        double error = Flux.range(0, outputs.length)
+//            .parallel(getPoolSize())
+//            .runOn(this.scheduler)
+//            .map(i -> getNetError(i, outputs, outputTargets))
+//            .reduce((error1, error2) -> error1 + error2)
+//            .block()
+//            ;
+//        // @formatter:on
+    //
+    // error /= 2.0D;
+    //
+    // return error;
+    // }
 
     /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
@@ -151,7 +153,7 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
     {
         // @formatter:off
         Flux.fromArray(layers)
-            .parallel(KnnUtils.DEFAULT_POOL_SIZE)
+            .parallel(getPoolSize())
             .runOn(this.scheduler)
             .subscribe(layer -> initialize(layer, valueInitializer))
             ;
@@ -172,32 +174,32 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
 
         // @formatter:off
         Flux.fromIterable(leftLayer.getNeurons())
-            .parallel(KnnUtils.DEFAULT_POOL_SIZE)
+            .parallel(getPoolSize())
             .runOn(this.scheduler)
             .subscribe(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
             ;
         // @formatter:on
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
-    @Override
-    public void setOutputError(final Layer layer, final BackwardVisitor visitor)
-    {
-        final double[] outputs = visitor.getOutputs(layer);
-        final double[] errors = new double[outputs.length];
-
-        // @formatter:off
-        //Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
-        //Flux.fromStream(IntStream.range(0, outputs.length).boxed())
-        Flux.range(0, outputs.length)
-            .parallel(KnnUtils.DEFAULT_POOL_SIZE)
-            .runOn(this.scheduler)
-            .subscribe(i -> setOutputError(i, outputs, errors, visitor))
-            ;
-        // @formatter:on
-
-        visitor.setErrors(layer, errors);
-    }
+    // /**
+    // * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
+    // */
+    // @Override
+    // public void setOutputError(final Layer layer, final BackwardVisitor visitor)
+    // {
+    // final double[] outputs = visitor.getOutputs(layer);
+    // final double[] errors = new double[outputs.length];
+    //
+//        // @formatter:off
+//        //Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
+//        //Flux.fromStream(IntStream.range(0, outputs.length).boxed())
+//        Flux.range(0, outputs.length)
+//            .parallel(getPoolSize())
+//            .runOn(this.scheduler)
+//            .subscribe(i -> setOutputError(i, outputs, errors, visitor))
+//            ;
+//        // @formatter:on
+    //
+    // visitor.setErrors(layer, errors);
+    // }
 }

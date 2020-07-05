@@ -54,7 +54,7 @@ public class KnnButtonDemo extends JFrame
             {
                 double rndValue = roundDouble(outputVector[i] * 100, 3);
 
-                KnnButtonDemo.this.labelsOutput[i].setText(String.valueOf(i) + ": " + rndValue + " %");
+                KnnButtonDemo.this.labelsOutput[i].setText(i + ": " + rndValue + " %");
 
                 if (rndValue > 80)
                 {
@@ -128,7 +128,7 @@ public class KnnButtonDemo extends JFrame
              * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
              */
             @Override
-            public void windowClosing(final WindowEvent e)
+            public void windowClosing(final WindowEvent event)
             {
                 try
                 {
@@ -145,16 +145,6 @@ public class KnnButtonDemo extends JFrame
         setResizable(true);
         setLayout(new BorderLayout());
 
-        // @formatter:off
-        this.neuralNetwork = new NeuralNetBuilder()
-                //.knnMath(new KnnMathExecutor())
-                //.valueInitializer(new ValueInitializerRandom())
-                .layerInput(new InputLayer(54))
-                .layerHidden(new HiddenLayer(25, new FunctionSigmoide()))
-                .layerOutput(new OutputLayer(10))
-                .build();
-        // @formatter:on
-
         this.matrixPanel = new KnnButtonPanel(new ToggleButtonListener());
         this.labelRecognized = new JLabel("Erkannt als: ");
 
@@ -169,6 +159,16 @@ public class KnnButtonDemo extends JFrame
         }
 
         // Training
+        // @formatter:off
+        this.neuralNetwork = new NeuralNetBuilder()
+                //.knnMath(new KnnMathExecutor())
+                .layerInput(new InputLayer(54))
+                .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
+                .layerOutput(new OutputLayer(10))
+                .build()
+                ;
+        // @formatter:on
+
         double teachFactor = 0.5D;
         double momentum = 0.5D;
         double maximumError = 0.05D;

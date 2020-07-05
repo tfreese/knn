@@ -4,7 +4,6 @@
 package de.freese.knn.net.math.forkjoin;
 
 import java.util.concurrent.RecursiveAction;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
@@ -37,6 +36,11 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
+    private final KnnMathForkJoin math;
+
+    /**
+     *
+     */
     private final NeuronList neurons;
 
     /**
@@ -47,28 +51,32 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      * Erstellt ein neues {@link ForkJoinBackwardTask} Object.
      *
+     * @param math {@link KnnMathForkJoin}
      * @param neurons {@link NeuronList}
      * @param errors double[]
      * @param layerErrors double[]
      */
-    ForkJoinBackwardTask(final NeuronList neurons, final double[] errors, final double[] layerErrors)
+    ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors)
     {
-        this(neurons, errors, layerErrors, 0, neurons.size());
+        this(math, neurons, errors, layerErrors, 0, neurons.size());
     }
 
     /**
      * Erstellt ein neues {@link ForkJoinBackwardTask} Object.
      *
+     * @param math {@link KnnMathForkJoin}
      * @param neurons {@link NeuronList}
      * @param errors double[]
      * @param layerErrors double[]
      * @param from int
      * @param to int
      */
-    private ForkJoinBackwardTask(final NeuronList neurons, final double[] errors, final double[] layerErrors, final int from, final int to)
+    private ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors, final int from,
+            final int to)
     {
         super();
 
+        this.math = math;
         this.neurons = neurons;
         this.errors = errors;
         this.layerErrors = layerErrors;
@@ -86,14 +94,14 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
         {
             NeuronList n = this.neurons.subList(this.from, this.to);
 
-            n.forEach(neuron -> AbstractKnnMath.backward(neuron, this.errors, this.layerErrors));
+            n.forEach(neuron -> this.math.backward(neuron, this.errors, this.layerErrors));
         }
         else
         {
             int middle = (this.from + this.to) / 2;
 
-            ForkJoinBackwardTask task1 = new ForkJoinBackwardTask(this.neurons, this.errors, this.layerErrors, this.from, middle);
-            ForkJoinBackwardTask task2 = new ForkJoinBackwardTask(this.neurons, this.errors, this.layerErrors, middle, this.to);
+            ForkJoinBackwardTask task1 = new ForkJoinBackwardTask(this.math, this.neurons, this.errors, this.layerErrors, this.from, middle);
+            ForkJoinBackwardTask task2 = new ForkJoinBackwardTask(this.math, this.neurons, this.errors, this.layerErrors, middle, this.to);
 
             invokeAll(task1, task2);
         }

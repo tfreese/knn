@@ -15,7 +15,6 @@ import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
-import de.freese.knn.net.utils.KnnUtils;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
@@ -55,6 +54,7 @@ public class KnnMathQueueWorker extends AbstractKnnMath implements AutoCloseable
                 }
                 catch (InterruptedException iex)
                 {
+                    getLogger().error(null, iex);
                     break;
                 }
                 catch (Exception ex)
@@ -84,7 +84,7 @@ public class KnnMathQueueWorker extends AbstractKnnMath implements AutoCloseable
     {
         super();
 
-        for (int i = 1; i <= (KnnUtils.DEFAULT_POOL_SIZE); i++)
+        for (int i = 1; i <= (getPoolSize()); i++)
         {
             QueueWorker worker = new QueueWorker();
             worker.setName(worker.getClass().getSimpleName() + "-" + i);

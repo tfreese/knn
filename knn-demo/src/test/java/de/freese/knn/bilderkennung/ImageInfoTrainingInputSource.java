@@ -55,7 +55,7 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource
     @Override
     public double[] getOutputAt(final int index)
     {
-        double[] output = new double[10];
+        double[] output = new double[getSize()];
         Arrays.fill(output, 0.0D);
 
         output[index] = 1.0D;

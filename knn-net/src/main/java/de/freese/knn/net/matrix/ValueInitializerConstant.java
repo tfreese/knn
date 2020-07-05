@@ -17,7 +17,7 @@ public class ValueInitializerConstant implements ValueInitializer
 
     /**
      * Creates a new {@link ValueInitializerConstant} object.
-     * 
+     *
      * @param weight double
      */
     public ValueInitializerConstant(final double weight)
@@ -32,14 +32,6 @@ public class ValueInitializerConstant implements ValueInitializer
      */
     @Override
     public double createNextValue()
-    {
-        return getWeight();
-    }
-
-    /**
-     * @return double
-     */
-    public double getWeight()
     {
         return this.weight;
     }

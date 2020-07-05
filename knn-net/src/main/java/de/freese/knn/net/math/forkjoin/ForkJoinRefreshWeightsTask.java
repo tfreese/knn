@@ -4,7 +4,6 @@
 package de.freese.knn.net.math.forkjoin;
 
 import java.util.concurrent.RecursiveAction;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
@@ -37,6 +36,11 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
     /**
      *
      */
+    private final KnnMathForkJoin math;
+
+    /**
+     *
+     */
     private final double momentum;
 
     /**
@@ -62,6 +66,7 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
     /**
      * Erstellt ein neues {@link ForkJoinRefreshWeightsTask} Object.
      *
+     * @param math {@link KnnMathForkJoin}
      * @param neurons {@link NeuronList}
      * @param teachFactor double
      * @param momentum double
@@ -69,15 +74,16 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
      * @param deltaWeights double[]
      * @param rightErrors double[]
      */
-    ForkJoinRefreshWeightsTask(final NeuronList neurons, final double teachFactor, final double momentum, final double[] leftOutputs,
-            final double[][] deltaWeights, final double[] rightErrors)
+    ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum,
+            final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors)
     {
-        this(neurons, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors, 0, neurons.size());
+        this(math, neurons, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors, 0, neurons.size());
     }
 
     /**
      * Erstellt ein neues {@link ForkJoinRefreshWeightsTask} Object.
      *
+     * @param math {@link KnnMathForkJoin}
      * @param neurons {@link NeuronList}
      * @param teachFactor double
      * @param momentum double
@@ -87,11 +93,12 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
      * @param from int
      * @param to int
      */
-    private ForkJoinRefreshWeightsTask(final NeuronList neurons, final double teachFactor, final double momentum, final double[] leftOutputs,
-            final double[][] deltaWeights, final double[] rightErrors, final int from, final int to)
+    private ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum,
+            final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors, final int from, final int to)
     {
         super();
 
+        this.math = math;
         this.neurons = neurons;
         this.teachFactor = teachFactor;
         this.momentum = momentum;
@@ -112,16 +119,15 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
         {
             NeuronList n = this.neurons.subList(this.from, this.to);
 
-            n.forEach(neuron -> AbstractKnnMath.refreshLayerWeights(neuron, this.teachFactor, this.momentum, this.leftOutputs, this.deltaWeights,
-                    this.rightErrors));
+            n.forEach(neuron -> this.math.refreshLayerWeights(neuron, this.teachFactor, this.momentum, this.leftOutputs, this.deltaWeights, this.rightErrors));
         }
         else
         {
             int middle = (this.from + this.to) / 2;
 
-            ForkJoinRefreshWeightsTask task1 = new ForkJoinRefreshWeightsTask(this.neurons, this.teachFactor, this.momentum, this.leftOutputs,
+            ForkJoinRefreshWeightsTask task1 = new ForkJoinRefreshWeightsTask(this.math, this.neurons, this.teachFactor, this.momentum, this.leftOutputs,
                     this.deltaWeights, this.rightErrors, this.from, middle);
-            ForkJoinRefreshWeightsTask task2 = new ForkJoinRefreshWeightsTask(this.neurons, this.teachFactor, this.momentum, this.leftOutputs,
+            ForkJoinRefreshWeightsTask task2 = new ForkJoinRefreshWeightsTask(this.math, this.neurons, this.teachFactor, this.momentum, this.leftOutputs,
                     this.deltaWeights, this.rightErrors, middle, this.to);
 
             invokeAll(task1, task2);

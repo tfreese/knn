@@ -4,7 +4,6 @@
 package de.freese.knn.net.math;
 
 import java.util.Arrays;
-import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
@@ -65,25 +64,25 @@ public class KnnMathStream extends AbstractKnnMath
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
-     */
-    @Override
-    public double getNetError(final double[] outputs, final double[] outputTargets)
-    {
-        // @formatter:off
-        double error = IntStream.range(0, outputs.length)
-                .parallel()
-                .mapToDouble(i -> getNetError(i, outputs, outputTargets))
-                .sum()
-                ;
-        // @formatter:on
-
-        error /= 2.0D;
-
-        return error;
-
-    }
+    // /**
+    // * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
+    // */
+    // @Override
+    // public double getNetError(final double[] outputs, final double[] outputTargets)
+    // {
+//        // @formatter:off
+//        double error = IntStream.range(0, outputs.length)
+//                .parallel()
+//                .mapToDouble(i -> getNetError(i, outputs, outputTargets))
+//                .sum()
+//                ;
+//        // @formatter:on
+    //
+    // error /= 2.0D;
+    //
+    // return error;
+    //
+    // }
 
     /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
@@ -119,22 +118,22 @@ public class KnnMathStream extends AbstractKnnMath
         // @formatter:on
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
-    @Override
-    public void setOutputError(final Layer layer, final BackwardVisitor visitor)
-    {
-        final double[] outputs = visitor.getOutputs(layer);
-        final double[] errors = new double[outputs.length];
-
-        // @formatter:off
-        IntStream.range(0, outputs.length)
-            .parallel()
-            .forEach(i -> setOutputError(i, outputs, errors, visitor))
-            ;
-        // @formatter:on
-
-        visitor.setErrors(layer, errors);
-    }
+    // /**
+    // * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
+    // */
+    // @Override
+    // public void setOutputError(final Layer layer, final BackwardVisitor visitor)
+    // {
+    // final double[] outputs = visitor.getOutputs(layer);
+    // final double[] errors = new double[outputs.length];
+    //
+//        // @formatter:off
+//        IntStream.range(0, outputs.length)
+//            .parallel()
+//            .forEach(i -> setOutputError(i, outputs, errors, visitor))
+//            ;
+//        // @formatter:on
+    //
+    // visitor.setErrors(layer, errors);
+    // }
 }

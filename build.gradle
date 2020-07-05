@@ -13,6 +13,7 @@ project("knn-net") {
 	dependencies {
 		api("de.freese.base:base-core:$project.archiveVersion")
 		
+		api("io.projectreactor:reactor-core")
 		api("org.slf4j:slf4j-api")
     }    
 }

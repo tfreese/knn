@@ -1,17 +1,15 @@
 /**
  * Created: 02.10.2011
  */
-package de.freese.knn.net.math.executor;
+package de.freese.knn.net.math;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.utils.KnnThreadQueueThreadFactory;
@@ -34,16 +32,18 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     /**
      *
      */
-    private final Executor executor;
+    private final ExecutorService executorService;
 
     /**
      * Erstellt ein neues {@link KnnMathExecutor} Object.
      */
     public KnnMathExecutor()
     {
-        // this(Executors.newCachedThreadPool(new KnnThreadQueueThreadFactory()));
-        // this(Executors.newWorkStealingPool(KnnUtils.DEFAULT_POOL_SIZE));
-        this(Executors.newFixedThreadPool(KnnUtils.DEFAULT_POOL_SIZE, new KnnThreadQueueThreadFactory()));
+        super();
+
+        // this.executorService = Executors.newCachedThreadPool(new KnnThreadQueueThreadFactory());
+        // this.executorService = Executors.newWorkStealingPool(KnnUtils.DEFAULT_POOL_SIZE);
+        this.executorService = Executors.newFixedThreadPool(getPoolSize(), new KnnThreadQueueThreadFactory());
 
         this.createdExecutor = true;
     }
@@ -51,13 +51,13 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     /**
      * Erstellt ein neues {@link KnnMathExecutor} Object.
      *
-     * @param executor {@link Executor}
+     * @param executorService {@link ExecutorService}
      */
-    public KnnMathExecutor(final Executor executor)
+    public KnnMathExecutor(final ExecutorService executorService)
     {
         super();
 
-        this.executor = Objects.requireNonNull(executor, "executor required");
+        this.executorService = Objects.requireNonNull(executorService, "executorService required");
     }
 
     /**
@@ -74,8 +74,14 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
 
         for (NeuronList partition : partitions)
         {
-            BackwardTask task = new BackwardTask(latch, partition, errors, layerErrors);
-            this.executor.execute(task);
+            // BackwardTask task = new BackwardTask(latch, partition, errors, layerErrors);
+            // this.executorService.execute(task);
+
+            this.executorService.execute(() -> {
+                partition.forEach(neuron -> backward(neuron, errors, layerErrors));
+
+                latch.countDown();
+            });
         }
 
         doLatchAwait(latch);
@@ -89,9 +95,9 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
     @Override
     public void close() throws Exception
     {
-        if (this.createdExecutor && (this.executor instanceof ExecutorService))
+        if (this.createdExecutor)
         {
-            KnnUtils.shutdown((ExecutorService) this.executor, getLogger());
+            KnnUtils.shutdown(this.executorService, getLogger());
         }
     }
 
@@ -130,8 +136,13 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
 
         for (NeuronList partition : partitions)
         {
-            ForwardTask task = new ForwardTask(latch, partition, inputs, outputs);
-            this.executor.execute(task);
+            // ForwardTask task = new ForwardTask(latch, partition, inputs, outputs);
+            // this.executorService.execute(task);
+            this.executorService.execute(() -> {
+                partition.forEach(neuron -> forward(neuron, inputs, outputs));
+
+                latch.countDown();
+            });
         }
 
         doLatchAwait(latch);
@@ -149,8 +160,13 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
 
         for (Layer layer : layers)
         {
-            InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
-            this.executor.execute(task);
+            // InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
+            // this.executorService.execute(task);
+            this.executorService.execute(() -> {
+                initialize(layer, valueInitializer);
+
+                latch.countDown();
+            });
         }
 
         doLatchAwait(latch);
@@ -173,8 +189,13 @@ public class KnnMathExecutor extends AbstractKnnMath implements AutoCloseable
 
         for (NeuronList partition : partitions)
         {
-            RefreshWeightsTask task = new RefreshWeightsTask(latch, partition, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
-            this.executor.execute(task);
+            // RefreshWeightsTask task = new RefreshWeightsTask(latch, partition, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
+            // this.executorService.execute(task);
+            this.executorService.execute(() -> {
+                partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
+
+                latch.countDown();
+            });
         }
 
         doLatchAwait(latch);

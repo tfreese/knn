@@ -1,4 +1,3 @@
-knn
-===
+= KNN
 
 Künstliches neuronales Netz (Artificial neural network)

@@ -39,7 +39,7 @@ public class NetTrainer
     private int maxIterations = 2000;
 
     // /**
-    // * Anfänglicher Anteil der vorherigen Gewichtsveränderung
+    // * Anfänglicher Anteil der vorherigen Gewichtsveränderung.
     // */
     // private double momentumInitial = this.momentum;
 
@@ -141,8 +141,8 @@ public class NetTrainer
 
             fireCycleEnded(new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum));
 
-            // Dynamische Anpassung der Lernrate und Momentum
-            // TODO da passt was noch nich
+            // Dynamische Anpassung der Lernrate und Momentum.
+            // TODO da passt was noch nicht
             // double stepLR = (this.teachFactorInitial - this.teachFactor) / this.maxIterations;
             // double stepMom = (this.momentumInitial - this.momentum) / this.maxIterations;
             // int currCicle = this.maxIterations - iteration;
@@ -150,20 +150,19 @@ public class NetTrainer
             // this.momentum = this.momentumInitial - (stepMom * currCicle);
             if (error <= this.maximumError)
             {
-                // Letzter Stand loggen
+                // Letzter Stand loggen.
                 NetTrainerCycleEndedEvent event = new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum);
                 LOGGER.info(event.toString());
 
                 long ms = System.currentTimeMillis() - start;
 
-                LOGGER.info("Required Time: {} ms", Long.valueOf(ms));
+                LOGGER.info("Required Time: {} ms", ms);
 
                 break;
             }
         }
 
         trainingContext.clear();
-        trainingContext = null;
     }
 
     /**
@@ -189,7 +188,7 @@ public class NetTrainer
 
         Layer[] layer = neuralNet.getLayer();
 
-        // Gewichte durch die Hidden- bis zum Inputlayer aktualisieren
+        // Gewichte durch die Hidden- bis zum Inputlayer aktualisieren.
         for (int i = layer.length - 1; i > 0; i--)
         {
             Layer rightLayer = layer[i];
@@ -201,7 +200,6 @@ public class NetTrainer
         double netzFehler = backwardVisitor.getNetError();
 
         backwardVisitor.clear();
-        backwardVisitor = null;
 
         return netzFehler;
     }

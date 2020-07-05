@@ -4,7 +4,7 @@
 package de.freese.knn.net.function;
 
 /**
- * Verrechnen der Eingangswerte durch die Sigmoid Funktion.
+ * Verrechnen der Eingangswerte durch die Sigmoid/Sprung/Treppen Funktion.
  *
  * @author Thomas Freese
  */
@@ -30,7 +30,7 @@ public class FunctionSigmoide implements Function
 
     /**
      * Creates a new {@link FunctionSigmoide} object.
-     * 
+     *
      * @param durchgang double
      * @param steigung double
      */
@@ -53,7 +53,7 @@ public class FunctionSigmoide implements Function
 
     /**
      * X-Durchgang fuer y = 0.5.
-     * 
+     *
      * @return double
      */
     public double getDurchgang()
@@ -63,7 +63,7 @@ public class FunctionSigmoide implements Function
 
     /**
      * Steigung -> 0 Treppenfunktion.
-     * 
+     *
      * @return double
      */
     public double getSteigung()

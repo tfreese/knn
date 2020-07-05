@@ -9,6 +9,7 @@ import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
+import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.utils.KnnUtils;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
@@ -35,8 +36,10 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
      */
     public KnnMathForkJoin()
     {
-        // this(ForkJoinPool.commonPool());
-        this(new ForkJoinPool(KnnUtils.DEFAULT_POOL_SIZE));
+        super();
+
+        // this.forkJoinPool = ForkJoinPool.commonPool();
+        this.forkJoinPool = new ForkJoinPool(getPoolSize());
 
         this.createdPool = true;
 
@@ -69,11 +72,20 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
         double[] errors = visitor.getLastErrors();
         double[] layerErrors = new double[layer.getSize()];
 
-        ForkJoinBackwardTask task = new ForkJoinBackwardTask(layer.getNeurons(), errors, layerErrors);
+        ForkJoinBackwardTask task = new ForkJoinBackwardTask(this, layer.getNeurons(), errors, layerErrors);
 
         this.forkJoinPool.invoke(task);
 
         visitor.setErrors(layer, layerErrors);
+    }
+
+    /**
+     * @see de.freese.knn.net.math.AbstractKnnMath#backward(de.freese.knn.net.neuron.Neuron, double[], double[])
+     */
+    @Override
+    protected void backward(final Neuron neuron, final double[] errors, final double[] layerErrors)
+    {
+        super.backward(neuron, errors, layerErrors);
     }
 
     /**
@@ -97,11 +109,29 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
         double[] inputs = visitor.getLastOutputs();
         double[] outputs = new double[layer.getSize()];
 
-        ForkJoinForwardTask task = new ForkJoinForwardTask(layer.getNeurons(), inputs, outputs);
+        ForkJoinForwardTask task = new ForkJoinForwardTask(this, layer.getNeurons(), inputs, outputs);
 
         this.forkJoinPool.invoke(task);
 
         visitor.setOutputs(layer, outputs);
+    }
+
+    /**
+     * @see de.freese.knn.net.math.AbstractKnnMath#forward(de.freese.knn.net.neuron.Neuron, double[], double[])
+     */
+    @Override
+    protected void forward(final Neuron neuron, final double[] inputs, final double[] outputs)
+    {
+        super.forward(neuron, inputs, outputs);
+    }
+
+    /**
+     * @see de.freese.knn.net.math.AbstractKnnMath#initialize(de.freese.knn.net.layer.Layer, de.freese.knn.net.matrix.ValueInitializer)
+     */
+    @Override
+    protected void initialize(final Layer layer, final ValueInitializer valueInitializer)
+    {
+        super.initialize(layer, valueInitializer);
     }
 
     /**
@@ -110,7 +140,7 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
     {
-        ForkJoinInitializeTask task = new ForkJoinInitializeTask(layers, valueInitializer);
+        ForkJoinInitializeTask task = new ForkJoinInitializeTask(this, layers, valueInitializer);
 
         this.forkJoinPool.invoke(task);
     }
@@ -127,8 +157,19 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
         double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         double[] rightErrors = visitor.getErrors(rightLayer);
 
-        ForkJoinRefreshWeightsTask task = new ForkJoinRefreshWeightsTask(leftLayer.getNeurons(), teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
+        ForkJoinRefreshWeightsTask task =
+                new ForkJoinRefreshWeightsTask(this, leftLayer.getNeurons(), teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
 
         this.forkJoinPool.invoke(task);
+    }
+
+    /**
+     * @see de.freese.knn.net.math.AbstractKnnMath#refreshLayerWeights(de.freese.knn.net.neuron.Neuron, double, double, double[], double[][], double[])
+     */
+    @Override
+    protected void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs,
+                                       final double[][] deltaWeights, final double[] rightErrors)
+    {
+        super.refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
     }
 }

@@ -4,7 +4,6 @@
 package de.freese.knn.net.math.forkjoin;
 
 import java.util.concurrent.RecursiveAction;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
@@ -32,6 +31,11 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
+    private final KnnMathForkJoin math;
+
+    /**
+     *
+     */
     private final NeuronList neurons;
 
     /**
@@ -47,28 +51,32 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      * Erstellt ein neues {@link ForkJoinForwardTask} Object.
      *
+     * @param math {@link KnnMathForkJoin}
      * @param neurons {@link NeuronList}
      * @param inputs double[]
      * @param outputs double[]
      */
-    ForkJoinForwardTask(final NeuronList neurons, final double[] inputs, final double[] outputs)
+    ForkJoinForwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] inputs, final double[] outputs)
     {
-        this(neurons, inputs, outputs, 0, neurons.size());
+        this(math, neurons, inputs, outputs, 0, neurons.size());
     }
 
     /**
      * Erstellt ein neues {@link ForkJoinForwardTask} Object.
      *
+     * @param math {@link KnnMathForkJoin}
      * @param neurons {@link NeuronList}
      * @param inputs double[]
      * @param outputs double[]
      * @param from int
      * @param to int
      */
-    private ForkJoinForwardTask(final NeuronList neurons, final double[] inputs, final double[] outputs, final int from, final int to)
+    private ForkJoinForwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] inputs, final double[] outputs, final int from,
+            final int to)
     {
         super();
 
+        this.math = math;
         this.neurons = neurons;
         this.inputs = inputs;
         this.outputs = outputs;
@@ -86,14 +94,14 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
         {
             NeuronList n = this.neurons.subList(this.from, this.to);
 
-            n.forEach(neuron -> AbstractKnnMath.forward(neuron, this.inputs, this.outputs));
+            n.forEach(neuron -> this.math.forward(neuron, this.inputs, this.outputs));
         }
         else
         {
             int middle = (this.from + this.to) / 2;
 
-            ForkJoinForwardTask task1 = new ForkJoinForwardTask(this.neurons, this.inputs, this.outputs, this.from, middle);
-            ForkJoinForwardTask task2 = new ForkJoinForwardTask(this.neurons, this.inputs, this.outputs, middle, this.to);
+            ForkJoinForwardTask task1 = new ForkJoinForwardTask(this.math, this.neurons, this.inputs, this.outputs, this.from, middle);
+            ForkJoinForwardTask task2 = new ForkJoinForwardTask(this.math, this.neurons, this.inputs, this.outputs, middle, this.to);
 
             invokeAll(task1, task2);
         }

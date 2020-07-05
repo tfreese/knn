@@ -6,7 +6,6 @@ package de.freese.knn.net.math;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletionService;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,16 +38,17 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
     /**
      *
      */
-    private final Executor executor;
+    private final ExecutorService executorService;
 
     /**
      * Erstellt ein neues {@link KnnMathCompletionService} Object.
      */
     public KnnMathCompletionService()
     {
-        // this(Executors.newCachedThreadPool(new KnnThreadQueueThreadFactory()));
-        // this(Executors.newWorkStealingPool(KnnUtils.DEFAULT_POOL_SIZE));
-        this(Executors.newFixedThreadPool(KnnUtils.DEFAULT_POOL_SIZE, new KnnThreadQueueThreadFactory()));
+        super();
+
+        this.executorService = Executors.newFixedThreadPool(getPoolSize(), new KnnThreadQueueThreadFactory());
+        this.completionService = new ExecutorCompletionService<>(this.executorService);
 
         this.createdExecutor = true;
     }
@@ -56,14 +56,14 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
     /**
      * Erstellt ein neues {@link KnnMathCompletionService} Object.
      *
-     * @param executor {@link Executor}
+     * @param executorService {@link ExecutorService}
      */
-    public KnnMathCompletionService(final Executor executor)
+    public KnnMathCompletionService(final ExecutorService executorService)
     {
         super();
 
-        this.executor = Objects.requireNonNull(executor, "executor required");
-        this.completionService = new ExecutorCompletionService<>(executor);
+        this.executorService = Objects.requireNonNull(executorService, "executorService required");
+        this.completionService = new ExecutorCompletionService<>(executorService);
     }
 
     /**
@@ -79,10 +79,7 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
 
         for (NeuronList partition : partitions)
         {
-            this.completionService.submit(() -> {
-                partition.forEach(neuron -> backward(neuron, errors, layerErrors));
-                return null;
-            });
+            this.completionService.submit(() -> partition.forEach(neuron -> backward(neuron, errors, layerErrors)), null);
         }
 
         waitForCompletionService(partitions.size());
@@ -96,9 +93,9 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
     @Override
     public void close() throws Exception
     {
-        if (this.createdExecutor && (this.executor instanceof ExecutorService))
+        if (this.createdExecutor)
         {
-            KnnUtils.shutdown((ExecutorService) this.executor, getLogger());
+            KnnUtils.shutdown(this.executorService, getLogger());
         }
     }
 
@@ -115,10 +112,7 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
 
         for (NeuronList partition : partitions)
         {
-            this.completionService.submit(() -> {
-                partition.forEach(neuron -> forward(neuron, inputs, outputs));
-                return null;
-            });
+            this.completionService.submit(() -> partition.forEach(neuron -> forward(neuron, inputs, outputs)), null);
         }
 
         waitForCompletionService(partitions.size());
@@ -134,10 +128,7 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
     {
         for (Layer layer : layers)
         {
-            this.completionService.submit(() -> {
-                initialize(layer, valueInitializer);
-                return null;
-            });
+            this.completionService.submit(() -> initialize(layer, valueInitializer), null);
         }
 
         waitForCompletionService(layers.length);
@@ -159,10 +150,8 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
 
         for (NeuronList partition : partitions)
         {
-            this.completionService.submit(() -> {
-                partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
-                return null;
-            });
+            this.completionService.submit(
+                    () -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
         }
 
         waitForCompletionService(partitions.size());

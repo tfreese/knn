@@ -194,9 +194,9 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         // Gewichte
         for (int i = 0; i < inputSize; i++)
         {
-            for (int o = 0; o < outputSize; o++)
+            for (int j = 0; j < outputSize; j++)
             {
-                matrix.getWeights()[i][o] = input.readDouble();
+                matrix.getWeights()[i][j] = input.readDouble();
             }
         }
 
@@ -295,9 +295,9 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         // Gewichte
         for (int i = 0; i < matrix.getInputSize(); i++)
         {
-            for (int o = 0; o < matrix.getOutputSize(); o++)
+            for (int j = 0; j < matrix.getOutputSize(); j++)
             {
-                output.writeDouble(matrix.getWeights()[i][o]);
+                output.writeDouble(matrix.getWeights()[i][j]);
             }
         }
     }

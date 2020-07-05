@@ -6,7 +6,6 @@ package de.freese.knn.net.math.forkjoin;
 import java.util.Arrays;
 import java.util.concurrent.RecursiveAction;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 
 /**
@@ -34,6 +33,11 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
+    private final KnnMathForkJoin math;
+
+    /**
+     *
+     */
     private int to = 0;
 
     /**
@@ -44,26 +48,29 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      * Erstellt ein neues {@link ForkJoinInitializeTask} Object.
      *
+     * @param math {@link KnnMathForkJoin}
      * @param layers {@link Layer}[]
      * @param valueInitializer {@link ValueInitializer}
      */
-    ForkJoinInitializeTask(final Layer[] layers, final ValueInitializer valueInitializer)
+    ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer)
     {
-        this(layers, valueInitializer, 0, layers.length);
+        this(math, layers, valueInitializer, 0, layers.length);
     }
 
     /**
      * Erstellt ein neues {@link ForkJoinInitializeTask} Object.
      *
+     * @param math {@link KnnMathForkJoin}
      * @param layers {@link Layer}[]
      * @param valueInitializer {@link ValueInitializer}
      * @param from int
      * @param to int
      */
-    private ForkJoinInitializeTask(final Layer[] layers, final ValueInitializer valueInitializer, final int from, final int to)
+    private ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer, final int from, final int to)
     {
         super();
 
+        this.math = math;
         this.layers = layers;
         this.valueInitializer = valueInitializer;
         this.from = from;
@@ -76,21 +83,21 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     @Override
     protected void compute()
     {
-        if ((this.to - this.from) < 2)
+        if ((this.to - this.from) < 20)
         {
             Layer[] l = Arrays.copyOfRange(this.layers, this.from, this.to);
 
             for (Layer layer : l)
             {
-                AbstractKnnMath.initialize(layer, this.valueInitializer);
+                this.math.initialize(layer, this.valueInitializer);
             }
         }
         else
         {
             int middle = (this.from + this.to) / 2;
 
-            ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(this.layers, this.valueInitializer, this.from, middle);
-            ForkJoinInitializeTask task2 = new ForkJoinInitializeTask(this.layers, this.valueInitializer, middle, this.to);
+            ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, this.from, middle);
+            ForkJoinInitializeTask task2 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, middle, this.to);
 
             invokeAll(task1, task2);
         }
