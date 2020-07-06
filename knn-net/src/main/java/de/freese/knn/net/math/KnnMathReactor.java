@@ -3,14 +3,10 @@
  */
 package de.freese.knn.net.math;
 
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.ValueInitializer;
-import de.freese.knn.net.utils.KnnThreadQueueThreadFactory;
-import de.freese.knn.net.utils.KnnUtils;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 import reactor.core.publisher.Flux;
@@ -22,46 +18,32 @@ import reactor.core.scheduler.Schedulers;
  *
  * @author Thomas Freese
  */
-public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
+public class KnnMathReactor extends AbstractKnnMathAsync
 {
-    /**
-     *
-     */
-    private boolean createdExecutor = false;
-
-    /**
-     *
-     */
-    private final ExecutorService executorService;
-
     /**
      *
      */
     private final Scheduler scheduler;
 
     /**
-     * Erstellt ein neues Object.
+     * Erstellt ein neues {@link KnnMathReactor} Object.
      */
     public KnnMathReactor()
     {
         super();
 
-        this.executorService = Executors.newFixedThreadPool(getPoolSize(), new KnnThreadQueueThreadFactory());
-        this.scheduler = Schedulers.fromExecutor(this.executorService);
-
-        this.createdExecutor = true;
+        this.scheduler = Schedulers.fromExecutor(getExecutorService());
     }
 
     /**
-     * Erstellt ein neues Object.
+     * Erstellt ein neues {@link KnnMathReactor} Object.
      *
      * @param executorService {@link ExecutorService}
      */
     public KnnMathReactor(final ExecutorService executorService)
     {
-        super();
+        super(executorService);
 
-        this.executorService = Objects.requireNonNull(executorService, "executorService required");
         this.scheduler = Schedulers.fromExecutor(executorService);
     }
 
@@ -78,7 +60,9 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
         Flux.fromIterable(layer.getNeurons())
             .parallel(getPoolSize())
             .runOn(this.scheduler)
-            .subscribe(neuron -> backward(neuron, errors, layerErrors))
+            .doOnNext(neuron -> backward(neuron, errors, layerErrors))
+            .sequential().blockLast() // Thread wartet bis Flux fertig ist.
+            //.subscribe(neuron -> backward(neuron, errors, layerErrors)) // Thread wartet nicht bis Flux fertig ist.
             ;
         // @formatter:on
 
@@ -86,17 +70,14 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
     }
 
     /**
-     * @see java.lang.AutoCloseable#close()
+     * @see de.freese.knn.net.math.AbstractKnnMathAsync#close()
      */
     @Override
     public void close() throws Exception
     {
         this.scheduler.dispose();
 
-        if (this.createdExecutor)
-        {
-            KnnUtils.shutdown(this.executorService, getLogger());
-        }
+        super.close();
     }
 
     /**
@@ -112,7 +93,9 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
         Flux.fromIterable(layer.getNeurons())
             .parallel(getPoolSize())
             .runOn(this.scheduler)
-            .subscribe(neuron -> forward(neuron, inputs, outputs))
+            .doOnNext(neuron -> forward(neuron, inputs, outputs))
+            .sequential().blockLast()
+            //.subscribe(neuron -> forward(neuron, inputs, outputs))
             ;
         // @formatter:on
 
@@ -155,7 +138,9 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
         Flux.fromArray(layers)
             .parallel(getPoolSize())
             .runOn(this.scheduler)
-            .subscribe(layer -> initialize(layer, valueInitializer))
+            .doOnNext(layer -> initialize(layer, valueInitializer))
+            .sequential().blockLast()
+            //.subscribe(layer -> initialize(layer, valueInitializer))
             ;
         // @formatter:on
     }
@@ -176,7 +161,9 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
         Flux.fromIterable(leftLayer.getNeurons())
             .parallel(getPoolSize())
             .runOn(this.scheduler)
-            .subscribe(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
+            .doOnNext(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
+            .sequential().blockLast()
+            //.subscribe(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
             ;
         // @formatter:on
     }
@@ -196,7 +183,9 @@ public class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
 //        Flux.range(0, outputs.length)
 //            .parallel(getPoolSize())
 //            .runOn(this.scheduler)
-//            .subscribe(i -> setOutputError(i, outputs, errors, visitor))
+//            .doOnNext(i -> setOutputError(i, outputs, errors, visitor))
+//            .sequential().blockLast()
+//            //.subscribe(i -> setOutputError(i, outputs, errors, visitor))
 //            ;
 //        // @formatter:on
     //

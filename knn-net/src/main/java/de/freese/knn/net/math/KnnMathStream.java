@@ -4,6 +4,7 @@
 package de.freese.knn.net.math;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
@@ -12,14 +13,14 @@ import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Mathematik des {@link NeuralNet} mit der Java8 Streaming-API.
+ * Mathematik des {@link NeuralNet} mit {@link Stream}s.
  *
  * @author Thomas Freese
  */
 public class KnnMathStream extends AbstractKnnMath
 {
     /**
-     * Erstellt ein neues Object.
+     * Erstellt ein neues {@link KnnMathStream} Object.
      */
     public KnnMathStream()
     {

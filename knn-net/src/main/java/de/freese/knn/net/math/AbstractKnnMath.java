@@ -3,8 +3,6 @@
  */
 package de.freese.knn.net.math;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import de.freese.knn.net.NeuralNet;
@@ -12,8 +10,6 @@ import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.Neuron;
-import de.freese.knn.net.neuron.NeuronList;
-import de.freese.knn.net.utils.KnnUtils;
 import de.freese.knn.net.visitor.BackwardVisitor;
 
 /**
@@ -128,44 +124,6 @@ public abstract class AbstractKnnMath implements KnnMath
         double error = Math.pow(outputTarget - output, 2.0D);
 
         return error;
-    }
-
-    /**
-     * Aufsplitten der Neuronen für parallele Verarbeitung.<br>
-     * Es wird pro Thread eine SubList verarbeitet.<br>
-     * Keine parallele Verarbeitung für einzelne Elemente, dadurch zu hoher Verwaltungsaufwand für die Runtime.
-     *
-     * @param neurons {@link NeuronList}
-     * @return {@link List}<NeuronList>
-     */
-    protected List<NeuronList> getPartitions(final NeuronList neurons)
-    {
-        List<NeuronList> partitions = new ArrayList<>(getPoolSize() + 1);
-
-        int size = neurons.size() / getPoolSize();
-
-        if (size <= 1)
-        {
-            // Keine Partitionen mit nur einem oder mit zu wenigen Elementen.
-            size = 2;
-        }
-
-        for (int i = 0; i < neurons.size(); i += size)
-        {
-            partitions.add(neurons.subList(i, Math.min(i + size, neurons.size())));
-        }
-
-        return partitions;
-    }
-
-    /**
-     * Liefert die Größe des ThreadPools.
-     *
-     * @return int
-     */
-    protected int getPoolSize()
-    {
-        return KnnUtils.DEFAULT_POOL_SIZE;
     }
 
     /**

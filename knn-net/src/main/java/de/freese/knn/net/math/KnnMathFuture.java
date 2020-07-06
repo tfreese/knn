@@ -6,6 +6,7 @@ package de.freese.knn.net.math;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.ValueInitializer;
@@ -14,26 +15,26 @@ import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Mathematik des {@link NeuralNet} mit dem {@link ExecutorService}-Framework.
+ * Mathematik des {@link NeuralNet} mit einem {@link Future}.
  *
  * @author Thomas Freese
  */
-public class KnnMathExecutor extends AbstractKnnMathAsync
+public class KnnMathFuture extends AbstractKnnMathAsync
 {
     /**
-     * Erstellt ein neues {@link KnnMathExecutor} Object.
+     * Erstellt ein neues {@link KnnMathFuture} Object.
      */
-    public KnnMathExecutor()
+    public KnnMathFuture()
     {
         super();
     }
 
     /**
-     * Erstellt ein neues {@link KnnMathExecutor} Object.
+     * Erstellt ein neues {@link KnnMathFuture} Object.
      *
      * @param executorService {@link ExecutorService}
      */
-    public KnnMathExecutor(final ExecutorService executorService)
+    public KnnMathFuture(final ExecutorService executorService)
     {
         super(executorService);
     }
@@ -48,18 +49,11 @@ public class KnnMathExecutor extends AbstractKnnMathAsync
         double[] layerErrors = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        for (NeuronList partition : partitions)
-        {
-            getExecutorService().execute(() -> {
-                partition.forEach(neuron -> backward(neuron, errors, layerErrors));
+        Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> backward(neuron, errors, layerErrors)));
+        partitions.get(1).forEach(neuron -> backward(neuron, errors, layerErrors));
 
-                latch.countDown();
-            });
-        }
-
-        waitForLatch(latch);
+        waitForFuture(future);
 
         visitor.setErrors(layer, layerErrors);
     }
@@ -74,20 +68,36 @@ public class KnnMathExecutor extends AbstractKnnMathAsync
         double[] outputs = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        for (NeuronList partition : partitions)
-        {
-            getExecutorService().execute(() -> {
-                partition.forEach(neuron -> forward(neuron, inputs, outputs));
+        Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> forward(neuron, inputs, outputs)));
+        partitions.get(1).forEach(neuron -> forward(neuron, inputs, outputs));
 
-                latch.countDown();
-            });
-        }
-
-        waitForLatch(latch);
+        waitForFuture(future);
 
         visitor.setOutputs(layer, outputs);
+    }
+
+    /**
+     * @see de.freese.knn.net.math.AbstractKnnMathAsync#getPartitions(de.freese.knn.net.neuron.NeuronList)
+     */
+    @Override
+    protected List<NeuronList> getPartitions(final NeuronList neurons)
+    {
+        int middle = neurons.size() / getPoolSize();
+
+        NeuronList nl1 = neurons.subList(0, middle);
+        NeuronList nl2 = neurons.subList(middle, neurons.size());
+
+        return List.of(nl1, nl2);
+    }
+
+    /**
+     * @see de.freese.knn.net.math.AbstractKnnMathAsync#getPoolSize()
+     */
+    @Override
+    protected int getPoolSize()
+    {
+        return 2;
     }
 
     /**
@@ -123,17 +133,11 @@ public class KnnMathExecutor extends AbstractKnnMathAsync
         double[] rightErrors = visitor.getErrors(rightLayer);
 
         List<NeuronList> partitions = getPartitions(leftLayer.getNeurons());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        for (NeuronList partition : partitions)
-        {
-            getExecutorService().execute(() -> {
-                partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
+        Future<?> future = getExecutorService()
+                .submit(() -> partitions.get(0).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
+        partitions.get(1).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
 
-                latch.countDown();
-            });
-        }
-
-        waitForLatch(latch);
+        waitForFuture(future);
     }
 }

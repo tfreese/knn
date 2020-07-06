@@ -161,7 +161,8 @@ public class KnnButtonDemo extends JFrame
         // Training
         // @formatter:off
         this.neuralNetwork = new NeuralNetBuilder()
-                //.knnMath(new KnnMathExecutor())
+                //.knnMath(new KnnMathStream())
+                //.knnMath(new KnnMathReactor())
                 .layerInput(new InputLayer(54))
                 .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
                 .layerOutput(new OutputLayer(10))
@@ -172,7 +173,7 @@ public class KnnButtonDemo extends JFrame
         double teachFactor = 0.5D;
         double momentum = 0.5D;
         double maximumError = 0.05D;
-        int maximumIteration = 10000;
+        int maximumIteration = 2000;
 
         NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
         trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));

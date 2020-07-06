@@ -64,7 +64,7 @@ public class NeuralNetImpl implements NeuralNet
     @Override
     public void close() throws Exception
     {
-        LOGGER.info("");
+        LOGGER.info("close");
 
         if (getMath() instanceof AutoCloseable)
         {

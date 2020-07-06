@@ -32,7 +32,8 @@ public class BildErkennung
 
         NeuralNetBuilder builder = new NeuralNetBuilder();
 
-        // builder.knnMath(new KnnMathCompletionService());
+        // builder.knnMath(new KnnMathStream());
+        // builder.knnMath(new KnnMathReactor());
 
         if (trainingInputSource instanceof ImageInfoTrainingInputSource)
         {

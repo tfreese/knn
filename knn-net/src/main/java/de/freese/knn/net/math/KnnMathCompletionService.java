@@ -4,17 +4,13 @@
 package de.freese.knn.net.math;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
-import de.freese.knn.net.utils.KnnThreadQueueThreadFactory;
-import de.freese.knn.net.utils.KnnUtils;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
@@ -23,22 +19,12 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public class KnnMathCompletionService extends AbstractKnnMath implements AutoCloseable
+public class KnnMathCompletionService extends AbstractKnnMathAsync
 {
     /**
      *
      */
     private final CompletionService<Void> completionService;
-
-    /**
-     *
-     */
-    private boolean createdExecutor = false;
-
-    /**
-     *
-     */
-    private final ExecutorService executorService;
 
     /**
      * Erstellt ein neues {@link KnnMathCompletionService} Object.
@@ -47,10 +33,7 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
     {
         super();
 
-        this.executorService = Executors.newFixedThreadPool(getPoolSize(), new KnnThreadQueueThreadFactory());
-        this.completionService = new ExecutorCompletionService<>(this.executorService);
-
-        this.createdExecutor = true;
+        this.completionService = new ExecutorCompletionService<>(getExecutorService());
     }
 
     /**
@@ -60,9 +43,8 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
      */
     public KnnMathCompletionService(final ExecutorService executorService)
     {
-        super();
+        super(executorService);
 
-        this.executorService = Objects.requireNonNull(executorService, "executorService required");
         this.completionService = new ExecutorCompletionService<>(executorService);
     }
 
@@ -82,21 +64,9 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
             this.completionService.submit(() -> partition.forEach(neuron -> backward(neuron, errors, layerErrors)), null);
         }
 
-        waitForCompletionService(partitions.size());
+        waitForCompletionService(this.completionService, partitions.size());
 
         visitor.setErrors(layer, layerErrors);
-    }
-
-    /**
-     * @see java.lang.AutoCloseable#close()
-     */
-    @Override
-    public void close() throws Exception
-    {
-        if (this.createdExecutor)
-        {
-            KnnUtils.shutdown(this.executorService, getLogger());
-        }
     }
 
     /**
@@ -115,7 +85,7 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
             this.completionService.submit(() -> partition.forEach(neuron -> forward(neuron, inputs, outputs)), null);
         }
 
-        waitForCompletionService(partitions.size());
+        waitForCompletionService(this.completionService, partitions.size());
 
         visitor.setOutputs(layer, outputs);
     }
@@ -131,7 +101,7 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
             this.completionService.submit(() -> initialize(layer, valueInitializer), null);
         }
 
-        waitForCompletionService(layers.length);
+        waitForCompletionService(this.completionService, layers.length);
     }
 
     /**
@@ -154,26 +124,6 @@ public class KnnMathCompletionService extends AbstractKnnMath implements AutoClo
                     () -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
         }
 
-        waitForCompletionService(partitions.size());
-    }
-
-    /**
-     * Warten bis alle Tasks fertig sind.
-     *
-     * @param count int; Anzahl der Tasks
-     */
-    private void waitForCompletionService(final int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            try
-            {
-                this.completionService.take();
-            }
-            catch (InterruptedException ex)
-            {
-                getLogger().error(null, ex);
-            }
-        }
+        waitForCompletionService(this.completionService, partitions.size());
     }
 }

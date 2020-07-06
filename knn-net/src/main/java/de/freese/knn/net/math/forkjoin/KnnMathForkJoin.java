@@ -3,45 +3,28 @@
  */
 package de.freese.knn.net.math.forkjoin;
 
-import java.util.Objects;
 import java.util.concurrent.ForkJoinPool;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
+import de.freese.knn.net.math.AbstractKnnMathAsync;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.Neuron;
-import de.freese.knn.net.utils.KnnUtils;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Mathematik des {@link NeuralNet} mit dem Fork-Join-Framework.
+ * Mathematik des {@link NeuralNet} mit dem ForkJoin-Framework.
  *
  * @author Thomas Freese
  */
-public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
+public class KnnMathForkJoin extends AbstractKnnMathAsync
 {
-    /**
-     *
-     */
-    private boolean createdPool = false;
-
-    /**
-     *
-     */
-    private final ForkJoinPool forkJoinPool;
-
     /**
      * Erstellt ein neues {@link KnnMathForkJoin} Object.
      */
     public KnnMathForkJoin()
     {
-        super();
-
-        // this.forkJoinPool = ForkJoinPool.commonPool();
-        this.forkJoinPool = new ForkJoinPool(getPoolSize());
-
-        this.createdPool = true;
+        super(ForkJoinPool.commonPool());
 
         // if (getLogger().isDebugEnabled())
         // {
@@ -58,9 +41,7 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
      */
     public KnnMathForkJoin(final ForkJoinPool forkJoinPool)
     {
-        super();
-
-        this.forkJoinPool = Objects.requireNonNull(forkJoinPool, "forkJoinPool required");
+        super(forkJoinPool);
     }
 
     /**
@@ -74,7 +55,7 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
 
         ForkJoinBackwardTask task = new ForkJoinBackwardTask(this, layer.getNeurons(), errors, layerErrors);
 
-        this.forkJoinPool.invoke(task);
+        getExecutorService().invoke(task);
 
         visitor.setErrors(layer, layerErrors);
     }
@@ -83,21 +64,9 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
      * @see de.freese.knn.net.math.AbstractKnnMath#backward(de.freese.knn.net.neuron.Neuron, double[], double[])
      */
     @Override
-    protected void backward(final Neuron neuron, final double[] errors, final double[] layerErrors)
+    public void backward(final Neuron neuron, final double[] errors, final double[] layerErrors)
     {
         super.backward(neuron, errors, layerErrors);
-    }
-
-    /**
-     * @see java.lang.AutoCloseable#close()
-     */
-    @Override
-    public void close() throws Exception
-    {
-        if (this.createdPool)
-        {
-            KnnUtils.shutdown(this.forkJoinPool, getLogger());
-        }
     }
 
     /**
@@ -111,7 +80,7 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
 
         ForkJoinForwardTask task = new ForkJoinForwardTask(this, layer.getNeurons(), inputs, outputs);
 
-        this.forkJoinPool.invoke(task);
+        getExecutorService().invoke(task);
 
         visitor.setOutputs(layer, outputs);
     }
@@ -120,16 +89,25 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
      * @see de.freese.knn.net.math.AbstractKnnMath#forward(de.freese.knn.net.neuron.Neuron, double[], double[])
      */
     @Override
-    protected void forward(final Neuron neuron, final double[] inputs, final double[] outputs)
+    public void forward(final Neuron neuron, final double[] inputs, final double[] outputs)
     {
         super.forward(neuron, inputs, outputs);
+    }
+
+    /**
+     * @see de.freese.knn.net.math.AbstractKnnMathAsync#getExecutorService()
+     */
+    @Override
+    protected ForkJoinPool getExecutorService()
+    {
+        return (ForkJoinPool) super.getExecutorService();
     }
 
     /**
      * @see de.freese.knn.net.math.AbstractKnnMath#initialize(de.freese.knn.net.layer.Layer, de.freese.knn.net.matrix.ValueInitializer)
      */
     @Override
-    protected void initialize(final Layer layer, final ValueInitializer valueInitializer)
+    public void initialize(final Layer layer, final ValueInitializer valueInitializer)
     {
         super.initialize(layer, valueInitializer);
     }
@@ -142,7 +120,7 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
     {
         ForkJoinInitializeTask task = new ForkJoinInitializeTask(this, layers, valueInitializer);
 
-        this.forkJoinPool.invoke(task);
+        getExecutorService().invoke(task);
     }
 
     /**
@@ -160,15 +138,15 @@ public class KnnMathForkJoin extends AbstractKnnMath implements AutoCloseable
         ForkJoinRefreshWeightsTask task =
                 new ForkJoinRefreshWeightsTask(this, leftLayer.getNeurons(), teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
 
-        this.forkJoinPool.invoke(task);
+        getExecutorService().invoke(task);
     }
 
     /**
      * @see de.freese.knn.net.math.AbstractKnnMath#refreshLayerWeights(de.freese.knn.net.neuron.Neuron, double, double, double[], double[][], double[])
      */
     @Override
-    protected void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs,
-                                       final double[][] deltaWeights, final double[] rightErrors)
+    public void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs,
+                                    final double[][] deltaWeights, final double[] rightErrors)
     {
         super.refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
     }
