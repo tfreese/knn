@@ -24,21 +24,20 @@ public class TestImageInfo
     public static void main(final String[] args) throws Exception
     {
         String fileName = null;
+        // fileName = "Ampel.gif";
+        // fileName = "Bahnkreuz.gif";
+        // fileName = "BigBrother.jpg";
         // fileName = "Einbahn.gif";
+        // fileName = "Klippe.gif";
+        fileName = "Seaside.jpg";
         // fileName = "Stop.gif";
-        // fileName = "Seaside.jpg";
-        fileName = "BigBrother.jpg";
         // fileName = "Sylvester.jpg";
         // fileName = "winnt.bmp";
+
         ImageInfo imageInfo = new ImageInfo(fileName);
-        imageInfo.calculate();
         System.out.println(imageInfo.toString());
 
         imageInfo.getInfoVector();
-
-        // imageInfo = new ImageInfo("Einbahn.gif");
-        // imageInfo.calculate();
-        // System.out.println(imageInfo.toString());
 
         JFrame frame = new JFrame(fileName);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

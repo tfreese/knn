@@ -11,7 +11,7 @@ package de.freese.knn.net.matrix;
 public class ValueInitializerRandom implements ValueInitializer
 {
     /**
-     * 
+     *
      */
     private final double oberGrenze;
 
@@ -30,7 +30,7 @@ public class ValueInitializerRandom implements ValueInitializer
 
     /**
      * Creates a new {@link ValueInitializerRandom} object.
-     * 
+     *
      * @param grenzWert double, Von -GrenzWert bis +Grenzwert
      */
     public ValueInitializerRandom(final double grenzWert)
@@ -40,7 +40,7 @@ public class ValueInitializerRandom implements ValueInitializer
 
     /**
      * Creates a new {@link ValueInitializerRandom} object.
-     * 
+     *
      * @param unterGrenze double
      * @param oberGrenze double
      */

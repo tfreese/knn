@@ -172,7 +172,7 @@ public class KnnButtonDemo extends JFrame
 
         double teachFactor = 0.5D;
         double momentum = 0.5D;
-        double maximumError = 0.05D;
+        double maximumError = 0.05D; // 5 %
         int maximumIteration = 2000;
 
         NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);

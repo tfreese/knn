@@ -46,7 +46,7 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource
     @Override
     public double[] getInputAt(final int index)
     {
-        return this.imageInfos.get(index).getInfoVector();
+        return this.imageInfos.get(index).getInfoVectorReScaled();
     }
 
     /**

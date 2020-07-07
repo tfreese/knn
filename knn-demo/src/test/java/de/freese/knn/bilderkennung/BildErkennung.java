@@ -10,6 +10,7 @@ import de.freese.knn.net.function.FunctionSigmoide;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
+import de.freese.knn.net.math.KnnMathStream;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 import de.freese.knn.net.trainer.TrainingInputSource;
@@ -32,7 +33,7 @@ public class BildErkennung
 
         NeuralNetBuilder builder = new NeuralNetBuilder();
 
-        // builder.knnMath(new KnnMathStream());
+        builder.knnMath(new KnnMathStream());
         // builder.knnMath(new KnnMathReactor());
 
         if (trainingInputSource instanceof ImageInfoTrainingInputSource)
@@ -40,7 +41,7 @@ public class BildErkennung
             // @formatter:off
             builder.layerInput(new InputLayer(36))
                 .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
-                //.layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
+                //.layerHidden(new HiddenLayer(50, new FunctionSigmoide()))
                 ;
             // @formatter:on
         }
@@ -60,17 +61,13 @@ public class BildErkennung
         {
             final double teachFactor = 0.5D;
             final double momentum = 0.5D;
-            final double maximumError = 0.05D;
+            final double maximumError = 0.05D; // 5 %
             final int maximumIteration = Integer.MAX_VALUE;
 
-            final long start = System.currentTimeMillis();
-
             final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
-            trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out, 500));
+            trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out, 100));
             // trainer.addNetTrainerListener(new LoggerNetTrainerListener(500));
             trainer.train(neuralNet, trainingInputSource);
-
-            System.out.println("Lernzeit: " + ((System.currentTimeMillis() - start) / 1000) + " s");
 
             Toolkit.getDefaultToolkit().beep();
         }
