@@ -181,7 +181,7 @@ public class ImageInfo
 
     /**
      * Liefert die gesammelten Daten aller Farbkanäle.<br>
-     * Die Daten sind hier re-skaliert da grosse Werte dabei sind (Uniformität=Energie, Kontrast).
+     * Die Daten sind hier re-skaliert da grosse Werte dabei sind, wie Uniformität (Energie) und Kontrast.
      *
      * @return double[]
      */
@@ -191,41 +191,49 @@ public class ImageInfo
         {
             this.infoVectorReScaled = new double[getInfoVector().length];
 
-            // Kopieren.
-            for (int i = 0; i < getInfoVector().length; i++)
-            {
-                this.infoVectorReScaled[i] = getInfoVector()[i];
-            }
-
             double min = Double.MAX_VALUE;
             double max = Double.MIN_VALUE;
 
-            // Sehr große Werte runter rechnen.
-            for (int i = 0; i < this.infoVectorReScaled.length; i++)
+            for (int i = 0; i < getInfoVector().length; i++)
             {
-                if (this.infoVectorReScaled[i] > 1_000_000D)
+                double value = getInfoVector()[i];
+
+                // Sehr große Werte häppchenweise runter rechnen.
+                if (value > 1_000_000D)
                 {
-                    this.infoVectorReScaled[i] = this.infoVectorReScaled[i] / 1_000D;
+                    value /= 1_000D;
                 }
 
-                // if (element > 1_000D)
-                // {
-                // this.infoVectorReScaled[i] = this.infoVectorReScaled[i] / 1_000D;
-                // }
+                if (value > 1_000_000D)
+                {
+                    value /= 100D;
+                }
 
-                min = Math.min(min, this.infoVectorReScaled[i]);
-                max = Math.max(max, this.infoVectorReScaled[i]);
+                if (value > 1_000_000D)
+                {
+                    value /= 10D;
+                }
+
+                if (value > 500_000D)
+                {
+                    value /= 2D;
+                }
+
+                this.infoVectorReScaled[i] = value;
+
+                min = Math.min(min, value);
+                max = Math.max(max, value);
             }
 
-            double minNorm = -500_000D;
-            double maxNorm = +500_000D;
-
-            for (int i = 0; i < this.infoVectorReScaled.length; i++)
-            {
-                // this.infoVectorReScaled[i] = ExtMath.reScale(this.infoVectorReScaled[i], min, max, minNorm, maxNorm);
-
-                this.infoVectorReScaled[i] = minNorm + (((this.infoVectorReScaled[i] - min) * (maxNorm - minNorm)) / (max - min));
-            }
+            // double minNorm = 0.0D;
+            // double maxNorm = 500_000D;
+            //
+            // for (int i = 0; i < this.infoVectorReScaled.length; i++)
+            // {
+            // // this.infoVectorReScaled[i] = ExtMath.reScale(this.infoVectorReScaled[i], min, max, minNorm, maxNorm);
+            //
+            // this.infoVectorReScaled[i] = minNorm + (((this.infoVectorReScaled[i] - min) * (maxNorm - minNorm)) / (max - min));
+            // }
         }
 
         return this.infoVectorReScaled;

@@ -37,7 +37,7 @@ public class TestImageInfo
         ImageInfo imageInfo = new ImageInfo(fileName);
         System.out.println(imageInfo.toString());
 
-        imageInfo.getInfoVector();
+        imageInfo.getInfoVectorReScaled();
 
         JFrame frame = new JFrame(fileName);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
