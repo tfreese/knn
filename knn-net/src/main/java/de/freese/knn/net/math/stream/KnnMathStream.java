@@ -1,13 +1,14 @@
 /**
  * Created on 23.05.2016 17:18:14
  */
-package de.freese.knn.net.math;
+package de.freese.knn.net.math.stream;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
@@ -17,7 +18,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public class KnnMathStream extends AbstractKnnMath
+public final class KnnMathStream extends AbstractKnnMath
 {
     /**
      * Erstellt ein neues {@link KnnMathStream} Object.

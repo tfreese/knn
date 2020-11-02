@@ -1,25 +1,30 @@
 /**
  * Created on 23.05.2016 17:18:14
  */
-package de.freese.knn.net.math;
+package de.freese.knn.net.math.reactor;
 
-import java.util.concurrent.ExecutorService;
+import java.util.Objects;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 /**
  * Mathematik des {@link NeuralNet} mit dem Reactor-Framework.
  *
  * @author Thomas Freese
  */
-public class KnnMathReactor extends AbstractKnnMathAsync
+public final class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
 {
+    /**
+     *
+     */
+    private final int parallelism;
+
     /**
      *
      */
@@ -27,24 +32,25 @@ public class KnnMathReactor extends AbstractKnnMathAsync
 
     /**
      * Erstellt ein neues {@link KnnMathReactor} Object.
+     *
+     * @param scheduler {@link Scheduler}
+     * @param parallelism int
      */
-    public KnnMathReactor()
+    public KnnMathReactor(final Scheduler scheduler, final int parallelism)
     {
         super();
 
-        this.scheduler = Schedulers.fromExecutor(getExecutorService());
-    }
+        // Siehe JavaDoc von Schedulers
+        // #elastic(): Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) can grow indefinitely
+        // #boundedElastic(): Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) is capped
+        this.scheduler = Objects.requireNonNull(scheduler, "scheduler required");
 
-    /**
-     * Erstellt ein neues {@link KnnMathReactor} Object.
-     *
-     * @param executorService {@link ExecutorService}
-     */
-    public KnnMathReactor(final ExecutorService executorService)
-    {
-        super(executorService);
+        if (parallelism <= 0)
+        {
+            throw new IllegalArgumentException("parallelism must >= 1");
+        }
 
-        this.scheduler = Schedulers.fromExecutor(executorService);
+        this.parallelism = parallelism;
     }
 
     /**
@@ -58,11 +64,11 @@ public class KnnMathReactor extends AbstractKnnMathAsync
 
         // @formatter:off
         Flux.fromIterable(layer.getNeurons())
-            .parallel(getPoolSize())
-            .runOn(this.scheduler)
+            .parallel(getParallelism())
+            .runOn(getScheduler())
             .doOnNext(neuron -> backward(neuron, errors, layerErrors))
-            .sequential().blockLast() // Thread wartet bis Flux fertig ist.
-            //.subscribe(neuron -> backward(neuron, errors, layerErrors)) // Thread wartet nicht bis Flux fertig ist.
+            .sequential()
+            .blockLast()
             ;
         // @formatter:on
 
@@ -70,14 +76,13 @@ public class KnnMathReactor extends AbstractKnnMathAsync
     }
 
     /**
-     * @see de.freese.knn.net.math.AbstractKnnMathAsync#close()
+     * @see java.lang.AutoCloseable#close()
      */
     @Override
     public void close() throws Exception
     {
-        this.scheduler.dispose();
-
-        super.close();
+        // Externen Scheduler nicht schliessen.
+        // getScheduler().dispose();
     }
 
     /**
@@ -91,15 +96,31 @@ public class KnnMathReactor extends AbstractKnnMathAsync
 
         // @formatter:off
         Flux.fromIterable(layer.getNeurons())
-            .parallel(getPoolSize())
-            .runOn(this.scheduler)
+            .parallel(getParallelism())
+            .runOn(getScheduler())
             .doOnNext(neuron -> forward(neuron, inputs, outputs))
-            .sequential().blockLast()
-            //.subscribe(neuron -> forward(neuron, inputs, outputs))
+            .sequential()
+            .blockLast()
             ;
         // @formatter:on
 
         visitor.setOutputs(layer, outputs);
+    }
+
+    /**
+     * @return int
+     */
+    private int getParallelism()
+    {
+        return this.parallelism;
+    }
+
+    /**
+     * @return {@link Scheduler}
+     */
+    private Scheduler getScheduler()
+    {
+        return this.scheduler;
     }
 
     // /**
@@ -115,8 +136,8 @@ public class KnnMathReactor extends AbstractKnnMathAsync
     //
 //        // @formatter:off
 //        double error = Flux.range(0, outputs.length)
-//            .parallel(getPoolSize())
-//            .runOn(this.scheduler)
+//            .parallel(getParallelism()
+//            .runOn(getScheduler())
 //            .map(i -> getNetError(i, outputs, outputTargets))
 //            .reduce((error1, error2) -> error1 + error2)
 //            .block()
@@ -136,11 +157,11 @@ public class KnnMathReactor extends AbstractKnnMathAsync
     {
         // @formatter:off
         Flux.fromArray(layers)
-            .parallel(getPoolSize())
-            .runOn(this.scheduler)
+            .parallel(getParallelism())
+            .runOn(getScheduler())
             .doOnNext(layer -> initialize(layer, valueInitializer))
-            .sequential().blockLast()
-            //.subscribe(layer -> initialize(layer, valueInitializer))
+            .sequential()
+            .blockLast()
             ;
         // @formatter:on
     }
@@ -159,11 +180,11 @@ public class KnnMathReactor extends AbstractKnnMathAsync
 
         // @formatter:off
         Flux.fromIterable(leftLayer.getNeurons())
-            .parallel(getPoolSize())
-            .runOn(this.scheduler)
+            .parallel(getParallelism())
+            .runOn(getScheduler())
             .doOnNext(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
-            .sequential().blockLast()
-            //.subscribe(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
+            .sequential()
+            .blockLast()
             ;
         // @formatter:on
     }
@@ -181,11 +202,11 @@ public class KnnMathReactor extends AbstractKnnMathAsync
 //        //Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
 //        //Flux.fromStream(IntStream.range(0, outputs.length).boxed())
 //        Flux.range(0, outputs.length)
-//            .parallel(getPoolSize())
-//            .runOn(this.scheduler)
+//            .parallel(getParallelism()
+//            .runOn(getScheduler())
 //            .doOnNext(i -> setOutputError(i, outputs, errors, visitor))
-//            .sequential().blockLast()
-//            //.subscribe(i -> setOutputError(i, outputs, errors, visitor))
+//            .sequential()
+//            .blockLast()
 //            ;
 //        // @formatter:on
     //

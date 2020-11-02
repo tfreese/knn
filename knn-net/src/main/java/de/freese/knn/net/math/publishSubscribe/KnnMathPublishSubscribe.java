@@ -1,11 +1,12 @@
 /**
  * Created: 02.10.2011
  */
-package de.freese.knn.net.math;
+package de.freese.knn.net.math.publishSubscribe;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Flow;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
@@ -13,6 +14,7 @@ import java.util.concurrent.SubmissionPublisher;
 import java.util.function.Consumer;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.visitor.BackwardVisitor;
@@ -23,12 +25,12 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
+public final class KnnMathPublishSubscribe extends AbstractKnnMath implements AutoCloseable
 {
     /**
      * @author Thomas Freese
      */
-    class NeuronSubscriber implements Subscriber<NeuronList>
+    private static final class NeuronSubscriber implements Subscriber<NeuronList>
     {
         /**
          *
@@ -43,7 +45,7 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
         /**
          *
          */
-        private Subscription subscription = null;
+        private Subscription subscription;
 
         /**
          * Erstellt ein neues {@link NeuronSubscriber} Object.
@@ -55,16 +57,8 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
         {
             super();
 
-            this.latch = latch;
-            this.consumer = consumer;
-        }
-
-        /**
-         * @return {@link Subscription}
-         */
-        protected Subscription getSubscription()
-        {
-            return this.subscription;
+            this.latch = Objects.requireNonNull(latch, "latch required");
+            this.consumer = Objects.requireNonNull(consumer, "consumer required");
         }
 
         /**
@@ -109,21 +103,33 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
     }
 
     /**
-     * Erstellt ein neues {@link KnnMathPublishSubscribe} Object.
-     */
-    public KnnMathPublishSubscribe()
-    {
-        super();
-    }
+    *
+    */
+    private Executor executor;
+
+    /**
+    *
+    */
+    private final int parallelism;
 
     /**
      * Erstellt ein neues {@link KnnMathPublishSubscribe} Object.
      *
-     * @param executorService {@link ExecutorService}
+     * @param executor {@link Executor}
+     * @param parallelism int
      */
-    public KnnMathPublishSubscribe(final ExecutorService executorService)
+    public KnnMathPublishSubscribe(final Executor executor, final int parallelism)
     {
-        super(executorService);
+        super();
+
+        this.executor = Objects.requireNonNull(executor, "executor required");
+
+        if (parallelism <= 0)
+        {
+            throw new IllegalArgumentException("parallelism must >= 1");
+        }
+
+        this.parallelism = parallelism;
     }
 
     /**
@@ -135,10 +141,10 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
         double[] errors = visitor.getLastErrors();
         double[] layerErrors = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons());
+        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         CountDownLatch latch = new CountDownLatch(1);
 
-        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutorService(), Flow.defaultBufferSize()))
+        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
         {
             publisher.subscribe(new NeuronSubscriber(latch, list -> list.forEach(neuron -> backward(neuron, errors, layerErrors))));
 
@@ -151,6 +157,16 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
     }
 
     /**
+     * @see java.lang.AutoCloseable#close()
+     */
+    @Override
+    public void close() throws Exception
+    {
+        // Externen Executor nicht schliessen.
+        // KnnUtils.shutdown(getExecutor(), getLogger());
+    }
+
+    /**
      * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
      */
     @Override
@@ -159,10 +175,10 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
         double[] inputs = visitor.getLastOutputs();
         double[] outputs = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons());
+        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         CountDownLatch latch = new CountDownLatch(1);
 
-        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutorService(), Flow.defaultBufferSize()))
+        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
         {
             publisher.subscribe(new NeuronSubscriber(latch, list -> list.forEach(neuron -> forward(neuron, inputs, outputs))));
 
@@ -172,6 +188,22 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
         waitForLatch(latch);
 
         visitor.setOutputs(layer, outputs);
+    }
+
+    /**
+     * @return {@link Executor}
+     */
+    private Executor getExecutor()
+    {
+        return this.executor;
+    }
+
+    /**
+     * @return int
+     */
+    private int getParallelism()
+    {
+        return this.parallelism;
     }
 
     /**
@@ -186,7 +218,7 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
         {
             // InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
             // this.executorService.execute(task);
-            getExecutorService().execute(() -> {
+            getExecutor().execute(() -> {
                 initialize(layer, valueInitializer);
 
                 latch.countDown();
@@ -208,10 +240,10 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
         double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         double[] rightErrors = visitor.getErrors(rightLayer);
 
-        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons());
+        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
         CountDownLatch latch = new CountDownLatch(1);
 
-        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutorService(), Flow.defaultBufferSize()))
+        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
         {
             publisher.subscribe(new NeuronSubscriber(latch,
                     list -> list.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))));
@@ -220,5 +252,26 @@ public class KnnMathPublishSubscribe extends AbstractKnnMathAsync
         }
 
         waitForLatch(latch);
+    }
+
+    /**
+     * Blockiert den aktuellen Thread, bis der Latch auf 0 ist.
+     *
+     * @param latch {@link CountDownLatch}
+     */
+    private void waitForLatch(final CountDownLatch latch)
+    {
+        try
+        {
+            latch.await();
+        }
+        catch (RuntimeException rex)
+        {
+            throw rex;
+        }
+        catch (Throwable th)
+        {
+            throw new RuntimeException(th);
+        }
     }
 }

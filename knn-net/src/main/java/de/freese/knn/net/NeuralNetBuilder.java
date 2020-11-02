@@ -10,7 +10,7 @@ import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.math.KnnMath;
-import de.freese.knn.net.math.KnnMathStream;
+import de.freese.knn.net.math.stream.KnnMathStream;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.matrix.ValueInitializerRandom;
 
@@ -27,22 +27,22 @@ public class NeuralNetBuilder
     /**
      *
      */
-    private InputLayer inputLayer = null;
+    private InputLayer inputLayer;
 
     /**
      *
      */
-    private KnnMath knnMath = null;
+    private KnnMath knnMath;
 
     /**
      *
      */
-    private OutputLayer outputLayer = null;
+    private OutputLayer outputLayer;
 
     /**
      *
      */
-    private ValueInitializer valueInitializer = null;
+    private ValueInitializer valueInitializer;
 
     /**
      * Erstellt ein neues {@link NeuralNetBuilder} Object.
@@ -91,7 +91,7 @@ public class NeuralNetBuilder
         // InputLayer
         if (this.inputLayer == null)
         {
-            throw new IllegalStateException("InputLayer required");
+            throw new IllegalArgumentException("InputLayer required");
         }
 
         neuralNet.addLayer(this.inputLayer);
@@ -99,7 +99,7 @@ public class NeuralNetBuilder
         // HiddenLayer
         if (this.hiddenLayers.isEmpty())
         {
-            throw new IllegalStateException("HiddenLayer required");
+            throw new IllegalArgumentException("HiddenLayer required");
         }
 
         for (HiddenLayer l : this.hiddenLayers)
@@ -110,7 +110,7 @@ public class NeuralNetBuilder
         // OutputLayer
         if (this.outputLayer == null)
         {
-            throw new IllegalStateException("OutputLayer required");
+            throw new IllegalArgumentException("OutputLayer required");
         }
 
         neuralNet.addLayer(this.outputLayer);

@@ -18,12 +18,12 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public class NeuralNetImpl implements NeuralNet
+class NeuralNetImpl implements NeuralNet
 {
     /**
      *
      */
-    private KnnMath knnMath = null;
+    private KnnMath knnMath;
 
     /**
      * Das Array wird in der #addLayer-Methode entsprechend vergrößert.
@@ -33,12 +33,12 @@ public class NeuralNetImpl implements NeuralNet
     /**
      *
      */
-    private ValueInitializer valueInitializer = null;
+    private ValueInitializer valueInitializer;
 
     /**
      * Creates a new {@link NeuralNetImpl} object.
      */
-    public NeuralNetImpl()
+    NeuralNetImpl()
     {
         super();
     }

@@ -24,6 +24,7 @@ import de.freese.knn.net.function.FunctionSigmoide;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
+import de.freese.knn.net.math.KnnMathSimple;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 
@@ -43,7 +44,7 @@ public class KnnButtonDemo extends JFrame
          * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
          */
         @Override
-        public void actionPerformed(final ActionEvent e)
+        public void actionPerformed(final ActionEvent event)
         {
             double[] outputVector = KnnButtonDemo.this.neuralNetwork.getOutput(KnnButtonDemo.this.matrixPanel.getInputVector());
 
@@ -88,16 +89,15 @@ public class KnnButtonDemo extends JFrame
     /**
      * @param args String[]
      */
-    @SuppressWarnings("unused")
     public static void main(final String[] args)
     {
-        new KnnButtonDemo();
+        new KnnButtonDemo().showGui();
     }
 
     /**
      *
      */
-    private JLabel labelRecognized = null;
+    private JLabel labelRecognized;
 
     /**
      *
@@ -107,12 +107,12 @@ public class KnnButtonDemo extends JFrame
     /**
      *
      */
-    private KnnButtonPanel matrixPanel = null;
+    private KnnButtonPanel matrixPanel;
 
     /**
      *
      */
-    private NeuralNet neuralNetwork = null;
+    private NeuralNet neuralNetwork;
 
     /**
      * Creates a new {@link KnnButtonDemo} object.
@@ -120,7 +120,36 @@ public class KnnButtonDemo extends JFrame
     public KnnButtonDemo()
     {
         super();
+    }
 
+    /**
+     * Rundet ein Double Werte mit Angabe der Anzahl an Nachkommastellen.
+     *
+     * @param wert double
+     * @param nachkommaStellen the number of digits after the decimal point
+     * @return double
+     */
+    private double roundDouble(final double wert, final int nachkommaStellen)
+    {
+        // double mask = Math.pow(10.0, nachkommaStellen);
+        //
+        // return (Math.round(wert * mask)) / mask;
+        if (Double.isNaN(wert) || Double.isInfinite(wert) || (wert == 0.0D))
+        {
+            return 0.0D;
+        }
+
+        BigDecimal bigDecimal = BigDecimal.valueOf(wert);
+        bigDecimal = bigDecimal.setScale(nachkommaStellen, RoundingMode.HALF_UP);
+
+        return bigDecimal.doubleValue();
+    }
+
+    /**
+     *
+     */
+    private void showGui()
+    {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter()
         {
@@ -145,7 +174,7 @@ public class KnnButtonDemo extends JFrame
         setResizable(true);
         setLayout(new BorderLayout());
 
-        this.matrixPanel = new KnnButtonPanel(new ToggleButtonListener());
+        this.matrixPanel = new KnnButtonPanel().initGui(new ToggleButtonListener());
         this.labelRecognized = new JLabel("Erkannt als: ");
 
         JPanel outputPanel = new JPanel();
@@ -159,10 +188,19 @@ public class KnnButtonDemo extends JFrame
         }
 
         // Training
+        int parallelism = 4;
+
         // @formatter:off
         this.neuralNetwork = new NeuralNetBuilder()
-                //.knnMath(new KnnMathStream())
-                //.knnMath(new KnnMathReactor())
+                .knnMath(new KnnMathSimple())
+//                .knnMath(new KnnMathStream())
+//                .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
+//                .knnMath(new KnnMathExecutor(Executors.newFixedThreadPool(parallelism), parallelism))
+//                .knnMath(new KnnMathQueueWorker(parallelism))
+//                .knnMath(new KnnMathReactor(Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-"), parallelism))
+//                .knnMath(new KnnMathPublishSubscribe(Executors.newFixedThreadPool(parallelism), parallelism))
+//                .knnMath(new KnnMathCompletionService(Executors.newFixedThreadPool(parallelism), parallelism))
+//                .knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(parallelism)))
                 .layerInput(new InputLayer(54))
                 .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
                 .layerOutput(new OutputLayer(10))
@@ -185,38 +223,15 @@ public class KnnButtonDemo extends JFrame
         getContentPane().add(outputPanel, BorderLayout.EAST);
         pack();
 
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 
         int w = getSize().width;
         int h = getSize().height;
-        int x = (dim.width - w) / 2;
-        int y = (dim.height - h) / 2;
+        int x = (dimension.width - w) / 2;
+        int y = (dimension.height - h) / 2;
 
         setLocation(x, y);
 
         setVisible(true);
-    }
-
-    /**
-     * Rundet ein Double Werte mit Angabe der Anzahl an Nachkommastellen.
-     *
-     * @param wert double
-     * @param nachkommaStellen the number of digits after the decimal point
-     * @return double
-     */
-    public double roundDouble(final double wert, final int nachkommaStellen)
-    {
-        // double mask = Math.pow(10.0, nachkommaStellen);
-        //
-        // return (Math.round(wert * mask)) / mask;
-        if (Double.isNaN(wert) || Double.isInfinite(wert) || (wert == 0.0D))
-        {
-            return 0.0D;
-        }
-
-        BigDecimal bigDecimal = BigDecimal.valueOf(wert);
-        bigDecimal = bigDecimal.setScale(nachkommaStellen, RoundingMode.HALF_UP);
-
-        return bigDecimal.doubleValue();
     }
 }

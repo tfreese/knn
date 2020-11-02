@@ -22,7 +22,7 @@ public class NeuronList implements Iterable<Neuron>
     /**
      * @author Thomas Freese
      */
-    private class NeuronIterator implements Iterator<Neuron>
+    private final class NeuronIterator implements Iterator<Neuron>
     {
         /**
          *

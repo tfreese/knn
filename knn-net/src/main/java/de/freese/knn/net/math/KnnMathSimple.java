@@ -14,7 +14,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public class KnnMathSimple extends AbstractKnnMath
+public final class KnnMathSimple extends AbstractKnnMath
 {
     /**
      * Erstellt ein neues {@link KnnMathSimple} Object.
@@ -65,18 +65,17 @@ public class KnnMathSimple extends AbstractKnnMath
     }
 
     /**
-     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double,
-     *      double, de.freese.knn.net.visitor.BackwardVisitor)
+     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
+     *      de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
-            final BackwardVisitor visitor)
+                                    final BackwardVisitor visitor)
     {
         double[] leftOutputs = visitor.getOutputs(leftLayer);
         double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         double[] rightErrors = visitor.getErrors(rightLayer);
 
-        leftLayer.getNeurons()
-                .forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
+        leftLayer.getNeurons().forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
     }
 }

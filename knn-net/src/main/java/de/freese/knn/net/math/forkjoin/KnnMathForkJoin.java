@@ -3,10 +3,11 @@
  */
 package de.freese.knn.net.math.forkjoin;
 
+import java.util.Objects;
 import java.util.concurrent.ForkJoinPool;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMathAsync;
+import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.visitor.BackwardVisitor;
@@ -17,22 +18,12 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public class KnnMathForkJoin extends AbstractKnnMathAsync
+public final class KnnMathForkJoin extends AbstractKnnMath
 {
     /**
-     * Erstellt ein neues {@link KnnMathForkJoin} Object.
+     *
      */
-    public KnnMathForkJoin()
-    {
-        super(ForkJoinPool.commonPool());
-
-        // if (getLogger().isDebugEnabled())
-        // {
-        // int tasks = 1 + (((neurons.size() + 7) >>> 3) / this.processors);
-        // getLogger().debug("Layer Size= {}, Calulated Tasks: {}",
-        // Integer.valueOf(neurons.size()), Integer.valueOf(tasks));
-        // }
-    }
+    private final ForkJoinPool forkJoinPool;
 
     /**
      * Erstellt ein neues {@link KnnMathForkJoin} Object.
@@ -41,7 +32,9 @@ public class KnnMathForkJoin extends AbstractKnnMathAsync
      */
     public KnnMathForkJoin(final ForkJoinPool forkJoinPool)
     {
-        super(forkJoinPool);
+        super();
+
+        this.forkJoinPool = Objects.requireNonNull(forkJoinPool, "forkJoinPool required");
     }
 
     /**
@@ -55,7 +48,7 @@ public class KnnMathForkJoin extends AbstractKnnMathAsync
 
         ForkJoinBackwardTask task = new ForkJoinBackwardTask(this, layer.getNeurons(), errors, layerErrors);
 
-        getExecutorService().invoke(task);
+        getForkJoinPool().invoke(task);
 
         visitor.setErrors(layer, layerErrors);
     }
@@ -80,7 +73,7 @@ public class KnnMathForkJoin extends AbstractKnnMathAsync
 
         ForkJoinForwardTask task = new ForkJoinForwardTask(this, layer.getNeurons(), inputs, outputs);
 
-        getExecutorService().invoke(task);
+        getForkJoinPool().invoke(task);
 
         visitor.setOutputs(layer, outputs);
     }
@@ -95,12 +88,11 @@ public class KnnMathForkJoin extends AbstractKnnMathAsync
     }
 
     /**
-     * @see de.freese.knn.net.math.AbstractKnnMathAsync#getExecutorService()
+     * @return {@link ForkJoinPool}
      */
-    @Override
-    protected ForkJoinPool getExecutorService()
+    private ForkJoinPool getForkJoinPool()
     {
-        return (ForkJoinPool) super.getExecutorService();
+        return this.forkJoinPool;
     }
 
     /**
@@ -120,7 +112,7 @@ public class KnnMathForkJoin extends AbstractKnnMathAsync
     {
         ForkJoinInitializeTask task = new ForkJoinInitializeTask(this, layers, valueInitializer);
 
-        getExecutorService().invoke(task);
+        getForkJoinPool().invoke(task);
     }
 
     /**
@@ -138,7 +130,7 @@ public class KnnMathForkJoin extends AbstractKnnMathAsync
         ForkJoinRefreshWeightsTask task =
                 new ForkJoinRefreshWeightsTask(this, leftLayer.getNeurons(), teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
 
-        getExecutorService().invoke(task);
+        getForkJoinPool().invoke(task);
     }
 
     /**

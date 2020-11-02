@@ -1,42 +1,53 @@
 /**
  * Created: 02.10.2011
  */
-package de.freese.knn.net.math;
+package de.freese.knn.net.math.executorHalfWork;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
+import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Mathematik des {@link NeuralNet} mit einem {@link Future}.
+ * Mathematik des {@link NeuralNet} mit einem {@link Future}.<br>
+ * Hier wird jedoch die Häfte der Arbeit im aktuellem Thread verarbeitet.
  *
  * @author Thomas Freese
  */
-public class KnnMathFuture extends AbstractKnnMathAsync
+public final class KnnMathExecutorHalfWork extends AbstractKnnMath implements AutoCloseable
 {
     /**
-     * Erstellt ein neues {@link KnnMathFuture} Object.
-     */
-    public KnnMathFuture()
-    {
-        super();
-    }
+    *
+    */
+    private ExecutorService executorService;
 
     /**
-     * Erstellt ein neues {@link KnnMathFuture} Object.
+    *
+    */
+    private final int parallelism;
+
+    /**
+     * Erstellt ein neues {@link KnnMathExecutorHalfWork} Object.
      *
      * @param executorService {@link ExecutorService}
      */
-    public KnnMathFuture(final ExecutorService executorService)
+    public KnnMathExecutorHalfWork(final ExecutorService executorService)
     {
-        super(executorService);
+        super();
+
+        this.executorService = Objects.requireNonNull(executorService, "executorService required");
+
+        // Die Arbeit wird zwischen diesem und einem anderen Thread aufgeteilt.
+        this.parallelism = 2;
     }
 
     /**
@@ -48,14 +59,26 @@ public class KnnMathFuture extends AbstractKnnMathAsync
         double[] errors = visitor.getLastErrors();
         double[] layerErrors = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons());
+        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
 
         Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> backward(neuron, errors, layerErrors)));
+
+        // In diesem Thread.
         partitions.get(1).forEach(neuron -> backward(neuron, errors, layerErrors));
 
         waitForFuture(future);
 
         visitor.setErrors(layer, layerErrors);
+    }
+
+    /**
+     * @see java.lang.AutoCloseable#close()
+     */
+    @Override
+    public void close() throws Exception
+    {
+        // Externen ExecutorService nicht schliessen.
+        // KnnUtils.shutdown(getExecutorService(), getLogger());
     }
 
     /**
@@ -67,9 +90,11 @@ public class KnnMathFuture extends AbstractKnnMathAsync
         double[] inputs = visitor.getLastOutputs();
         double[] outputs = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons());
+        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
 
         Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> forward(neuron, inputs, outputs)));
+
+        // In diesem Thread.
         partitions.get(1).forEach(neuron -> forward(neuron, inputs, outputs));
 
         waitForFuture(future);
@@ -78,12 +103,28 @@ public class KnnMathFuture extends AbstractKnnMathAsync
     }
 
     /**
-     * @see de.freese.knn.net.math.AbstractKnnMathAsync#getPartitions(de.freese.knn.net.neuron.NeuronList)
+     * @return {@link ExecutorService}
+     */
+    private ExecutorService getExecutorService()
+    {
+        return this.executorService;
+    }
+
+    /**
+     * @return int
+     */
+    private int getParallelism()
+    {
+        return this.parallelism;
+    }
+
+    /**
+     * @see de.freese.knn.net.math.AbstractKnnMath#getPartitions(de.freese.knn.net.neuron.NeuronList, int)
      */
     @Override
-    protected List<NeuronList> getPartitions(final NeuronList neurons)
+    protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism)
     {
-        int middle = neurons.size() / getPoolSize();
+        int middle = neurons.size() / parallelism;
 
         NeuronList nl1 = neurons.subList(0, middle);
         NeuronList nl2 = neurons.subList(middle, neurons.size());
@@ -92,32 +133,24 @@ public class KnnMathFuture extends AbstractKnnMathAsync
     }
 
     /**
-     * @see de.freese.knn.net.math.AbstractKnnMathAsync#getPoolSize()
-     */
-    @Override
-    protected int getPoolSize()
-    {
-        return 2;
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
     {
-        CountDownLatch latch = new CountDownLatch(layers.length);
+        int middle = layers.length / this.parallelism;
 
-        for (Layer layer : layers)
-        {
-            getExecutorService().execute(() -> {
-                initialize(layer, valueInitializer);
+        List<Layer> layerList = Arrays.asList(layers);
 
-                latch.countDown();
-            });
-        }
+        List<Layer> list1 = layerList.subList(0, middle);
+        List<Layer> list2 = layerList.subList(middle, layers.length);
 
-        waitForLatch(latch);
+        Future<?> future = getExecutorService().submit(() -> list1.forEach(layer -> initialize(layer, valueInitializer)));
+
+        // In diesem Thread.
+        list2.forEach(layer -> initialize(layer, valueInitializer));
+
+        waitForFuture(future);
     }
 
     /**
@@ -132,12 +165,31 @@ public class KnnMathFuture extends AbstractKnnMathAsync
         double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         double[] rightErrors = visitor.getErrors(rightLayer);
 
-        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons());
+        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
 
         Future<?> future = getExecutorService()
                 .submit(() -> partitions.get(0).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
+
+        // In diesem Thread.
         partitions.get(1).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
 
         waitForFuture(future);
+    }
+
+    /**
+     * Warten bis der Task fertig ist.
+     *
+     * @param future {@link Future}
+     */
+    private void waitForFuture(final Future<?> future)
+    {
+        try
+        {
+            future.get();
+        }
+        catch (InterruptedException | ExecutionException ex)
+        {
+            getLogger().error(null, ex);
+        }
     }
 }
