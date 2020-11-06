@@ -4,6 +4,7 @@
 package de.freese.knn.net.math;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,19 +141,84 @@ public abstract class AbstractKnnMath implements KnnMath
      */
     protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism)
     {
-        List<NeuronList> partitions = new ArrayList<>(parallelism + 1);
-
-        int size = neurons.size() / parallelism;
-
-        if (size <= 1)
+        if (parallelism > neurons.size())
         {
-            // Keine Partitionen mit nur einem oder mit zu wenigen Elementen.
-            size = 2;
+            String message = String.format("parallelism > neurons.size(): %d > %d", parallelism, neurons.size());
+
+            getLogger().warn(message);
+
+            throw new IllegalStateException(message);
         }
 
-        for (int i = 0; i < neurons.size(); i += size)
+        // Die alte Implementierung lieferte nicht immer die gewünschte Anzahl an Partitionen.
+        //
+        // List<NeuronList> partitions = new ArrayList<>(parallelism + 1);
+        //
+        // int size = neurons.size() / parallelism;
+        //
+        // if (size <= 1)
+        // {
+        // // Keine Partitionen mit nur einem oder mit zu wenigen Elementen.
+        // size = 2;
+        // }
+        //
+        // for (int i = 0; i < neurons.size(); i += size)
+        // {
+        // partitions.add(neurons.subList(i, Math.min(i + size, neurons.size())));
+        // }
+        //
+        // return partitions;
+
+        // Runded immer ab.
+        int size = neurons.size() / parallelism;
+
+        int[] sizeOfPartition = new int[parallelism];
+        Arrays.fill(sizeOfPartition, size);
+
+        int sum = parallelism * size;
+
+        // Stimmt die Gesamtlänge der einzelnen Partitionen mit der Länge der Liste überein ?
+
+        if (sum > neurons.size())
         {
-            partitions.add(neurons.subList(i, Math.min(i + size, neurons.size())));
+            // Gesamtlänge der einzelnen Partitionen ist zu groß.
+            // Von hinten Index für Index reduzieren bis es passt.
+            int index = parallelism - 1;
+
+            while (sum > neurons.size())
+            {
+                sizeOfPartition[index] -= 1;
+
+                sum -= 1;
+                index -= 1;
+
+            }
+        }
+
+        if (sum < neurons.size())
+        {
+            // Gesamtlänge der einzelnen Partitionen ist zu klein.
+            // Von vorne Index für Index erhöhen bis es passt.
+            int index = 0;
+
+            while (sum < neurons.size())
+            {
+                sizeOfPartition[index] += 1;
+
+                sum += 1;
+                index += 1;
+
+            }
+        }
+
+        List<NeuronList> partitions = new ArrayList<>(parallelism);
+        int fromIndex = 0;
+
+        for (int partitionSize : sizeOfPartition)
+        {
+            partitions.add(neurons.subList(fromIndex, fromIndex + partitionSize));
+
+            fromIndex += partitionSize;
         }
 
         return partitions;

@@ -24,7 +24,7 @@ import de.freese.knn.net.function.FunctionSigmoide;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
-import de.freese.knn.net.math.KnnMathSimple;
+import de.freese.knn.net.math.disruptor.KnnMathDisruptor;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 
@@ -188,11 +188,11 @@ public class KnnButtonDemo extends JFrame
         }
 
         // Training
-        int parallelism = 4;
+        int parallelism = 7;
 
         // @formatter:off
         this.neuralNetwork = new NeuralNetBuilder()
-                .knnMath(new KnnMathSimple())
+//                .knnMath(new KnnMathSimple())
 //                .knnMath(new KnnMathStream())
 //                .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
 //                .knnMath(new KnnMathExecutor(Executors.newFixedThreadPool(parallelism), parallelism))
@@ -200,7 +200,8 @@ public class KnnButtonDemo extends JFrame
 //                .knnMath(new KnnMathReactor(Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-"), parallelism))
 //                .knnMath(new KnnMathPublishSubscribe(Executors.newFixedThreadPool(parallelism), parallelism))
 //                .knnMath(new KnnMathCompletionService(Executors.newFixedThreadPool(parallelism), parallelism))
-//                .knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(parallelism)))
+//                .knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(1)))
+                .knnMath(new KnnMathDisruptor(parallelism))
                 .layerInput(new InputLayer(54))
                 .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
                 .layerOutput(new OutputLayer(10))

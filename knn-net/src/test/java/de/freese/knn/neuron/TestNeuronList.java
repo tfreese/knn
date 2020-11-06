@@ -6,6 +6,7 @@ package de.freese.knn.neuron;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,102 @@ class TestNeuronList
     static Stream<Neuron[]> createNeuronsAsStream()
     {
         return Stream.of(1).map(v -> createNeurons());
+    }
+
+    /**
+     * @param values {@link List}
+     * @param parallelism int
+     * @return {@link List}
+     */
+    private List<List<String>> getPartitionsByModulo(final List<String> values, final int parallelism)
+    {
+        Map<Integer, List<String>> partitionMap = new HashMap<>();
+
+        for (int i = 0; i < values.size(); i++)
+        {
+            String value = values.get(i);
+            int modulo = i % parallelism;
+
+            partitionMap.computeIfAbsent(modulo, key -> new ArrayList<>()).add(value);
+        }
+
+        List<List<String>> partitions = new ArrayList<>(partitionMap.values());
+
+        return partitions;
+    }
+
+    /**
+     * @param values {@link List}
+     * @param parallelism int
+     * @return {@link List}
+     */
+    protected List<List<String>> getPartitionsBySize(final List<String> values, final int parallelism)
+    {
+        // if(parallelism > values.size())
+        // {
+        // // Log Warning
+        //
+        // return values
+        // }
+
+        // Runded immer ab.
+        int size = values.size() / parallelism;
+
+        int[] sizeOfPartition = new int[parallelism];
+        Arrays.fill(sizeOfPartition, size);
+
+        int sum = parallelism * size;
+
+        // Stimmt die Gesamtlänge der einzelnen Partitionen mit der Länge der Liste überein ?
+
+        if (sum > values.size())
+        {
+            // Länge der einzelnen Partitionen ist zu groß.
+            // Von hinten Index für Index reduzieren bis es passt.
+            int index = parallelism - 1;
+
+            while (sum > values.size())
+            {
+                sizeOfPartition[index] -= 1;
+
+                sum -= 1;
+                index -= 1;
+
+            }
+        }
+
+        if (sum < values.size())
+        {
+            // Länge der einzelnen Partitionen ist zu klein.
+            // Von vorne Index für Index erhöhen bis es passt.
+            int index = 0;
+
+            while (sum < values.size())
+            {
+                sizeOfPartition[index] += 1;
+
+                sum += 1;
+                index += 1;
+
+            }
+        }
+
+        List<List<String>> partitions = new ArrayList<>(parallelism);
+        int fromIndex = 0;
+
+        for (int partitionSize : sizeOfPartition)
+        {
+            partitions.add(values.subList(fromIndex, fromIndex + partitionSize));
+
+            fromIndex += partitionSize;
+        }
+
+        // for (int i = 0; i < values.size(); i += size)
+        // {
+        // partitions.add(values.subList(i, Math.min(i + size, values.size())));
+        // }
+
+        return partitions;
     }
 
     /**
@@ -110,19 +207,9 @@ class TestNeuronList
     {
         List<String> values = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i");
 
-        Map<Integer, List<String>> partitionMap = new HashMap<>();
-
         int parallelism = 4;
 
-        for (int i = 0; i < values.size(); i++)
-        {
-            String value = values.get(i);
-            int modulo = i % parallelism;
-
-            partitionMap.computeIfAbsent(modulo, key -> new ArrayList<>()).add(value);
-        }
-
-        List<List<String>> partitions = new ArrayList<>(partitionMap.values());
+        List<List<String>> partitions = getPartitionsByModulo(values, parallelism);
 
         assertEquals(3, partitions.get(0).size());
         assertEquals(2, partitions.get(1).size());
@@ -133,6 +220,55 @@ class TestNeuronList
         assertEquals("[b, f]", partitions.get(1).toString());
         assertEquals("[c, g]", partitions.get(2).toString());
         assertEquals("[d, h]", partitions.get(3).toString());
+    }
+
+    /**
+    *
+    */
+    @Test
+    void testPartitionBySize()
+    {
+        // 9
+        List<String> values = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i");
+        List<List<String>> partitions = getPartitionsBySize(values, 4);
+
+        assertEquals(3, partitions.get(0).size());
+        assertEquals(2, partitions.get(1).size());
+        assertEquals(2, partitions.get(2).size());
+        assertEquals(2, partitions.get(3).size());
+
+        assertEquals("[a, b, c]", partitions.get(0).toString());
+        assertEquals("[d, e]", partitions.get(1).toString());
+        assertEquals("[f, g]", partitions.get(2).toString());
+        assertEquals("[h, i]", partitions.get(3).toString());
+
+        // 10
+        values = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j");
+        partitions = getPartitionsBySize(values, 4);
+
+        assertEquals(3, partitions.get(0).size());
+        assertEquals(3, partitions.get(1).size());
+        assertEquals(2, partitions.get(2).size());
+        assertEquals(2, partitions.get(3).size());
+
+        assertEquals("[a, b, c]", partitions.get(0).toString());
+        assertEquals("[d, e, f]", partitions.get(1).toString());
+        assertEquals("[g, h]", partitions.get(2).toString());
+        assertEquals("[i, j]", partitions.get(3).toString());
+
+        // 11
+        values = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+        partitions = getPartitionsBySize(values, 4);
+
+        assertEquals(3, partitions.get(0).size());
+        assertEquals(3, partitions.get(1).size());
+        assertEquals(3, partitions.get(2).size());
+        assertEquals(2, partitions.get(3).size());
+
+        assertEquals("[a, b, c]", partitions.get(0).toString());
+        assertEquals("[d, e, f]", partitions.get(1).toString());
+        assertEquals("[g, h, i]", partitions.get(2).toString());
+        assertEquals("[j, k]", partitions.get(3).toString());
     }
 
     /**

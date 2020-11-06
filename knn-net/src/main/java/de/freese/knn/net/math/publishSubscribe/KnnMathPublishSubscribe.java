@@ -5,13 +5,13 @@ package de.freese.knn.net.math.publishSubscribe;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Flow;
-import java.util.concurrent.Flow.Subscriber;
-import java.util.concurrent.Flow.Subscription;
+import java.util.concurrent.Future;
 import java.util.concurrent.SubmissionPublisher;
-import java.util.function.Consumer;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
@@ -27,80 +27,80 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public final class KnnMathPublishSubscribe extends AbstractKnnMath implements AutoCloseable
 {
-    /**
-     * @author Thomas Freese
-     */
-    private static final class NeuronSubscriber implements Subscriber<NeuronList>
-    {
-        /**
-         *
-         */
-        private final Consumer<NeuronList> consumer;
-
-        /**
-         *
-         */
-        private final CountDownLatch latch;
-
-        /**
-         *
-         */
-        private Subscription subscription;
-
-        /**
-         * Erstellt ein neues {@link NeuronSubscriber} Object.
-         *
-         * @param latch {@link CountDownLatch}
-         * @param consumer {@link Consumer}
-         */
-        private NeuronSubscriber(final CountDownLatch latch, final Consumer<NeuronList> consumer)
-        {
-            super();
-
-            this.latch = Objects.requireNonNull(latch, "latch required");
-            this.consumer = Objects.requireNonNull(consumer, "consumer required");
-        }
-
-        /**
-         * @see java.util.concurrent.Flow.Subscriber#onComplete()
-         */
-        @Override
-        public void onComplete()
-        {
-            this.latch.countDown();
-        }
-
-        /**
-         * @see java.util.concurrent.Flow.Subscriber#onError(java.lang.Throwable)
-         */
-        @Override
-        public void onError(final Throwable t)
-        {
-            // Empty
-        }
-
-        /**
-         * @see java.util.concurrent.Flow.Subscriber#onNext(java.lang.Object)
-         */
-        @Override
-        public void onNext(final NeuronList list)
-        {
-            this.consumer.accept(list);
-
-            this.subscription.request(1); // Nächstes Element anfordern.
-        }
-
-        /**
-         * @see java.util.concurrent.Flow.Subscriber#onSubscribe(java.util.concurrent.Flow.Subscription)
-         */
-        @Override
-        public void onSubscribe(final Subscription subscription)
-        {
-            this.subscription = subscription;
-            this.subscription.request(1); // Erstes Element anfordern.
-            // subscription.request(Long.MAX_VALUE); // Alle Elemente anfordern.
-        }
-    }
+    // /**
+    // * @author Thomas Freese
+    // */
+    // private static final class NeuronSubscriber implements Subscriber<NeuronList>
+    // {
+    // /**
+    // *
+    // */
+    // private final Consumer<NeuronList> consumer;
+    //
+    // /**
+    // *
+    // */
+    // private final CountDownLatch latch;
+    //
+    // /**
+    // *
+    // */
+    // private Subscription subscription;
+    //
+    // /**
+    // * Erstellt ein neues {@link NeuronSubscriber} Object.
+    // *
+    // * @param latch {@link CountDownLatch}
+    // * @param consumer {@link Consumer}
+    // */
+    // private NeuronSubscriber(final CountDownLatch latch, final Consumer<NeuronList> consumer)
+    // {
+    // super();
+    //
+    // this.latch = Objects.requireNonNull(latch, "latch required");
+    // this.consumer = Objects.requireNonNull(consumer, "consumer required");
+    // }
+    //
+    // /**
+    // * @see java.util.concurrent.Flow.Subscriber#onComplete()
+    // */
+    // @Override
+    // public void onComplete()
+    // {
+    // this.latch.countDown();
+    // }
+    //
+    // /**
+    // * @see java.util.concurrent.Flow.Subscriber#onError(java.lang.Throwable)
+    // */
+    // @Override
+    // public void onError(final Throwable t)
+    // {
+    // // Empty
+    // }
+    //
+    // /**
+    // * @see java.util.concurrent.Flow.Subscriber#onNext(java.lang.Object)
+    // */
+    // @Override
+    // public void onNext(final NeuronList list)
+    // {
+    // this.consumer.accept(list);
+    //
+    // this.subscription.request(1); // Nächstes Element anfordern.
+    // }
+    //
+    // /**
+    // * @see java.util.concurrent.Flow.Subscriber#onSubscribe(java.util.concurrent.Flow.Subscription)
+    // */
+    // @Override
+    // public void onSubscribe(final Subscription subscription)
+    // {
+    // this.subscription = subscription;
+    // this.subscription.request(1); // Erstes Element anfordern.
+    // // subscription.request(Long.MAX_VALUE); // Alle Elemente anfordern.
+    // }
+    // }
 
     /**
     *
@@ -142,16 +142,16 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath implements Au
         double[] layerErrors = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(1);
+        CompletableFuture<Void> future = null;
 
         try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
         {
-            publisher.subscribe(new NeuronSubscriber(latch, list -> list.forEach(neuron -> backward(neuron, errors, layerErrors))));
+            future = publisher.consume(list -> list.forEach(neuron -> backward(neuron, errors, layerErrors)));
 
             partitions.forEach(publisher::submit);
         }
 
-        waitForLatch(latch);
+        waitForFuture(future);
 
         visitor.setErrors(layer, layerErrors);
     }
@@ -176,16 +176,16 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath implements Au
         double[] outputs = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(1);
+        CompletableFuture<Void> future = null;
 
         try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
         {
-            publisher.subscribe(new NeuronSubscriber(latch, list -> list.forEach(neuron -> forward(neuron, inputs, outputs))));
+            future = publisher.consume(list -> list.forEach(neuron -> forward(neuron, inputs, outputs)));
 
             partitions.forEach(publisher::submit);
         }
 
-        waitForLatch(latch);
+        waitForFuture(future);
 
         visitor.setOutputs(layer, outputs);
     }
@@ -241,17 +241,34 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath implements Au
         double[] rightErrors = visitor.getErrors(rightLayer);
 
         List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(1);
+        CompletableFuture<Void> future = null;
 
         try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
         {
-            publisher.subscribe(new NeuronSubscriber(latch,
-                    list -> list.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))));
+            future = publisher
+                    .consume(list -> list.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
 
             partitions.forEach(publisher::submit);
         }
 
-        waitForLatch(latch);
+        waitForFuture(future);
+    }
+
+    /**
+     * Warten bis der Task fertig ist.
+     *
+     * @param future {@link Future}
+     */
+    private void waitForFuture(final Future<?> future)
+    {
+        try
+        {
+            future.get();
+        }
+        catch (InterruptedException | ExecutionException ex)
+        {
+            getLogger().error(null, ex);
+        }
     }
 
     /**

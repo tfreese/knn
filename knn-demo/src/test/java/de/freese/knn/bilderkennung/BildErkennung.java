@@ -6,6 +6,7 @@ package de.freese.knn.bilderkennung;
 import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import de.freese.knn.bilderkennung.utils.ImageData;
 import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
@@ -31,13 +32,25 @@ public class BildErkennung
      */
     public static void main(final String[] args) throws Exception
     {
-        TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
-        // TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
+        // TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
+        TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
 
-        NeuralNetBuilder builder = new NeuralNetBuilder();
+        int parallelism = 7;
 
-        builder.knnMath(new KnnMathStream());
-        // builder.knnMath(new KnnMathReactor());
+        // @formatter:off
+        NeuralNetBuilder builder = new NeuralNetBuilder()
+                //.knnMath(new KnnMathSimple())
+                .knnMath(new KnnMathStream())
+                //.knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
+                //.knnMath(new KnnMathExecutor(Executors.newFixedThreadPool(parallelism), parallelism))
+                //.knnMath(new KnnMathQueueWorker(parallelism))
+                //.knnMath(new KnnMathReactor(Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-"), parallelism))
+                //.knnMath(new KnnMathPublishSubscribe(Executors.newFixedThreadPool(parallelism), parallelism))
+                //.knnMath(new KnnMathCompletionService(Executors.newFixedThreadPool(parallelism), parallelism))
+                //.knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(1)))
+                //.knnMath(new KnnMathDisruptor(parallelism))
+                ;
+        // @formatter:on
 
         if (trainingInputSource instanceof ImageInfoTrainingInputSource)
         {
@@ -52,7 +65,7 @@ public class BildErkennung
             // @formatter:off
             builder.layerInput(new InputLayer(trainingInputSource.getInputAt(0).length))
                 .layerHidden(new HiddenLayer(1000, new FunctionSigmoide()))
-                //.layerHidden(new HiddenLayer(1000, new FunctionSigmoide()))
+                .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
                 ;
             // @formatter:on
         }
@@ -65,10 +78,10 @@ public class BildErkennung
             final double teachFactor = 0.5D;
             final double momentum = 0.5D;
             final double maximumError = 0.05D; // 5 %
-            final int maximumIteration = Integer.MAX_VALUE;
+            final int maximumIteration = 100_000;
 
             final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
-            trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out, 100));
+            trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out, 10));
             // trainer.addNetTrainerListener(new LoggerNetTrainerListener(100));
             trainer.train(neuralNet, trainingInputSource);
 
@@ -77,9 +90,20 @@ public class BildErkennung
             // Ausgabe testen, Index 5 erwartet.
             System.out.println();
 
-            ImageInfo testImageInfo = new ImageInfo("Seaside.jpg");
+            double[] outputs = null;
 
-            double[] outputs = neuralNet.getOutput(testImageInfo.getInfoVectorReScaled());
+            if (trainingInputSource instanceof ImageInfoTrainingInputSource)
+            {
+                ImageInfo testImageInfo = new ImageInfo("Seaside.jpg");
+
+                outputs = neuralNet.getOutput(testImageInfo.getInfoVectorReScaled());
+            }
+            else if (trainingInputSource instanceof ImagePixelTrainingInputSource)
+            {
+                ImageData imageData = new ImageData("Seaside.jpg");
+
+                outputs = neuralNet.getOutput(imageData.getPixels());
+            }
 
             System.out.println("TestImage: Expected Index 5");
             System.out.println(Arrays.stream(outputs).mapToObj(v -> String.format("%7.3f %%", v * 100)).collect(Collectors.joining(",", "[", "]")));

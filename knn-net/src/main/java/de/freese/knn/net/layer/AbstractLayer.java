@@ -25,7 +25,7 @@ public abstract class AbstractLayer implements Layer
     /**
      *
      */
-    private Matrix inputMatrix = null;
+    private Matrix inputMatrix;
 
     /**
      *
@@ -35,7 +35,7 @@ public abstract class AbstractLayer implements Layer
     /**
      *
      */
-    private Matrix outputMatrix = null;
+    private Matrix outputMatrix;
 
     /**
      *
@@ -58,9 +58,10 @@ public abstract class AbstractLayer implements Layer
         }
 
         this.size = size;
+        this.function = Objects.requireNonNull(function, "function required");
+
         this.neurons = new NeuronList(new Neuron[size]);
 
-        this.function = Objects.requireNonNull(function, "function required");
         createNeurons(this.neurons);
     }
 
