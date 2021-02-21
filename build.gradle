@@ -1,9 +1,19 @@
 // Tasks im SubModul ausführen: gradle MODUL:clean build
 
 subprojects {
-	dependencies {
-		implementation(platform("de.freese:maven-bom:$version_mavenBom"))
-		//implementation("org.springframework.boot:spring-boot-starter")
+    apply plugin: 'java'
+    apply plugin: "maven-publish"
+    apply plugin: "de.freese.gradle.conventions"
+    apply plugin: "io.spring.dependency-management"
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:$version_springBoot"
+        }
+
+        dependencies {
+        	dependency "com.lmax:disruptor:$version_disruptor"         
+        }
     }
 }
 
@@ -11,10 +21,14 @@ project("knn-net") {
 	apply plugin: 'java-library'
 	description = "Künstliches neurales Netz"
 	dependencies {
-		api("de.freese.base:base-core:$project.archiveVersion")
+		api("de.freese.base:base-core:$project.version")
 		
+		api("com.lmax:disruptor")
 		api("io.projectreactor:reactor-core")
 		api("org.slf4j:slf4j-api")
+		
+		testImplementation("org.junit.jupiter:junit-jupiter-engine")
+		testImplementation("org.junit.jupiter:junit-jupiter-params")
     }    
 }
 
@@ -28,8 +42,8 @@ project("knn-demo") {
 
 		runtimeOnly("org.slf4j:slf4j-simple")
 
-		testImplementation("mysql:mysql-connector-java")
 		testImplementation("org.junit.jupiter:junit-jupiter-engine")
 		testImplementation("org.springframework:spring-jdbc")
+		testImplementation("mysql:mysql-connector-java")
     }  
 }
