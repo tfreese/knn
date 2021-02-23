@@ -2,8 +2,6 @@
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: "maven-publish"
-    apply plugin: "de.freese.gradle.conventions"
     apply plugin: "io.spring.dependency-management"
 
     dependencyManagement {
