@@ -126,7 +126,6 @@ class NeuralNetImpl implements NeuralNet
         final double[] outputs = getOutputLayer().adjustOutput(visitor);
 
         visitor.clear();
-        visitor = null;
 
         return outputs;
     }

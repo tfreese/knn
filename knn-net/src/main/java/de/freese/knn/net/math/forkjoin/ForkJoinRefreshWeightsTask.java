@@ -26,7 +26,7 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
     /**
      *
      */
-    private int from = 0;
+    private int from;
 
     /**
      *
@@ -61,7 +61,7 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
     /**
      *
      */
-    private int to = 0;
+    private int to;
 
     /**
      * Erstellt ein neues {@link ForkJoinRefreshWeightsTask} Object.

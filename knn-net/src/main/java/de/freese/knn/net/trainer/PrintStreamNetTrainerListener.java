@@ -14,13 +14,13 @@ import java.util.Objects;
 public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener
 {
     /**
-     * 
+     *
      */
-    private PrintStream printStream = null;
+    private PrintStream printStream;
 
     /**
      * Creates a new {@link PrintStreamNetTrainerListener} object.
-     * 
+     *
      * @param printStream {@link PrintStream}
      */
     public PrintStreamNetTrainerListener(final PrintStream printStream)
@@ -32,7 +32,7 @@ public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener
 
     /**
      * Creates a new {@link PrintStreamNetTrainerListener} object.
-     * 
+     *
      * @param printStream {@link PrintStream}
      * @param logModulo Welches wievielte Event soll geloggt werden ?
      */

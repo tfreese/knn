@@ -180,7 +180,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath implements A
      * @param completionService {@link CompletionService}
      * @param count int; Anzahl der Tasks
      */
-    protected void waitForCompletionService(final CompletionService<?> completionService, final int count)
+    void waitForCompletionService(final CompletionService<?> completionService, final int count)
     {
         for (int i = 0; i < count; i++)
         {

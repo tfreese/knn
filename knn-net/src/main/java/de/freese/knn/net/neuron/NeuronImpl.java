@@ -20,7 +20,7 @@ public class NeuronImpl implements Neuron
     /**
      *
      */
-    private double inputBIAS = 0.0D;
+    private double inputBIAS;
 
     /**
      *

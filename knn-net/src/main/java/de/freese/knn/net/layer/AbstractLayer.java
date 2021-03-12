@@ -48,7 +48,7 @@ public abstract class AbstractLayer implements Layer
      * @param size int
      * @param function {@link Function}
      */
-    public AbstractLayer(final int size, final Function function)
+    protected AbstractLayer(final int size, final Function function)
     {
         super();
 

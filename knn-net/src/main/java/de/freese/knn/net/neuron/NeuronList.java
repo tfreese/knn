@@ -27,7 +27,7 @@ public class NeuronList implements Iterable<Neuron>
         /**
          *
          */
-        private int position = 0;
+        private int position;
 
         /**
          * Erzeugt eine neue Instanz von {@link NeuronIterator}

@@ -17,9 +17,9 @@ import de.freese.knn.net.layer.OutputLayer;
 public class ForwardVisitor extends AbstractKnnVisitor
 {
     /**
-     * 
+     *
      */
-    private double[] inputs = null;
+    private double[] inputs;
 
     /**
      * false = nur die aktuellen Outputs werden gespeichert.
@@ -28,7 +28,7 @@ public class ForwardVisitor extends AbstractKnnVisitor
 
     /**
      * Erstellt ein neues {@link ForwardVisitor} Object.
-     * 
+     *
      * @param trainingMode boolean, false = nur die aktuellen Outputs werden gespeichert
      */
     public ForwardVisitor(final boolean trainingMode)
@@ -40,7 +40,7 @@ public class ForwardVisitor extends AbstractKnnVisitor
 
     /**
      * Liefert die Output-Daten des letzten Layers.
-     * 
+     *
      * @return double[]
      */
     public double[] getLastOutputs()
@@ -50,7 +50,7 @@ public class ForwardVisitor extends AbstractKnnVisitor
 
     /**
      * Liefert die Output-Daten des Layers.
-     * 
+     *
      * @param layer {@link Layer}
      * @return double[]
      */
@@ -63,7 +63,7 @@ public class ForwardVisitor extends AbstractKnnVisitor
 
     /**
      * Setzt die Daten des Input-Layers.
-     * 
+     *
      * @param inputs double[]
      */
     public void setInputs(final double[] inputs)
@@ -73,7 +73,7 @@ public class ForwardVisitor extends AbstractKnnVisitor
 
     /**
      * Setzt die Output-Daten des Layers.
-     * 
+     *
      * @param layer {@link Layer}
      * @param outputs double[]
      */

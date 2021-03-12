@@ -29,14 +29,6 @@ public abstract class AbstractKnnMath implements KnnMath
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
-     * Erstellt ein neues {@link AbstractKnnMath} Object.
-     */
-    public AbstractKnnMath()
-    {
-        super();
-    }
-
-    /**
      * Mathematik für die Eingangsfehler eines Neurons.
      *
      * @param neuron {@link Neuron}

@@ -25,7 +25,7 @@ public class FunctionBinary implements Function
 
     /**
      * Creates a new {@link FunctionBinary} object.
-     * 
+     *
      * @param threshold double
      */
     public FunctionBinary(final double threshold)

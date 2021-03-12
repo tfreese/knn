@@ -27,7 +27,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
     /**
      *
      */
-    private double[] outputTargets = null;
+    private double[] outputTargets;
 
     /**
      *

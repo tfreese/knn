@@ -18,20 +18,12 @@ public abstract class AbstractKnnVisitor implements Visitor
     /**
      *
      */
-    private KnnMath knnMath = null;
+    private KnnMath knnMath;
 
     /**
      *
      */
     private Map<Layer, double[]> values = new HashMap<>();
-
-    /**
-     * Erstellt ein neues {@link AbstractKnnVisitor} Object.
-     */
-    public AbstractKnnVisitor()
-    {
-        super();
-    }
 
     /**
      * Aufräumen.
