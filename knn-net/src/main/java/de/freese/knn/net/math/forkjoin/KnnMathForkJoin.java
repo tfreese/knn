@@ -32,7 +32,7 @@ public final class KnnMathForkJoin extends AbstractKnnMath
      */
     public KnnMathForkJoin(final ForkJoinPool forkJoinPool)
     {
-        super();
+        super(1);
 
         this.forkJoinPool = Objects.requireNonNull(forkJoinPool, "forkJoinPool required");
     }

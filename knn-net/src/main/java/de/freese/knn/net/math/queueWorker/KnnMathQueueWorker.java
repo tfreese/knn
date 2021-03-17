@@ -105,11 +105,6 @@ public final class KnnMathQueueWorker extends AbstractKnnMath implements AutoClo
     }
 
     /**
-    *
-    */
-    private final int parallelism;
-
-    /**
      *
      */
     private final BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
@@ -126,14 +121,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath implements AutoClo
      */
     public KnnMathQueueWorker(final int parallelism)
     {
-        super();
-
-        if (parallelism <= 0)
-        {
-            throw new IllegalArgumentException("parallelism must >= 1");
-        }
-
-        this.parallelism = parallelism;
+        super(parallelism);
 
         for (int i = 1; i <= (parallelism); i++)
         {
@@ -206,14 +194,6 @@ public final class KnnMathQueueWorker extends AbstractKnnMath implements AutoClo
         waitForFutures(futures);
 
         visitor.setOutputs(layer, outputs);
-    }
-
-    /**
-     * @return int
-     */
-    private int getParallelism()
-    {
-        return this.parallelism;
     }
 
     /**

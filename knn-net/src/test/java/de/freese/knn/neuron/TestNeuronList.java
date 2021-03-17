@@ -62,9 +62,9 @@ class TestNeuronList
         for (int i = 0; i < values.size(); i++)
         {
             String value = values.get(i);
-            int modulo = i % parallelism;
+            int indexToUse = i % parallelism;
 
-            partitionMap.computeIfAbsent(modulo, key -> new ArrayList<>()).add(value);
+            partitionMap.computeIfAbsent(indexToUse, key -> new ArrayList<>()).add(value);
         }
 
         List<List<String>> partitions = new ArrayList<>(partitionMap.values());
@@ -79,69 +79,47 @@ class TestNeuronList
      */
     protected List<List<String>> getPartitionsBySize(final List<String> values, final int parallelism)
     {
-        // if(parallelism > values.size())
-        // {
-        // // Log Warning
-        //
-        // return values
-        // }
+        int minSize = Math.min(values.size(), parallelism);
+        int size = values.size() / minSize;
 
-        // Runded immer ab.
-        int size = values.size() / parallelism;
+        int[] partitionSizes = new int[minSize];
+        Arrays.fill(partitionSizes, size);
 
-        int[] sizeOfPartition = new int[parallelism];
-        Arrays.fill(sizeOfPartition, size);
+        int sum = minSize * size;
 
-        int sum = parallelism * size;
+        // Länge der einzelnen Partitionen ist zu groß.
+        // Von hinten Index für Index reduzieren bis es passt.
+        int index = minSize - 1;
 
-        // Stimmt die Gesamtlänge der einzelnen Partitionen mit der Länge der Liste überein ?
-
-        if (sum > values.size())
+        while (sum > values.size())
         {
-            // Länge der einzelnen Partitionen ist zu groß.
-            // Von hinten Index für Index reduzieren bis es passt.
-            int index = parallelism - 1;
+            partitionSizes[index]--;
 
-            while (sum > values.size())
-            {
-                sizeOfPartition[index] -= 1;
-
-                sum -= 1;
-                index -= 1;
-
-            }
+            sum--;
+            index--;
         }
 
-        if (sum < values.size())
+        // Länge der einzelnen Partitionen ist zu klein.
+        // Von vorne Index für Index erhöhen bis es passt.
+        index = 0;
+
+        while (sum < values.size())
         {
-            // Länge der einzelnen Partitionen ist zu klein.
-            // Von vorne Index für Index erhöhen bis es passt.
-            int index = 0;
+            partitionSizes[index]++;
 
-            while (sum < values.size())
-            {
-                sizeOfPartition[index] += 1;
-
-                sum += 1;
-                index += 1;
-
-            }
+            sum++;
+            index++;
         }
 
-        List<List<String>> partitions = new ArrayList<>(parallelism);
+        List<List<String>> partitions = new ArrayList<>(minSize);
         int fromIndex = 0;
 
-        for (int partitionSize : sizeOfPartition)
+        for (int partitionSize : partitionSizes)
         {
             partitions.add(values.subList(fromIndex, fromIndex + partitionSize));
 
             fromIndex += partitionSize;
         }
-
-        // for (int i = 0; i < values.size(); i += size)
-        // {
-        // partitions.add(values.subList(i, Math.min(i + size, values.size())));
-        // }
 
         return partitions;
     }

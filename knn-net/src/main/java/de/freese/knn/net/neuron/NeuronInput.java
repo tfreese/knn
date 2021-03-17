@@ -1,7 +1,6 @@
 /**
  * Created: 17.07.2011
  */
-
 package de.freese.knn.net.neuron;
 
 import de.freese.knn.net.layer.InputLayer;
@@ -16,7 +15,7 @@ public class NeuronInput extends NeuronImpl
 {
     /**
      * Erstellt ein neues {@link NeuronInput} Object.
-     * 
+     *
      * @param layer InputLayer
      * @param layerIndex int
      */

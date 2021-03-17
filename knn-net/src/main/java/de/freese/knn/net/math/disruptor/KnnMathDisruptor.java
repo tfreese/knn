@@ -53,25 +53,13 @@ public class KnnMathDisruptor extends AbstractKnnMath implements AutoCloseable
     // private final JoiningHandler joiningHandler;
 
     /**
-     *
-     */
-    private final int parallelism;
-
-    /**
      * Erstellt ein neues {@link KnnMathDisruptor} Object.
      *
      * @param parallelism int
      */
     public KnnMathDisruptor(final int parallelism)
     {
-        super();
-
-        if (parallelism <= 0)
-        {
-            throw new IllegalArgumentException("parallelism must >= 1");
-        }
-
-        this.parallelism = parallelism;
+        super(parallelism);
 
         int ringBufferSize = 16 * parallelism;
 
@@ -163,14 +151,6 @@ public class KnnMathDisruptor extends AbstractKnnMath implements AutoCloseable
     private Disruptor<MathEvent> getDisruptor()
     {
         return this.disruptor;
-    }
-
-    /**
-     * @return int
-     */
-    private int getParallelism()
-    {
-        return this.parallelism;
     }
 
     /**

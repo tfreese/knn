@@ -24,7 +24,7 @@ import de.freese.knn.net.function.FunctionSigmoide;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
-import de.freese.knn.net.math.disruptor.KnnMathDisruptor;
+import de.freese.knn.net.math.stream.KnnMathStream;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 
@@ -115,14 +115,6 @@ public class KnnButtonDemo extends JFrame
     private NeuralNet neuralNetwork;
 
     /**
-     * Creates a new {@link KnnButtonDemo} object.
-     */
-    public KnnButtonDemo()
-    {
-        super();
-    }
-
-    /**
      * Rundet ein Double Werte mit Angabe der Anzahl an Nachkommastellen.
      *
      * @param wert double
@@ -188,20 +180,20 @@ public class KnnButtonDemo extends JFrame
         }
 
         // Training
-        int parallelism = 7;
+        int parallelism = Runtime.getRuntime().availableProcessors();
 
         // @formatter:off
         this.neuralNetwork = new NeuralNetBuilder()
 //                .knnMath(new KnnMathSimple())
-//                .knnMath(new KnnMathStream())
+                .knnMath(new KnnMathStream()) // Ist Default im NeuralNetBuilder
 //                .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
-//                .knnMath(new KnnMathExecutor(Executors.newFixedThreadPool(parallelism), parallelism))
+//                .knnMath(new KnnMathExecutor(parallelism, Executors.newFixedThreadPool(parallelism)))
 //                .knnMath(new KnnMathQueueWorker(parallelism))
-//                .knnMath(new KnnMathReactor(Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-"), parallelism))
-//                .knnMath(new KnnMathPublishSubscribe(Executors.newFixedThreadPool(parallelism), parallelism))
-//                .knnMath(new KnnMathCompletionService(Executors.newFixedThreadPool(parallelism), parallelism))
-//                .knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(1)))
-                .knnMath(new KnnMathDisruptor(parallelism))
+//                .knnMath(new KnnMathReactor(parallelism))
+//                .knnMath(new KnnMathPublishSubscribe(parallelism, Executors.newFixedThreadPool(parallelism)))
+//                .knnMath(new KnnMathCompletionService(parallelism, Executors.newFixedThreadPool(parallelism) ))
+//                .knnMath(new KnnMathExecutorHalfWork(Executors.newSingleThreadExecutor()))
+//                .knnMath(new KnnMathDisruptor(parallelism))
                 .layerInput(new InputLayer(54))
                 .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
                 .layerOutput(new OutputLayer(10))

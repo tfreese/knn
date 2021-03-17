@@ -1,7 +1,6 @@
 /**
  * Created: 17.07.2011
  */
-
 package de.freese.knn.net.neuron;
 
 import de.freese.knn.net.function.Function;
@@ -17,21 +16,21 @@ public interface Neuron
 {
     /**
      * Liefert die Aktivierungsfunktion des Neurons.
-     * 
+     *
      * @return {@link Function}
      */
     public Function getFunction();
 
     /**
      * Liefert den Bias Wert um Ueberanpassungen zu vermeiden.
-     * 
+     *
      * @return double
      */
     public double getInputBIAS();
 
     /**
      * Liefert die Anzahl von Eingaengen.
-     * 
+     *
      * @return int
      */
     public int getInputSize();
@@ -39,7 +38,7 @@ public interface Neuron
     /**
      * Liefert das Eingangsgewicht.<br>
      * Der {@link InputLayer} hat keine Eingangsgewichte !
-     * 
+     *
      * @param index int
      * @return double
      */
@@ -47,14 +46,14 @@ public interface Neuron
 
     /**
      * Liefert die Position des Neurons im Layer.
-     * 
+     *
      * @return int
      */
     public int getLayerIndex();
 
     /**
      * Liefert die Anzahl von Ausgaengen.
-     * 
+     *
      * @return int
      */
     public int getOutputSize();
@@ -62,7 +61,7 @@ public interface Neuron
     /**
      * Liefert das Ausgangsgewicht.<br>
      * Der {@link OutputLayer} hat keine Ausgangsgewichte !
-     * 
+     *
      * @param index int
      * @return double
      */
@@ -71,7 +70,7 @@ public interface Neuron
     /**
      * Liefert den Bias Gewicht um Ueberanpassungen zu vermeiden.<br>
      * Der {@link InputLayer} hat keine BIAS Gewichte !
-     * 
+     *
      * @param value double
      */
     public void setInputBIAS(double value);
@@ -79,7 +78,7 @@ public interface Neuron
     /**
      * Setzt das Eingangsgewicht.<br>
      * Der {@link InputLayer} hat keine Eingangsgewichte !
-     * 
+     *
      * @param index int
      * @param weight double
      */
@@ -88,7 +87,7 @@ public interface Neuron
     /**
      * Setzt das Ausgangsgewicht.<br>
      * Der {@link OutputLayer} hat keine Ausgangsgewichte !
-     * 
+     *
      * @param index int
      * @param weight double
      */

@@ -108,28 +108,16 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath implements Au
     private Executor executor;
 
     /**
-    *
-    */
-    private final int parallelism;
-
-    /**
      * Erstellt ein neues {@link KnnMathPublishSubscribe} Object.
      *
-     * @param executor {@link Executor}
      * @param parallelism int
+     * @param executor {@link Executor}
      */
-    public KnnMathPublishSubscribe(final Executor executor, final int parallelism)
+    public KnnMathPublishSubscribe(final int parallelism, final Executor executor)
     {
-        super();
+        super(parallelism);
 
         this.executor = Objects.requireNonNull(executor, "executor required");
-
-        if (parallelism <= 0)
-        {
-            throw new IllegalArgumentException("parallelism must >= 1");
-        }
-
-        this.parallelism = parallelism;
     }
 
     /**
@@ -196,14 +184,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath implements Au
     private Executor getExecutor()
     {
         return this.executor;
-    }
-
-    /**
-     * @return int
-     */
-    private int getParallelism()
-    {
-        return this.parallelism;
     }
 
     /**

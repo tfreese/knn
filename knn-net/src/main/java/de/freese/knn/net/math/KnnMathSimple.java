@@ -21,7 +21,7 @@ public final class KnnMathSimple extends AbstractKnnMath
      */
     public KnnMathSimple()
     {
-        super();
+        super(1);
     }
 
     /**

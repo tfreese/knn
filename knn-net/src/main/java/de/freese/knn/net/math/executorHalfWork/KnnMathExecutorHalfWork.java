@@ -31,23 +31,16 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath implements Au
     private ExecutorService executorService;
 
     /**
-    *
-    */
-    private final int parallelism;
-
-    /**
      * Erstellt ein neues {@link KnnMathExecutorHalfWork} Object.
      *
      * @param executorService {@link ExecutorService}
      */
     public KnnMathExecutorHalfWork(final ExecutorService executorService)
     {
-        super();
+        // Die Arbeit wird zwischen diesem und einem anderen Thread aufgeteilt.
+        super(2);
 
         this.executorService = Objects.requireNonNull(executorService, "executorService required");
-
-        // Die Arbeit wird zwischen diesem und einem anderen Thread aufgeteilt.
-        this.parallelism = 2;
     }
 
     /**
@@ -111,14 +104,6 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath implements Au
     }
 
     /**
-     * @return int
-     */
-    private int getParallelism()
-    {
-        return this.parallelism;
-    }
-
-    /**
      * @see de.freese.knn.net.math.AbstractKnnMath#getPartitions(de.freese.knn.net.neuron.NeuronList, int)
      */
     @Override
@@ -138,7 +123,7 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath implements Au
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
     {
-        int middle = layers.length / this.parallelism;
+        int middle = layers.length / getParallelism();
 
         List<Layer> layerList = Arrays.asList(layers);
 

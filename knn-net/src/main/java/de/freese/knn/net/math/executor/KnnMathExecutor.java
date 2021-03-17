@@ -29,28 +29,16 @@ public final class KnnMathExecutor extends AbstractKnnMath implements AutoClosea
     private Executor executor;
 
     /**
-    *
-    */
-    private final int parallelism;
-
-    /**
      * Erstellt ein neues {@link KnnMathExecutor} Object.
      *
-     * @param executor {@link Executor}
      * @param parallelism int
+     * @param executor {@link Executor}
      */
-    public KnnMathExecutor(final Executor executor, final int parallelism)
+    public KnnMathExecutor(final int parallelism, final Executor executor)
     {
-        super();
+        super(parallelism);
 
         this.executor = Objects.requireNonNull(executor, "executor required");
-
-        if (parallelism <= 0)
-        {
-            throw new IllegalArgumentException("parallelism must >= 1");
-        }
-
-        this.parallelism = parallelism;
     }
 
     /**
@@ -121,14 +109,6 @@ public final class KnnMathExecutor extends AbstractKnnMath implements AutoClosea
     private Executor getExecutor()
     {
         return this.executor;
-    }
-
-    /**
-     * @return int
-     */
-    private int getParallelism()
-    {
-        return this.parallelism;
     }
 
     /**

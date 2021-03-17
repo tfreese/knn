@@ -1,7 +1,6 @@
 /**
  * Created: 03.07.2020
  */
-
 package de.freese.knn.net.utils;
 
 import java.util.Optional;

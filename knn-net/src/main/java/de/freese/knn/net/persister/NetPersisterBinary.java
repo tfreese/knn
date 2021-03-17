@@ -32,14 +32,6 @@ import de.freese.knn.net.neuron.NeuronList;
 public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
 {
     /**
-     * Creates a new {@link NetPersisterBinary} object.
-     */
-    public NetPersisterBinary()
-    {
-        super();
-    }
-
-    /**
      * @see de.freese.knn.net.persister.NetPersister#load(java.lang.Object)
      */
     @Override

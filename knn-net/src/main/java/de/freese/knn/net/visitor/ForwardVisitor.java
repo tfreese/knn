@@ -1,7 +1,6 @@
 /**
  * Created: 12.06.2011
  */
-
 package de.freese.knn.net.visitor;
 
 import de.freese.knn.net.NeuralNet;

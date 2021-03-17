@@ -25,7 +25,7 @@ public final class KnnMathStream extends AbstractKnnMath
      */
     public KnnMathStream()
     {
-        super();
+        super(1);
     }
 
     /**

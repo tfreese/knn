@@ -1,7 +1,6 @@
 /**
  * Created: 27.05.2011
  */
-
 package de.freese.knn.net.trainer;
 
 import java.util.HashMap;
@@ -19,14 +18,6 @@ public class TrainingContext
      *
      */
     private Map<Matrix, double[][]> deltaWeights = new HashMap<>();
-
-    /**
-     * Erstellt ein neues {@link TrainingContext} Object.
-     */
-    public TrainingContext()
-    {
-        super();
-    }
 
     /**
      * Aufraeumen.

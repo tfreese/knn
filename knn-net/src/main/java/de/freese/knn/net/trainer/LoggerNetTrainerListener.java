@@ -1,7 +1,6 @@
 /**
  * Created: 17.07.2011
  */
-
 package de.freese.knn.net.trainer;
 
 import java.io.PrintStream;
@@ -16,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class LoggerNetTrainerListener extends AbstractNetTrainerListener
 {
     /**
-     * 
+     *
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggerNetTrainerListener.class);
 
@@ -30,7 +29,7 @@ public class LoggerNetTrainerListener extends AbstractNetTrainerListener
 
     /**
      * Creates a new {@link LoggerNetTrainerListener} object.
-     * 
+     *
      * @param logModulo int Welches wievielte Event soll geloggt werden ?
      */
     public LoggerNetTrainerListener(final int logModulo)

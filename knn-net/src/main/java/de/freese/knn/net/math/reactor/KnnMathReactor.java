@@ -4,14 +4,17 @@
 package de.freese.knn.net.math.reactor;
 
 import java.util.Objects;
+import java.util.concurrent.Executors;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
+import de.freese.knn.net.utils.KnnThreadFactory;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * Mathematik des {@link NeuralNet} mit dem Reactor-Framework.
@@ -23,34 +26,39 @@ public final class KnnMathReactor extends AbstractKnnMath implements AutoCloseab
     /**
      *
      */
-    private final int parallelism;
-
-    /**
-     *
-     */
     private final Scheduler scheduler;
 
     /**
      * Erstellt ein neues {@link KnnMathReactor} Object.
      *
-     * @param scheduler {@link Scheduler}
      * @param parallelism int
      */
-    public KnnMathReactor(final Scheduler scheduler, final int parallelism)
+    public KnnMathReactor(final int parallelism)
     {
-        super();
+        // Recht langsam
+        // this(parallelism, Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-"));
+
+        // Recht langsam
+        // this(parallelism, Schedulers.newParallel("knn-scheduler-", parallelism));
+
+        // Recht schnell
+        this(parallelism, Schedulers.fromExecutor(Executors.newFixedThreadPool(parallelism, new KnnThreadFactory("knn-scheduler-"))));
+    }
+
+    /**
+     * Erstellt ein neues {@link KnnMathReactor} Object.
+     *
+     * @param parallelism int
+     * @param scheduler {@link Scheduler}
+     */
+    public KnnMathReactor(final int parallelism, final Scheduler scheduler)
+    {
+        super(parallelism);
 
         // Siehe JavaDoc von Schedulers
         // #elastic(): Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) can grow indefinitely
         // #boundedElastic(): Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) is capped
         this.scheduler = Objects.requireNonNull(scheduler, "scheduler required");
-
-        if (parallelism <= 0)
-        {
-            throw new IllegalArgumentException("parallelism must >= 1");
-        }
-
-        this.parallelism = parallelism;
     }
 
     /**
@@ -105,14 +113,6 @@ public final class KnnMathReactor extends AbstractKnnMath implements AutoCloseab
         // @formatter:on
 
         visitor.setOutputs(layer, outputs);
-    }
-
-    /**
-     * @return int
-     */
-    private int getParallelism()
-    {
-        return this.parallelism;
     }
 
     /**

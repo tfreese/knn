@@ -1,7 +1,6 @@
 /**
  * Created: 13.02.2019
  */
-
 package de.freese.knn.net;
 
 import java.util.ArrayList;
@@ -43,14 +42,6 @@ public class NeuralNetBuilder
      *
      */
     private ValueInitializer valueInitializer;
-
-    /**
-     * Erstellt ein neues {@link NeuralNetBuilder} Object.
-     */
-    public NeuralNetBuilder()
-    {
-        super();
-    }
 
     /**
      * @return {@link NeuralNet}

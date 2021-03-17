@@ -34,28 +34,16 @@ public final class KnnMathCompletionService extends AbstractKnnMath implements A
     private Executor executor;
 
     /**
-    *
-    */
-    private final int parallelism;
-
-    /**
      * Erstellt ein neues {@link KnnMathCompletionService} Object.
      *
-     * @param executor {@link Executor}
      * @param parallelism int
+     * @param executor {@link Executor}
      */
-    public KnnMathCompletionService(final Executor executor, final int parallelism)
+    public KnnMathCompletionService(final int parallelism, final Executor executor)
     {
-        super();
+        super(parallelism);
 
         this.executor = Objects.requireNonNull(executor, "executor required");
-
-        if (parallelism <= 0)
-        {
-            throw new IllegalArgumentException("parallelism must >= 1");
-        }
-
-        this.parallelism = parallelism;
 
         this.completionService = new ExecutorCompletionService<>(executor);
     }
@@ -127,14 +115,6 @@ public final class KnnMathCompletionService extends AbstractKnnMath implements A
     private Executor getExecutor()
     {
         return this.executor;
-    }
-
-    /**
-     * @return int
-     */
-    private int getParallelism()
-    {
-        return this.parallelism;
     }
 
     /**
