@@ -4,6 +4,8 @@
 package de.freese.knn.net.layer;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
+
 import de.freese.knn.net.function.Function;
 import de.freese.knn.net.matrix.Matrix;
 import de.freese.knn.net.neuron.Neuron;
@@ -50,32 +52,36 @@ public abstract class AbstractLayer implements Layer
      */
     protected AbstractLayer(final int size, final Function function)
     {
+        this(size, function, NeuronImpl::new);
+    }
+
+    /**
+     * Creates a new {@link AbstractLayer} object.
+     *
+     * @param size int
+     * @param function {@link Function}
+     * @param neuronSupplier {@link BiFunction}
+     */
+    protected AbstractLayer(final int size, final Function function, final BiFunction<Layer, Integer, Neuron> neuronSupplier)
+    {
         super();
 
         if (size <= 0)
         {
-            throw new IllegalArgumentException("size");
+            throw new IllegalArgumentException("size <= 0: " + size);
         }
 
         this.size = size;
         this.function = Objects.requireNonNull(function, "function required");
 
-        this.neurons = new NeuronList(new Neuron[size]);
+        Neuron[] neuronArray = new Neuron[size];
 
-        createNeurons(this.neurons);
-    }
-
-    /**
-     * Erzeugt die Neuronen des Layers.
-     *
-     * @param neurons {@link NeuronList}
-     */
-    protected void createNeurons(final NeuronList neurons)
-    {
-        for (int i = 0; i < neurons.size(); i++)
+        for (int i = 0; i < neuronArray.length; i++)
         {
-            neurons.set(i, new NeuronImpl(this, i));
+            neuronArray[i] = neuronSupplier.apply(this, i);
         }
+
+        this.neurons = new NeuronList(neuronArray);
     }
 
     /**

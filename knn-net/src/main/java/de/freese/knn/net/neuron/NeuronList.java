@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import de.freese.knn.net.layer.Layer;
 
 /**
@@ -83,16 +84,6 @@ public class NeuronList implements Iterable<Neuron>
     /**
      * Erstellt ein neues {@link NeuronList} Object.
      *
-     * @param size int
-     */
-    public NeuronList(final int size)
-    {
-        this(new Neuron[size]);
-    }
-
-    /**
-     * Erstellt ein neues {@link NeuronList} Object.
-     *
      * @param neurons {@link Neuron}[]
      */
     public NeuronList(final Neuron[] neurons)
@@ -140,15 +131,6 @@ public class NeuronList implements Iterable<Neuron>
     public Stream<Neuron> parallelStream()
     {
         return StreamSupport.stream(spliterator(), true);
-    }
-
-    /**
-     * @param index int
-     * @param neuron {@link Neuron}
-     */
-    public void set(final int index, final Neuron neuron)
-    {
-        this.neurons[index + this.fromIndex] = neuron;
     }
 
     /**

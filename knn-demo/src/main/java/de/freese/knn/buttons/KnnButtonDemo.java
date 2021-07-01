@@ -4,20 +4,14 @@
 package de.freese.knn.buttons;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
 import de.freese.knn.net.function.FunctionSigmoide;
@@ -36,52 +30,6 @@ import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 public class KnnButtonDemo extends JFrame
 {
     /**
-     * @author Thomas Freese
-     */
-    private class ToggleButtonListener implements ActionListener
-    {
-        /**
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
-        @Override
-        public void actionPerformed(final ActionEvent event)
-        {
-            double[] outputVector = KnnButtonDemo.this.neuralNetwork.getOutput(KnnButtonDemo.this.matrixPanel.getInputVector());
-
-            double output = Double.MIN_VALUE;
-            double value = Double.NaN;
-
-            for (int i = 0; i < outputVector.length; i++)
-            {
-                double rndValue = roundDouble(outputVector[i] * 100, 3);
-
-                KnnButtonDemo.this.labelsOutput[i].setText(i + ": " + rndValue + " %");
-
-                if (rndValue > 80)
-                {
-                    KnnButtonDemo.this.labelsOutput[i].setForeground(Color.RED);
-                }
-                else if (rndValue > 50)
-                {
-                    KnnButtonDemo.this.labelsOutput[i].setForeground(Color.BLUE);
-                }
-                else
-                {
-                    KnnButtonDemo.this.labelsOutput[i].setForeground(Color.BLACK);
-                }
-
-                if (outputVector[i] > output)
-                {
-                    output = outputVector[i];
-                    value = i;
-                }
-            }
-
-            KnnButtonDemo.this.labelRecognized.setText("Erkannt als: " + value);
-        }
-    }
-
-    /**
      *
      */
     private static final long serialVersionUID = -2245301418603208848L;
@@ -89,101 +37,14 @@ public class KnnButtonDemo extends JFrame
     /**
      * @param args String[]
      */
+    @SuppressWarnings("unused")
     public static void main(final String[] args)
     {
-        new KnnButtonDemo().showGui();
-    }
-
-    /**
-     *
-     */
-    private JLabel labelRecognized;
-
-    /**
-     *
-     */
-    private JLabel[] labelsOutput = new JLabel[10];
-
-    /**
-     *
-     */
-    private KnnButtonPanel matrixPanel;
-
-    /**
-     *
-     */
-    private NeuralNet neuralNetwork;
-
-    /**
-     * Rundet ein Double Werte mit Angabe der Anzahl an Nachkommastellen.
-     *
-     * @param wert double
-     * @param nachkommaStellen the number of digits after the decimal point
-     * @return double
-     */
-    private double roundDouble(final double wert, final int nachkommaStellen)
-    {
-        // double mask = Math.pow(10.0, nachkommaStellen);
-        //
-        // return (Math.round(wert * mask)) / mask;
-        if (Double.isNaN(wert) || Double.isInfinite(wert) || (wert == 0.0D))
-        {
-            return 0.0D;
-        }
-
-        BigDecimal bigDecimal = BigDecimal.valueOf(wert);
-        bigDecimal = bigDecimal.setScale(nachkommaStellen, RoundingMode.HALF_UP);
-
-        return bigDecimal.doubleValue();
-    }
-
-    /**
-     *
-     */
-    private void showGui()
-    {
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        addWindowListener(new WindowAdapter()
-        {
-            /**
-             * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
-             */
-            @Override
-            public void windowClosing(final WindowEvent event)
-            {
-                try
-                {
-                    KnnButtonDemo.this.neuralNetwork.close();
-                    System.exit(0);
-                }
-                catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        setResizable(true);
-        setLayout(new BorderLayout());
-
-        this.matrixPanel = new KnnButtonPanel().initGui(new ToggleButtonListener());
-        this.labelRecognized = new JLabel("Erkannt als: ");
-
-        JPanel outputPanel = new JPanel();
-        outputPanel.setLayout(new GridLayout(12, 1));
-        outputPanel.add(new JLabel("Output-Neuronen"));
-
-        for (int i = 0; i < this.labelsOutput.length; i++)
-        {
-            this.labelsOutput[i] = new JLabel(String.valueOf(i));
-            outputPanel.add(this.labelsOutput[i]);
-        }
-
         // Training
         int parallelism = Runtime.getRuntime().availableProcessors();
 
         // @formatter:off
-        this.neuralNetwork = new NeuralNetBuilder()
+        NeuralNet neuralNet = new NeuralNetBuilder()
 //                .knnMath(new KnnMathSimple())
                 .knnMath(new KnnMathStream()) // Ist Default im NeuralNetBuilder
 //                .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
@@ -209,11 +70,44 @@ public class KnnButtonDemo extends JFrame
         NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
         trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
         // trainer.addNetTrainerListener(new LoggerNetTrainerListener());
-        trainer.train(this.neuralNetwork, new KnnButtonTrainingInputSource());
+        trainer.train(neuralNet, new KnnButtonTrainingInputSource());
 
-        getContentPane().add(this.matrixPanel, BorderLayout.CENTER);
-        getContentPane().add(this.labelRecognized, BorderLayout.SOUTH);
-        getContentPane().add(outputPanel, BorderLayout.EAST);
+        new KnnButtonDemo().showGui(neuralNet);
+    }
+
+    /**
+     * @param neuralNet {@link NeuralNet}
+     */
+    private void showGui(final NeuralNet neuralNet)
+    {
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new WindowAdapter()
+        {
+            /**
+             * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
+             */
+            @Override
+            public void windowClosing(final WindowEvent event)
+            {
+                try
+                {
+                    neuralNet.close();
+                    System.exit(0);
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                    System.exit(-1);
+                }
+            }
+        });
+
+        setResizable(true);
+        setLayout(new BorderLayout());
+
+        KnnButtonPanel buttonPanel = new KnnButtonPanel(neuralNet).initGui();
+
+        getContentPane().add(buttonPanel, BorderLayout.CENTER);
         pack();
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();

@@ -5,6 +5,7 @@
 package de.freese.knn.neuron;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,7 +14,9 @@ import java.util.Map;
 import java.util.Spliterator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
+
 import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.neuron.NeuronImpl;
 import de.freese.knn.net.neuron.NeuronList;
@@ -28,18 +31,10 @@ class TestNeuronList
      */
     static Neuron[] createNeurons()
     {
-        // @formatter:off
-        Neuron[] neurons = new Neuron[]
-                    {
-                        new NeuronImpl(null, 0),
-                        new NeuronImpl(null, 1),
-                        new NeuronImpl(null, 2),
-                        new NeuronImpl(null, 3),
-                        new NeuronImpl(null, 4)
-                    };
-        // @formatter:on
-
-        return neurons;
+        return new Neuron[]
+        {
+                new NeuronImpl(null, 0), new NeuronImpl(null, 1), new NeuronImpl(null, 2), new NeuronImpl(null, 3), new NeuronImpl(null, 4)
+        };
     }
 
     /**
@@ -67,9 +62,7 @@ class TestNeuronList
             partitionMap.computeIfAbsent(indexToUse, key -> new ArrayList<>()).add(value);
         }
 
-        List<List<String>> partitions = new ArrayList<>(partitionMap.values());
-
-        return partitions;
+        return new ArrayList<>(partitionMap.values());
     }
 
     /**
@@ -79,17 +72,17 @@ class TestNeuronList
      */
     protected List<List<String>> getPartitionsBySize(final List<String> values, final int parallelism)
     {
-        int minSize = Math.min(values.size(), parallelism);
-        int size = values.size() / minSize;
+        int partitionCount = Math.min(values.size(), parallelism);
+        int partitionLength = values.size() / partitionCount;
 
-        int[] partitionSizes = new int[minSize];
-        Arrays.fill(partitionSizes, size);
+        int[] partitionSizes = new int[partitionCount];
+        Arrays.fill(partitionSizes, partitionLength);
 
-        int sum = minSize * size;
+        int sum = partitionCount * partitionLength;
 
         // Länge der einzelnen Partitionen ist zu groß.
         // Von hinten Index für Index reduzieren bis es passt.
-        int index = minSize - 1;
+        int index = partitionCount - 1;
 
         while (sum > values.size())
         {
@@ -111,7 +104,7 @@ class TestNeuronList
             index++;
         }
 
-        List<List<String>> partitions = new ArrayList<>(minSize);
+        List<List<String>> partitions = new ArrayList<>(partitionCount);
         int fromIndex = 0;
 
         for (int partitionSize : partitionSizes)
@@ -247,24 +240,6 @@ class TestNeuronList
         assertEquals("[d, e, f]", partitions.get(1).toString());
         assertEquals("[g, h, i]", partitions.get(2).toString());
         assertEquals("[j, k]", partitions.get(3).toString());
-    }
-
-    /**
-    *
-    */
-    @Test
-    void testSetNeuron()
-    {
-        Neuron[] neurons = createNeurons();
-        NeuronList neuronList = new NeuronList(neurons);
-
-        assertEquals(neurons.length, neuronList.size());
-        assertEquals(4, neuronList.get(4).getLayerIndex());
-
-        neuronList.set(4, new NeuronImpl(null, 6));
-
-        assertEquals(neurons.length, neuronList.size());
-        assertEquals(6, neuronList.get(4).getLayerIndex());
     }
 
     /**

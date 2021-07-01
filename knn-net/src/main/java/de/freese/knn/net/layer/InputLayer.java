@@ -5,7 +5,6 @@ package de.freese.knn.net.layer;
 
 import de.freese.knn.net.function.FunctionLinear;
 import de.freese.knn.net.neuron.NeuronInput;
-import de.freese.knn.net.neuron.NeuronList;
 
 /**
  * EingangsLayer.
@@ -21,18 +20,6 @@ public class InputLayer extends AbstractLayer
      */
     public InputLayer(final int size)
     {
-        super(size, new FunctionLinear());
-    }
-
-    /**
-     * @see de.freese.knn.net.layer.AbstractLayer#createNeurons(de.freese.knn.net.neuron.NeuronList)
-     */
-    @Override
-    protected void createNeurons(final NeuronList neurons)
-    {
-        for (int i = 0; i < neurons.size(); i++)
-        {
-            neurons.set(i, new NeuronInput(this, i));
-        }
+        super(size, new FunctionLinear(), NeuronInput::new);
     }
 }

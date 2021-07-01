@@ -6,8 +6,10 @@ package de.freese.knn.net.math;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.Matrix;
@@ -48,14 +50,6 @@ public abstract class AbstractKnnMath implements KnnMath
         }
 
         this.parallelism = parallelism;
-    }
-
-    /**
-     * @return int
-     */
-    protected int getParallelism()
-    {
-        return this.parallelism;
     }
 
     /**
@@ -147,9 +141,15 @@ public abstract class AbstractKnnMath implements KnnMath
         double output = outputs[neuronIndex];
         double outputTarget = outputTargets[neuronIndex];
 
-        double error = Math.pow(outputTarget - output, 2.0D);
+        return Math.pow(outputTarget - output, 2.0D);
+    }
 
-        return error;
+    /**
+     * @return int
+     */
+    protected int getParallelism()
+    {
+        return this.parallelism;
     }
 
     /**
@@ -161,68 +161,41 @@ public abstract class AbstractKnnMath implements KnnMath
      * @param parallelism int
      * @return {@link List}<NeuronList>
      */
-    @SuppressWarnings("unused")
     protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism)
     {
-        // boolean keepOrder = true;
-        //
-        // if (!keepOrder)
-        // {
-        // Map<Integer, List<Neuron>> partitionMap = new HashMap<>();
-        //
-        // for (int i = 0; i < neurons.size(); i++)
-        // {
-        // Neuron neuron = neurons.get(i);
-        // int indexToUse = i % parallelism;
-        //
-        // partitionMap.computeIfAbsent(indexToUse, key -> new ArrayList<>()).add(neuron);
-        // }
-        //
-        // List<List<Neuron>> partitions = new ArrayList<>(partitionMap.values());
-        //
-        // // return partitions;
-        // return null;
-        // }
-        // else
-        // {
-        int minSize = Math.min(neurons.size(), parallelism);
-        int size = neurons.size() / minSize;
+        int partitionCount = Math.min(neurons.size(), parallelism);
+        int partitionLength = neurons.size() / partitionCount;
 
-        int[] partitionSizes = new int[minSize];
-        Arrays.fill(partitionSizes, size);
+        int[] partitionSizes = new int[partitionCount];
+        Arrays.fill(partitionSizes, partitionLength);
 
-        int sum = minSize * size;
+        int sum = partitionCount * partitionLength;
 
-        if (sum > neurons.size())
+        // Länge der einzelnen Partitionen ist zu groß.
+        // Von hinten Index für Index reduzieren bis es passt.
+        int index = partitionCount - 1;
+
+        while (sum > neurons.size())
         {
-            // Länge der einzelnen Partitionen ist zu groß.
-            // Von hinten Index für Index reduzieren bis es passt.
-            int index = minSize - 1;
+            partitionSizes[index]--;
 
-            while (sum > neurons.size())
-            {
-                partitionSizes[index]--;
-
-                sum--;
-                index--;
-            }
-        }
-        else if (sum < neurons.size())
-        {
-            // Länge der einzelnen Partitionen ist zu klein.
-            // Von vorne Index für Index erhöhen bis es passt.
-            int index = 0;
-
-            while (sum < neurons.size())
-            {
-                partitionSizes[index]++;
-
-                sum++;
-                index++;
-            }
+            sum--;
+            index--;
         }
 
-        List<NeuronList> partitions = new ArrayList<>(minSize);
+        // Länge der einzelnen Partitionen ist zu klein.
+        // Von vorne Index für Index erhöhen bis es passt.
+        index = 0;
+
+        while (sum < neurons.size())
+        {
+            partitionSizes[index]++;
+
+            sum++;
+            index++;
+        }
+
+        List<NeuronList> partitions = new ArrayList<>(partitionCount);
         int fromIndex = 0;
 
         for (int partitionSize : partitionSizes)
@@ -233,7 +206,6 @@ public abstract class AbstractKnnMath implements KnnMath
         }
 
         return partitions;
-        // }
     }
 
     /**

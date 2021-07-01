@@ -15,7 +15,7 @@ public class OutputLayer extends AbstractLayer
 {
     /**
      * Creates a new {@link OutputLayer} object.
-     * 
+     *
      * @param size int
      */
     public OutputLayer(final int size)
@@ -25,7 +25,7 @@ public class OutputLayer extends AbstractLayer
 
     /**
      * Anpassen der Outputs.
-     * 
+     *
      * @param visitor {@link ForwardVisitor}
      * @return double[]
      */

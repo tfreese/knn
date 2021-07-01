@@ -4,6 +4,7 @@
 package de.freese.knn.net.neuron;
 
 import de.freese.knn.net.layer.InputLayer;
+import de.freese.knn.net.layer.Layer;
 
 /**
  * Neuron des {@link InputLayer}.<br>
@@ -16,10 +17,10 @@ public class NeuronInput extends NeuronImpl
     /**
      * Erstellt ein neues {@link NeuronInput} Object.
      *
-     * @param layer InputLayer
+     * @param layer {@link Layer}
      * @param layerIndex int
      */
-    public NeuronInput(final InputLayer layer, final int layerIndex)
+    public NeuronInput(final Layer layer, final int layerIndex)
     {
         super(layer, layerIndex);
     }
