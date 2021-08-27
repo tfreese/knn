@@ -6,10 +6,13 @@ package de.freese.knn;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import javax.sql.DataSource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
 import de.freese.knn.net.function.FunctionSigmoide;
@@ -29,6 +32,7 @@ public class TestMailSpamFilter implements TrainingInputSource
 {
     /**
      * @param args String[]
+     *
      * @throws Exception Falls was schief geht.
      */
     public static void main(final String[] args) throws Exception
@@ -36,26 +40,26 @@ public class TestMailSpamFilter implements TrainingInputSource
         TestMailSpamFilter spamFilter = new TestMailSpamFilter();
         // spamFilter.cleanUp();
 
-        try ( // @formatter:off
-              NeuralNet neuralNet = new NeuralNetBuilder()
-                  .layerInput(new InputLayer(spamFilter.token.size()))
-                  .layerHidden(new HiddenLayer(20000, new FunctionSigmoide()))
-                  .layerOutput(new OutputLayer(1))
-                  .build()
-              // @formatter:on
-        )
-        {
-            double teachFactor = 0.5D;
-            double momentum = 0.5D;
-            double maximumError = 0.05D;
-            int maximumIteration = 10000;
+        // @formatter:off
+        NeuralNet neuralNet = new NeuralNetBuilder()
+                .layerInput(new InputLayer(spamFilter.token.size()))
+                .layerHidden(new HiddenLayer(20000, new FunctionSigmoide()))
+                .layerOutput(new OutputLayer(1))
+                .build()
+                ;
+          // @formatter:on
 
-            NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
-            // trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
-            trainer.addNetTrainerListener(new LoggerNetTrainerListener());
-            trainer.train(neuralNet, spamFilter);
-        }
+        double teachFactor = 0.5D;
+        double momentum = 0.5D;
+        double maximumError = 0.05D;
+        int maximumIteration = 10000;
 
+        NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
+        // trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
+        trainer.addNetTrainerListener(new LoggerNetTrainerListener());
+        trainer.train(neuralNet, spamFilter);
+
+        neuralNet.close();
         spamFilter.closeDataSource();
     }
 
@@ -171,7 +175,7 @@ public class TestMailSpamFilter implements TrainingInputSource
     public double[] getOutputAt(final int index)
     {
         Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
-        double[] output = new double[]
+        double[] output =
         {
                 isSpam ? 1.0D : 0.0D
         };

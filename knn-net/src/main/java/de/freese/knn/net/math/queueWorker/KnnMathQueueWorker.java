@@ -12,8 +12,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RunnableFuture;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
@@ -27,7 +29,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public final class KnnMathQueueWorker extends AbstractKnnMath implements AutoCloseable
+public final class KnnMathQueueWorker extends AbstractKnnMath
 {
     /**
      * @author Thomas Freese
@@ -160,10 +162,10 @@ public final class KnnMathQueueWorker extends AbstractKnnMath implements AutoClo
     }
 
     /**
-     * @see java.lang.AutoCloseable#close()
+     * @see de.freese.knn.net.math.KnnMath#close()
      */
     @Override
-    public void close() throws Exception
+    public void close()
     {
         this.workers.forEach(QueueWorker::stopWorker);
 

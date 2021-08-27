@@ -22,7 +22,15 @@ public interface KnnMath
      * @param layer {@link Layer}
      * @param visitor {@link BackwardVisitor}
      */
-    public void backward(final Layer layer, final BackwardVisitor visitor);
+    void backward(final Layer layer, final BackwardVisitor visitor);
+
+    /**
+    *
+    */
+    default void close()
+    {
+        // Empty
+    }
 
     /**
      * Mathematik für die Ausgangswerte eines Layers.
@@ -30,16 +38,17 @@ public interface KnnMath
      * @param layer {@link Layer}
      * @param visitor {@link ForwardVisitor}
      */
-    public void forward(final Layer layer, final ForwardVisitor visitor);
+    void forward(final Layer layer, final ForwardVisitor visitor);
 
     /**
      * Liefert den aktuellen Netzfehler.
      *
      * @param outputs double[]
      * @param outputTargets double[]
+     *
      * @return double
      */
-    public double getNetError(final double[] outputs, final double[] outputTargets);
+    double getNetError(final double[] outputs, final double[] outputTargets);
 
     /**
      * Initialisiert die BIAS-Gewichte der Neuronen eines Layers.
@@ -47,7 +56,7 @@ public interface KnnMath
      * @param valueInitializer {@link ValueInitializer}
      * @param layers {@link Layer}[]
      */
-    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers);
+    void initialize(final ValueInitializer valueInitializer, final Layer[] layers);
 
     /**
      * Aktualisiert die Gewichte eines Layers aus den Fehlern und Ausgangswerten des nachfolgenden Layers.
@@ -58,8 +67,7 @@ public interface KnnMath
      * @param momentum double, Anteil der vorherigen Gewichtsveränderung
      * @param visitor {@link BackwardVisitor}
      */
-    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
-            final BackwardVisitor visitor);
+    void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor);
 
     /**
      * Liefert den Ausgabefehler nach dem Gradientenabstiegsverfahren.
@@ -67,5 +75,5 @@ public interface KnnMath
      * @param layer {@link Layer}
      * @param visitor {@link BackwardVisitor}
      */
-    public void setOutputError(final Layer layer, final BackwardVisitor visitor);
+    void setOutputError(final Layer layer, final BackwardVisitor visitor);
 }

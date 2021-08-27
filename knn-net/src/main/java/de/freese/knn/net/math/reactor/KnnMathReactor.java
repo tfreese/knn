@@ -5,6 +5,7 @@ package de.freese.knn.net.math.reactor;
 
 import java.util.Objects;
 import java.util.concurrent.Executors;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
@@ -21,7 +22,7 @@ import reactor.core.scheduler.Schedulers;
  *
  * @author Thomas Freese
  */
-public final class KnnMathReactor extends AbstractKnnMath implements AutoCloseable
+public final class KnnMathReactor extends AbstractKnnMath
 {
     /**
      *
@@ -84,10 +85,10 @@ public final class KnnMathReactor extends AbstractKnnMath implements AutoCloseab
     }
 
     /**
-     * @see java.lang.AutoCloseable#close()
+     * @see de.freese.knn.net.math.KnnMath#close()
      */
     @Override
-    public void close() throws Exception
+    public void close()
     {
         // Externen Scheduler nicht schliessen.
         // getScheduler().dispose();

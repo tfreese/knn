@@ -6,6 +6,7 @@ package de.freese.knn.bilderkennung;
 import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
 import de.freese.knn.bilderkennung.utils.ImageData;
 import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
 import de.freese.knn.net.NeuralNet;
@@ -28,6 +29,7 @@ public class BildErkennung
 {
     /**
      * @param args String[]
+     *
      * @throws Exception Falls was schief geht.
      */
     public static void main(final String[] args) throws Exception
@@ -73,42 +75,43 @@ public class BildErkennung
         builder.layerOutput(new OutputLayer(trainingInputSource.getSize()));
         // builder.layerOutput(new OutputWTALayer(trainingInputSource.getSize()));
 
-        try (NeuralNet neuralNet = builder.build())
+        NeuralNet neuralNet = builder.build();
+
+        final double teachFactor = 0.5D;
+        final double momentum = 0.5D;
+        final double maximumError = 0.05D; // 5 %
+        final int maximumIteration = 100_000;
+
+        final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
+        trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out, 10));
+        // trainer.addNetTrainerListener(new LoggerNetTrainerListener(100));
+        trainer.train(neuralNet, trainingInputSource);
+
+        Toolkit.getDefaultToolkit().beep();
+
+        // Ausgabe testen, Index 5 erwartet.
+        System.out.println();
+
+        double[] outputs = null;
+
+        if (trainingInputSource instanceof ImageInfoTrainingInputSource)
         {
-            final double teachFactor = 0.5D;
-            final double momentum = 0.5D;
-            final double maximumError = 0.05D; // 5 %
-            final int maximumIteration = 100_000;
+            ImageInfo testImageInfo = new ImageInfo("Seaside.jpg");
 
-            final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
-            trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out, 10));
-            // trainer.addNetTrainerListener(new LoggerNetTrainerListener(100));
-            trainer.train(neuralNet, trainingInputSource);
-
-            Toolkit.getDefaultToolkit().beep();
-
-            // Ausgabe testen, Index 5 erwartet.
-            System.out.println();
-
-            double[] outputs = null;
-
-            if (trainingInputSource instanceof ImageInfoTrainingInputSource)
-            {
-                ImageInfo testImageInfo = new ImageInfo("Seaside.jpg");
-
-                outputs = neuralNet.getOutput(testImageInfo.getInfoVectorReScaled());
-            }
-            else if (trainingInputSource instanceof ImagePixelTrainingInputSource)
-            {
-                ImageData imageData = new ImageData("Seaside.jpg");
-
-                outputs = neuralNet.getOutput(imageData.getPixels());
-            }
-
-            System.out.println("TestImage: Expected Index 5");
-            System.out.println(Arrays.stream(outputs).mapToObj(v -> String.format("%7.3f %%", v * 100)).collect(Collectors.joining(",", "[", "]")));
-            System.out.println();
+            outputs = neuralNet.getOutput(testImageInfo.getInfoVectorReScaled());
         }
+        else if (trainingInputSource instanceof ImagePixelTrainingInputSource)
+        {
+            ImageData imageData = new ImageData("Seaside.jpg");
+
+            outputs = neuralNet.getOutput(imageData.getPixels());
+        }
+
+        System.out.println("TestImage: Expected Index 5");
+        System.out.println(Arrays.stream(outputs).mapToObj(v -> String.format("%7.3f %%", v * 100)).collect(Collectors.joining(",", "[", "]")));
+        System.out.println();
+
+        neuralNet.close();
 
         System.exit(0);
     }

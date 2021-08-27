@@ -5,6 +5,7 @@ package de.freese.knn.net;
 
 import java.util.Arrays;
 import java.util.Objects;
+
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.layer.OutputLayer;
@@ -28,7 +29,7 @@ class NeuralNetImpl implements NeuralNet
     /**
      * Das Array wird in der #addLayer-Methode entsprechend vergrößert.
      */
-    private Layer[] layers = new Layer[0];
+    private Layer[] layers = {};
 
     /**
      *
@@ -59,17 +60,14 @@ class NeuralNetImpl implements NeuralNet
     }
 
     /**
-     * @see java.lang.AutoCloseable#close()
+     * @see de.freese.knn.net.NeuralNet#close()
      */
     @Override
-    public void close() throws Exception
+    public void close()
     {
         LOGGER.info("close");
 
-        if (getMath() instanceof AutoCloseable)
-        {
-            ((AutoCloseable) getMath()).close();
-        }
+        getMath().close();
 
         this.layers = null;
     }

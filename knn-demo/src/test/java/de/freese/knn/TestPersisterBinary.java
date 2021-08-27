@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+
 import de.freese.knn.buttons.KnnButtonTrainingInputSource;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
@@ -35,6 +36,7 @@ public class TestPersisterBinary
 {
     /**
      * @param args String[]
+     *
      * @throws Exception Falls was schief geht.
      */
     public static void main(final String[] args) throws Exception
@@ -42,14 +44,16 @@ public class TestPersisterBinary
         TrainingInputSource trainingInputSource = new KnnButtonTrainingInputSource();
         File knnFile = new File("ButtonNeuralNet.bin");
 
-        try ( // @formatter:off
-              NeuralNet neuralNet = new NeuralNetBuilder()
-                  .layerInput(new InputLayer(54))
-                  .layerHidden(new HiddenLayer(25, new FunctionSigmoide()))
-                  .layerOutput(new OutputLayer(10))
-                  .build();
-               // @formatter:on
-             DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(knnFile))))
+        // @formatter:off
+        NeuralNet neuralNet = new NeuralNetBuilder()
+                .layerInput(new InputLayer(54))
+                .layerHidden(new HiddenLayer(25, new FunctionSigmoide()))
+                .layerOutput(new OutputLayer(10))
+                .build()
+                ;
+        // @formatter:on
+
+        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(knnFile))))
         {
             double teachFactor = 0.5D;
             double momentum = 0.5D;
@@ -64,21 +68,25 @@ public class TestPersisterBinary
             // Speichern
             NetPersister<DataInput, DataOutput> persister = new NetPersisterBinary();
             persister.save(dos, neuralNet);
+
         }
+
+        neuralNet.close();
 
         // Laden
         try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(knnFile))))
         {
             NetPersister<DataInput, DataOutput> persister = new NetPersisterBinary();
 
-            try (NeuralNet neuralNet = persister.load(dis))
-            {
-                // Netz testen
-                double[] inputs = trainingInputSource.getInputAt(0);
-                double[] outputs = neuralNet.getOutput(inputs);
+            neuralNet = persister.load(dis);
 
-                System.out.println(Arrays.toString(outputs));
-            }
+            // Netz testen
+            double[] inputs = trainingInputSource.getInputAt(0);
+            double[] outputs = neuralNet.getOutput(inputs);
+
+            System.out.println(Arrays.toString(outputs));
+
+            neuralNet.close();
         }
     }
 }

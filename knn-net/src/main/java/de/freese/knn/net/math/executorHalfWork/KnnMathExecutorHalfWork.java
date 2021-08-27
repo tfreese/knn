@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
@@ -23,7 +24,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public final class KnnMathExecutorHalfWork extends AbstractKnnMath implements AutoCloseable
+public final class KnnMathExecutorHalfWork extends AbstractKnnMath
 {
     /**
     *
@@ -65,10 +66,10 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath implements Au
     }
 
     /**
-     * @see java.lang.AutoCloseable#close()
+     * @see de.freese.knn.net.math.KnnMath#close()
      */
     @Override
-    public void close() throws Exception
+    public void close()
     {
         // Externen ExecutorService nicht schliessen.
         // KnnUtils.shutdown(getExecutorService(), getLogger());

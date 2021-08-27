@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.IntFunction;
+
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
+
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
@@ -18,7 +20,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
 /**
  * @author Thomas Freese
  */
-public class KnnMathDisruptor extends AbstractKnnMath implements AutoCloseable
+public class KnnMathDisruptor extends AbstractKnnMath
 {
     // /**
     // * @author Thomas Freese
@@ -108,14 +110,22 @@ public class KnnMathDisruptor extends AbstractKnnMath implements AutoCloseable
     }
 
     /**
-     * @see java.lang.AutoCloseable#close()
+     * @see de.freese.knn.net.math.KnnMath#close()
      */
     @Override
-    public void close() throws Exception
+    public void close()
     {
         // Nur notwending, wenn die Event-Publizierung noch nicht abgeschlossen ist.
         this.disruptor.halt();
-        this.disruptor.shutdown(5, TimeUnit.SECONDS);
+
+        try
+        {
+            this.disruptor.shutdown(5, TimeUnit.SECONDS);
+        }
+        catch (Exception ex)
+        {
+            getLogger().error(null, ex);
+        }
     }
 
     /**
