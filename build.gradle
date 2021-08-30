@@ -1,7 +1,7 @@
 // Tasks im SubModul ausführen: gradle MODUL:clean build
 
 subprojects {
-    apply plugin: 'java'
+    apply plugin: "java"
     apply plugin: "io.spring.dependency-management"
 
     dependencyManagement {
@@ -16,7 +16,7 @@ subprojects {
 }
 
 project("knn-net") {
-	apply plugin: 'java-library'
+	apply plugin: "java-library"
 	description = "Künstliches neurales Netz"
 	dependencies {
 		api("de.freese.base:base-core:$project.version")
