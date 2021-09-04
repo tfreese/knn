@@ -57,16 +57,25 @@ public class KnnMathDisruptor extends AbstractKnnMath
     /**
      * Erstellt ein neues {@link KnnMathDisruptor} Object.
      *
-     * @param parallelism int
+     * @param parallelism int; must be a power of 2
      */
     public KnnMathDisruptor(final int parallelism)
     {
         super(parallelism);
 
-        int ringBufferSize = 16 * parallelism;
-
         // bufferSize must be a power of 2
-        ringBufferSize = Integer.highestOneBit(ringBufferSize) << 1;
+        // 32 << 4 = 512<br>
+        // 24 << 4 = 256<br>
+        // 16 << 4 = 256<br>
+        // 8 << 4 = 128<br>
+        // 4 << 4 = 64<br>
+        // 2 << 4 = 32<br>
+        int ringBufferSize = Integer.highestOneBit(parallelism) << 4;
+
+        if (Integer.bitCount(ringBufferSize) != 1)
+        {
+            throw new IllegalArgumentException("bufferSize must be a power of 2");
+        }
 
         this.disruptor = new Disruptor<>(() -> new MathEvent(parallelism), ringBufferSize, new KnnThreadFactory("knn-disruptor-"));
 
@@ -116,7 +125,7 @@ public class KnnMathDisruptor extends AbstractKnnMath
     public void close()
     {
         // Nur notwending, wenn die Event-Publizierung noch nicht abgeschlossen ist.
-        this.disruptor.halt();
+        // this.disruptor.halt();
 
         try
         {
