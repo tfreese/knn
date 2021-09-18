@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
@@ -109,7 +108,7 @@ public class TestMailSpamFilter implements TrainingInputSource
         {
             for (int i = 3; i < 10; i++)
             {
-                String t = StringUtils.repeat(c, i);
+                String t = ("" + c).repeat(i);
                 t = "%" + t + "%";
                 int deleted = this.jdbcTemplate.update("delete from message_token where token like ?", t);
                 deleted += this.jdbcTemplate.update("delete from token where token like ?", t);
