@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net;
 
 import java.util.Arrays;
@@ -25,12 +23,10 @@ class NeuralNetImpl implements NeuralNet
      *
      */
     private KnnMath knnMath;
-
     /**
      * Das Array wird in der #addLayer-Methode entsprechend vergrößert.
      */
     private Layer[] layers = {};
-
     /**
      *
      */

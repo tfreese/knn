@@ -2,6 +2,7 @@ package de.freese.knn.net.visitor;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.Layer;
@@ -19,7 +20,6 @@ public abstract class AbstractKnnVisitor implements Visitor
      *
      */
     private KnnMath knnMath;
-
     /**
      *
      */
@@ -74,21 +74,21 @@ public abstract class AbstractKnnVisitor implements Visitor
     @Override
     public void visitObject(final Object object)
     {
-        if (object instanceof NeuralNet)
+        if (object instanceof NeuralNet o)
         {
-            visitKNN((NeuralNet) object);
+            visitKNN(o);
         }
-        else if (object instanceof InputLayer)
+        else if (object instanceof InputLayer o)
         {
-            visitInputLayer((InputLayer) object);
+            visitInputLayer(o);
         }
-        else if (object instanceof OutputLayer)
+        else if (object instanceof OutputLayer o)
         {
-            visitOutputLayer((OutputLayer) object);
+            visitOutputLayer(o);
         }
-        else if (object instanceof Layer)
+        else if (object instanceof Layer o)
         {
-            visitHiddenLayer((Layer) object);
+            visitHiddenLayer(o);
         }
     }
 

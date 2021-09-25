@@ -1,11 +1,10 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.buttons;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import de.freese.knn.net.trainer.TrainingInputSource;
 
 /**
@@ -19,7 +18,6 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
      *
      */
     private final List<double[]> inputList = new ArrayList<>();
-
     /**
      *
      */
@@ -39,6 +37,7 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
      * Erzeugt den Output fuer den Wert.
      *
      * @param value int
+     *
      * @return double[]
      */
     private double[] createOutput(final int value)

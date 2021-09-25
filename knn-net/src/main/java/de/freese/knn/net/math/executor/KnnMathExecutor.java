@@ -1,6 +1,4 @@
-/**
- * Created: 02.10.2011
- */
+// Created: 02.10.2011
 package de.freese.knn.net.math.executor;
 
 import java.util.List;

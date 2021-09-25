@@ -1,10 +1,9 @@
-/**
- * Created: 27.05.2011
- */
+// Created: 27.05.2011
 package de.freese.knn.net.trainer;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import de.freese.knn.net.matrix.Matrix;
 
 /**
@@ -32,6 +31,7 @@ public class TrainingContext
      * Liefert die vorherige Gewichtsaenderungen der Matrix-Neuronen.
      *
      * @param matrix {@link Matrix}
+     *
      * @return double[][]
      */
     public double[][] getDeltaWeights(final Matrix matrix)

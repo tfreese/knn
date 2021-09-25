@@ -1,6 +1,4 @@
-/**
- * Created: 02.10.2011
- */
+// Created: 02.10.2011
 package de.freese.knn.net.math.publishSubscribe;
 
 import java.util.List;
@@ -37,12 +35,10 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
     // *
     // */
     // private final Consumer<NeuronList> consumer;
-    //
     // /**
     // *
     // */
     // private final CountDownLatch latch;
-    //
     // /**
     // *
     // */

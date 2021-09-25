@@ -1,9 +1,8 @@
-/**
- * Created: 17.07.2011
- */
+// Created: 17.07.2011
 package de.freese.knn.net.trainer;
 
 import java.io.PrintStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +47,9 @@ public class LoggerNetTrainerListener extends AbstractNetTrainerListener
             return;
         }
 
-        LOGGER.info(toString(event));
+        if (LOGGER.isInfoEnabled())
+        {
+            LOGGER.info(toString(event));
+        }
     }
 }

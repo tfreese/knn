@@ -1,6 +1,4 @@
-/**
- * 11.06.2008
- */
+// Created: 11.06.2008
 package de.freese.knn.net.trainer;
 
 /**
@@ -47,6 +45,7 @@ public abstract class AbstractNetTrainerListener implements NetTrainerListener
 
     /**
      * @param event {@link NetTrainerCycleEndedEvent}
+     *
      * @return String
      */
     protected String toString(final NetTrainerCycleEndedEvent event)

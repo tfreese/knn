@@ -1,6 +1,4 @@
-/**
- * Created: 02.10.2011
- */
+// Created: 02.10.2011
 package de.freese.knn.net.math.queueWorker;
 
 import java.util.ArrayList;
@@ -40,12 +38,10 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
         *
         */
         private static final Logger LOGGER = LoggerFactory.getLogger(QueueWorker.class);
-
         /**
          *
          */
         private final BlockingQueue<Runnable> queue;
-
         /**
          *
          */
@@ -110,7 +106,6 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
      *
      */
     private final BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
-
     /**
      *
      */

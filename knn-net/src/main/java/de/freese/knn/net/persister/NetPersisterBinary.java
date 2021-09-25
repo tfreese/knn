@@ -1,11 +1,10 @@
-/**
- * 11.06.2008
- */
+// Created: 11.06.2008
 package de.freese.knn.net.persister;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.lang.reflect.Constructor;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
 import de.freese.knn.net.function.Function;
@@ -74,7 +73,9 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      * Laden einer Function.
      *
      * @param input {@link DataInput}
+     *
      * @return {@link Layer}
+     *
      * @throws Exception Falls was schief geht.
      */
     protected Function loadFunction(final DataInput input) throws Exception
@@ -133,7 +134,9 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      * Laden eines Layers.
      *
      * @param input {@link DataInput}
+     *
      * @return {@link Layer}
+     *
      * @throws Exception Falls was schief geht.
      */
     protected Layer loadLayer(final DataInput input) throws Exception
@@ -173,7 +176,9 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      * Laden einer Matrix.
      *
      * @param input {@link DataInput}
+     *
      * @return {@link Matrix}
+     *
      * @throws Exception Falls was schief geht.
      */
     protected Matrix loadMatrix(final DataInput input) throws Exception
@@ -223,6 +228,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      *
      * @param output {@link DataOutput}
      * @param function {@link Function}
+     *
      * @throws Exception Falls was schief geht.
      */
     protected void saveFunction(final DataOutput output, final Function function) throws Exception
@@ -231,18 +237,18 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         output.writeUTF(function.getClass().getName());
 
         // Funktions-Parameter
-        if (function instanceof FunctionBinary)
+        if (function instanceof FunctionBinary f)
         {
-            output.writeDouble(((FunctionBinary) function).getThreshold());
+            output.writeDouble(f.getThreshold());
         }
-        else if (function instanceof FunctionLinear)
+        else if (function instanceof FunctionLinear f)
         {
-            output.writeDouble(((FunctionLinear) function).getFactor());
+            output.writeDouble(f.getFactor());
         }
-        else if (function instanceof FunctionSigmoide)
+        else if (function instanceof FunctionSigmoide f)
         {
-            output.writeDouble(((FunctionSigmoide) function).getDurchgang());
-            output.writeDouble(((FunctionSigmoide) function).getSteigung());
+            output.writeDouble(f.getDurchgang());
+            output.writeDouble(f.getSteigung());
         }
     }
 
@@ -251,6 +257,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      *
      * @param output {@link DataOutput}
      * @param layer {@link Layer}
+     *
      * @throws Exception Falls was schief geht.
      */
     protected void saveLayer(final DataOutput output, final Layer layer) throws Exception
@@ -277,6 +284,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      *
      * @param output {@link DataOutput}
      * @param matrix {@link Matrix}
+     *
      * @throws Exception Falls was schief geht.
      */
     protected void saveMatrix(final DataOutput output, final Matrix matrix) throws Exception

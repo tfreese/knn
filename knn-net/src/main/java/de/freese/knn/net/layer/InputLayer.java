@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.layer;
 
 import de.freese.knn.net.function.FunctionLinear;

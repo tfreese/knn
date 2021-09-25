@@ -1,10 +1,9 @@
-/**
- * Created: 02.10.2011
- */
+// Created: 02.10.2011
 package de.freese.knn.net.math.forkjoin;
 
 import java.util.Objects;
 import java.util.concurrent.ForkJoinPool;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;

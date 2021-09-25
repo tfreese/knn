@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.matrix;
 
 /**
@@ -12,23 +10,21 @@ package de.freese.knn.net.matrix;
 public class Matrix
 {
     /**
-     * 
+     *
      */
     private final int inputSize;
-
     /**
-     * 
+     *
      */
     private final int outputSize;
-
     /**
-     * 
+     *
      */
     private final double[][] weights;
 
     /**
      * Creates a new {@link Matrix} object.
-     * 
+     *
      * @param inputSize int
      * @param outputSize int
      */
@@ -44,7 +40,7 @@ public class Matrix
 
     /**
      * Liefert die Anzahl der Eingangsneuronen.
-     * 
+     *
      * @return int
      */
     public int getInputSize()
@@ -54,7 +50,7 @@ public class Matrix
 
     /**
      * Liefert die Anzahl der Ausgangsneuronen.
-     * 
+     *
      * @return int
      */
     public int getOutputSize()
@@ -64,7 +60,7 @@ public class Matrix
 
     /**
      * Gewichte. Die Rows sind die Neuronen des Layers, die Columns die Neuronen des vorherigen Layers.
-     * 
+     *
      * @return double[][]
      */
     public double[][] getWeights()

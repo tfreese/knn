@@ -1,6 +1,4 @@
-/**
- * Created: 02.08.2009
- */
+// Created: 02.08.2009
 package de.freese.knn.bilderkennung.utils.image.info;
 
 import java.awt.image.BufferedImage;
@@ -17,67 +15,54 @@ public class ImageColorChannelInfo
      *
      */
     private final BufferedImage bufferedImage;
-
     /**
      *
      */
     private final ColorChannel colorChannel;
-
     /**
      *
      */
-    private int[][] coOccurenceMatrix = null;
-
+    private int[][] coOccurenceMatrix;
     /**
      *
      */
     private double entrophie = -1.0D;
-
     /**
      *
      */
     private int farbTiefe = -1;
-
     /**
      *
      */
-    private int[] histogramm = null;
-
+    private int[] histogramm;
     /**
      *
      */
     private double inverseDifferenz = -1.0D;
-
     /**
      *
      */
     private double inversesDifferenzMoment = -1.0D;
-
     /**
      *
      */
     private double kontrast = -1.0D;
-
     /**
      *
      */
     private int maximalerFarbwert = -1;
-
     /**
      *
      */
     private int minimalerFarbwert = -1;
-
     /**
      *
      */
     private int mittlererFarbwert = -1;
-
     /**
      *
      */
     private double unaehnlichkeit = -1.0D;
-
     /**
      *
      */

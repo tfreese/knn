@@ -1,6 +1,4 @@
-/**
- * 11.06.2008
- */
+// Created: 11.06.2008
 package de.freese.knn;
 
 import java.util.Arrays;
@@ -65,17 +63,15 @@ public class TestMailSpamFilter implements TrainingInputSource
     /**
      *
      */
-    private JdbcTemplate jdbcTemplate = null;
-
+    private JdbcTemplate jdbcTemplate;
     /**
      *
      */
-    private List<Map<String, Object>> messages = null;
-
+    private List<Map<String, Object>> messages;
     /**
      *
      */
-    private List<String> token = null;
+    private List<String> token;
 
     /**
      * Erstellt ein neues {@link TestMailSpamFilter} Object.

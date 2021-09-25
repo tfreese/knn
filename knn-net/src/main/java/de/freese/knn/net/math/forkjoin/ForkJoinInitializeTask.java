@@ -1,10 +1,9 @@
-/**
- * Created: 04.04.2012
- */
+// Created: 04.04.2012
 package de.freese.knn.net.math.forkjoin;
 
 import java.util.Arrays;
 import java.util.concurrent.RecursiveAction;
+
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.ValueInitializer;
 
@@ -19,27 +18,22 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
      *
      */
     private static final long serialVersionUID = 687804634087313634L;
-
     /**
      *
      */
     private int from;
-
     /**
      *
      */
     private final Layer[] layers;
-
     /**
      *
      */
     private final KnnMathForkJoin math;
-
     /**
      *
      */
     private int to;
-
     /**
      *
      */

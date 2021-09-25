@@ -1,13 +1,11 @@
-/**
- * Created: 12.06.2011
- */
-
+// Created: 12.06.2011
 package de.freese.knn.bilderkennung;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
+
 import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
 
 /**
@@ -19,11 +17,12 @@ public class TestImageInfo
 {
     /**
      * @param args String[]
+     *
      * @throws Exception falls was schief geht.
      */
     public static void main(final String[] args) throws Exception
     {
-        String fileName = null;
+        String fileName;
         // fileName = "Ampel.gif";
         // fileName = "Bahnkreuz.gif";
         // fileName = "BigBrother.jpg";

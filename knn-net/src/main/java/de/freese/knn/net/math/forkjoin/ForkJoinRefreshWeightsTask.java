@@ -1,9 +1,8 @@
-/**
- * Created: 04.04.2012
- */
+// Created: 04.04.2012
 package de.freese.knn.net.math.forkjoin;
 
 import java.util.concurrent.RecursiveAction;
+
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
@@ -17,47 +16,38 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
      *
      */
     private static final long serialVersionUID = 7164427207684076313L;
-
     /**
      *
      */
     private final double[][] deltaWeights;
-
     /**
      *
      */
     private int from;
-
     /**
      *
      */
     private final double[] leftOutputs;
-
     /**
      *
      */
     private final KnnMathForkJoin math;
-
     /**
      *
      */
     private final double momentum;
-
     /**
      *
      */
     private final NeuronList neurons;
-
     /**
      *
      */
     private final double[] rightErrors;
-
     /**
      *
      */
     private final double teachFactor;
-
     /**
      *
      */

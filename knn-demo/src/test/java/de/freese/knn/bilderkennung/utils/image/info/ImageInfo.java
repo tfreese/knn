@@ -1,6 +1,4 @@
-/**
- * Created: 02.08.2009
- */
+// Created: 02.08.2009
 package de.freese.knn.bilderkennung.utils.image.info;
 
 import java.awt.Graphics2D;
@@ -9,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.imageio.ImageIO;
 
 /**
@@ -22,26 +21,24 @@ public class ImageInfo
      *
      */
     private final List<ImageColorChannelInfo> channelInfos = new ArrayList<>();
-
-    /**
-    *
-    */
-    private BufferedImage coOccurenceMatrixImage = null;
-
     /**
      *
      */
-    private double[] infoVector = null;
-
+    private BufferedImage coOccurenceMatrixImage;
     /**
-    *
-    */
-    private double[] infoVectorReScaled = null;
+     *
+     */
+    private double[] infoVector;
+    /**
+     *
+     */
+    private double[] infoVectorReScaled;
 
     /**
      * Erstellt ein neues {@link ImageInfo} Object.
      *
      * @param fileName String
+     *
      * @throws Exception Falls was schief geht.
      */
     public ImageInfo(final String fileName) throws Exception

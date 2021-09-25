@@ -1,6 +1,4 @@
-/**
- * Created: 17.09.2016
- */
+// Created: 17.09.2016
 package de.freese.knn.net.neuron;
 
 import java.util.Arrays;
@@ -70,12 +68,10 @@ public class NeuronList implements Iterable<Neuron>
      *
      */
     private final int fromIndex;
-
     /**
      *
      */
     private final Neuron[] neurons;
-
     /**
      *
      */
@@ -109,6 +105,7 @@ public class NeuronList implements Iterable<Neuron>
 
     /**
      * @param index int
+     *
      * @return {@link Neuron}
      */
     public Neuron get(final int index)
@@ -161,6 +158,7 @@ public class NeuronList implements Iterable<Neuron>
     /**
      * @param fromIndex int; inklusive
      * @param toIndex int; exklusive
+     *
      * @return {@link NeuronList}
      */
     public NeuronList subList(final int fromIndex, final int toIndex)

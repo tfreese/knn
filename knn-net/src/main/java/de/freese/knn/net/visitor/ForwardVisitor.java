@@ -1,6 +1,4 @@
-/**
- * Created: 12.06.2011
- */
+// Created: 12.06.2011
 package de.freese.knn.net.visitor;
 
 import de.freese.knn.net.NeuralNet;
@@ -19,7 +17,6 @@ public class ForwardVisitor extends AbstractKnnVisitor
      *
      */
     private double[] inputs;
-
     /**
      * false = nur die aktuellen Outputs werden gespeichert.
      */
@@ -51,6 +48,7 @@ public class ForwardVisitor extends AbstractKnnVisitor
      * Liefert die Output-Daten des Layers.
      *
      * @param layer {@link Layer}
+     *
      * @return double[]
      */
     double[] getOutputs(final Layer layer)

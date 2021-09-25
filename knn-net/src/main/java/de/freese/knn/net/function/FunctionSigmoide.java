@@ -1,6 +1,4 @@
-/**
- * 16.04.2008
- */
+// Created: 16.04.2008
 package de.freese.knn.net.function;
 
 /**
@@ -14,7 +12,6 @@ public class FunctionSigmoide implements Function
      * X-Durchgang fuer y = 0.5
      */
     private final double durchgang;
-
     /**
      * Steigung -> 0 Treppenfunktion
      */

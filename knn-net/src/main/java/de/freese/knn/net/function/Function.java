@@ -1,6 +1,4 @@
-/**
- * 16.04.2008
- */
+// Created: 16.04.2008
 package de.freese.knn.net.function;
 
 import java.util.function.UnaryOperator;
@@ -26,6 +24,7 @@ public interface Function extends UnaryOperator<Double>
      * Liefert den verrechneten Eingangswert.
      *
      * @param value double
+     *
      * @return double
      */
     double calculate(double value);

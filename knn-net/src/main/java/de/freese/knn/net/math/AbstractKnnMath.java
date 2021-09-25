@@ -1,6 +1,4 @@
-/**
- * Created: 04.04.2012
- */
+// Created: 04.04.2012
 package de.freese.knn.net.math;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ public abstract class AbstractKnnMath implements KnnMath
      *
      */
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
     /**
     *
     */
@@ -134,6 +131,7 @@ public abstract class AbstractKnnMath implements KnnMath
      * @param neuronIndex int
      * @param outputs double[]
      * @param outputTargets double[]
+     *
      * @return double
      */
     protected double getNetError(final int neuronIndex, final double[] outputs, final double[] outputTargets)
@@ -159,6 +157,7 @@ public abstract class AbstractKnnMath implements KnnMath
      *
      * @param neurons {@link NeuronList}
      * @param parallelism int
+     *
      * @return {@link List}<NeuronList>
      */
     protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism)

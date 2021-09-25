@@ -1,6 +1,4 @@
-/**
- * 17.04.2008
- */
+// Created: 17.04.2008
 package de.freese.knn.buttons;
 
 import java.awt.BorderLayout;
@@ -27,32 +25,26 @@ public class KnnButtonPanel extends JPanel implements ActionListener
      *
      */
     public static final int MAT_HEIGHT = 9;
-
     /**
      *
      */
     public static final int MAT_WIDTH = 6;
-
     /**
     *
     */
     private static final long serialVersionUID = 1L;
-
     /**
      *
      */
     private JLabel labelRecognized;
-
     /**
      *
      */
     private final JLabel[] labelsOutput = new JLabel[10];
-
     /**
      *
      */
     private final transient NeuralNet neuralNet;
-
     /**
      *
      */
@@ -112,6 +104,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener
 
     /**
      * @param actionListener {@link ActionListener}
+     *
      * @return {@link JPanel}
      */
     private JPanel createButtonPanel(final ActionListener actionListener)

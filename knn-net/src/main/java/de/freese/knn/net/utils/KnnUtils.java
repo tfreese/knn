@@ -1,12 +1,11 @@
-/**
- * Created: 03.07.2020
- */
+// Created: 03.07.2020
 package de.freese.knn.net.utils;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 
 /**

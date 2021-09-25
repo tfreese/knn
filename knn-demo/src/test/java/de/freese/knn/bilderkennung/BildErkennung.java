@@ -1,6 +1,4 @@
-/**
- * 15.07.2008
- */
+// Created: 15.07.2008
 package de.freese.knn.bilderkennung;
 
 import java.awt.Toolkit;

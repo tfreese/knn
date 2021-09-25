@@ -1,6 +1,4 @@
-/**
- * Created on 23.05.2016 17:18:14
- */
+// Created: 23.05.2016
 package de.freese.knn.net.math.reactor;
 
 import java.util.Objects;

@@ -1,6 +1,4 @@
-/**
- * 11.06.2008
- */
+// Created: 11.06.2008
 package de.freese.knn.net.trainer;
 
 import java.io.PrintStream;

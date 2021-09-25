@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.trainer;
 
 import java.util.EventListener;
@@ -15,8 +13,8 @@ public interface NetTrainerListener extends EventListener
 {
     /**
      * Nachdem ein Lernzyklus beendet ist, wird die Nummer und der Netzfehler des Zykluses uebergeben.
-     * 
+     *
      * @param event {@link NetTrainerCycleEndedEvent}
      */
-    public void trainingCycleEnded(NetTrainerCycleEndedEvent event);
+    void trainingCycleEnded(NetTrainerCycleEndedEvent event);
 }

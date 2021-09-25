@@ -48,7 +48,6 @@ public class KnnMathDisruptor extends AbstractKnnMath
      *
      */
     private final Disruptor<MathEvent> disruptor;
-
     // /**
     // *
     // */

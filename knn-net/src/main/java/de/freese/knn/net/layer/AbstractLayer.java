@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.layer;
 
 import java.util.Objects;
@@ -23,22 +21,18 @@ public abstract class AbstractLayer implements Layer
      *
      */
     private final Function function;
-
     /**
      *
      */
     private Matrix inputMatrix;
-
     /**
      *
      */
     private final NeuronList neurons;
-
     /**
      *
      */
     private Matrix outputMatrix;
-
     /**
      *
      */

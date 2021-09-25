@@ -1,6 +1,4 @@
-/**
- * Created: 17.07.2008
- */
+// Created: 17.07.2008
 package de.freese.knn.bilderkennung.utils;
 
 import java.awt.Color;
@@ -23,11 +21,10 @@ public class BlackWhiteOp implements BufferedImageOp
      *
      */
     private int colorLimit = 0;
-
     /**
      *
      */
-    private RenderingHints hints = null;
+    private RenderingHints hints;
 
     /**
      * Creates a new {@link BlackWhiteOp} object.
@@ -50,7 +47,7 @@ public class BlackWhiteOp implements BufferedImageOp
     /**
      * Creates a new {@link BlackWhiteOp} object.
      *
-     * @param hints      {@link RenderingHints}
+     * @param hints {@link RenderingHints}
      * @param colorLimit int, Wenn eine Farbe > colorLimit wird sie als Weiß interpretiert
      */
     public BlackWhiteOp(final RenderingHints hints, final int colorLimit)
@@ -67,7 +64,7 @@ public class BlackWhiteOp implements BufferedImageOp
     @Override
     public BufferedImage createCompatibleDestImage(final BufferedImage src, final ColorModel destCM)
     {
-        BufferedImage image = null;
+        BufferedImage image;
 
         ColorModel colorModel = destCM;
 
@@ -132,7 +129,7 @@ public class BlackWhiteOp implements BufferedImageOp
 
                 if ((red > this.colorLimit) || (green > this.colorLimit) || (blue > this.colorLimit))
                 {
-					//
+                    //
                     // int rgb = ((255 & 0xFF) << 24) | ((255 & 0xFF) << 16) | ((255 & 0xFF) << 8) |
                     // ((255 & 0xFF) << 0);
                     destImage.setRGB(x, y, rgbWhite);

@@ -1,6 +1,4 @@
-/**
- * Created: 02.10.2011
- */
+// Created: 02.10.2011
 package de.freese.knn.net.math.completionService;
 
 import java.util.List;
@@ -28,7 +26,6 @@ public final class KnnMathCompletionService extends AbstractKnnMath
      *
      */
     private final CompletionService<Void> completionService;
-
     /**
     *
     */

@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.trainer;
 
 /**
@@ -12,24 +10,26 @@ public interface TrainingInputSource
 {
     /**
      * Liefert die Eingangswerte am Index.
-     * 
+     *
      * @param index int
+     *
      * @return double[]
      */
-    public double[] getInputAt(int index);
+    double[] getInputAt(int index);
 
     /**
      * Liefert die Ausgangswerte am Index.
-     * 
+     *
      * @param index int
+     *
      * @return double[]
      */
-    public double[] getOutputAt(int index);
+    double[] getOutputAt(int index);
 
     /**
      * Liefert die Anzahl der Trainingsdaten.
-     * 
+     *
      * @return int
      */
-    public int getSize();
+    int getSize();
 }

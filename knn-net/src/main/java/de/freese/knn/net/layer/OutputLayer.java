@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.layer;
 
 import de.freese.knn.net.function.FunctionSigmoide;
@@ -27,6 +25,7 @@ public class OutputLayer extends AbstractLayer
      * Anpassen der Outputs.
      *
      * @param visitor {@link ForwardVisitor}
+     *
      * @return double[]
      */
     public double[] adjustOutput(final ForwardVisitor visitor)

@@ -1,11 +1,11 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.trainer;
 
 import javax.swing.event.EventListenerList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.visitor.BackwardVisitor;
@@ -22,37 +22,30 @@ public class NetTrainer
      *
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(NetTrainer.class);
-
     /**
      *
      */
     private EventListenerList listenerList = new EventListenerList();
-
     /**
      * Max. Netzfehler 5 %
      */
     private double maximumError = 0.05D;
-
     /**
      *
      */
     private int maxIterations = 2000;
-
     // /**
     // * Anfänglicher Anteil der vorherigen Gewichtsveränderung.
     // */
     // private double momentumInitial = this.momentum;
-
     /**
      * Anteil der vorherigen Gewichtsveränderung
      */
     private double momentum = 0.5D;
-
     // /**
     // * Lernfaktor
     // */
     // private double teachFactorInitial = this.teachFactor;
-
     /**
      * Lernfaktor
      */
@@ -152,7 +145,11 @@ public class NetTrainer
             {
                 // Letzter Stand loggen.
                 NetTrainerCycleEndedEvent event = new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum);
-                LOGGER.info(event.toString());
+
+                if (LOGGER.isInfoEnabled())
+                {
+                    LOGGER.info(event.toString());
+                }
 
                 long ms = System.currentTimeMillis() - start;
 
@@ -173,6 +170,7 @@ public class NetTrainer
      * @param neuralNet {@link NeuralNet}
      * @param inputs double[]
      * @param outputs double[]
+     *
      * @return double, Netzfehler
      */
     private double train(final TrainingContext trainingContext, final NeuralNet neuralNet, final double[] inputs, final double[] outputs)

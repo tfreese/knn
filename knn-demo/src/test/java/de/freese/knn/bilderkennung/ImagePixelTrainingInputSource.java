@@ -1,11 +1,10 @@
-/**
- * 15.07.2008
- */
+// Created: 15.07.2008
 package de.freese.knn.bilderkennung;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import de.freese.knn.bilderkennung.utils.ImageData;
 import de.freese.knn.net.trainer.TrainingInputSource;
 

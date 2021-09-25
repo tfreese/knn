@@ -1,9 +1,8 @@
-/**
- * Created: 04.04.2012
- */
+// Created: 04.04.2012
 package de.freese.knn.net.math.forkjoin;
 
 import java.util.concurrent.RecursiveAction;
+
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
@@ -17,32 +16,26 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
      *
      */
     private static final long serialVersionUID = 4449740515431715497L;
-
     /**
      *
      */
     private int from;
-
     /**
      *
      */
     private final double[] inputs;
-
     /**
      *
      */
     private final KnnMathForkJoin math;
-
     /**
      *
      */
     private final NeuronList neurons;
-
     /**
      *
      */
     private final double[] outputs;
-
     /**
      *
      */

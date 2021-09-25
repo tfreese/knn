@@ -1,12 +1,11 @@
-/**
- * 12.07.2008
- */
+// 12.07.2008
 package de.freese.knn.bilderkennung.utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Arrays;
+
 import javax.imageio.ImageIO;
 
 /**
@@ -19,18 +18,15 @@ public class ImageData
     /**
      *
      */
-    private BufferedImage blackWhiteImage = null;
-
+    private BufferedImage blackWhiteImage;
     /**
      *
      */
-    private BufferedImage edgeImage = null;
-
+    private BufferedImage edgeImage;
     /**
      *
      */
-    private double[] pixels = null;
-
+    private double[] pixels;
     /**
      *
      */
@@ -40,6 +36,7 @@ public class ImageData
      * Creates a new {@link ImageData} object.
      *
      * @param fileName String
+     *
      * @throws Exception Falls was schief geht.
      */
     public ImageData(final String fileName) throws Exception

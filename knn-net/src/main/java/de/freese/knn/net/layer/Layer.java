@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.layer;
 
 import de.freese.knn.net.function.Function;
@@ -20,47 +18,47 @@ public interface Layer extends Visitable
      *
      * @return {@link Function}
      */
-    public Function getFunction();
+    Function getFunction();
 
     /**
      * Liefert die Eingangsmatrix des Layers.
      *
      * @return {@link Matrix}
      */
-    public Matrix getInputMatrix();
+    Matrix getInputMatrix();
 
     /**
      * Liefert die Neuronen des Layers.
      *
      * @return {@link NeuronList}
      */
-    public NeuronList getNeurons();
+    NeuronList getNeurons();
 
     /**
      * Liefert die Ausgangsmatrix des Layers.
      *
      * @return {@link Matrix}
      */
-    public Matrix getOutputMatrix();
+    Matrix getOutputMatrix();
 
     /**
      * Liefert die Anzahl der Neuronen.
      *
      * @return int
      */
-    public int getSize();
+    int getSize();
 
     /**
      * Setzt die Eingangsmatrix des Layers.
      *
      * @param matrix {@link Matrix}
      */
-    public void setInputMatrix(Matrix matrix);
+    void setInputMatrix(Matrix matrix);
 
     /**
      * Setzt die Ausgangsmatrix des Layers.
      *
      * @param matrix {@link Matrix}
      */
-    public void setOutputMatrix(Matrix matrix);
+    void setOutputMatrix(Matrix matrix);
 }

@@ -1,6 +1,4 @@
-/**
- * 06.06.2008
- */
+// Created: 06.06.2008
 package de.freese.knn.net.matrix;
 
 /**
@@ -14,7 +12,6 @@ public class ValueInitializerRandom implements ValueInitializer
      *
      */
     private final double oberGrenze;
-
     /**
      *
      */

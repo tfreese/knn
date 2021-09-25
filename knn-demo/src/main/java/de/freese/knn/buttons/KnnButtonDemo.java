@@ -1,6 +1,4 @@
-/**
- * 15.04.2008
- */
+// Created: 15.04.2008
 package de.freese.knn.buttons;
 
 import java.awt.BorderLayout;

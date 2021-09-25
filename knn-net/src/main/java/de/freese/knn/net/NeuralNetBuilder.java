@@ -1,10 +1,9 @@
-/**
- * Created: 13.02.2019
- */
+// Created: 13.02.2019
 package de.freese.knn.net;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
@@ -22,22 +21,18 @@ public class NeuralNetBuilder
      *
      */
     private final List<HiddenLayer> hiddenLayers = new ArrayList<>();
-
     /**
      *
      */
     private InputLayer inputLayer;
-
     /**
      *
      */
     private KnnMath knnMath;
-
     /**
      *
      */
     private OutputLayer outputLayer;
-
     /**
      *
      */
@@ -53,6 +48,7 @@ public class NeuralNetBuilder
 
     /**
      * @param connectLayer boolean
+     *
      * @return {@link NeuralNet}
      */
     public NeuralNet build(final boolean connectLayer)
@@ -116,6 +112,7 @@ public class NeuralNetBuilder
 
     /**
      * @param knnMath {@link KnnMath}
+     *
      * @return {@link NeuralNetBuilder}
      */
     public NeuralNetBuilder knnMath(final KnnMath knnMath)
@@ -127,6 +124,7 @@ public class NeuralNetBuilder
 
     /**
      * @param hiddenLayer {@link HiddenLayer}
+     *
      * @return {@link NeuralNetBuilder}
      */
     public NeuralNetBuilder layerHidden(final HiddenLayer hiddenLayer)
@@ -138,6 +136,7 @@ public class NeuralNetBuilder
 
     /**
      * @param inputLayer {@link InputLayer}
+     *
      * @return {@link NeuralNetBuilder}
      */
     public NeuralNetBuilder layerInput(final InputLayer inputLayer)
@@ -149,6 +148,7 @@ public class NeuralNetBuilder
 
     /**
      * @param outputLayer {@link OutputLayer}
+     *
      * @return {@link NeuralNetBuilder}
      */
     public NeuralNetBuilder layerOutput(final OutputLayer outputLayer)
@@ -160,6 +160,7 @@ public class NeuralNetBuilder
 
     /**
      * @param valueInitializer {@link ValueInitializer}
+     *
      * @return {@link NeuralNetBuilder}
      */
     public NeuralNetBuilder valueInitializer(final ValueInitializer valueInitializer)

@@ -1,6 +1,4 @@
-/**
- * 12.07.2008
- */
+// Created: 12.07.2008
 package de.freese.knn.bilderkennung;
 
 import java.awt.BorderLayout;
@@ -10,12 +8,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+
 import de.freese.knn.bilderkennung.utils.ImageData;
 
 /**
@@ -27,7 +27,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
 {
     /**
      * CellRenderer für Images.
-     * 
+     *
      * @author Thomas Freese
      */
     private class ImageTableRenderer extends DefaultTableCellRenderer
@@ -36,19 +36,10 @@ public class TestImagePixelTrainingInputSource extends JFrame
          *
          */
         private static final long serialVersionUID = 1L;
-
         /**
-         * 
+         *
          */
-        private Image image = null;
-
-        /**
-         * Creates a new {@link ImageTableRenderer} object.
-         */
-        public ImageTableRenderer()
-        {
-            super();
-        }
+        private Image image;
 
         /**
          * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
@@ -103,7 +94,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
 
     /**
      * TableModel.
-     * 
+     *
      * @author Thomas Freese
      */
     private class TableModel extends AbstractTableModel
@@ -112,21 +103,10 @@ public class TestImagePixelTrainingInputSource extends JFrame
          *
          */
         private static final long serialVersionUID = 1L;
-
         /**
-         * 
+         *
          */
-        private List<ImageData> dataList = null;
-
-        /**
-         * Creates a new {@link TableModel} object.
-         */
-        public TableModel()
-        {
-            super();
-
-            this.dataList = new ArrayList<>();
-        }
+        private final List<ImageData> dataList = new ArrayList<>();
 
         /**
          * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
@@ -194,7 +174,9 @@ public class TestImagePixelTrainingInputSource extends JFrame
          */
         public void setList(final List<ImageData> objects)
         {
-            this.dataList = objects;
+            this.dataList.clear();
+            this.dataList.addAll(objects);
+
             fireTableDataChanged();
         }
     }
@@ -206,6 +188,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
 
     /**
      * @param args String[]
+     *
      * @throws Exception Falls was schief geht.
      */
     public static void main(final String[] args) throws Exception
@@ -216,7 +199,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
 
     /**
      * Creates a new {@link TestImagePixelTrainingInputSource} object.
-     * 
+     *
      * @throws Exception Falls was schief geht.
      */
     public TestImagePixelTrainingInputSource() throws Exception
@@ -228,6 +211,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
 
     /**
      * @return {@link JTable}
+     *
      * @throws Exception Falls was schief geht.
      */
     private JTable createTable() throws Exception

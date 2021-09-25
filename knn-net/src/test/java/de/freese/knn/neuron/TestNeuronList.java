@@ -1,7 +1,4 @@
-/**
- * Created: 03.07.2020
- */
-
+// Created: 03.07.2020
 package de.freese.knn.neuron;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,6 +45,7 @@ class TestNeuronList
     /**
      * @param values {@link List}
      * @param parallelism int
+     *
      * @return {@link List}
      */
     private List<List<String>> getPartitionsByModulo(final List<String> values, final int parallelism)
@@ -68,6 +66,7 @@ class TestNeuronList
     /**
      * @param values {@link List}
      * @param parallelism int
+     *
      * @return {@link List}
      */
     protected List<List<String>> getPartitionsBySize(final List<String> values, final int parallelism)

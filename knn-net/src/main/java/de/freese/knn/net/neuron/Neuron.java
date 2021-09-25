@@ -1,6 +1,4 @@
-/**
- * Created: 17.07.2011
- */
+// Created: 17.07.2011
 package de.freese.knn.net.neuron;
 
 import de.freese.knn.net.function.Function;
@@ -19,53 +17,55 @@ public interface Neuron
      *
      * @return {@link Function}
      */
-    public Function getFunction();
+    Function getFunction();
 
     /**
      * Liefert den Bias Wert um Ueberanpassungen zu vermeiden.
      *
      * @return double
      */
-    public double getInputBIAS();
+    double getInputBIAS();
 
     /**
      * Liefert die Anzahl von Eingaengen.
      *
      * @return int
      */
-    public int getInputSize();
+    int getInputSize();
 
     /**
      * Liefert das Eingangsgewicht.<br>
      * Der {@link InputLayer} hat keine Eingangsgewichte !
      *
      * @param index int
+     *
      * @return double
      */
-    public double getInputWeight(int index);
+    double getInputWeight(int index);
 
     /**
      * Liefert die Position des Neurons im Layer.
      *
      * @return int
      */
-    public int getLayerIndex();
+    int getLayerIndex();
 
     /**
      * Liefert die Anzahl von Ausgaengen.
      *
      * @return int
      */
-    public int getOutputSize();
+    int getOutputSize();
 
     /**
      * Liefert das Ausgangsgewicht.<br>
      * Der {@link OutputLayer} hat keine Ausgangsgewichte !
      *
      * @param index int
+     *
      * @return double
      */
-    public double getOutputWeight(int index);
+    double getOutputWeight(int index);
 
     /**
      * Liefert den Bias Gewicht um Ueberanpassungen zu vermeiden.<br>
@@ -73,7 +73,7 @@ public interface Neuron
      *
      * @param value double
      */
-    public void setInputBIAS(double value);
+    void setInputBIAS(double value);
 
     /**
      * Setzt das Eingangsgewicht.<br>
@@ -82,7 +82,7 @@ public interface Neuron
      * @param index int
      * @param weight double
      */
-    public void setInputWeight(int index, double weight);
+    void setInputWeight(int index, double weight);
 
     /**
      * Setzt das Ausgangsgewicht.<br>
@@ -91,5 +91,5 @@ public interface Neuron
      * @param index int
      * @param weight double
      */
-    public void setOutputWeight(int index, double weight);
+    void setOutputWeight(int index, double weight);
 }

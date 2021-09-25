@@ -1,6 +1,4 @@
-/**
- * Created: 17.07.2011
- */
+// Created: 17.07.2011
 package de.freese.knn.net.neuron;
 
 import de.freese.knn.net.function.Function;
@@ -20,12 +18,10 @@ public class NeuronImpl implements Neuron
      *
      */
     private double inputBIAS;
-
     /**
      *
      */
     private final Layer layer;
-
     /**
      *
      */
