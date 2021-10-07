@@ -1,7 +1,6 @@
 // Created: 23.05.2016
 package de.freese.knn.net.math.reactor;
 
-import java.util.Objects;
 import java.util.concurrent.Executors;
 
 import de.freese.knn.net.NeuralNet;
@@ -34,30 +33,21 @@ public final class KnnMathReactor extends AbstractKnnMath
      */
     public KnnMathReactor(final int parallelism)
     {
-        // Recht langsam
-        // this(parallelism, Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-"));
-
-        // Recht langsam
-        // this(parallelism, Schedulers.newParallel("knn-scheduler-", parallelism));
-
-        // Recht schnell
-        this(parallelism, Schedulers.fromExecutor(Executors.newFixedThreadPool(parallelism, new KnnThreadFactory("knn-scheduler-"))));
-    }
-
-    /**
-     * Erstellt ein neues {@link KnnMathReactor} Object.
-     *
-     * @param parallelism int
-     * @param scheduler {@link Scheduler}
-     */
-    public KnnMathReactor(final int parallelism, final Scheduler scheduler)
-    {
         super(parallelism);
 
         // Siehe JavaDoc von Schedulers
-        // #elastic(): Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) can grow indefinitely
-        // #boundedElastic(): Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) is capped
-        this.scheduler = Objects.requireNonNull(scheduler, "scheduler required");
+        // #boundedElastic()}: Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) is capped
+        // #parallel()}: Optimized for fast {@link Runnable} non-blocking executions
+        // #fromExecutorService(ExecutorService)} to create new instances around {@link java.util.concurrent.Executors}
+
+        // Recht langsam
+        // this.scheduler = Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-");
+
+        // Recht langsam
+        // this.scheduler = Schedulers.newParallel("knn-scheduler-", parallelism);
+
+        // Recht schnell
+        this.scheduler = Schedulers.fromExecutor(Executors.newFixedThreadPool(parallelism, new KnnThreadFactory("knn-scheduler-")));
     }
 
     /**
@@ -88,8 +78,7 @@ public final class KnnMathReactor extends AbstractKnnMath
     @Override
     public void close()
     {
-        // Externen Scheduler nicht schliessen.
-        // getScheduler().dispose();
+        getScheduler().dispose();
     }
 
     /**

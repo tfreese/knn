@@ -30,25 +30,27 @@ public class BildErkennung
      *
      * @throws Exception Falls was schief geht.
      */
+    @SuppressWarnings("unused")
     public static void main(final String[] args) throws Exception
     {
         // TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
         TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
 
-        int parallelism = 7;
+        int parallelism = Runtime.getRuntime().availableProcessors();
 
         // @formatter:off
         NeuralNetBuilder builder = new NeuralNetBuilder()
                 //.knnMath(new KnnMathSimple())
-                .knnMath(new KnnMathStream())
+                .knnMath(new KnnMathStream()) // Ist Default im NeuralNetBuilder
                 //.knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
                 //.knnMath(new KnnMathExecutor(Executors.newFixedThreadPool(parallelism), parallelism))
                 //.knnMath(new KnnMathQueueWorker(parallelism))
-                //.knnMath(new KnnMathReactor(Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-"), parallelism))
+//                .knnMath(new KnnMathReactor(parallelism))
                 //.knnMath(new KnnMathPublishSubscribe(Executors.newFixedThreadPool(parallelism), parallelism))
                 //.knnMath(new KnnMathCompletionService(Executors.newFixedThreadPool(parallelism), parallelism))
                 //.knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(1)))
-                //.knnMath(new KnnMathDisruptor(parallelism))
+                //.knnMath(new KnnMathDisruptorPartitionPerHandler(parallelism))
+//                .knnMath(new KnnMathDisruptorNeuronPerHandler(parallelism))
                 ;
         // @formatter:on
 

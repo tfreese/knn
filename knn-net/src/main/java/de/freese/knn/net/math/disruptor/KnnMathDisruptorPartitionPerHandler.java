@@ -6,6 +6,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.IntFunction;
 
+import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 
@@ -18,9 +19,11 @@ import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
+ * Jeder Handler verarbeitet eine SubList der Neuronen.
+ *
  * @author Thomas Freese
  */
-public class KnnMathDisruptor extends AbstractKnnMath
+public class KnnMathDisruptorPartitionPerHandler extends AbstractKnnMath
 {
     // /**
     // * @author Thomas Freese
@@ -45,6 +48,63 @@ public class KnnMathDisruptor extends AbstractKnnMath
     // }
 
     /**
+     * @author Thomas Freese
+     */
+    private static class MathEvent
+    {
+        /**
+         *
+         */
+        final Runnable[] runnables;
+
+        /**
+         * Erstellt ein neues {@link MathEvent} Object.
+         *
+         * @param parallelism int
+         */
+        MathEvent(final int parallelism)
+        {
+            super();
+
+            this.runnables = new Runnable[parallelism];
+        }
+    }
+
+    /**
+     * @author Thomas Freese
+     */
+    private static class MathEventHandler implements EventHandler<MathEvent>
+    {
+        /**
+         *
+         */
+        private final int ordinal;
+
+        /**
+         * Erstellt ein neues {@link MathEventHandler} Object.
+         *
+         * @param ordinal int
+         */
+        MathEventHandler(final int ordinal)
+        {
+            super();
+
+            this.ordinal = ordinal;
+        }
+
+        /**
+         * @see com.lmax.disruptor.EventHandler#onEvent(java.lang.Object, long, boolean)
+         */
+        @Override
+        public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) throws Exception
+        {
+            event.runnables[this.ordinal].run();
+
+            event.runnables[this.ordinal] = null;
+        }
+    }
+
+    /**
      *
      */
     private final Disruptor<MathEvent> disruptor;
@@ -54,11 +114,11 @@ public class KnnMathDisruptor extends AbstractKnnMath
     // private final JoiningHandler joiningHandler;
 
     /**
-     * Erstellt ein neues {@link KnnMathDisruptor} Object.
+     * Erstellt ein neues {@link KnnMathDisruptorPartitionPerHandler} Object.
      *
      * @param parallelism int; must be a power of 2
      */
-    public KnnMathDisruptor(final int parallelism)
+    public KnnMathDisruptorPartitionPerHandler(final int parallelism)
     {
         super(parallelism);
 
