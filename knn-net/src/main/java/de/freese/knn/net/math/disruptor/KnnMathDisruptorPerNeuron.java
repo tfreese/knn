@@ -1,124 +1,112 @@
 // Created: 05.11.2020
 package de.freese.knn.net.math.disruptor;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.function.IntFunction;
 
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
-import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.utils.KnnThreadFactory;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Jeder Handler verarbeitet eine SubList der Neuronen.
+ * Jeder Handler verarbeitet ein einzelnes Neuron.
  *
  * @author Thomas Freese
  */
-public class KnnMathDisruptorPartitionPerHandler extends AbstractKnnMath
+public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
 {
-    // /**
-    // * @author Thomas Freese
-    // */
-    // private static class JoiningHandler implements EventHandler<MathEvent>
-    // {
-    // /**
-    // *
-    // */
-    // private CountDownLatch latch;
-    //
-    // /**
-    // * @see com.lmax.disruptor.EventHandler#onEvent(java.lang.Object, long, boolean)
-    // */
-    // @Override
-    // public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) throws Exception
-    // {
-    // LoggerFactory.getLogger(JoiningHandler.class).info("onEvent");
-    //
-    // this.latch.countDown();
-    // }
-    // }
-
     /**
      * @author Thomas Freese
      */
-    private static class MathEvent
+    private static class RunnableEvent
     {
         /**
-         *
-         */
-        final Runnable[] runnables;
-
-        /**
-         * Erstellt ein neues {@link MathEvent} Object.
-         *
-         * @param parallelism int
-         */
-        MathEvent(final int parallelism)
-        {
-            super();
-
-            this.runnables = new Runnable[parallelism];
-        }
+        *
+        */
+        Runnable runnable;
     }
-
     /**
      * @author Thomas Freese
      */
-    private static class MathEventHandler implements EventHandler<MathEvent>
+    private static class RunnableHandler implements EventHandler<RunnableEvent>, WorkHandler<RunnableEvent>
     {
         /**
          *
          */
         private final int ordinal;
+        /**
+         *
+         */
+        private final int parallelism;
 
         /**
-         * Erstellt ein neues {@link MathEventHandler} Object.
+         * Erstellt ein neues {@link RunnableHandler} Object.
          *
+         */
+        RunnableHandler()
+        {
+            this(-1,-1);
+        }
+
+        /**
+         * Erstellt ein neues {@link RunnableHandler} Object.
+         *
+         * @param parallelism int
          * @param ordinal int
          */
-        MathEventHandler(final int ordinal)
+        RunnableHandler(final int parallelism, final int ordinal)
         {
             super();
 
+            this.parallelism = parallelism;
             this.ordinal = ordinal;
+        }
+
+        /**
+         * @see com.lmax.disruptor.WorkHandler#onEvent(java.lang.Object)
+         */
+        @Override
+        public void onEvent(final RunnableEvent event) throws Exception
+        {
+            event.runnable.run();
+
+            event.runnable = null;
         }
 
         /**
          * @see com.lmax.disruptor.EventHandler#onEvent(java.lang.Object, long, boolean)
          */
         @Override
-        public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) throws Exception
+        public void onEvent(final RunnableEvent event, final long sequence, final boolean endOfBatch) throws Exception
         {
-            event.runnables[this.ordinal].run();
-
-            event.runnables[this.ordinal] = null;
+            // Load-Balancing auf die Handler über die Sequence.
+            // Sonst würden alle Handler gleichzeitig eine Sequence bearbeiten.
+            if ((this.ordinal == -1) || (this.ordinal == (sequence % this.parallelism)))
+            {
+                onEvent(event);
+            }
         }
     }
 
     /**
      *
      */
-    private final Disruptor<MathEvent> disruptor;
-    // /**
-    // *
-    // */
-    // private final JoiningHandler joiningHandler;
+    private final Disruptor<RunnableEvent> disruptor;
 
     /**
-     * Erstellt ein neues {@link KnnMathDisruptorPartitionPerHandler} Object.
+     * Erstellt ein neues {@link KnnMathDisruptorPerNeuron} Object.
      *
      * @param parallelism int; must be a power of 2
      */
-    public KnnMathDisruptorPartitionPerHandler(final int parallelism)
+    public KnnMathDisruptorPerNeuron(final int parallelism)
     {
         super(parallelism);
 
@@ -136,18 +124,26 @@ public class KnnMathDisruptorPartitionPerHandler extends AbstractKnnMath
             throw new IllegalArgumentException("bufferSize must be a power of 2");
         }
 
-        this.disruptor = new Disruptor<>(() -> new MathEvent(parallelism), ringBufferSize, new KnnThreadFactory("knn-disruptor-"));
+        this.disruptor = new Disruptor<>(RunnableEvent::new, ringBufferSize, new KnnThreadFactory("knn-disruptor-"));
 
-        MathEventHandler[] handlers = new MathEventHandler[parallelism];
+//        EventHandler<RunnableEvent>[] handlers = new RunnableHandler[parallelism];
+//
+//        for (int i = 0; i < handlers.length; i++)
+//        {
+//            handlers[i] = new RunnableHandler(parallelism, i);
+//        }
+//
+//        this.disruptor.handleEventsWith(handlers);
 
-        for (int i = 0; i < handlers.length; i++)
+        WorkHandler<RunnableEvent>[] workers = new RunnableHandler[parallelism];
+
+        for (int i = 0; i < workers.length; i++)
         {
-            handlers[i] = new MathEventHandler(i);
+            workers[i] = new RunnableHandler();
         }
 
-        // this.joiningHandler = new JoiningHandler();
+        this.disruptor.handleEventsWithWorkerPool(workers);
 
-        this.disruptor.handleEventsWith(handlers);// .then(this.joiningHandler);
         this.disruptor.start();
     }
 
@@ -160,16 +156,25 @@ public class KnnMathDisruptorPartitionPerHandler extends AbstractKnnMath
         double[] errors = visitor.getLastErrors();
         double[] layerErrors = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
+        CountDownLatch latch = new CountDownLatch(layer.getSize());
+        RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
 
-        publish(ordinal -> {
-            NeuronList partition = partitions.get(ordinal);
+        layer.getNeurons().forEach(neuron -> {
+            long sequence = ringBuffer.next();
 
-            return () -> {
-                partition.forEach(neuron -> backward(neuron, errors, layerErrors));
-                latch.countDown();
-            };
+            try
+            {
+                RunnableEvent event = ringBuffer.get(sequence);
+
+                event.runnable = () -> {
+                    backward(neuron, errors, layerErrors);
+                    latch.countDown();
+                };
+            }
+            finally
+            {
+                ringBuffer.publish(sequence);
+            }
         });
 
         waitForLatch(latch);
@@ -205,17 +210,25 @@ public class KnnMathDisruptorPartitionPerHandler extends AbstractKnnMath
         double[] inputs = visitor.getLastOutputs();
         double[] outputs = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
+        CountDownLatch latch = new CountDownLatch(layer.getSize());
+        RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
 
-        publish(ordinal -> {
-            NeuronList partition = partitions.get(ordinal);
+        layer.getNeurons().forEach(neuron -> {
+            long sequence = ringBuffer.next();
 
-            return () -> {
-                partition.forEach(neuron -> forward(neuron, inputs, outputs));
+            try
+            {
+                RunnableEvent event = ringBuffer.get(sequence);
 
-                latch.countDown();
-            };
+                event.runnable = () -> {
+                    forward(neuron, inputs, outputs);
+                    latch.countDown();
+                };
+            }
+            finally
+            {
+                ringBuffer.publish(sequence);
+            }
         });
 
         waitForLatch(latch);
@@ -224,9 +237,9 @@ public class KnnMathDisruptorPartitionPerHandler extends AbstractKnnMath
     }
 
     /**
-     * @return {@link Disruptor}<MathEvent>
+     * @return {@link Disruptor}
      */
-    private Disruptor<MathEvent> getDisruptor()
+    private Disruptor<RunnableEvent> getDisruptor()
     {
         return this.disruptor;
     }
@@ -244,30 +257,6 @@ public class KnnMathDisruptorPartitionPerHandler extends AbstractKnnMath
     }
 
     /**
-     * @param functionRunnables {@link IntFunction}
-     */
-    private void publish(final IntFunction<Runnable> functionRunnables)
-    {
-        RingBuffer<MathEvent> ringBuffer = getDisruptor().getRingBuffer();
-
-        long sequence = ringBuffer.next();
-
-        try
-        {
-            MathEvent event = ringBuffer.get(sequence);
-
-            for (int i = 0; i < getParallelism(); i++)
-            {
-                event.runnables[i] = functionRunnables.apply(i);
-            }
-        }
-        finally
-        {
-            ringBuffer.publish(sequence);
-        }
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
      *      de.freese.knn.net.visitor.BackwardVisitor)
      */
@@ -279,17 +268,25 @@ public class KnnMathDisruptorPartitionPerHandler extends AbstractKnnMath
         double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         double[] rightErrors = visitor.getErrors(rightLayer);
 
-        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
+        CountDownLatch latch = new CountDownLatch(leftLayer.getSize());
+        RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
 
-        publish(ordinal -> {
-            NeuronList partition = partitions.get(ordinal);
+        leftLayer.getNeurons().forEach(neuron -> {
+            long sequence = ringBuffer.next();
 
-            return () -> {
-                partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
+            try
+            {
+                RunnableEvent event = ringBuffer.get(sequence);
 
-                latch.countDown();
-            };
+                event.runnable = () -> {
+                    refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
+                    latch.countDown();
+                };
+            }
+            finally
+            {
+                ringBuffer.publish(sequence);
+            }
         });
 
         waitForLatch(latch);

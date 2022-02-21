@@ -45,12 +45,12 @@ public class BildErkennung
                 //.knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
                 //.knnMath(new KnnMathExecutor(Executors.newFixedThreadPool(parallelism), parallelism))
                 //.knnMath(new KnnMathQueueWorker(parallelism))
-//                .knnMath(new KnnMathReactor(parallelism))
+                //.knnMath(new KnnMathReactor(parallelism))
                 //.knnMath(new KnnMathPublishSubscribe(Executors.newFixedThreadPool(parallelism), parallelism))
                 //.knnMath(new KnnMathCompletionService(Executors.newFixedThreadPool(parallelism), parallelism))
                 //.knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(1)))
-                //.knnMath(new KnnMathDisruptorPartitionPerHandler(parallelism))
-//                .knnMath(new KnnMathDisruptorNeuronPerHandler(parallelism))
+                //.knnMath(new KnnMathDisruptorPerPartition(parallelism))
+                //.knnMath(new KnnMathDisruptorPerNeuron(parallelism))
                 ;
         // @formatter:on
 
