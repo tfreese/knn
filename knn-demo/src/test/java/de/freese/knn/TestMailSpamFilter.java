@@ -67,11 +67,11 @@ public class TestMailSpamFilter implements TrainingInputSource
     /**
      *
      */
-    private List<Map<String, Object>> messages;
+    private final List<Map<String, Object>> messages;
     /**
      *
      */
-    private List<String> token;
+    private final List<String> token;
 
     /**
      * Erstellt ein neues {@link TestMailSpamFilter} Object.

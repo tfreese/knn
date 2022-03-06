@@ -27,9 +27,9 @@ public final class KnnMathCompletionService extends AbstractKnnMath
      */
     private final CompletionService<Void> completionService;
     /**
-    *
-    */
-    private Executor executor;
+     *
+     */
+    private final Executor executor;
 
     /**
      * Erstellt ein neues {@link KnnMathCompletionService} Object.
@@ -100,23 +100,6 @@ public final class KnnMathCompletionService extends AbstractKnnMath
     }
 
     /**
-     * @return {@link CompletionService}<Void>
-     */
-    private CompletionService<Void> getCompletionService()
-    {
-        return this.completionService;
-    }
-
-    /**
-     * @return {@link Executor}
-     */
-    @SuppressWarnings("unused")
-    private Executor getExecutor()
-    {
-        return this.executor;
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
@@ -132,7 +115,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath
 
     /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
@@ -172,5 +155,22 @@ public final class KnnMathCompletionService extends AbstractKnnMath
                 getLogger().error(null, ex);
             }
         }
+    }
+
+    /**
+     * @return {@link CompletionService}<Void>
+     */
+    private CompletionService<Void> getCompletionService()
+    {
+        return this.completionService;
+    }
+
+    /**
+     * @return {@link Executor}
+     */
+    @SuppressWarnings("unused")
+    private Executor getExecutor()
+    {
+        return this.executor;
     }
 }

@@ -100,9 +100,9 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
     // }
 
     /**
-    *
-    */
-    private Executor executor;
+     *
+     */
+    private final Executor executor;
 
     /**
      * Erstellt ein neues {@link KnnMathPublishSubscribe} Object.
@@ -176,14 +176,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
     }
 
     /**
-     * @return {@link Executor}
-     */
-    private Executor getExecutor()
-    {
-        return this.executor;
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
@@ -195,7 +187,8 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
         {
             // InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
             // this.executorService.execute(task);
-            getExecutor().execute(() -> {
+            getExecutor().execute(() ->
+            {
                 initialize(layer, valueInitializer);
 
                 latch.countDown();
@@ -207,7 +200,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
 
     /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
@@ -229,6 +222,14 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
         }
 
         waitForFuture(future);
+    }
+
+    /**
+     * @return {@link Executor}
+     */
+    private Executor getExecutor()
+    {
+        return this.executor;
     }
 
     /**

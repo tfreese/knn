@@ -3,13 +3,12 @@ package de.freese.knn.net.trainer;
 
 import javax.swing.event.EventListenerList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Trainer für das neurale Netz.
@@ -25,15 +24,15 @@ public class NetTrainer
     /**
      *
      */
-    private EventListenerList listenerList = new EventListenerList();
-    /**
-     * Max. Netzfehler 5 %
-     */
-    private double maximumError = 0.05D;
+    private final EventListenerList listenerList = new EventListenerList();
     /**
      *
      */
     private int maxIterations = 2000;
+    /**
+     * Max. Netzfehler 5 %
+     */
+    private double maximumError = 0.05D;
     // /**
     // * Anfänglicher Anteil der vorherigen Gewichtsveränderung.
     // */
@@ -79,24 +78,6 @@ public class NetTrainer
     public void addNetTrainerListener(final NetTrainerListener listener)
     {
         this.listenerList.add(NetTrainerListener.class, listener);
-    }
-
-    /**
-     * Feuert ein Event, wenn ein Lernzyklus beendet ist.
-     *
-     * @param event {@link NetTrainerCycleEndedEvent}
-     */
-    private void fireCycleEnded(final NetTrainerCycleEndedEvent event)
-    {
-        Object[] listeners = this.listenerList.getListenerList();
-
-        for (int i = listeners.length - 2; i >= 0; i -= 2)
-        {
-            if (listeners[i] == NetTrainerListener.class)
-            {
-                ((NetTrainerListener) listeners[i + 1]).trainingCycleEnded(event);
-            }
-        }
     }
 
     /**
@@ -160,6 +141,24 @@ public class NetTrainer
         }
 
         trainingContext.clear();
+    }
+
+    /**
+     * Feuert ein Event, wenn ein Lernzyklus beendet ist.
+     *
+     * @param event {@link NetTrainerCycleEndedEvent}
+     */
+    private void fireCycleEnded(final NetTrainerCycleEndedEvent event)
+    {
+        Object[] listeners = this.listenerList.getListenerList();
+
+        for (int i = listeners.length - 2; i >= 0; i -= 2)
+        {
+            if (listeners[i] == NetTrainerListener.class)
+            {
+                ((NetTrainerListener) listeners[i + 1]).trainingCycleEnded(event);
+            }
+        }
     }
 
     /**

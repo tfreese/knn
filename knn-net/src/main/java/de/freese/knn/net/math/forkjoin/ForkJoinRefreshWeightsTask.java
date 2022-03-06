@@ -23,7 +23,7 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
     /**
      *
      */
-    private int from;
+    private final int from;
     /**
      *
      */
@@ -51,7 +51,7 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
     /**
      *
      */
-    private int to;
+    private final int to;
 
     /**
      * Erstellt ein neues {@link ForkJoinRefreshWeightsTask} Object.
@@ -65,7 +65,7 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
      * @param rightErrors double[]
      */
     ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum,
-            final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors)
+                               final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors)
     {
         this(math, neurons, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors, 0, neurons.size());
     }
@@ -84,7 +84,7 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
      * @param to int
      */
     private ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum,
-            final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors, final int from, final int to)
+                                       final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors, final int from, final int to)
     {
         super();
 

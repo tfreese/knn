@@ -23,9 +23,9 @@ import de.freese.knn.net.visitor.ForwardVisitor;
 public final class KnnMathExecutor extends AbstractKnnMath
 {
     /**
-    *
-    */
-    private Executor executor;
+     *
+     */
+    private final Executor executor;
 
     /**
      * Erstellt ein neues {@link KnnMathExecutor} Object.
@@ -54,7 +54,8 @@ public final class KnnMathExecutor extends AbstractKnnMath
 
         for (NeuronList partition : partitions)
         {
-            getExecutor().execute(() -> {
+            getExecutor().execute(() ->
+            {
                 partition.forEach(neuron -> backward(neuron, errors, layerErrors));
 
                 latch.countDown();
@@ -90,7 +91,8 @@ public final class KnnMathExecutor extends AbstractKnnMath
 
         for (NeuronList partition : partitions)
         {
-            getExecutor().execute(() -> {
+            getExecutor().execute(() ->
+            {
                 partition.forEach(neuron -> forward(neuron, inputs, outputs));
 
                 latch.countDown();
@@ -103,14 +105,6 @@ public final class KnnMathExecutor extends AbstractKnnMath
     }
 
     /**
-     * @return {@link Executor}
-     */
-    private Executor getExecutor()
-    {
-        return this.executor;
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
@@ -120,7 +114,8 @@ public final class KnnMathExecutor extends AbstractKnnMath
 
         for (Layer layer : layers)
         {
-            getExecutor().execute(() -> {
+            getExecutor().execute(() ->
+            {
                 initialize(layer, valueInitializer);
 
                 latch.countDown();
@@ -132,7 +127,7 @@ public final class KnnMathExecutor extends AbstractKnnMath
 
     /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
@@ -147,7 +142,8 @@ public final class KnnMathExecutor extends AbstractKnnMath
 
         for (NeuronList partition : partitions)
         {
-            getExecutor().execute(() -> {
+            getExecutor().execute(() ->
+            {
                 partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
 
                 latch.countDown();
@@ -155,6 +151,14 @@ public final class KnnMathExecutor extends AbstractKnnMath
         }
 
         waitForLatch(latch);
+    }
+
+    /**
+     * @return {@link Executor}
+     */
+    private Executor getExecutor()
+    {
+        return this.executor;
     }
 
     /**

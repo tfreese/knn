@@ -21,7 +21,7 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
-    private int from;
+    private final int from;
     /**
      *
      */
@@ -33,7 +33,7 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
-    private int to;
+    private final int to;
     /**
      *
      */

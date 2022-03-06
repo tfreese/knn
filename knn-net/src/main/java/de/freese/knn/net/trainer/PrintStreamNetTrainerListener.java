@@ -14,7 +14,7 @@ public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener
     /**
      *
      */
-    private PrintStream printStream;
+    private final PrintStream printStream;
 
     /**
      * Creates a new {@link PrintStreamNetTrainerListener} object.

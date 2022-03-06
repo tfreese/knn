@@ -23,7 +23,7 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
-    private int from;
+    private final int from;
     /**
      *
      */
@@ -39,7 +39,7 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
-    private int to;
+    private final int to;
 
     /**
      * Erstellt ein neues {@link ForkJoinBackwardTask} Object.
@@ -65,7 +65,7 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
      * @param to int
      */
     private ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors, final int from,
-            final int to)
+                                 final int to)
     {
         super();
 
