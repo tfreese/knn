@@ -19,7 +19,7 @@ public class TrainingContext
     private Map<Matrix, double[][]> deltaWeights = new HashMap<>();
 
     /**
-     * Aufraeumen.
+     * Aufräumen.
      */
     public void clear()
     {

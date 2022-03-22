@@ -36,9 +36,9 @@ public final class KnnMathReactor extends AbstractKnnMath
         super(parallelism);
 
         // Siehe JavaDoc von Schedulers
-        // #boundedElastic()}: Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) is capped
-        // #parallel()}: Optimized for fast {@link Runnable} non-blocking executions
-        // #fromExecutorService(ExecutorService)} to create new instances around {@link java.util.concurrent.Executors}
+        // #boundedElastic(): Optimized for longer executions, an alternative for blocking tasks where the number of active tasks (and threads) is capped
+        // #parallel(): Optimized for fast {@link Runnable} non-blocking executions
+        // #fromExecutorService(ExecutorService) to create new instances around {@link java.util.concurrent.Executors}
 
         // Recht langsam
         // this.scheduler = Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-");
@@ -104,11 +104,20 @@ public final class KnnMathReactor extends AbstractKnnMath
     }
 
     /**
-     * @return {@link Scheduler}
+     * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
-    private Scheduler getScheduler()
+    @Override
+    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
     {
-        return this.scheduler;
+        // @formatter:off
+        Flux.fromArray(layers)
+            .parallel(getParallelism())
+            .runOn(getScheduler())
+            .doOnNext(layer -> initialize(layer, valueInitializer))
+            .sequential()
+            .blockLast()
+            ;
+        // @formatter:on
     }
 
     // /**
@@ -138,25 +147,8 @@ public final class KnnMathReactor extends AbstractKnnMath
     // }
 
     /**
-     * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
-     */
-    @Override
-    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
-    {
-        // @formatter:off
-        Flux.fromArray(layers)
-            .parallel(getParallelism())
-            .runOn(getScheduler())
-            .doOnNext(layer -> initialize(layer, valueInitializer))
-            .sequential()
-            .blockLast()
-            ;
-        // @formatter:on
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
@@ -175,6 +167,14 @@ public final class KnnMathReactor extends AbstractKnnMath
             .blockLast()
             ;
         // @formatter:on
+    }
+
+    /**
+     * @return {@link Scheduler}
+     */
+    private Scheduler getScheduler()
+    {
+        return this.scheduler;
     }
 
     // /**

@@ -18,7 +18,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
  * Mathematik des {@link NeuralNet} mit einem {@link Future}.<br>
- * Hier wird jedoch die Häfte der Arbeit im aktuellem Thread verarbeitet.
+ * Hier wird jedoch die Häfte der Arbeit im aktuellen Thread verarbeitet.
  *
  * @author Thomas Freese
  */

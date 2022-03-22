@@ -2,7 +2,7 @@
 package de.freese.knn.net.matrix;
 
 /**
- * Verknuepft 2 Layer miteinander und enthaelt die Daten der Gewichte<br>
+ * Verknuepft 2 Layer miteinander und enthaelt die Daten der Gewichte.<br>
  * Die Rows sind die Neuronen des 1. Layers, die Columns die Neuronen des 2. Layers.
  *
  * @author Thomas Freese

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@link NetTrainerListener} fuer die Ausgabe auf einen {@link PrintStream}.
+ * {@link NetTrainerListener} für die Ausgabe auf einen {@link PrintStream}.
  *
  * @author Thomas Freese
  */

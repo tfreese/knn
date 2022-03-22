@@ -195,7 +195,7 @@ public class ImageInfo
             {
                 double value = getInfoVector()[i];
 
-                // Sehr große Werte häppchenweise runter rechnen.
+                // Sehr große Werte häppchenweise runterrechnen.
                 if (value > 1_000_000D)
                 {
                     value /= 1_000D;

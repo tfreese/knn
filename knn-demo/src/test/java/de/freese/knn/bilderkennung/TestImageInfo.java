@@ -34,7 +34,7 @@ public class TestImageInfo
         // fileName = "winnt.bmp";
 
         ImageInfo imageInfo = new ImageInfo(fileName);
-        System.out.println(imageInfo.toString());
+        System.out.println(imageInfo);
 
         imageInfo.getInfoVectorReScaled();
 

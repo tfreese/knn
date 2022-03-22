@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import java.util.Objects;
 
 /**
- * {@link NetTrainerListener} fuer die Ausgabe auf einen {@link PrintStream}.
+ * {@link NetTrainerListener} für die Ausgabe auf einen {@link PrintStream}.
  *
  * @author Thomas Freese
  */
