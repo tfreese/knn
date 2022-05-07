@@ -7,9 +7,9 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import de.freese.knn.buttons.KnnButtonTrainingInputSource;
@@ -40,7 +40,7 @@ public class TestPersisterBinary
     public static void main(final String[] args) throws Exception
     {
         TrainingInputSource trainingInputSource = new KnnButtonTrainingInputSource();
-        File knnFile = new File("ButtonNeuralNet.bin");
+        Path knnFile = Paths.get(System.getProperty("java.io.tmpdir"), "ButtonNeuralNet.bin");
 
         // @formatter:off
         NeuralNet neuralNet = new NeuralNetBuilder()
@@ -51,7 +51,7 @@ public class TestPersisterBinary
                 ;
         // @formatter:on
 
-        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(knnFile))))
+        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(knnFile))))
         {
             double teachFactor = 0.5D;
             double momentum = 0.5D;
@@ -72,7 +72,7 @@ public class TestPersisterBinary
         neuralNet.close();
 
         // Laden
-        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(knnFile))))
+        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(Files.newInputStream(knnFile))))
         {
             NetPersister<DataInput, DataOutput> persister = new NetPersisterBinary();
 
