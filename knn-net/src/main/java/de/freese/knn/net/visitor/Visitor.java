@@ -10,7 +10,7 @@ public interface Visitor
      * @param <T> Konkreter Typ
      * @param array Object[]
      */
-    public default <T> void visitArray(final T[] array)
+    default <T> void visitArray(final T[] array)
     {
         if (array == null)
         {
@@ -26,7 +26,7 @@ public interface Visitor
     /**
      * @param iterable {@link Iterable}
      */
-    public default void visitIterable(final Iterable<?> iterable)
+    default void visitIterable(final Iterable<?> iterable)
     {
         if (iterable == null)
         {
@@ -42,5 +42,5 @@ public interface Visitor
     /**
      * @param object Object
      */
-    public void visitObject(Object object);
+    void visitObject(Object object);
 }

@@ -3,6 +3,7 @@ package de.freese.knn.net;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
@@ -56,24 +57,10 @@ public class NeuralNetBuilder
         NeuralNetImpl neuralNet = new NeuralNetImpl();
 
         // KnnMath
-        if (this.knnMath != null)
-        {
-            neuralNet.setKnnMath(this.knnMath);
-        }
-        else
-        {
-            neuralNet.setKnnMath(new KnnMathStream());
-        }
+        neuralNet.setKnnMath(Objects.requireNonNullElseGet(this.knnMath, KnnMathStream::new));
 
         // ValueInitializer
-        if (this.valueInitializer != null)
-        {
-            neuralNet.setValueInitializer(this.valueInitializer);
-        }
-        else
-        {
-            neuralNet.setValueInitializer(new ValueInitializerRandom());
-        }
+        neuralNet.setValueInitializer(Objects.requireNonNullElseGet(this.valueInitializer, ValueInitializerRandom::new));
 
         // InputLayer
         if (this.inputLayer == null)

@@ -30,8 +30,8 @@ public class KnnButtonPanel extends JPanel implements ActionListener
      */
     public static final int MAT_WIDTH = 6;
     /**
-    *
-    */
+     *
+     */
     private static final long serialVersionUID = 1L;
     /**
      *
@@ -75,15 +75,15 @@ public class KnnButtonPanel extends JPanel implements ActionListener
 
         for (int i = 0; i < outputVector.length; i++)
         {
-            double percent = outputVector[i] * 100;
+            double percent = outputVector[i] * 100D;
 
             this.labelsOutput[i].setText(String.format("%d: %6.3f %%", i, percent));
 
-            if (percent > 80)
+            if (percent > 80D)
             {
                 this.labelsOutput[i].setForeground(Color.RED);
             }
-            else if (percent > 50)
+            else if (percent > 50D)
             {
                 this.labelsOutput[i].setForeground(Color.BLUE);
             }
@@ -122,7 +122,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener
             for (int y = 0; y < MAT_HEIGHT; y++, i++)
             {
                 JToggleButton button = new JToggleButton(String.valueOf(i));
-                button.setBackground(Color.BLUE);
+                button.setBackground(Color.LIGHT_GRAY);
                 button.setPreferredSize(new Dimension(50, 50));
                 button.addActionListener(actionListener);
 

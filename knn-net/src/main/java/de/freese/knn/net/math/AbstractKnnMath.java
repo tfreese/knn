@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.Matrix;
@@ -15,6 +12,8 @@ import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.visitor.BackwardVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Basisklasse der Mathematik des {@link NeuralNet}.
@@ -28,8 +27,8 @@ public abstract class AbstractKnnMath implements KnnMath
      */
     private final Logger logger = LoggerFactory.getLogger(getClass());
     /**
-    *
-    */
+     *
+     */
     private final int parallelism;
 
     /**
@@ -84,10 +83,9 @@ public abstract class AbstractKnnMath implements KnnMath
     protected void forward(final Neuron neuron, final double[] inputs, final double[] outputs)
     {
         int layerIndex = neuron.getLayerIndex();
-        double eingangsSumme = 0.0D;
 
         // Bias Neuron draufrechnen.
-        eingangsSumme += neuron.getInputBIAS();
+        double eingangsSumme = neuron.getInputBIAS();
 
         for (int i = 0; i < neuron.getInputSize(); i++)
         {
@@ -232,6 +230,22 @@ public abstract class AbstractKnnMath implements KnnMath
                     matrix.getWeights()[row][column] = weight;
                 }
             }
+
+            // Diese Methode wird selbst schon parallel ausgeführt !
+            // @formatter:off
+            //            IntStream.range(0, matrix.getOutputSize())
+            //                    .parallel()
+            //                    .forEach(column ->
+            //                    {
+            //                        for (int row = 0; row < matrix.getInputSize(); row++)
+            //                        {
+            //                            double weight = valueInitializer.createNextValue();
+            //                            matrix.getWeights()[row][column] = weight;
+            //                        }
+            //                    })
+            //            ;
+            //            // @formatter:on
+
         }
     }
 
