@@ -76,7 +76,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      *
      * @return {@link Layer}
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     protected Function loadFunction(final DataInput input) throws Exception
     {
@@ -137,7 +137,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      *
      * @return {@link Layer}
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     protected Layer loadLayer(final DataInput input) throws Exception
     {
@@ -179,7 +179,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      *
      * @return {@link Matrix}
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     protected Matrix loadMatrix(final DataInput input) throws Exception
     {
@@ -229,7 +229,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      * @param output {@link DataOutput}
      * @param function {@link Function}
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     protected void saveFunction(final DataOutput output, final Function function) throws Exception
     {
@@ -258,7 +258,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      * @param output {@link DataOutput}
      * @param layer {@link Layer}
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     protected void saveLayer(final DataOutput output, final Layer layer) throws Exception
     {
@@ -285,7 +285,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      * @param output {@link DataOutput}
      * @param matrix {@link Matrix}
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     protected void saveMatrix(final DataOutput output, final Matrix matrix) throws Exception
     {

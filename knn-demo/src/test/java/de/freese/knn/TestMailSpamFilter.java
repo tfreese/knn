@@ -7,9 +7,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
 import de.freese.knn.net.function.FunctionSigmoide;
@@ -19,6 +16,8 @@ import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.trainer.LoggerNetTrainerListener;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.TrainingInputSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 /**
  * Klasse zum Test des BinaryPersisters.
@@ -30,7 +29,7 @@ public class TestMailSpamFilter implements TrainingInputSource
     /**
      * @param args String[]
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     public static void main(final String[] args) throws Exception
     {
@@ -142,7 +141,8 @@ public class TestMailSpamFilter implements TrainingInputSource
         final double[] input = new double[this.token.size()];
         Arrays.fill(input, 0.0D);
 
-        this.jdbcTemplate.query("select token from message_token where message_id = ?", rs -> {
+        this.jdbcTemplate.query("select token from message_token where message_id = ?", rs ->
+        {
             while (rs.next())
             {
                 int i = TestMailSpamFilter.this.token.indexOf(rs.getString("token"));
@@ -171,9 +171,9 @@ public class TestMailSpamFilter implements TrainingInputSource
     {
         Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
         double[] output =
-        {
-                isSpam ? 1.0D : 0.0D
-        };
+                {
+                        isSpam ? 1.0D : 0.0D
+                };
 
         return output;
     }

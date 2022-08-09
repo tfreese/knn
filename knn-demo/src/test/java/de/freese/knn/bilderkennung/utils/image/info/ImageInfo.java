@@ -39,7 +39,7 @@ public class ImageInfo
      *
      * @param fileName String
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     public ImageInfo(final String fileName) throws Exception
     {

@@ -11,7 +11,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
 
 /**
- * Erstellt ein reines Schwarz/Weiß Bild, indem alle Pixel die NICHT Schwarz sind in Weiß umgewandelt werden.
+ * Erstellt ein reines Schwarz/Weiß Bild, indem alle Pixel die NICHT Schwarz sind, in Weiß umgewandelt werden.
  *
  * @author Thomas Freese
  */

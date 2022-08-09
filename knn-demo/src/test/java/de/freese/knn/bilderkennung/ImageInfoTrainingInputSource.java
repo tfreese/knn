@@ -21,7 +21,7 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource
     /**
      * Erstellt ein neues {@link ImageInfoTrainingInputSource} Object.
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     public ImageInfoTrainingInputSource() throws Exception
     {

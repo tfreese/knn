@@ -55,7 +55,7 @@ public class BackwardVisitor extends AbstractKnnVisitor
     }
 
     /**
-     * Liefert die vorherige Gewichtsänderungen der Neuronen.
+     * Liefert die vorherigen Gewichtsänderungen der Neuronen.
      *
      * @param layer {@link Layer}
      *

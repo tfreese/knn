@@ -18,7 +18,7 @@ public class TestImageInfo
     /**
      * @param args String[]
      *
-     * @throws Exception falls was schief geht.
+     * @throws Exception falls was schiefgeht.
      */
     public static void main(final String[] args) throws Exception
     {

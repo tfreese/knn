@@ -20,7 +20,7 @@ public interface Neuron
     Function getFunction();
 
     /**
-     * Liefert den Bias Wert um Ueberanpassungen zu vermeiden.
+     * Liefert den Bias Wert, um Ueberanpassungen zu vermeiden.
      *
      * @return double
      */
@@ -68,7 +68,7 @@ public interface Neuron
     double getOutputWeight(int index);
 
     /**
-     * Liefert den Bias Gewicht um Ueberanpassungen zu vermeiden.<br>
+     * Liefert den Bias Gewicht, um Ueberanpassungen zu vermeiden.<br>
      * Der {@link InputLayer} hat keine BIAS Gewichte !
      *
      * @param value double

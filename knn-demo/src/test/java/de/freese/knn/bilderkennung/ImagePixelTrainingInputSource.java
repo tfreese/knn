@@ -23,7 +23,7 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
     /**
      * Creates a new {@link ImagePixelTrainingInputSource} object.
      *
-     * @throws Exception falls was schief geht.
+     * @throws Exception falls was schiefgeht.
      */
     public ImagePixelTrainingInputSource() throws Exception
     {

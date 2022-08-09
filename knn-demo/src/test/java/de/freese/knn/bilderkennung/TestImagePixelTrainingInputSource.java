@@ -189,7 +189,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
     /**
      * @param args String[]
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     public static void main(final String[] args) throws Exception
     {
@@ -200,7 +200,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
     /**
      * Creates a new {@link TestImagePixelTrainingInputSource} object.
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     public TestImagePixelTrainingInputSource() throws Exception
     {
@@ -212,7 +212,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
     /**
      * @return {@link JTable}
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     private JTable createTable() throws Exception
     {
@@ -230,7 +230,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
     }
 
     /**
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     private void init() throws Exception
     {

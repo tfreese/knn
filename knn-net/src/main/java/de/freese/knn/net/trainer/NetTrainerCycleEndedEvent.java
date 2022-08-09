@@ -1,6 +1,7 @@
 // Created: 06.06.2008
 package de.freese.knn.net.trainer;
 
+import java.io.Serial;
 import java.util.EventObject;
 
 /**
@@ -13,6 +14,7 @@ public class NetTrainerCycleEndedEvent extends EventObject
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = -1343301845155055735L;
     /**
      *

@@ -37,7 +37,7 @@ public class ImageData
      *
      * @param fileName String
      *
-     * @throws Exception Falls was schief geht.
+     * @throws Exception Falls was schiefgeht.
      */
     public ImageData(final String fileName) throws Exception
     {
