@@ -1,6 +1,7 @@
 // Created: 04.04.2012
 package de.freese.knn.net.math.forkjoin;
 
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.concurrent.RecursiveAction;
 
@@ -17,6 +18,7 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = 687804634087313634L;
     /**
      *

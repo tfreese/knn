@@ -1,6 +1,7 @@
 // Created: 04.04.2012
 package de.freese.knn.net.math.forkjoin;
 
+import java.io.Serial;
 import java.util.concurrent.RecursiveAction;
 
 import de.freese.knn.net.neuron.NeuronList;
@@ -15,6 +16,7 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = 5074316140736114438L;
     /**
      *

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.Serial;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -30,6 +31,7 @@ public class KnnButtonDemo extends JFrame
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = -2245301418603208848L;
 
     /**

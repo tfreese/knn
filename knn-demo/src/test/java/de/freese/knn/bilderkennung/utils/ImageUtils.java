@@ -41,14 +41,13 @@ public final class ImageUtils
      * Liefert true, wenn das {@link Image} transparente Pixel enthält.
      *
      * @param image {@link Image}
+     *
      * @return boolean
      */
     public static boolean hasAlpha(final Image image)
     {
-        if (image instanceof BufferedImage)
+        if (image instanceof BufferedImage bimage)
         {
-            BufferedImage bimage = (BufferedImage) image;
-
             return bimage.getColorModel().hasAlpha();
         }
 
@@ -74,6 +73,7 @@ public final class ImageUtils
      * @param src {@link Image}
      * @param scaleX double
      * @param scaleY double
+     *
      * @return {@link BufferedImage}
      */
     public static BufferedImage scaleImage(final Image src, final double scaleX, final double scaleY)
@@ -102,6 +102,7 @@ public final class ImageUtils
      * @param src {@link BufferedImage}
      * @param width int
      * @param height int
+     *
      * @return {@link BufferedImage}
      */
     public static BufferedImage scaleImageAbsolut(final Image src, final int width, final int height)
@@ -118,6 +119,7 @@ public final class ImageUtils
      * Liefert das Schwarzweiss Bild.
      *
      * @param image {@link Image}
+     *
      * @return {@link BufferedImage}
      */
     public static BufferedImage toBlackWhiteImage(final Image image)
@@ -192,6 +194,7 @@ public final class ImageUtils
      * Konvertiert ein {@link Image} in ein {@link BufferedImage}.
      *
      * @param image {@link Image}
+     *
      * @return {@link BufferedImage}
      */
     public static BufferedImage toBufferedImage(final Image image)
@@ -251,6 +254,7 @@ public final class ImageUtils
      * Liefert das Kanten Bild.
      *
      * @param image {@link Image}
+     *
      * @return {@link BufferedImage}
      */
     public static BufferedImage toEdgeImage(final Image image)
@@ -259,9 +263,9 @@ public final class ImageUtils
 
         // Sobel Operator, horizontal & vertikal
         float[] matrix = new float[]
-        {
-                0.0f, -1.0f, 0.0f, -1.0f, 4.0f, -1.0f, 0.0f, -1.0f, 0.0f
-        };
+                {
+                        0.0f, -1.0f, 0.0f, -1.0f, 4.0f, -1.0f, 0.0f, -1.0f, 0.0f
+                };
 
         // // Sobel Operator, horizontal
         // float[] matrix = new float[]

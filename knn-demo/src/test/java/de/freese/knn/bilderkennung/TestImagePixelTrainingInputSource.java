@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +31,12 @@ public class TestImagePixelTrainingInputSource extends JFrame
      *
      * @author Thomas Freese
      */
-    private class ImageTableRenderer extends DefaultTableCellRenderer
+    private static class ImageTableRenderer extends DefaultTableCellRenderer
     {
         /**
          *
          */
+        @Serial
         private static final long serialVersionUID = 1L;
         /**
          *
@@ -97,11 +99,12 @@ public class TestImagePixelTrainingInputSource extends JFrame
      *
      * @author Thomas Freese
      */
-    private class TableModel extends AbstractTableModel
+    private static class TableModel extends AbstractTableModel
     {
         /**
          *
          */
+        @Serial
         private static final long serialVersionUID = 1L;
         /**
          *
@@ -143,28 +146,13 @@ public class TestImagePixelTrainingInputSource extends JFrame
         {
             ImageData imageData = this.dataList.get(rowIndex);
 
-            Object value = null;
-
-            switch (columnIndex)
-            {
-                case 0:
-                    value = imageData.getSourceImage();
-
-                    break;
-
-                case 1:
-                    value = imageData.getEdgeImage();
-
-                    break;
-
-                case 2:
-                    value = imageData.getBlackWhiteImage();
-
-                    break;
-
-                default:
-                    break;
-            }
+            Object value = switch (columnIndex)
+                    {
+                        case 0 -> imageData.getSourceImage();
+                        case 1 -> imageData.getEdgeImage();
+                        case 2 -> imageData.getBlackWhiteImage();
+                        default -> null;
+                    };
 
             return value;
         }
@@ -184,6 +172,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

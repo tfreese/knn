@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +33,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = 1L;
     /**
      *
