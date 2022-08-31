@@ -245,7 +245,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
         }
         catch (InterruptedException | ExecutionException ex)
         {
-            getLogger().error(null, ex);
+            getLogger().error(ex.getMessage(), ex);
         }
     }
 

@@ -152,7 +152,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath
             }
             catch (InterruptedException ex)
             {
-                getLogger().error(null, ex);
+                getLogger().error(ex.getMessage(), ex);
             }
         }
     }

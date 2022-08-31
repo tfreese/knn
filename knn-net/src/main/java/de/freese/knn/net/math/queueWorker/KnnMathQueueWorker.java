@@ -11,9 +11,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RunnableFuture;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
@@ -21,6 +18,8 @@ import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Mathematik des {@link NeuralNet} mit QueueWorkers.
@@ -35,8 +34,8 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
     private static final class QueueWorker extends Thread
     {
         /**
-        *
-        */
+         *
+         */
         private static final Logger LOGGER = LoggerFactory.getLogger(QueueWorker.class);
         /**
          *
@@ -84,7 +83,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
                 }
                 catch (Exception ex)
                 {
-                    LOGGER.error(null, ex);
+                    LOGGER.error(ex.getMessage(), ex);
                 }
             }
 
@@ -222,7 +221,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
 
     /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
@@ -260,7 +259,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
         }
         catch (InterruptedException | ExecutionException ex)
         {
-            getLogger().error(null, ex);
+            getLogger().error(ex.getMessage(), ex);
         }
     }
 

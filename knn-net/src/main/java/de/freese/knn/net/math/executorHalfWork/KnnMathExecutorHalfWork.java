@@ -173,7 +173,7 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
         }
         catch (InterruptedException | ExecutionException ex)
         {
-            getLogger().error(null, ex);
+            getLogger().error(ex.getMessage(), ex);
         }
     }
 }

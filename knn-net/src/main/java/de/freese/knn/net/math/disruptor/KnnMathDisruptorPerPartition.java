@@ -9,7 +9,6 @@ import java.util.function.IntFunction;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
@@ -163,10 +162,12 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
         List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        publish(ordinal -> {
+        publish(ordinal ->
+        {
             NeuronList partition = partitions.get(ordinal);
 
-            return () -> {
+            return () ->
+            {
                 partition.forEach(neuron -> backward(neuron, errors, layerErrors));
                 latch.countDown();
             };
@@ -192,7 +193,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
         }
         catch (Exception ex)
         {
-            getLogger().error(null, ex);
+            getLogger().error(ex.getMessage(), ex);
         }
     }
 
@@ -208,10 +209,12 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
         List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        publish(ordinal -> {
+        publish(ordinal ->
+        {
             NeuronList partition = partitions.get(ordinal);
 
-            return () -> {
+            return () ->
+            {
                 partition.forEach(neuron -> forward(neuron, inputs, outputs));
 
                 latch.countDown();
@@ -269,7 +272,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
 
     /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
@@ -282,10 +285,12 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
         List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
         CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        publish(ordinal -> {
+        publish(ordinal ->
+        {
             NeuronList partition = partitions.get(ordinal);
 
-            return () -> {
+            return () ->
+            {
                 partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
 
                 latch.countDown();
