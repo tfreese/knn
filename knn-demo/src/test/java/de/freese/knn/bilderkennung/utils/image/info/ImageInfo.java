@@ -24,7 +24,7 @@ public class ImageInfo
     /**
      *
      */
-    private BufferedImage coOccurenceMatrixImage;
+    private BufferedImage coOccurrenceMatrixImage;
     /**
      *
      */
@@ -66,11 +66,11 @@ public class ImageInfo
     /**
      * @return {@link BufferedImage}
      */
-    public BufferedImage createCoOccurenceMatrixImage()
+    public BufferedImage createCoOccurrenceMatrixImage()
     {
-        if (this.coOccurenceMatrixImage == null)
+        if (this.coOccurrenceMatrixImage == null)
         {
-            this.coOccurenceMatrixImage = new BufferedImage(510, 510, BufferedImage.TYPE_INT_RGB);
+            this.coOccurrenceMatrixImage = new BufferedImage(510, 510, BufferedImage.TYPE_INT_RGB);
 
             for (ImageColorChannelInfo channelInfo : this.channelInfos)
             {
@@ -98,18 +98,18 @@ public class ImageInfo
                 {
                     for (int y = yOffset; y < (255 + yOffset); y++)
                     {
-                        int value = channelInfo.getCoOccurenceMatrix()[x - xOffset][y - yOffset];
+                        int value = channelInfo.getCoOccurrenceMatrix()[x - xOffset][y - yOffset];
 
                         if (value > 0)
                         {
-                            this.coOccurenceMatrixImage.setRGB(x, y, colorChannel.getColor().getRGB());
+                            this.coOccurrenceMatrixImage.setRGB(x, y, colorChannel.getColor().getRGB());
                         }
                     }
                 }
             }
         }
 
-        return this.coOccurenceMatrixImage;
+        return this.coOccurrenceMatrixImage;
     }
 
     /**
@@ -126,8 +126,8 @@ public class ImageInfo
      * 2. Maximaler Farbwert<br>
      * 3. Mittlerer Farbwert<br>
      * 4. Entropie<br>
-     * 5. Uniformitaet<br>
-     * 6. Unaehnlichkeit<br>
+     * 5. Uniformität<br>
+     * 6. Unähnlichkeit<br>
      * 7. Inverse Differenz<br>
      * 8. Inverses Differenzmoment<br>
      * 9. Kontrast<br>
@@ -142,9 +142,9 @@ public class ImageInfo
 
             int i = 0;
 
-            // Co-Occurence-Matrix direkt verwenden
+            // Co-Occurrence-Matrix direkt verwenden
             // ImageColorChannelInfo channelInfo = this.channelInfos.get(1);
-            // int[][] matrix = channelInfo.getCoOccurenceMatrix();
+            // int[][] matrix = channelInfo.getCoOccurrenceMatrix();
             //
             // for (int x = 0; x < 255; x++)
             // {
@@ -164,7 +164,7 @@ public class ImageInfo
                 this.infoVector[i++] = channelInfo.getMinimalerFarbwert();
                 this.infoVector[i++] = channelInfo.getMaximalerFarbwert();
                 this.infoVector[i++] = channelInfo.getMittlererFarbwert();
-                this.infoVector[i++] = channelInfo.getEntrophie();
+                this.infoVector[i++] = channelInfo.getEntropie();
                 this.infoVector[i++] = channelInfo.getUniformitaet();
                 this.infoVector[i++] = channelInfo.getUnaehnlichkeit();
                 this.infoVector[i++] = channelInfo.getInverseDifferenz();

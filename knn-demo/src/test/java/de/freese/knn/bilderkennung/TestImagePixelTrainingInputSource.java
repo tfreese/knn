@@ -27,6 +27,12 @@ import de.freese.knn.bilderkennung.utils.ImageData;
 public class TestImagePixelTrainingInputSource extends JFrame
 {
     /**
+     *
+     */
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    /**
      * CellRenderer für Images.
      *
      * @author Thomas Freese
@@ -146,15 +152,13 @@ public class TestImagePixelTrainingInputSource extends JFrame
         {
             ImageData imageData = this.dataList.get(rowIndex);
 
-            Object value = switch (columnIndex)
+            return switch (columnIndex)
                     {
                         case 0 -> imageData.getSourceImage();
                         case 1 -> imageData.getEdgeImage();
                         case 2 -> imageData.getBlackWhiteImage();
                         default -> null;
                     };
-
-            return value;
         }
 
         /**
@@ -168,12 +172,6 @@ public class TestImagePixelTrainingInputSource extends JFrame
             fireTableDataChanged();
         }
     }
-
-    /**
-     *
-     */
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     /**
      * @param args String[]

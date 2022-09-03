@@ -12,7 +12,7 @@ import de.freese.knn.net.function.FunctionBinary;
 import de.freese.knn.net.function.FunctionGauss;
 import de.freese.knn.net.function.FunctionLinear;
 import de.freese.knn.net.function.FunctionLogarithmic;
-import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.function.FunctionSigmoid;
 import de.freese.knn.net.function.FunctionSinus;
 import de.freese.knn.net.function.FunctionTanH;
 import de.freese.knn.net.layer.HiddenLayer;
@@ -70,6 +70,29 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
     }
 
     /**
+     * @see de.freese.knn.net.persister.NetPersister#save(java.lang.Object, de.freese.knn.net.NeuralNet)
+     */
+    @Override
+    public void save(final DataOutput output, final NeuralNet knn) throws Exception
+    {
+        // Anzahl Layer
+        Layer[] layers = knn.getLayer();
+
+        output.writeInt(layers.length);
+
+        for (int i = 0; i < layers.length; i++)
+        {
+            Layer layer = layers[i];
+            saveLayer(output, layer);
+
+            if (i < (layers.length - 1))
+            {
+                saveMatrix(output, layer.getOutputMatrix());
+            }
+        }
+    }
+
+    /**
      * Laden einer Function.
      *
      * @param input {@link DataInput}
@@ -107,12 +130,12 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         {
             function = new FunctionLogarithmic();
         }
-        else if (FunctionSigmoide.class.equals(clazz))
+        else if (FunctionSigmoid.class.equals(clazz))
         {
             double durchgang = input.readDouble();
             double steigung = input.readDouble();
 
-            function = new FunctionSigmoide(durchgang, steigung);
+            function = new FunctionSigmoid(durchgang, steigung);
         }
         else if (FunctionSinus.class.equals(clazz))
         {
@@ -124,7 +147,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         }
         else
         {
-            throw new UnsupportedOperationException("unkown function type: " + clazz.getName());
+            throw new UnsupportedOperationException("unknown function type: " + clazz.getName());
         }
 
         return function;
@@ -201,29 +224,6 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
     }
 
     /**
-     * @see de.freese.knn.net.persister.NetPersister#save(java.lang.Object, de.freese.knn.net.NeuralNet)
-     */
-    @Override
-    public void save(final DataOutput output, final NeuralNet knn) throws Exception
-    {
-        // Anzahl Layer
-        Layer[] layers = knn.getLayer();
-
-        output.writeInt(layers.length);
-
-        for (int i = 0; i < layers.length; i++)
-        {
-            Layer layer = layers[i];
-            saveLayer(output, layer);
-
-            if (i < (layers.length - 1))
-            {
-                saveMatrix(output, layer.getOutputMatrix());
-            }
-        }
-    }
-
-    /**
      * Speichert einen Layer.
      *
      * @param output {@link DataOutput}
@@ -245,7 +245,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         {
             output.writeDouble(f.getFactor());
         }
-        else if (function instanceof FunctionSigmoide f)
+        else if (function instanceof FunctionSigmoid f)
         {
             output.writeDouble(f.getDurchgang());
             output.writeDouble(f.getSteigung());

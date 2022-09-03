@@ -34,7 +34,34 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
     }
 
     /**
-     * Erzeugt den Output fuer den Wert.
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
+     */
+    @Override
+    public double[] getInputAt(final int index)
+    {
+        return this.inputList.get(index);
+    }
+
+    /**
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
+     */
+    @Override
+    public double[] getOutputAt(final int index)
+    {
+        return this.outputList.get(index);
+    }
+
+    /**
+     * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
+     */
+    @Override
+    public int getSize()
+    {
+        return this.inputList.size();
+    }
+
+    /**
+     * Erzeugt den Output für den Wert.
      *
      * @param value int
      *
@@ -276,32 +303,5 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
         matrix[46] = 1.0D;
         this.inputList.add(matrix);
         this.outputList.add(createOutput(9));
-    }
-
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
-     */
-    @Override
-    public double[] getInputAt(final int index)
-    {
-        return this.inputList.get(index);
-    }
-
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
-     */
-    @Override
-    public double[] getOutputAt(final int index)
-    {
-        return this.outputList.get(index);
-    }
-
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
-     */
-    @Override
-    public int getSize()
-    {
-        return this.inputList.size();
     }
 }

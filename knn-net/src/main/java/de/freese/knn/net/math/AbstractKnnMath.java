@@ -49,6 +49,41 @@ public abstract class AbstractKnnMath implements KnnMath
     }
 
     /**
+     * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
+     */
+    @Override
+    public double getNetError(final double[] outputs, final double[] outputTargets)
+    {
+        double error = 0.0D;
+
+        for (int i = 0; i < outputs.length; i++)
+        {
+            error += getNetError(i, outputs, outputTargets);
+        }
+
+        error /= 2.0D;
+
+        return error;
+    }
+
+    /**
+     * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
+     */
+    @Override
+    public void setOutputError(final Layer layer, final BackwardVisitor visitor)
+    {
+        double[] outputs = visitor.getOutputs(layer);
+        double[] errors = new double[outputs.length];
+
+        for (int i = 0; i < outputs.length; i++)
+        {
+            setOutputError(i, outputs, errors, visitor);
+        }
+
+        visitor.setErrors(layer, errors);
+    }
+
+    /**
      * Mathematik für die Eingangsfehler eines Neurons.
      *
      * @param neuron {@link Neuron}
@@ -103,24 +138,6 @@ public abstract class AbstractKnnMath implements KnnMath
     protected Logger getLogger()
     {
         return this.logger;
-    }
-
-    /**
-     * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
-     */
-    @Override
-    public double getNetError(final double[] outputs, final double[] outputTargets)
-    {
-        double error = 0.0D;
-
-        for (int i = 0; i < outputs.length; i++)
-        {
-            error += getNetError(i, outputs, outputTargets);
-        }
-
-        error /= 2.0D;
-
-        return error;
     }
 
     /**
@@ -278,7 +295,7 @@ public abstract class AbstractKnnMath implements KnnMath
             deltaWeights[layerIndex][i] = deltaWeight;
 
             // Bias verrechnen, feuert immer.
-            // So wie es aussieht müssen die Biasgewichte nicht angepasst werden.
+            // So wie es aussieht müssen die Bias-Gewichte nicht angepasst werden.
             //
             // double biasWeight = matrix.getBiasWeights()[i];
             // double biasDeltaWeight = this.teachFactor * rightErrors[i] * 1;
@@ -302,26 +319,9 @@ public abstract class AbstractKnnMath implements KnnMath
         // Berechnung des Mittleren quadratischen Fehlers.
         double error = (outputTarget - output) * output * (1.0D - output);
 
-        // Flatspot-Problem korrigieren.
+        // FlatSpot-Problem korrigieren.
         // error += 0.01D;
 
         errors[neuronIndex] = error;
-    }
-
-    /**
-     * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
-    @Override
-    public void setOutputError(final Layer layer, final BackwardVisitor visitor)
-    {
-        double[] outputs = visitor.getOutputs(layer);
-        double[] errors = new double[outputs.length];
-
-        for (int i = 0; i < outputs.length; i++)
-        {
-            setOutputError(i, outputs, errors, visitor);
-        }
-
-        visitor.setErrors(layer, errors);
     }
 }

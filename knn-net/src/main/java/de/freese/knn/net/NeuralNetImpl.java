@@ -13,7 +13,7 @@ import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Basisklasses des neuralen Netzes.
+ * Basisklasse des neuralen Netzes.
  *
  * @author Thomas Freese
  */
@@ -41,21 +41,6 @@ class NeuralNetImpl implements NeuralNet
     }
 
     /**
-     * Fügt einen Layer hinzu.<br>
-     * Der erste muss ein {@link InputLayer} sein, der letzte ein {@link OutputLayer}.
-     *
-     * @param layer {@link Layer}
-     */
-    void addLayer(final Layer layer)
-    {
-        // Array vergrößern.
-        Layer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
-
-        array[this.layers.length] = layer;
-        this.layers = array;
-    }
-
-    /**
      * @see de.freese.knn.net.NeuralNet#close()
      */
     @Override
@@ -66,26 +51,6 @@ class NeuralNetImpl implements NeuralNet
         getMath().close();
 
         this.layers = null;
-    }
-
-    /**
-     * Verbindet die Layer mit den Matrixobjekten.
-     */
-    void connectLayer()
-    {
-        for (int i = 0; i < (getLayer().length - 1); i++)
-        {
-            final Layer leftLayer = getLayer()[i];
-            final Layer rightLayer = getLayer()[i + 1];
-
-            final Matrix matrix = new Matrix(leftLayer.getNeurons().size(), rightLayer.getNeurons().size());
-
-            leftLayer.setOutputMatrix(matrix);
-            rightLayer.setInputMatrix(matrix);
-        }
-
-        // Gewichte initialisieren
-        getMath().initialize(getValueInitializer(), getLayer());
     }
 
     /**
@@ -125,21 +90,38 @@ class NeuralNetImpl implements NeuralNet
     }
 
     /**
-     * Liefert den {@link OutputLayer}.
+     * Fügt einen Layer hinzu.<br>
+     * Der erste muss ein {@link InputLayer} sein, der letzte ein {@link OutputLayer}.
      *
-     * @return {@link OutputLayer}
+     * @param layer {@link Layer}
      */
-    private OutputLayer getOutputLayer()
+    void addLayer(final Layer layer)
     {
-        return (OutputLayer) getLayer()[getLayer().length - 1];
+        // Array vergrößern.
+        Layer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
+
+        array[this.layers.length] = layer;
+        this.layers = array;
     }
 
     /**
-     * @return {@link ValueInitializer}
+     * Verbindet die Layer mit den Matrixobjekten.
      */
-    private ValueInitializer getValueInitializer()
+    void connectLayer()
     {
-        return this.valueInitializer;
+        for (int i = 0; i < (getLayer().length - 1); i++)
+        {
+            final Layer leftLayer = getLayer()[i];
+            final Layer rightLayer = getLayer()[i + 1];
+
+            final Matrix matrix = new Matrix(leftLayer.getNeurons().size(), rightLayer.getNeurons().size());
+
+            leftLayer.setOutputMatrix(matrix);
+            rightLayer.setInputMatrix(matrix);
+        }
+
+        // Gewichte initialisieren
+        getMath().initialize(getValueInitializer(), getLayer());
     }
 
     /**
@@ -156,5 +138,23 @@ class NeuralNetImpl implements NeuralNet
     void setValueInitializer(final ValueInitializer valueInitializer)
     {
         this.valueInitializer = Objects.requireNonNull(valueInitializer, "valueInitializer required");
+    }
+
+    /**
+     * Liefert den {@link OutputLayer}.
+     *
+     * @return {@link OutputLayer}
+     */
+    private OutputLayer getOutputLayer()
+    {
+        return (OutputLayer) getLayer()[getLayer().length - 1];
+    }
+
+    /**
+     * @return {@link ValueInitializer}
+     */
+    private ValueInitializer getValueInitializer()
+    {
+        return this.valueInitializer;
     }
 }

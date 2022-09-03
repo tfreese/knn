@@ -4,7 +4,7 @@ package de.freese.knn.net.trainer;
 import java.util.EventListener;
 
 /**
- * Listener fuer den Trainer des neuralen Netzes.
+ * Listener für den Trainer des neuralen Netzes.
  *
  * @author Thomas Freese
  */
@@ -12,7 +12,7 @@ import java.util.EventListener;
 public interface NetTrainerListener extends EventListener
 {
     /**
-     * Nachdem ein Lernzyklus beendet ist, wird die Nummer und der Netzfehler des Zykluses uebergeben.
+     * Nachdem ein Lernzyklus beendet ist, wird die Nummer und der Netzfehler des Zyklus übergeben.
      *
      * @param event {@link NetTrainerCycleEndedEvent}
      */

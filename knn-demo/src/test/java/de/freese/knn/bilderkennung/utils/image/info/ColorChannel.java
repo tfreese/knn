@@ -82,8 +82,6 @@ public enum ColorChannel
      */
     public int getValue(final int pixel)
     {
-        int value = (pixel >> getBitOperator()) & 0xFF;
-
-        return value;
+        return (pixel >> getBitOperator()) & 0xFF;
     }
 }

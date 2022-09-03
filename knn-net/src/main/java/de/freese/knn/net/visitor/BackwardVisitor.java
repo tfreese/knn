@@ -23,11 +23,11 @@ public class BackwardVisitor extends AbstractKnnVisitor
     /**
      *
      */
-    private double[] outputTargets;
+    private final TrainingContext trainingContext;
     /**
      *
      */
-    private final TrainingContext trainingContext;
+    private double[] outputTargets;
 
     /**
      * Erstellt ein neues {@link BackwardVisitor} Object.
@@ -91,16 +91,6 @@ public class BackwardVisitor extends AbstractKnnVisitor
     }
 
     /**
-     * Liefert die Output-Daten des letzten Layers.
-     *
-     * @return double[]
-     */
-    private double[] getLastOutputs()
-    {
-        return this.forwardVisitor.getLastOutputs();
-    }
-
-    /**
      * Liefert den aktuellen Netzfehler.
      *
      * @return double
@@ -110,9 +100,17 @@ public class BackwardVisitor extends AbstractKnnVisitor
         double[] outputs = getLastOutputs();
         double[] targets = getOutputTargets();
 
-        double error = getMath().getNetError(outputs, targets);
+        return getMath().getNetError(outputs, targets);
+    }
 
-        return error;
+    /**
+     * Liefert die Ausgabeziele der Neuronen, wird im {@link NetTrainer} benötigt.
+     *
+     * @return double[]
+     */
+    public double[] getOutputTargets()
+    {
+        return this.outputTargets;
     }
 
     /**
@@ -125,16 +123,6 @@ public class BackwardVisitor extends AbstractKnnVisitor
     public double[] getOutputs(final Layer layer)
     {
         return this.forwardVisitor.getOutputs(layer);
-    }
-
-    /**
-     * Liefert die Ausgabeziele der Neuronen, wird im {@link NetTrainer} benötigt.
-     *
-     * @return double[]
-     */
-    public double[] getOutputTargets()
-    {
-        return this.outputTargets;
     }
 
     /**
@@ -203,5 +191,15 @@ public class BackwardVisitor extends AbstractKnnVisitor
     protected void visitOutputLayer(final OutputLayer layer)
     {
         getMath().setOutputError(layer, this);
+    }
+
+    /**
+     * Liefert die Output-Daten des letzten Layers.
+     *
+     * @return double[]
+     */
+    private double[] getLastOutputs()
+    {
+        return this.forwardVisitor.getLastOutputs();
     }
 }

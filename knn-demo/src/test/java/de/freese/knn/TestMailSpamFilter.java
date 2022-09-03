@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
-import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.function.FunctionSigmoid;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
@@ -39,7 +39,7 @@ public class TestMailSpamFilter implements TrainingInputSource
         // @formatter:off
         NeuralNet neuralNet = new NeuralNetBuilder()
                 .layerInput(new InputLayer(spamFilter.token.size()))
-                .layerHidden(new HiddenLayer(20000, new FunctionSigmoide()))
+                .layerHidden(new HiddenLayer(20000, new FunctionSigmoid()))
                 .layerOutput(new OutputLayer(1))
                 .build()
                 ;
@@ -62,15 +62,15 @@ public class TestMailSpamFilter implements TrainingInputSource
     /**
      *
      */
-    private JdbcTemplate jdbcTemplate;
-    /**
-     *
-     */
     private final List<Map<String, Object>> messages;
     /**
      *
      */
     private final List<String> token;
+    /**
+     *
+     */
+    private JdbcTemplate jdbcTemplate;
 
     /**
      * Erstellt ein neues {@link TestMailSpamFilter} Object.
@@ -170,12 +170,8 @@ public class TestMailSpamFilter implements TrainingInputSource
     public double[] getOutputAt(final int index)
     {
         Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
-        double[] output =
-                {
-                        isSpam ? 1.0D : 0.0D
-                };
 
-        return output;
+        return new double[]{isSpam ? 1.0D : 0.0D};
     }
 
     /**

@@ -119,9 +119,9 @@ public class NetTrainer
             // TODO da passt was noch nicht
             // double stepLR = (this.teachFactorInitial - this.teachFactor) / this.maxIterations;
             // double stepMom = (this.momentumInitial - this.momentum) / this.maxIterations;
-            // int currCicle = this.maxIterations - iteration;
-            // this.teachFactor = this.teachFactorInitial - (stepLR * currCicle);
-            // this.momentum = this.momentumInitial - (stepMom * currCicle);
+            // int currCircle = this.maxIterations - iteration;
+            // this.teachFactor = this.teachFactorInitial - (stepLR * currCircle);
+            // this.momentum = this.momentumInitial - (stepMom * currCircle);
             if (error <= this.maximumError)
             {
                 // Letzter Stand loggen.
@@ -178,14 +178,14 @@ public class NetTrainer
         forwardVisitor.setInputs(inputs);
         neuralNet.visit(forwardVisitor);
 
-        // Fehler durch die Hidden- bis zum Inputlayer propagieren, Gradientenabstiegsverfahren
+        // Fehler durch die Hidden- bis zum InputLayer propagieren, Gradientenabstiegsverfahren
         BackwardVisitor backwardVisitor = new BackwardVisitor(trainingContext, forwardVisitor);
         backwardVisitor.setOutputTargets(outputs);
         neuralNet.visit(backwardVisitor);
 
         Layer[] layer = neuralNet.getLayer();
 
-        // Gewichte durch die Hidden- bis zum Inputlayer aktualisieren.
+        // Gewichte durch die Hidden- bis zum InputLayer aktualisieren.
         for (int i = layer.length - 1; i > 0; i--)
         {
             Layer rightLayer = layer[i];

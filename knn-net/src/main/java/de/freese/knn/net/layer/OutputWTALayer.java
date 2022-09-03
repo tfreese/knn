@@ -7,7 +7,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
  * Ausgangslayer.<br>
- * Dieser verwendet den "Winner-takes-it-all" Algorythmus.<br>
+ * Dieser verwendet den "Winner-takes-it-all" Algorithmus.<br>
  * Das Neuron mit dem höchsten Ausgabewert erhält den Wert 1, alle anderen 0.
  *
  * @author Thomas Freese

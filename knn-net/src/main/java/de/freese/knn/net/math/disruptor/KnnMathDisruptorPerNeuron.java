@@ -189,7 +189,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
     @Override
     public void close()
     {
-        // Nur notwending, wenn die Event-Publizierung noch nicht abgeschlossen ist.
+        // Nur notwendig, wenn die Event-Publizierung noch nicht abgeschlossen ist.
         // this.disruptor.halt();
 
         try
@@ -240,14 +240,6 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
     }
 
     /**
-     * @return {@link Disruptor}
-     */
-    private Disruptor<RunnableEvent> getDisruptor()
-    {
-        return this.disruptor;
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
@@ -295,6 +287,14 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
         });
 
         waitForLatch(latch);
+    }
+
+    /**
+     * @return {@link Disruptor}
+     */
+    private Disruptor<RunnableEvent> getDisruptor()
+    {
+        return this.disruptor;
     }
 
     /**

@@ -13,7 +13,7 @@ import javax.swing.WindowConstants;
 
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
-import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.function.FunctionSigmoid;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
@@ -57,7 +57,7 @@ public class KnnButtonDemo extends JFrame
 //                .knnMath(new KnnMathDisruptorPerPartition(parallelism))
 //                .knnMath(new KnnMathDisruptorPerNeuron(parallelism))
                 .layerInput(new InputLayer(54))
-                .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
+                .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
                 .layerOutput(new OutputLayer(10))
                 .build()
                 ;

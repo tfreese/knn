@@ -1,7 +1,7 @@
 // Created: 06.06.2008
 package de.freese.knn.net.layer;
 
-import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.function.FunctionSigmoid;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
@@ -18,7 +18,7 @@ public class OutputLayer extends AbstractLayer
      */
     public OutputLayer(final int size)
     {
-        super(size, new FunctionSigmoide());
+        super(size, new FunctionSigmoid());
     }
 
     /**

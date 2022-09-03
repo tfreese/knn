@@ -184,7 +184,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
     @Override
     public void close()
     {
-        // Nur notwending, wenn die Event-Publizierung noch nicht abgeschlossen ist.
+        // Nur notwendig, wenn die Event-Publizierung noch nicht abgeschlossen ist.
         // this.disruptor.halt();
 
         try
@@ -227,14 +227,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
     }
 
     /**
-     * @return {@link Disruptor}<MathEvent>
-     */
-    private Disruptor<MathEvent> getDisruptor()
-    {
-        return this.disruptor;
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
@@ -243,30 +235,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
         for (Layer layer : layers)
         {
             initialize(layer, valueInitializer);
-        }
-    }
-
-    /**
-     * @param functionRunnables {@link IntFunction}
-     */
-    private void publish(final IntFunction<Runnable> functionRunnables)
-    {
-        RingBuffer<MathEvent> ringBuffer = getDisruptor().getRingBuffer();
-
-        long sequence = ringBuffer.next();
-
-        try
-        {
-            MathEvent event = ringBuffer.get(sequence);
-
-            for (int i = 0; i < getParallelism(); i++)
-            {
-                event.runnables[i] = functionRunnables.apply(i);
-            }
-        }
-        finally
-        {
-            ringBuffer.publish(sequence);
         }
     }
 
@@ -298,6 +266,38 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
         });
 
         waitForLatch(latch);
+    }
+
+    /**
+     * @return {@link Disruptor}<MathEvent>
+     */
+    private Disruptor<MathEvent> getDisruptor()
+    {
+        return this.disruptor;
+    }
+
+    /**
+     * @param functionRunnables {@link IntFunction}
+     */
+    private void publish(final IntFunction<Runnable> functionRunnables)
+    {
+        RingBuffer<MathEvent> ringBuffer = getDisruptor().getRingBuffer();
+
+        long sequence = ringBuffer.next();
+
+        try
+        {
+            MathEvent event = ringBuffer.get(sequence);
+
+            for (int i = 0; i < getParallelism(); i++)
+            {
+                event.runnables[i] = functionRunnables.apply(i);
+            }
+        }
+        finally
+        {
+            ringBuffer.publish(sequence);
+        }
     }
 
     /**

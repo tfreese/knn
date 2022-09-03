@@ -15,7 +15,7 @@ import java.util.Arrays;
 import de.freese.knn.buttons.KnnButtonTrainingInputSource;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
-import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.function.FunctionSigmoid;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
@@ -45,7 +45,7 @@ public class TestPersisterBinary
         // @formatter:off
         NeuralNet neuralNet = new NeuralNetBuilder()
                 .layerInput(new InputLayer(54))
-                .layerHidden(new HiddenLayer(25, new FunctionSigmoide()))
+                .layerHidden(new HiddenLayer(25, new FunctionSigmoid()))
                 .layerOutput(new OutputLayer(10))
                 .build()
                 ;

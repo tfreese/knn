@@ -9,7 +9,7 @@ import de.freese.knn.bilderkennung.utils.ImageData;
 import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
-import de.freese.knn.net.function.FunctionSigmoide;
+import de.freese.knn.net.function.FunctionSigmoid;
 import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
@@ -58,7 +58,7 @@ public class BildErkennung
         {
             // @formatter:off
             builder.layerInput(new InputLayer(trainingInputSource.getInputAt(0).length))
-                .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
+                .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
                 ;
             // @formatter:on
         }
@@ -66,8 +66,8 @@ public class BildErkennung
         {
             // @formatter:off
             builder.layerInput(new InputLayer(trainingInputSource.getInputAt(0).length))
-                .layerHidden(new HiddenLayer(1000, new FunctionSigmoide()))
-                .layerHidden(new HiddenLayer(100, new FunctionSigmoide()))
+                .layerHidden(new HiddenLayer(1000, new FunctionSigmoid()))
+                .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
                 ;
             // @formatter:on
         }

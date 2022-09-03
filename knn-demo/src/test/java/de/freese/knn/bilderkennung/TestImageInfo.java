@@ -40,7 +40,7 @@ public class TestImageInfo
 
         JFrame frame = new JFrame(fileName);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.add(new JLabel(new ImageIcon(imageInfo.createCoOccurenceMatrixImage())));
+        frame.add(new JLabel(new ImageIcon(imageInfo.createCoOccurrenceMatrixImage())));
         frame.setSize(550, 550);
         frame.setVisible(true);
     }

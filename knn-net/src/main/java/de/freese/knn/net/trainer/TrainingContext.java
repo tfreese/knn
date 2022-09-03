@@ -7,7 +7,7 @@ import java.util.Map;
 import de.freese.knn.net.matrix.Matrix;
 
 /**
- * Enthaelt Daten des Netzes fuer den kompletten Trainingslauf.
+ * Enthält Daten des Netzes für den kompletten Trainingslauf.
  *
  * @author Thomas Freese
  */
@@ -28,7 +28,7 @@ public class TrainingContext
     }
 
     /**
-     * Liefert die vorherige Gewichtsaenderungen der Matrix-Neuronen.
+     * Liefert die vorherige Gewichtsänderungen der Matrix-Neuronen.
      *
      * @param matrix {@link Matrix}
      *
@@ -36,8 +36,6 @@ public class TrainingContext
      */
     public double[][] getDeltaWeights(final Matrix matrix)
     {
-        double[][] dWeights = this.deltaWeights.computeIfAbsent(matrix, key -> new double[matrix.getInputSize()][matrix.getOutputSize()]);
-
-        return dWeights;
+        return this.deltaWeights.computeIfAbsent(matrix, key -> new double[matrix.getInputSize()][matrix.getOutputSize()]);
     }
 }
