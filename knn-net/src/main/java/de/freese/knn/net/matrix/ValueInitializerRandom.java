@@ -28,7 +28,7 @@ public class ValueInitializerRandom implements ValueInitializer
     /**
      * Creates a new {@link ValueInitializerRandom} object.
      *
-     * @param grenzWert double, Von -GrenzWert bis +Grenzwert
+     * @param grenzWert double, Von -Grenzwert bis +Grenzwert
      */
     public ValueInitializerRandom(final double grenzWert)
     {
