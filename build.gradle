@@ -1,8 +1,22 @@
 // Tasks im SubModul ausführen: gradle MODUL:clean build
+buildscript {
+    // Für Plugins
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal() // maven { url "https://plugins.gradle.org/m2"; name "plugins-gradle" }
+    }
+
+    dependencies {
+        classpath "de.freese.gradle:gradle-plugins:0.0.1-SNAPSHOT"
+        classpath "io.spring.gradle:dependency-management-plugin:$version_springDependencyManagement"
+    }
+}
 
 subprojects {
     apply plugin: "java"
     apply plugin: "io.spring.dependency-management"
+    apply plugin: "de.freese.gradle.plugin.conventions"
 
     dependencyManagement {
         imports {
@@ -10,38 +24,38 @@ subprojects {
         }
 
         dependencies {
-        	dependency "com.lmax:disruptor:$version_disruptor"         
+            dependency "com.lmax:disruptor:$version_disruptor"
         }
     }
 }
 
 project("knn-net") {
-	apply plugin: "java-library"
-	description = "Künstliches neurales Netz"
-	dependencies {
-		api("de.freese.base:base-core:$project.version")
-		
-		api("com.lmax:disruptor")
-		api("io.projectreactor:reactor-core")
-		api("org.slf4j:slf4j-api")
-		
-		testImplementation("org.junit.jupiter:junit-jupiter-engine")
-		testImplementation("org.junit.jupiter:junit-jupiter-params")
-    }    
+    apply plugin: "java-library"
+    description = "Künstliches neurales Netz"
+    dependencies {
+        api("de.freese.base:base-core:$project.version")
+
+        api("com.lmax:disruptor")
+        api("io.projectreactor:reactor-core")
+        api("org.slf4j:slf4j-api")
+
+        testImplementation("org.junit.jupiter:junit-jupiter-engine")
+        testImplementation("org.junit.jupiter:junit-jupiter-params")
+    }
 }
 
 project("knn-demo") {
-	description = "Demos für künstliche neurale Netze"
-	dependencies {
-		implementation(project(":knn-net"))
-		
-		implementation("org.apache.commons:commons-lang3")
-		implementation("org.springframework:spring-jdbc")
+    description = "Demos für künstliche neurale Netze"
+    dependencies {
+        implementation(project(":knn-net"))
 
-		runtimeOnly("org.slf4j:slf4j-simple")
+        implementation("org.apache.commons:commons-lang3")
+        implementation("org.springframework:spring-jdbc")
 
-		testImplementation("org.junit.jupiter:junit-jupiter-engine")
-		testImplementation("org.springframework:spring-jdbc")
-		testImplementation("mysql:mysql-connector-java")
-    }  
+        runtimeOnly("org.slf4j:slf4j-simple")
+
+        testImplementation("org.junit.jupiter:junit-jupiter-engine")
+        testImplementation("org.springframework:spring-jdbc")
+        testImplementation("mysql:mysql-connector-java")
+    }
 }
