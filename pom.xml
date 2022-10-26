@@ -28,18 +28,13 @@
         <url>${project.url}</url>
         <connection>scm:git:git://github.com/tfreese/knn.git</connection>
         <developerConnection>scm:git:https://github.com/tfreese/knn.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
-
-    <modules>
-        <module>knn-net</module>
-        <module>knn-demo</module>
-    </modules>
 
     <developers>
         <developer>
             <id>tfreese</id>
             <name>Thomas Freese</name>
-            <email>commercial@freese-home.de </email>
             <url>${project.organization.url}</url>
             <roles>
                 <role>developer</role>
@@ -48,6 +43,11 @@
             <timezone>+2</timezone>
         </developer>
     </developers>
+    
+    <modules>
+        <module>knn-net</module>
+        <module>knn-demo</module>
+    </modules>
 
     <dependencies>
         <!-- compile scope -->
