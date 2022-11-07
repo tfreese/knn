@@ -25,12 +25,6 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  */
 public class BildErkennung
 {
-    /**
-     * @param args String[]
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
-    @SuppressWarnings("unused")
     public static void main(final String[] args) throws Exception
     {
         // TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();

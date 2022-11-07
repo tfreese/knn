@@ -5,9 +5,6 @@ package de.freese.knn.net.visitor;
  */
 public interface Visitable
 {
-    /**
-     * @param visitor {@link Visitor}
-     */
     default void visit(final Visitor visitor)
     {
         visitor.visitObject(this);

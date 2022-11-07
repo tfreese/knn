@@ -14,11 +14,6 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public class OutputWTALayer extends OutputLayer
 {
-    /**
-     * Creates a new {@link OutputWTALayer} object.
-     *
-     * @param size int
-     */
     public OutputWTALayer(final int size)
     {
         super(size);

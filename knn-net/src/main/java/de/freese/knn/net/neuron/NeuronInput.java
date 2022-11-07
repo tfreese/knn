@@ -12,12 +12,6 @@ import de.freese.knn.net.layer.Layer;
  */
 public class NeuronInput extends NeuronImpl
 {
-    /**
-     * Erstellt ein neues {@link NeuronInput} Object.
-     *
-     * @param layer {@link Layer}
-     * @param layerIndex int
-     */
     public NeuronInput(final Layer layer, final int layerIndex)
     {
         super(layer, layerIndex);

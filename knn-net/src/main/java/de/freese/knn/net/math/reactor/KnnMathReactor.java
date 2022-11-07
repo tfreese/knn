@@ -21,16 +21,8 @@ import reactor.core.scheduler.Schedulers;
  */
 public final class KnnMathReactor extends AbstractKnnMath
 {
-    /**
-     *
-     */
     private final Scheduler scheduler;
 
-    /**
-     * Erstellt ein neues {@link KnnMathReactor} Object.
-     *
-     * @param parallelism int
-     */
     public KnnMathReactor(final int parallelism)
     {
         super(parallelism);
@@ -131,7 +123,7 @@ public final class KnnMathReactor extends AbstractKnnMath
     // //
     // // Siehe auch MathFlux für math. Operatoren !
     //
-//        // @formatter:off
+    //        // @formatter:off
 //        double error = Flux.range(0, outputs.length)
 //            .parallel(getParallelism()
 //            .runOn(getScheduler())
@@ -169,9 +161,6 @@ public final class KnnMathReactor extends AbstractKnnMath
         // @formatter:on
     }
 
-    /**
-     * @return {@link Scheduler}
-     */
     private Scheduler getScheduler()
     {
         return this.scheduler;
@@ -186,7 +175,7 @@ public final class KnnMathReactor extends AbstractKnnMath
     // final double[] outputs = visitor.getOutputs(layer);
     // final double[] errors = new double[outputs.length];
     //
-//        // @formatter:off
+    //        // @formatter:off
 //        //Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
 //        //Flux.fromStream(IntStream.range(0, outputs.length).boxed())
 //        Flux.range(0, outputs.length)

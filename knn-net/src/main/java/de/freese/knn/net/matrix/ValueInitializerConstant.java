@@ -8,16 +8,8 @@ package de.freese.knn.net.matrix;
  */
 public class ValueInitializerConstant implements ValueInitializer
 {
-    /**
-     *
-     */
     private final double weight;
 
-    /**
-     * Creates a new {@link ValueInitializerConstant} object.
-     *
-     * @param weight double
-     */
     public ValueInitializerConstant(final double weight)
     {
         super();

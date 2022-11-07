@@ -22,17 +22,8 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public final class KnnMathExecutor extends AbstractKnnMath
 {
-    /**
-     *
-     */
     private final Executor executor;
 
-    /**
-     * Erstellt ein neues {@link KnnMathExecutor} Object.
-     *
-     * @param parallelism int
-     * @param executor {@link Executor}
-     */
     public KnnMathExecutor(final int parallelism, final Executor executor)
     {
         super(parallelism);
@@ -153,9 +144,6 @@ public final class KnnMathExecutor extends AbstractKnnMath
         waitForLatch(latch);
     }
 
-    /**
-     * @return {@link Executor}
-     */
     private Executor getExecutor()
     {
         return this.executor;
@@ -163,8 +151,6 @@ public final class KnnMathExecutor extends AbstractKnnMath
 
     /**
      * Blockiert den aktuellen Thread, bis der Latch auf 0 ist.
-     *
-     * @param latch {@link CountDownLatch}
      */
     private void waitForLatch(final CountDownLatch latch)
     {

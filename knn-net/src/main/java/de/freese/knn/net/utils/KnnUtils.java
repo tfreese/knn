@@ -13,18 +13,9 @@ import org.slf4j.Logger;
  */
 public final class KnnUtils
 {
-    /**
-     *
-     */
     public static final int DEFAULT_POOL_SIZE =
             Optional.ofNullable(Integer.getInteger("knn.defaultPoolSize")).orElseGet(() -> Runtime.getRuntime().availableProcessors());
 
-    /**
-     * Shutdown des {@link ExecutorService}.
-     *
-     * @param executorService {@link ExecutorService}
-     * @param logger {@link Logger}
-     */
     public static void shutdown(final ExecutorService executorService, final Logger logger)
     {
         logger.info("shutdown ExecutorService");
@@ -81,9 +72,6 @@ public final class KnnUtils
         }
     }
 
-    /**
-     * Erstellt ein neues {@link KnnUtils} Object.
-     */
     private KnnUtils()
     {
         super();

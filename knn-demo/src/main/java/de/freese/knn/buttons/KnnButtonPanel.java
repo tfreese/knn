@@ -22,41 +22,17 @@ import de.freese.knn.net.NeuralNet;
  */
 public class KnnButtonPanel extends JPanel implements ActionListener
 {
-    /**
-     *
-     */
     public static final int MAT_HEIGHT = 9;
-    /**
-     *
-     */
+
     public static final int MAT_WIDTH = 6;
-    /**
-     *
-     */
+
     @Serial
     private static final long serialVersionUID = 1L;
-    /**
-     *
-     */
-    private JLabel labelRecognized;
-    /**
-     *
-     */
     private final JLabel[] labelsOutput = new JLabel[10];
-    /**
-     *
-     */
     private final transient NeuralNet neuralNet;
-    /**
-     *
-     */
     private final JToggleButton[] toggleButtons = new JToggleButton[MAT_HEIGHT * MAT_WIDTH];
+    private JLabel labelRecognized;
 
-    /**
-     * Erstellt ein neues {@link KnnButtonPanel} Object.
-     *
-     * @param neuralNet {@link NeuralNet}
-     */
     public KnnButtonPanel(final NeuralNet neuralNet)
     {
         super();
@@ -104,11 +80,20 @@ public class KnnButtonPanel extends JPanel implements ActionListener
         this.labelRecognized.setText("Erkannt als: " + value);
     }
 
-    /**
-     * @param actionListener {@link ActionListener}
-     *
-     * @return {@link JPanel}
-     */
+    public KnnButtonPanel initGui()
+    {
+        JPanel buttonPanel = createButtonPanel(this);
+        JPanel outputPanel = createOutputPanel();
+        this.labelRecognized = new JLabel("Erkannt als: ");
+
+        setLayout(new BorderLayout());
+        add(buttonPanel, BorderLayout.CENTER);
+        add(outputPanel, BorderLayout.EAST);
+        add(this.labelRecognized, BorderLayout.SOUTH);
+
+        return this;
+    }
+
     private JPanel createButtonPanel(final ActionListener actionListener)
     {
         JPanel panel = new JPanel();
@@ -136,9 +121,6 @@ public class KnnButtonPanel extends JPanel implements ActionListener
         return panel;
     }
 
-    /**
-     * @return {@link JPanel}
-     */
     private JPanel createOutputPanel()
     {
         JPanel panel = new JPanel();
@@ -156,8 +138,6 @@ public class KnnButtonPanel extends JPanel implements ActionListener
 
     /**
      * Eingangsvektor des NeuralenNetzes.
-     *
-     * @return double[]
      */
     private double[] getInputVector()
     {
@@ -169,22 +149,5 @@ public class KnnButtonPanel extends JPanel implements ActionListener
         }
 
         return result;
-    }
-
-    /**
-     * @return {@link KnnButtonPanel}
-     */
-    public KnnButtonPanel initGui()
-    {
-        JPanel buttonPanel = createButtonPanel(this);
-        JPanel outputPanel = createOutputPanel();
-        this.labelRecognized = new JLabel("Erkannt als: ");
-
-        setLayout(new BorderLayout());
-        add(buttonPanel, BorderLayout.CENTER);
-        add(outputPanel, BorderLayout.EAST);
-        add(this.labelRecognized, BorderLayout.SOUTH);
-
-        return this;
     }
 }

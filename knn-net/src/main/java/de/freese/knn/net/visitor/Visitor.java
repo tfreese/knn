@@ -6,10 +6,6 @@ package de.freese.knn.net.visitor;
 @FunctionalInterface
 public interface Visitor
 {
-    /**
-     * @param <T> Konkreter Typ
-     * @param array Object[]
-     */
     default <T> void visitArray(final T[] array)
     {
         if (array == null)
@@ -23,9 +19,6 @@ public interface Visitor
         }
     }
 
-    /**
-     * @param iterable {@link Iterable}
-     */
     default void visitIterable(final Iterable<?> iterable)
     {
         if (iterable == null)
@@ -39,8 +32,5 @@ public interface Visitor
         }
     }
 
-    /**
-     * @param object Object
-     */
     void visitObject(Object object);
 }

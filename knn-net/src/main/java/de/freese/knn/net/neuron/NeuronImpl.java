@@ -14,25 +14,10 @@ import de.freese.knn.net.matrix.Matrix;
  */
 public class NeuronImpl implements Neuron
 {
-    /**
-     *
-     */
-    private double inputBIAS;
-    /**
-     *
-     */
     private final Layer layer;
-    /**
-     *
-     */
     private final int layerIndex;
+    private double inputBIAS;
 
-    /**
-     * Erstellt ein neues {@link NeuronImpl} Object.
-     *
-     * @param layer {@link Layer}
-     * @param layerIndex int
-     */
     public NeuronImpl(final Layer layer, final int layerIndex)
     {
         super();
@@ -57,17 +42,6 @@ public class NeuronImpl implements Neuron
     public double getInputBIAS()
     {
         return this.inputBIAS;
-    }
-
-    /**
-     * Liefert die Eingangsmatrix des Layers.<br>
-     * Der {@link InputLayer} hat keine Eingangsmatrix !
-     *
-     * @return {@link Matrix}
-     */
-    protected Matrix getInputMatrix()
-    {
-        return this.layer.getInputMatrix();
     }
 
     /**
@@ -109,17 +83,6 @@ public class NeuronImpl implements Neuron
     public int getLayerIndex()
     {
         return this.layerIndex;
-    }
-
-    /**
-     * Liefert die Ausgangsmatrix des Layers.<br>
-     * Der {@link OutputLayer} hat keine Ausgangsmatrix !
-     *
-     * @return {@link Matrix}
-     */
-    protected Matrix getOutputMatrix()
-    {
-        return this.layer.getOutputMatrix();
     }
 
     /**
@@ -203,5 +166,23 @@ public class NeuronImpl implements Neuron
         sb.append("/").append(this.layer.getSize() - 1);
 
         return sb.toString();
+    }
+
+    /**
+     * Liefert die Eingangsmatrix des Layers.<br>
+     * Der {@link InputLayer} hat keine Eingangsmatrix !
+     */
+    protected Matrix getInputMatrix()
+    {
+        return this.layer.getInputMatrix();
+    }
+
+    /**
+     * Liefert die Ausgangsmatrix des Layers.<br>
+     * Der {@link OutputLayer} hat keine Ausgangsmatrix !
+     */
+    protected Matrix getOutputMatrix()
+    {
+        return this.layer.getOutputMatrix();
     }
 }

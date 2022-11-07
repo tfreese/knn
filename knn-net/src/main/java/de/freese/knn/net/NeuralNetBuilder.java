@@ -18,40 +18,21 @@ import de.freese.knn.net.matrix.ValueInitializerRandom;
  */
 public class NeuralNetBuilder
 {
-    /**
-     *
-     */
     private final List<HiddenLayer> hiddenLayers = new ArrayList<>();
-    /**
-     *
-     */
+
     private InputLayer inputLayer;
-    /**
-     *
-     */
+
     private KnnMath knnMath;
-    /**
-     *
-     */
+
     private OutputLayer outputLayer;
-    /**
-     *
-     */
+
     private ValueInitializer valueInitializer;
 
-    /**
-     * @return {@link NeuralNet}
-     */
     public NeuralNet build()
     {
         return build(true);
     }
 
-    /**
-     * @param connectLayer boolean
-     *
-     * @return {@link NeuralNet}
-     */
     public NeuralNet build(final boolean connectLayer)
     {
         NeuralNetImpl neuralNet = new NeuralNetImpl();
@@ -97,11 +78,6 @@ public class NeuralNetBuilder
         return neuralNet;
     }
 
-    /**
-     * @param knnMath {@link KnnMath}
-     *
-     * @return {@link NeuralNetBuilder}
-     */
     public NeuralNetBuilder knnMath(final KnnMath knnMath)
     {
         this.knnMath = knnMath;
@@ -109,11 +85,6 @@ public class NeuralNetBuilder
         return this;
     }
 
-    /**
-     * @param hiddenLayer {@link HiddenLayer}
-     *
-     * @return {@link NeuralNetBuilder}
-     */
     public NeuralNetBuilder layerHidden(final HiddenLayer hiddenLayer)
     {
         this.hiddenLayers.add(hiddenLayer);
@@ -121,11 +92,6 @@ public class NeuralNetBuilder
         return this;
     }
 
-    /**
-     * @param inputLayer {@link InputLayer}
-     *
-     * @return {@link NeuralNetBuilder}
-     */
     public NeuralNetBuilder layerInput(final InputLayer inputLayer)
     {
         this.inputLayer = inputLayer;
@@ -133,11 +99,6 @@ public class NeuralNetBuilder
         return this;
     }
 
-    /**
-     * @param outputLayer {@link OutputLayer}
-     *
-     * @return {@link NeuralNetBuilder}
-     */
     public NeuralNetBuilder layerOutput(final OutputLayer outputLayer)
     {
         this.outputLayer = outputLayer;
@@ -145,11 +106,6 @@ public class NeuralNetBuilder
         return this;
     }
 
-    /**
-     * @param valueInitializer {@link ValueInitializer}
-     *
-     * @return {@link NeuralNetBuilder}
-     */
     public NeuralNetBuilder valueInitializer(final ValueInitializer valueInitializer)
     {
         this.valueInitializer = valueInitializer;

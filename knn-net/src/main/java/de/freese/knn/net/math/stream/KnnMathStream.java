@@ -19,9 +19,6 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public final class KnnMathStream extends AbstractKnnMath
 {
-    /**
-     * Erstellt ein neues {@link KnnMathStream} Object.
-     */
     public KnnMathStream()
     {
         super(1);
@@ -71,7 +68,7 @@ public final class KnnMathStream extends AbstractKnnMath
     // @Override
     // public double getNetError(final double[] outputs, final double[] outputTargets)
     // {
-//        // @formatter:off
+    //        // @formatter:off
 //        double error = IntStream.range(0, outputs.length)
 //                .parallel()
 //                .mapToDouble(i -> getNetError(i, outputs, outputTargets))
@@ -101,7 +98,7 @@ public final class KnnMathStream extends AbstractKnnMath
 
     /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
@@ -128,7 +125,7 @@ public final class KnnMathStream extends AbstractKnnMath
     // final double[] outputs = visitor.getOutputs(layer);
     // final double[] errors = new double[outputs.length];
     //
-//        // @formatter:off
+    //        // @formatter:off
 //        IntStream.range(0, outputs.length)
 //            .parallel()
 //            .forEach(i -> setOutputError(i, outputs, errors, visitor))

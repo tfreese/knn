@@ -19,16 +19,8 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public final class KnnMathForkJoin extends AbstractKnnMath
 {
-    /**
-     *
-     */
     private final ForkJoinPool forkJoinPool;
 
-    /**
-     * Erstellt ein neues {@link KnnMathForkJoin} Object.
-     *
-     * @param forkJoinPool {@link ForkJoinPool}
-     */
     public KnnMathForkJoin(final ForkJoinPool forkJoinPool)
     {
         super(1);
@@ -87,14 +79,6 @@ public final class KnnMathForkJoin extends AbstractKnnMath
     }
 
     /**
-     * @return {@link ForkJoinPool}
-     */
-    private ForkJoinPool getForkJoinPool()
-    {
-        return this.forkJoinPool;
-    }
-
-    /**
      * @see de.freese.knn.net.math.AbstractKnnMath#initialize(de.freese.knn.net.layer.Layer, de.freese.knn.net.matrix.ValueInitializer)
      */
     @Override
@@ -116,7 +100,7 @@ public final class KnnMathForkJoin extends AbstractKnnMath
 
     /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
@@ -140,5 +124,10 @@ public final class KnnMathForkJoin extends AbstractKnnMath
                                     final double[][] deltaWeights, final double[] rightErrors)
     {
         super.refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
+    }
+
+    private ForkJoinPool getForkJoinPool()
+    {
+        return this.forkJoinPool;
     }
 }

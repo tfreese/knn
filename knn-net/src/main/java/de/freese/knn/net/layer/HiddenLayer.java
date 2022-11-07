@@ -10,12 +10,6 @@ import de.freese.knn.net.function.Function;
  */
 public class HiddenLayer extends AbstractLayer
 {
-    /**
-     * Creates a new {@link HiddenLayer} object.
-     *
-     * @param size int
-     * @param function {@link Function}
-     */
     public HiddenLayer(final int size, final Function function)
     {
         super(size, function);

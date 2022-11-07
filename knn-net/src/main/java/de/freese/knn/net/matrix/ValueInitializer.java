@@ -9,10 +9,5 @@ package de.freese.knn.net.matrix;
 @FunctionalInterface
 public interface ValueInitializer
 {
-    /**
-     * Erzeugt einen neuen Wert.
-     *
-     * @return double
-     */
     double createNextValue();
 }

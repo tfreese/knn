@@ -33,24 +33,12 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
      */
     private static final class QueueWorker extends Thread
     {
-        /**
-         *
-         */
         private static final Logger LOGGER = LoggerFactory.getLogger(QueueWorker.class);
-        /**
-         *
-         */
+
         private final BlockingQueue<Runnable> queue;
-        /**
-         *
-         */
+
         private boolean stopped;
 
-        /**
-         * Erzeugt eine neue Instanz von {@link QueueWorker}.
-         *
-         * @param queue {@link BlockingQueue}
-         */
         private QueueWorker(final BlockingQueue<Runnable> queue)
         {
             super();
@@ -90,9 +78,6 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
             LOGGER.debug("{}: terminated", getName());
         }
 
-        /**
-         *
-         */
         void stopWorker()
         {
             this.stopped = true;
@@ -101,20 +86,10 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
         }
     }
 
-    /**
-     *
-     */
     private final BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
-    /**
-     *
-     */
+
     private final List<QueueWorker> workers = new ArrayList<>();
 
-    /**
-     * Erstellt ein neues {@link KnnMathQueueWorker} Object.
-     *
-     * @param parallelism int
-     */
     public KnnMathQueueWorker(final int parallelism)
     {
         super(parallelism);
@@ -193,14 +168,6 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
     }
 
     /**
-     * @return {@link BlockingQueue}<Runnable>
-     */
-    private BlockingQueue<Runnable> getQueue()
-    {
-        return this.queue;
-    }
-
-    /**
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
@@ -246,10 +213,13 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
         waitForFutures(futures);
     }
 
+    private BlockingQueue<Runnable> getQueue()
+    {
+        return this.queue;
+    }
+
     /**
      * Warten bis der Task fertig ist.
-     *
-     * @param future {@link Future}
      */
     private void waitForFuture(final Future<?> future)
     {
@@ -265,8 +235,6 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
 
     /**
      * Warten bis alle Tasks fertig sind.
-     *
-     * @param futures {@link List}
      */
     private void waitForFutures(final List<? extends Future<Void>> futures)
     {

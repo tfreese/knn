@@ -13,59 +13,26 @@ import de.freese.knn.net.neuron.NeuronList;
  */
 class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
 {
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = 5074316140736114438L;
-    /**
-     *
-     */
+
     private final double[] errors;
-    /**
-     *
-     */
+
     private final int from;
-    /**
-     *
-     */
+
     private final double[] layerErrors;
-    /**
-     *
-     */
+
     private final KnnMathForkJoin math;
-    /**
-     *
-     */
+
     private final NeuronList neurons;
-    /**
-     *
-     */
+
     private final int to;
 
-    /**
-     * Erstellt ein neues {@link ForkJoinBackwardTask} Object.
-     *
-     * @param math {@link KnnMathForkJoin}
-     * @param neurons {@link NeuronList}
-     * @param errors double[]
-     * @param layerErrors double[]
-     */
     ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors)
     {
         this(math, neurons, errors, layerErrors, 0, neurons.size());
     }
 
-    /**
-     * Erstellt ein neues {@link ForkJoinBackwardTask} Object.
-     *
-     * @param math {@link KnnMathForkJoin}
-     * @param neurons {@link NeuronList}
-     * @param errors double[]
-     * @param layerErrors double[]
-     * @param from int
-     * @param to int
-     */
     private ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors, final int from,
                                  final int to)
     {

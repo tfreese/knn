@@ -10,24 +10,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class KnnThreadFactory implements ThreadFactory
 {
-    /**
-    *
-    */
     private final ThreadFactory defaultThreadFactory = Executors.defaultThreadFactory();
-    /**
-    *
-    */
+
     private final String namePrefix;
-    /**
-    *
-    */
+
     private final AtomicInteger threadNumber = new AtomicInteger(1);
 
-    /**
-     * Creates a new {@link KnnThreadFactory} object.
-     *
-     * @param namePrefix String
-     */
     public KnnThreadFactory(final String namePrefix)
     {
 

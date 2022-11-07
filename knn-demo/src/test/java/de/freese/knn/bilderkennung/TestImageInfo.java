@@ -15,11 +15,6 @@ import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
  */
 public class TestImageInfo
 {
-    /**
-     * @param args String[]
-     *
-     * @throws Exception falls was schiefgeht.
-     */
     public static void main(final String[] args) throws Exception
     {
         String fileName;

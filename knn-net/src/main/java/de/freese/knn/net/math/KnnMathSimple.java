@@ -14,9 +14,6 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public final class KnnMathSimple extends AbstractKnnMath
 {
-    /**
-     * Erstellt ein neues {@link KnnMathSimple} Object.
-     */
     public KnnMathSimple()
     {
         super(1);
@@ -64,7 +61,7 @@ public final class KnnMathSimple extends AbstractKnnMath
 
     /**
      * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     *      de.freese.knn.net.visitor.BackwardVisitor)
+     * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,

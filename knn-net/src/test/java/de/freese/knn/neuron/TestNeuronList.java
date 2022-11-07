@@ -22,9 +22,6 @@ import org.junit.jupiter.api.Test;
  */
 class TestNeuronList
 {
-    /**
-     * @return Neuron[]
-     */
     static Neuron[] createNeurons()
     {
         return new Neuron[]
@@ -33,17 +30,11 @@ class TestNeuronList
                 };
     }
 
-    /**
-     * @return {@link Stream}
-     */
     static Stream<Neuron[]> createNeuronsAsStream()
     {
         return Stream.of(1).map(v -> createNeurons());
     }
 
-    /**
-     *
-     */
     @Test
     void testForEach()
     {
@@ -74,9 +65,6 @@ class TestNeuronList
         assertEquals(4, atomicInteger.get());
     }
 
-    /**
-     *
-     */
     // @ParameterizedTest
     // @MethodSource("createNeuronsAsStream")
     @Test
@@ -95,9 +83,6 @@ class TestNeuronList
         assertEquals(neurons.length, i);
     }
 
-    /**
-     *
-     */
     @Test
     void testPartitionByModulo()
     {
@@ -118,9 +103,6 @@ class TestNeuronList
         assertEquals("[d, h]", partitions.get(3).toString());
     }
 
-    /**
-     *
-     */
     @Test
     void testPartitionBySize()
     {
@@ -167,9 +149,6 @@ class TestNeuronList
         assertEquals("[j, k]", partitions.get(3).toString());
     }
 
-    /**
-     *
-     */
     // @ParameterizedTest
     // @MethodSource("createNeuronsAsStream")
     @Test
@@ -186,9 +165,6 @@ class TestNeuronList
         }
     }
 
-    /**
-     *
-     */
     @Test
     void testSpliterator()
     {
@@ -219,9 +195,6 @@ class TestNeuronList
         assertEquals(4, atomicInteger.get());
     }
 
-    /**
-     *
-     */
     @Test
     void testStream()
     {
@@ -233,9 +206,6 @@ class TestNeuronList
         assertEquals(10, neuronList.parallelStream().mapToInt(Neuron::getLayerIndex).sum());
     }
 
-    /**
-     *
-     */
     @Test
     void testSubList()
     {
@@ -253,12 +223,6 @@ class TestNeuronList
         assertEquals(4, subList.get(2).getLayerIndex());
     }
 
-    /**
-     * @param values {@link List}
-     * @param parallelism int
-     *
-     * @return {@link List}
-     */
     protected List<List<String>> getPartitionsBySize(final List<String> values, final int parallelism)
     {
         int partitionCount = Math.min(values.size(), parallelism);
@@ -306,12 +270,6 @@ class TestNeuronList
         return partitions;
     }
 
-    /**
-     * @param values {@link List}
-     * @param parallelism int
-     *
-     * @return {@link List}
-     */
     private List<List<String>> getPartitionsByModulo(final List<String> values, final int parallelism)
     {
         Map<Integer, List<String>> partitionMap = new HashMap<>();

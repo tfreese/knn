@@ -17,45 +17,17 @@ import de.freese.knn.net.neuron.NeuronList;
  */
 public abstract class AbstractLayer implements Layer
 {
-    /**
-     *
-     */
     private final Function function;
-    /**
-     *
-     */
-    private Matrix inputMatrix;
-    /**
-     *
-     */
     private final NeuronList neurons;
-    /**
-     *
-     */
-    private Matrix outputMatrix;
-    /**
-     *
-     */
     private final int size;
+    private Matrix inputMatrix;
+    private Matrix outputMatrix;
 
-    /**
-     * Creates a new {@link AbstractLayer} object.
-     *
-     * @param size int
-     * @param function {@link Function}
-     */
     protected AbstractLayer(final int size, final Function function)
     {
         this(size, function, NeuronImpl::new);
     }
 
-    /**
-     * Creates a new {@link AbstractLayer} object.
-     *
-     * @param size int
-     * @param function {@link Function}
-     * @param neuronSupplier {@link BiFunction}
-     */
     protected AbstractLayer(final int size, final Function function, final BiFunction<Layer, Integer, Neuron> neuronSupplier)
     {
         super();

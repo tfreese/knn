@@ -15,53 +15,24 @@ import de.freese.knn.net.matrix.ValueInitializer;
  */
 class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
 {
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = 687804634087313634L;
-    /**
-     *
-     */
+
     private final int from;
-    /**
-     *
-     */
+
     private final Layer[] layers;
-    /**
-     *
-     */
+
     private final KnnMathForkJoin math;
-    /**
-     *
-     */
+
     private final int to;
-    /**
-     *
-     */
+
     private final ValueInitializer valueInitializer;
 
-    /**
-     * Erstellt ein neues {@link ForkJoinInitializeTask} Object.
-     *
-     * @param math {@link KnnMathForkJoin}
-     * @param layers {@link Layer}[]
-     * @param valueInitializer {@link ValueInitializer}
-     */
     ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer)
     {
         this(math, layers, valueInitializer, 0, layers.length);
     }
 
-    /**
-     * Erstellt ein neues {@link ForkJoinInitializeTask} Object.
-     *
-     * @param math {@link KnnMathForkJoin}
-     * @param layers {@link Layer}[]
-     * @param valueInitializer {@link ValueInitializer}
-     * @param from int
-     * @param to int
-     */
     private ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer, final int from, final int to)
     {
         super();

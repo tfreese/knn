@@ -11,11 +11,6 @@ import de.freese.knn.net.neuron.NeuronInput;
  */
 public class InputLayer extends AbstractLayer
 {
-    /**
-     * Creates a new {@link InputLayer} object.
-     *
-     * @param size int
-     */
     public InputLayer(final int size)
     {
         super(size, new FunctionLinear(), NeuronInput::new);

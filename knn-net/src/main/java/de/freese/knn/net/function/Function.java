@@ -22,10 +22,6 @@ public interface Function extends UnaryOperator<Double>
 
     /**
      * Liefert den verrechneten Eingangswert.
-     *
-     * @param value double
-     *
-     * @return double
      */
     double calculate(double value);
 }

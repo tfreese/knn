@@ -26,27 +26,17 @@ import de.freese.knn.bilderkennung.utils.ImageData;
  */
 public class TestImagePixelTrainingInputSource extends JFrame
 {
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * CellRenderer für Images.
-     *
      * @author Thomas Freese
      */
     private static class ImageTableRenderer extends DefaultTableCellRenderer
     {
-        /**
-         *
-         */
         @Serial
         private static final long serialVersionUID = 1L;
-        /**
-         *
-         */
+
         private Image image;
 
         /**
@@ -101,20 +91,13 @@ public class TestImagePixelTrainingInputSource extends JFrame
     }
 
     /**
-     * TableModel.
-     *
      * @author Thomas Freese
      */
     private static class TableModel extends AbstractTableModel
     {
-        /**
-         *
-         */
         @Serial
         private static final long serialVersionUID = 1L;
-        /**
-         *
-         */
+
         private final List<ImageData> dataList = new ArrayList<>();
 
         /**
@@ -161,9 +144,6 @@ public class TestImagePixelTrainingInputSource extends JFrame
                     };
         }
 
-        /**
-         * @param objects {@link List}
-         */
         public void setList(final List<ImageData> objects)
         {
             this.dataList.clear();
@@ -173,22 +153,12 @@ public class TestImagePixelTrainingInputSource extends JFrame
         }
     }
 
-    /**
-     * @param args String[]
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     public static void main(final String[] args) throws Exception
     {
         TestImagePixelTrainingInputSource imageTest = new TestImagePixelTrainingInputSource();
         imageTest.setVisible(true);
     }
 
-    /**
-     * Creates a new {@link TestImagePixelTrainingInputSource} object.
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     public TestImagePixelTrainingInputSource() throws Exception
     {
         super();
@@ -196,11 +166,6 @@ public class TestImagePixelTrainingInputSource extends JFrame
         init();
     }
 
-    /**
-     * @return {@link JTable}
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     private JTable createTable() throws Exception
     {
         JTable table = new JTable();
@@ -216,9 +181,6 @@ public class TestImagePixelTrainingInputSource extends JFrame
         return table;
     }
 
-    /**
-     * @throws Exception Falls was schiefgeht.
-     */
     private void init() throws Exception
     {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

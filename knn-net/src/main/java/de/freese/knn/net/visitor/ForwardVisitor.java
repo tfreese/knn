@@ -14,17 +14,12 @@ import de.freese.knn.net.layer.OutputLayer;
 public class ForwardVisitor extends AbstractKnnVisitor
 {
     /**
-     *
-     */
-    private double[] inputs;
-    /**
      * false = nur die aktuellen Outputs werden gespeichert.
      */
     private final boolean trainingMode;
+    private double[] inputs;
 
     /**
-     * Erstellt ein neues {@link ForwardVisitor} Object.
-     *
      * @param trainingMode boolean, false = nur die aktuellen Outputs werden gespeichert
      */
     public ForwardVisitor(final boolean trainingMode)
@@ -36,8 +31,6 @@ public class ForwardVisitor extends AbstractKnnVisitor
 
     /**
      * Liefert die Output-Daten des letzten Layers.
-     *
-     * @return double[]
      */
     public double[] getLastOutputs()
     {
@@ -45,23 +38,7 @@ public class ForwardVisitor extends AbstractKnnVisitor
     }
 
     /**
-     * Liefert die Output-Daten des Layers.
-     *
-     * @param layer {@link Layer}
-     *
-     * @return double[]
-     */
-    double[] getOutputs(final Layer layer)
-    {
-        Layer key = this.trainingMode ? layer : null;
-
-        return getValues().get(key);
-    }
-
-    /**
      * Setzt die Daten des Input-Layers.
-     *
-     * @param inputs double[]
      */
     public void setInputs(final double[] inputs)
     {
@@ -70,9 +47,6 @@ public class ForwardVisitor extends AbstractKnnVisitor
 
     /**
      * Setzt die Output-Daten des Layers.
-     *
-     * @param layer {@link Layer}
-     * @param outputs double[]
      */
     public void setOutputs(final Layer layer, final double[] outputs)
     {
@@ -83,6 +57,16 @@ public class ForwardVisitor extends AbstractKnnVisitor
 
         // Aktuelle Outputs merken
         getValues().put(null, outputs);
+    }
+
+    /**
+     * Liefert die Output-Daten des Layers.
+     */
+    double[] getOutputs(final Layer layer)
+    {
+        Layer key = this.trainingMode ? layer : null;
+
+        return getValues().get(key);
     }
 
     /**

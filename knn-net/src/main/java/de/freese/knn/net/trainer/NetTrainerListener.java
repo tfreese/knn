@@ -13,8 +13,6 @@ public interface NetTrainerListener extends EventListener
 {
     /**
      * Nachdem ein Lernzyklus beendet ist, wird die Nummer und der Netzfehler des Zyklus übergeben.
-     *
-     * @param event {@link NetTrainerCycleEndedEvent}
      */
     void trainingCycleEnded(NetTrainerCycleEndedEvent event);
 }

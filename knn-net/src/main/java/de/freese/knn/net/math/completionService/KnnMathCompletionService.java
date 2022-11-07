@@ -22,21 +22,10 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public final class KnnMathCompletionService extends AbstractKnnMath
 {
-    /**
-     *
-     */
     private final CompletionService<Void> completionService;
-    /**
-     *
-     */
+
     private final Executor executor;
 
-    /**
-     * Erstellt ein neues {@link KnnMathCompletionService} Object.
-     *
-     * @param parallelism int
-     * @param executor {@link Executor}
-     */
     public KnnMathCompletionService(final int parallelism, final Executor executor)
     {
         super(parallelism);
@@ -138,9 +127,6 @@ public final class KnnMathCompletionService extends AbstractKnnMath
 
     /**
      * Warten bis alle Tasks fertig sind.
-     *
-     * @param completionService {@link CompletionService}
-     * @param count int; Anzahl der Tasks
      */
     void waitForCompletionService(final CompletionService<?> completionService, final int count)
     {
@@ -157,17 +143,11 @@ public final class KnnMathCompletionService extends AbstractKnnMath
         }
     }
 
-    /**
-     * @return {@link CompletionService}<Void>
-     */
     private CompletionService<Void> getCompletionService()
     {
         return this.completionService;
     }
 
-    /**
-     * @return {@link Executor}
-     */
     @SuppressWarnings("unused")
     private Executor getExecutor()
     {

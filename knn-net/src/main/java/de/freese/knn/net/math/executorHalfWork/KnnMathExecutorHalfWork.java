@@ -18,22 +18,14 @@ import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
  * Mathematik des {@link NeuralNet} mit einem {@link Future}.<br>
- * Hier wird jedoch die Häfte der Arbeit im aktuellen Thread verarbeitet.
+ * Hier wird jedoch die Hälfte der Arbeit im aktuellen Thread verarbeitet.
  *
  * @author Thomas Freese
  */
 public final class KnnMathExecutorHalfWork extends AbstractKnnMath
 {
-    /**
-     *
-     */
     private final ExecutorService executorService;
 
-    /**
-     * Erstellt ein neues {@link KnnMathExecutorHalfWork} Object.
-     *
-     * @param executorService {@link ExecutorService}
-     */
     public KnnMathExecutorHalfWork(final ExecutorService executorService)
     {
         // Die Arbeit wird zwischen diesem und einem anderen Thread aufgeteilt.
@@ -152,9 +144,6 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
         return List.of(nl1, nl2);
     }
 
-    /**
-     * @return {@link ExecutorService}
-     */
     private ExecutorService getExecutorService()
     {
         return this.executorService;
@@ -162,8 +151,6 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
 
     /**
      * Warten bis der Task fertig ist.
-     *
-     * @param future {@link Future}
      */
     private void waitForFuture(final Future<?> future)
     {

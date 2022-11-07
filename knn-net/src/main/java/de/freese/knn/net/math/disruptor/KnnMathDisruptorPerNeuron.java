@@ -27,9 +27,6 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
      */
     private static class RunnableEvent
     {
-        /**
-         *
-         */
         Runnable runnable;
     }
 
@@ -38,29 +35,15 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
      */
     private static class RunnableHandler implements EventHandler<RunnableEvent>, WorkHandler<RunnableEvent>
     {
-        /**
-         *
-         */
         private final int ordinal;
-        /**
-         *
-         */
+
         private final int parallelism;
 
-        /**
-         * Erstellt ein neues {@link RunnableHandler} Object.
-         */
         RunnableHandler()
         {
             this(-1, -1);
         }
 
-        /**
-         * Erstellt ein neues {@link RunnableHandler} Object.
-         *
-         * @param parallelism int
-         * @param ordinal int
-         */
         RunnableHandler(final int parallelism, final int ordinal)
         {
             super();
@@ -95,14 +78,9 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
         }
     }
 
-    /**
-     *
-     */
     private final Disruptor<RunnableEvent> disruptor;
 
     /**
-     * Erstellt ein neues {@link KnnMathDisruptorPerNeuron} Object.
-     *
      * @param parallelism int; must be a power of 2
      */
     public KnnMathDisruptorPerNeuron(final int parallelism)
@@ -289,9 +267,6 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
         waitForLatch(latch);
     }
 
-    /**
-     * @return {@link Disruptor}
-     */
     private Disruptor<RunnableEvent> getDisruptor()
     {
         return this.disruptor;
@@ -299,8 +274,6 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
 
     /**
      * Blockiert den aktuellen Thread, bis der Latch auf 0 ist.
-     *
-     * @param latch {@link CountDownLatch}
      */
     private void waitForLatch(final CountDownLatch latch)
     {

@@ -31,25 +31,12 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
     // */
     // private static final class NeuronSubscriber implements Subscriber<NeuronList>
     // {
-    // /**
-    // *
-    // */
     // private final Consumer<NeuronList> consumer;
-    // /**
-    // *
-    // */
+    //
     // private final CountDownLatch latch;
-    // /**
-    // *
-    // */
+    //
     // private Subscription subscription;
     //
-    // /**
-    // * Erstellt ein neues {@link NeuronSubscriber} Object.
-    // *
-    // * @param latch {@link CountDownLatch}
-    // * @param consumer {@link Consumer}
-    // */
     // private NeuronSubscriber(final CountDownLatch latch, final Consumer<NeuronList> consumer)
     // {
     // super();
@@ -99,17 +86,8 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
     // }
     // }
 
-    /**
-     *
-     */
     private final Executor executor;
 
-    /**
-     * Erstellt ein neues {@link KnnMathPublishSubscribe} Object.
-     *
-     * @param parallelism int
-     * @param executor {@link Executor}
-     */
     public KnnMathPublishSubscribe(final int parallelism, final Executor executor)
     {
         super(parallelism);
@@ -224,9 +202,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
         waitForFuture(future);
     }
 
-    /**
-     * @return {@link Executor}
-     */
     private Executor getExecutor()
     {
         return this.executor;
@@ -234,8 +209,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
 
     /**
      * Warten bis der Task fertig ist.
-     *
-     * @param future {@link Future}
      */
     private void waitForFuture(final Future<?> future)
     {
@@ -251,8 +224,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
 
     /**
      * Blockiert den aktuellen Thread, bis der Latch auf 0 ist.
-     *
-     * @param latch {@link CountDownLatch}
      */
     private void waitForLatch(final CountDownLatch latch)
     {

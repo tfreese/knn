@@ -17,20 +17,11 @@ public class FunctionSigmoid implements Function
      */
     private final double steigung;
 
-    /**
-     * Creates a new {@link FunctionSigmoid} object.
-     */
     public FunctionSigmoid()
     {
         this(0.0D, 1.0D);
     }
 
-    /**
-     * Creates a new {@link FunctionSigmoid} object.
-     *
-     * @param durchgang double
-     * @param steigung double
-     */
     public FunctionSigmoid(final double durchgang, final double steigung)
     {
         super();
@@ -50,8 +41,6 @@ public class FunctionSigmoid implements Function
 
     /**
      * X-Durchgang für y = 0.5.
-     *
-     * @return double
      */
     public double getDurchgang()
     {
@@ -60,8 +49,6 @@ public class FunctionSigmoid implements Function
 
     /**
      * Steigung -> 0 Treppenfunktion.
-     *
-     * @return double
      */
     public double getSteigung()
     {

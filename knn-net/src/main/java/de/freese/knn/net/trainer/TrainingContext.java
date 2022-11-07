@@ -13,14 +13,8 @@ import de.freese.knn.net.matrix.Matrix;
  */
 public class TrainingContext
 {
-    /**
-     *
-     */
     private Map<Matrix, double[][]> deltaWeights = new HashMap<>();
 
-    /**
-     * Aufräumen.
-     */
     public void clear()
     {
         this.deltaWeights.clear();
@@ -28,11 +22,7 @@ public class TrainingContext
     }
 
     /**
-     * Liefert die vorherige Gewichtsänderungen der Matrix-Neuronen.
-     *
-     * @param matrix {@link Matrix}
-     *
-     * @return double[][]
+     * Liefert die vorherigen Gewichtsänderungen der Matrix-Neuronen.
      */
     public double[][] getDeltaWeights(final Matrix matrix)
     {

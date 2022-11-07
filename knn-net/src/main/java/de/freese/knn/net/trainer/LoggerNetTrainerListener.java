@@ -13,24 +13,13 @@ import org.slf4j.LoggerFactory;
  */
 public class LoggerNetTrainerListener extends AbstractNetTrainerListener
 {
-    /**
-     *
-     */
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggerNetTrainerListener.class);
 
-    /**
-     * Erstellt ein neues {@link LoggerNetTrainerListener} Object.
-     */
     public LoggerNetTrainerListener()
     {
         super();
     }
 
-    /**
-     * Creates a new {@link LoggerNetTrainerListener} object.
-     *
-     * @param logModulo int Welches wievielte Event soll geloggt werden ?
-     */
     public LoggerNetTrainerListener(final int logModulo)
     {
         super(logModulo);

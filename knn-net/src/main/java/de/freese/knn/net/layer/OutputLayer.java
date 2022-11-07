@@ -11,11 +11,6 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public class OutputLayer extends AbstractLayer
 {
-    /**
-     * Creates a new {@link OutputLayer} object.
-     *
-     * @param size int
-     */
     public OutputLayer(final int size)
     {
         super(size, new FunctionSigmoid());
@@ -23,10 +18,6 @@ public class OutputLayer extends AbstractLayer
 
     /**
      * Anpassen der Outputs.
-     *
-     * @param visitor {@link ForwardVisitor}
-     *
-     * @return double[]
      */
     public double[] adjustOutput(final ForwardVisitor visitor)
     {

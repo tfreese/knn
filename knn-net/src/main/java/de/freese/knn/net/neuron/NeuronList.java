@@ -22,9 +22,6 @@ public class NeuronList implements Iterable<Neuron>
      */
     private final class NeuronIterator implements Iterator<Neuron>
     {
-        /**
-         *
-         */
         private int position;
 
         /**
@@ -64,33 +61,18 @@ public class NeuronList implements Iterable<Neuron>
         }
     }
 
-    /**
-     *
-     */
     private final int fromIndex;
-    /**
-     *
-     */
+
     private final Neuron[] neurons;
-    /**
-     *
-     */
+
     private final int toIndex;
 
-    /**
-     * Erstellt ein neues {@link NeuronList} Object.
-     *
-     * @param neurons {@link Neuron}[]
-     */
     public NeuronList(final Neuron[] neurons)
     {
         this(neurons, 0, neurons.length);
     }
 
     /**
-     * Erstellt ein neues {@link NeuronList} Object.
-     *
-     * @param neurons {@link Neuron}[]
      * @param fromIndex int; inklusive
      * @param toIndex int; exklusive
      */
@@ -103,11 +85,6 @@ public class NeuronList implements Iterable<Neuron>
         this.toIndex = toIndex;
     }
 
-    /**
-     * @param index int
-     *
-     * @return {@link Neuron}
-     */
     public Neuron get(final int index)
     {
         return this.neurons[index + this.fromIndex];
@@ -122,17 +99,11 @@ public class NeuronList implements Iterable<Neuron>
         return new NeuronIterator();
     }
 
-    /**
-     * @return {@link Stream}
-     */
     public Stream<Neuron> parallelStream()
     {
         return StreamSupport.stream(spliterator(), true);
     }
 
-    /**
-     * @return int
-     */
     public int size()
     {
         return this.toIndex - this.fromIndex;
@@ -147,9 +118,6 @@ public class NeuronList implements Iterable<Neuron>
         return Arrays.spliterator(this.neurons, this.fromIndex, this.toIndex);
     }
 
-    /**
-     * @return {@link Stream}
-     */
     public Stream<Neuron> stream()
     {
         return StreamSupport.stream(spliterator(), false);
@@ -158,8 +126,6 @@ public class NeuronList implements Iterable<Neuron>
     /**
      * @param fromIndex int; inklusive
      * @param toIndex int; exklusive
-     *
-     * @return {@link NeuronList}
      */
     public NeuronList subList(final int fromIndex, final int toIndex)
     {

@@ -11,37 +11,17 @@ import java.util.EventObject;
  */
 public class NetTrainerCycleEndedEvent extends EventObject
 {
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = -1343301845155055735L;
-    /**
-     *
-     */
+
     private final double error;
-    /**
-     *
-     */
+
     private final int iteration;
-    /**
-     *
-     */
+
     private final double momentum;
-    /**
-     *
-     */
+
     private final double teachFactor;
 
-    /**
-     * Creates a new {@link NetTrainerCycleEndedEvent} object.
-     *
-     * @param source Object
-     * @param iteration int
-     * @param error double
-     * @param teachFactor double
-     * @param momentum double
-     */
     public NetTrainerCycleEndedEvent(final Object source, final int iteration, final double error, final double teachFactor, final double momentum)
     {
         super(source);
@@ -54,8 +34,6 @@ public class NetTrainerCycleEndedEvent extends EventObject
 
     /**
      * Netzfehler.
-     *
-     * @return double
      */
     public double getError()
     {
@@ -64,8 +42,6 @@ public class NetTrainerCycleEndedEvent extends EventObject
 
     /**
      * Lernzyklus.
-     *
-     * @return int
      */
     public int getIteration()
     {
@@ -74,8 +50,6 @@ public class NetTrainerCycleEndedEvent extends EventObject
 
     /**
      * Aktuelles Momentum.
-     *
-     * @return double
      */
     public double getMomentum()
     {
@@ -84,8 +58,6 @@ public class NetTrainerCycleEndedEvent extends EventObject
 
     /**
      * Aktuelle Lernrate.
-     *
-     * @return double
      */
     public double getTeachFactor()
     {

@@ -15,30 +15,11 @@ import javax.imageio.ImageIO;
  */
 public class ImageData
 {
-    /**
-     *
-     */
-    private BufferedImage blackWhiteImage;
-    /**
-     *
-     */
-    private BufferedImage edgeImage;
-    /**
-     *
-     */
-    private double[] pixels;
-    /**
-     *
-     */
     private final BufferedImage sourceImage;
+    private BufferedImage blackWhiteImage;
+    private BufferedImage edgeImage;
+    private double[] pixels;
 
-    /**
-     * Creates a new {@link ImageData} object.
-     *
-     * @param fileName String
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     public ImageData(final String fileName) throws Exception
     {
         super();
@@ -54,8 +35,6 @@ public class ImageData
 
     /**
      * Liefert das Schwarzweiss Bild.
-     *
-     * @return {@link BufferedImage}
      */
     public BufferedImage getBlackWhiteImage()
     {
@@ -69,8 +48,6 @@ public class ImageData
 
     /**
      * Liefert das Kantenbild.
-     *
-     * @return {@link BufferedImage}
      */
     public BufferedImage getEdgeImage()
     {
@@ -85,8 +62,6 @@ public class ImageData
     /**
      * Liefert die Pixel des Kantenbildes als double[].<br>
      * Schwarze Pixel haben den Wert -1, Weiße die +1.
-     *
-     * @return double[]
      */
     public double[] getPixels()
     {
@@ -121,8 +96,6 @@ public class ImageData
 
     /**
      * Liefert das OriginalBild.
-     *
-     * @return {@link BufferedImage}
      */
     public BufferedImage getSourceImage()
     {

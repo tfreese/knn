@@ -29,9 +29,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
     // */
     // private static class JoiningHandler implements EventHandler<MathEvent>
     // {
-    // /**
-    // *
-    // */
     // private CountDownLatch latch;
     //
     // /**
@@ -51,16 +48,8 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
      */
     private static class MathEvent
     {
-        /**
-         *
-         */
         final Runnable[] runnables;
 
-        /**
-         * Erstellt ein neues {@link MathEvent} Object.
-         *
-         * @param parallelism int
-         */
         MathEvent(final int parallelism)
         {
             super();
@@ -74,16 +63,8 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
      */
     private static class MathHandler implements EventHandler<MathEvent>
     {
-        /**
-         *
-         */
         private final int ordinal;
 
-        /**
-         * Erstellt ein neues {@link MathHandler} Object.
-         *
-         * @param ordinal int
-         */
         MathHandler(final int ordinal)
         {
             super();
@@ -103,18 +84,11 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
         }
     }
 
-    /**
-     *
-     */
     private final Disruptor<MathEvent> disruptor;
-    // /**
-    // *
-    // */
+
     // private final JoiningHandler joiningHandler;
 
     /**
-     * Erstellt ein neues {@link KnnMathDisruptorPerPartition} Object.
-     *
      * @param parallelism int; must be a power of 2
      */
     public KnnMathDisruptorPerPartition(final int parallelism)
@@ -268,17 +242,11 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
         waitForLatch(latch);
     }
 
-    /**
-     * @return {@link Disruptor}<MathEvent>
-     */
     private Disruptor<MathEvent> getDisruptor()
     {
         return this.disruptor;
     }
 
-    /**
-     * @param functionRunnables {@link IntFunction}
-     */
     private void publish(final IntFunction<Runnable> functionRunnables)
     {
         RingBuffer<MathEvent> ringBuffer = getDisruptor().getRingBuffer();
@@ -302,8 +270,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
 
     /**
      * Blockiert den aktuellen Thread, bis der Latch auf 0 ist.
-     *
-     * @param latch {@link CountDownLatch}
      */
     private void waitForLatch(final CountDownLatch latch)
     {

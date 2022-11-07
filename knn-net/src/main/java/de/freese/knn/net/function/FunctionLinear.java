@@ -8,24 +8,13 @@ package de.freese.knn.net.function;
  */
 public class FunctionLinear implements Function
 {
-    /**
-     *
-     */
     private final double factor;
 
-    /**
-     * Creates a new {@link FunctionLinear} object.
-     */
     public FunctionLinear()
     {
         this(1.0D);
     }
 
-    /**
-     * Creates a new {@link FunctionLinear} object.
-     *
-     * @param factor double
-     */
     public FunctionLinear(final double factor)
     {
         super();
@@ -42,9 +31,6 @@ public class FunctionLinear implements Function
         return value * getFactor();
     }
 
-    /**
-     * @return double
-     */
     public double getFactor()
     {
         return this.factor;

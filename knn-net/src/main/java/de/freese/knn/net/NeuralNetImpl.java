@@ -19,22 +19,14 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 class NeuralNetImpl implements NeuralNet
 {
-    /**
-     *
-     */
     private KnnMath knnMath;
     /**
      * Das Array wird in der #addLayer-Methode entsprechend vergrößert.
      */
     private Layer[] layers = {};
-    /**
-     *
-     */
+
     private ValueInitializer valueInitializer;
 
-    /**
-     * Creates a new {@link NeuralNetImpl} object.
-     */
     NeuralNetImpl()
     {
         super();
@@ -92,8 +84,6 @@ class NeuralNetImpl implements NeuralNet
     /**
      * Fügt einen Layer hinzu.<br>
      * Der erste muss ein {@link InputLayer} sein, der letzte ein {@link OutputLayer}.
-     *
-     * @param layer {@link Layer}
      */
     void addLayer(final Layer layer)
     {
@@ -124,35 +114,21 @@ class NeuralNetImpl implements NeuralNet
         getMath().initialize(getValueInitializer(), getLayer());
     }
 
-    /**
-     * @param knnMath {@link KnnMath}
-     */
     void setKnnMath(final KnnMath knnMath)
     {
         this.knnMath = Objects.requireNonNull(knnMath, "knnMath required");
     }
 
-    /**
-     * @param valueInitializer {@link ValueInitializer}
-     */
     void setValueInitializer(final ValueInitializer valueInitializer)
     {
         this.valueInitializer = Objects.requireNonNull(valueInitializer, "valueInitializer required");
     }
 
-    /**
-     * Liefert den {@link OutputLayer}.
-     *
-     * @return {@link OutputLayer}
-     */
     private OutputLayer getOutputLayer()
     {
         return (OutputLayer) getLayer()[getLayer().length - 1];
     }
 
-    /**
-     * @return {@link ValueInitializer}
-     */
     private ValueInitializer getValueInitializer()
     {
         return this.valueInitializer;

@@ -8,45 +8,28 @@ package de.freese.knn.net.matrix;
  */
 public class ValueInitializerRandom implements ValueInitializer
 {
-    /**
-     *
-     */
-    private final double oberGrenze;
-    /**
-     *
-     */
-    private final double unterGrenze;
+    private final double lowerLimit;
+    private final double upperLimit;
 
-    /**
-     * Creates a new {@link ValueInitializerRandom} object.
-     */
     public ValueInitializerRandom()
     {
         this(-0.5D, +0.5D);
     }
 
     /**
-     * Creates a new {@link ValueInitializerRandom} object.
-     *
-     * @param grenzWert double, Von -Grenzwert bis +Grenzwert
+     * @param limit double, -limit to +limit
      */
-    public ValueInitializerRandom(final double grenzWert)
+    public ValueInitializerRandom(final double limit)
     {
-        this(Math.abs(grenzWert) * -1, Math.abs(grenzWert));
+        this(Math.abs(limit) * -1, Math.abs(limit));
     }
 
-    /**
-     * Creates a new {@link ValueInitializerRandom} object.
-     *
-     * @param unterGrenze double
-     * @param oberGrenze double
-     */
-    public ValueInitializerRandom(final double unterGrenze, final double oberGrenze)
+    public ValueInitializerRandom(final double lowerLimit, final double upperLimit)
     {
         super();
 
-        this.unterGrenze = unterGrenze;
-        this.oberGrenze = oberGrenze;
+        this.lowerLimit = lowerLimit;
+        this.upperLimit = upperLimit;
     }
 
     /**
@@ -58,6 +41,6 @@ public class ValueInitializerRandom implements ValueInitializer
         // double weight = -0.05D + (Math.random() * 0.1D); // -0.05 bis +0.05
         // double weight = (2.0D * Math.random()) - 1.0D; // -1 bis +1
         // double weight = -0.5D + Math.random(); // -0.5 - +0.5
-        return this.unterGrenze + (Math.random() * (this.oberGrenze - this.unterGrenze));
+        return this.lowerLimit + (Math.random() * (this.upperLimit - this.lowerLimit));
     }
 }

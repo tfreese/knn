@@ -32,11 +32,6 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  */
 public class TestPersisterBinary
 {
-    /**
-     * @param args String[]
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     public static void main(final String[] args) throws Exception
     {
         TrainingInputSource trainingInputSource = new KnnButtonTrainingInputSource();

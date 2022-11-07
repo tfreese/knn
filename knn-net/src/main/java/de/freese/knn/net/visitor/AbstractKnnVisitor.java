@@ -16,56 +16,14 @@ import de.freese.knn.net.math.KnnMath;
  */
 public abstract class AbstractKnnVisitor implements Visitor
 {
-    /**
-     *
-     */
     private KnnMath knnMath;
-    /**
-     *
-     */
+
     private Map<Layer, double[]> values = new HashMap<>();
 
-    /**
-     * Aufräumen.
-     */
     public void clear()
     {
         this.values.clear();
         this.values = null;
-    }
-
-    /**
-     * @return {@link KnnMath}
-     */
-    protected KnnMath getMath()
-    {
-        return this.knnMath;
-    }
-
-    /**
-     * @return {@link Map}<ILayer,double[]>
-     */
-    protected Map<Layer, double[]> getValues()
-    {
-        return this.values;
-    }
-
-    /**
-     * @param layer {@link Layer}
-     */
-    protected abstract void visitHiddenLayer(final Layer layer);
-
-    /**
-     * @param layer {@link InputLayer}
-     */
-    protected abstract void visitInputLayer(final InputLayer layer);
-
-    /**
-     * @param knn {@link NeuralNet}
-     */
-    protected void visitKNN(final NeuralNet knn)
-    {
-        this.knnMath = knn.getMath();
     }
 
     /**
@@ -92,8 +50,24 @@ public abstract class AbstractKnnVisitor implements Visitor
         }
     }
 
-    /**
-     * @param layer {@link OutputLayer}
-     */
+    protected KnnMath getMath()
+    {
+        return this.knnMath;
+    }
+
+    protected Map<Layer, double[]> getValues()
+    {
+        return this.values;
+    }
+
+    protected abstract void visitHiddenLayer(final Layer layer);
+
+    protected abstract void visitInputLayer(final InputLayer layer);
+
+    protected void visitKNN(final NeuralNet knn)
+    {
+        this.knnMath = knn.getMath();
+    }
+
     protected abstract void visitOutputLayer(final OutputLayer layer);
 }

@@ -39,16 +39,12 @@ public final class ImageUtils
 
     /**
      * Liefert true, wenn das {@link Image} transparente Pixel enthält.
-     *
-     * @param image {@link Image}
-     *
-     * @return boolean
      */
     public static boolean hasAlpha(final Image image)
     {
-        if (image instanceof BufferedImage bimage)
+        if (image instanceof BufferedImage bi)
         {
-            return bimage.getColorModel().hasAlpha();
+            return bi.getColorModel().hasAlpha();
         }
 
         PixelGrabber pg = new PixelGrabber(image, 0, 0, 1, 1, false);
@@ -69,12 +65,6 @@ public final class ImageUtils
 
     /**
      * Skaliert das Bild auf eine feste Größe.
-     *
-     * @param src {@link Image}
-     * @param scaleX double
-     * @param scaleY double
-     *
-     * @return {@link BufferedImage}
      */
     public static BufferedImage scaleImage(final Image src, final double scaleX, final double scaleY)
     {
@@ -98,12 +88,6 @@ public final class ImageUtils
 
     /**
      * Skaliert das Bild auf eine feste Größe.
-     *
-     * @param src {@link BufferedImage}
-     * @param width int
-     * @param height int
-     *
-     * @return {@link BufferedImage}
      */
     public static BufferedImage scaleImageAbsolut(final Image src, final int width, final int height)
     {
@@ -117,10 +101,6 @@ public final class ImageUtils
 
     /**
      * Liefert das Schwarzweiss Bild.
-     *
-     * @param image {@link Image}
-     *
-     * @return {@link BufferedImage}
      */
     public static BufferedImage toBlackWhiteImage(final Image image)
     {
@@ -192,10 +172,6 @@ public final class ImageUtils
 
     /**
      * Konvertiert ein {@link Image} in ein {@link BufferedImage}.
-     *
-     * @param image {@link Image}
-     *
-     * @return {@link BufferedImage}
      */
     public static BufferedImage toBufferedImage(final Image image)
     {
@@ -252,10 +228,6 @@ public final class ImageUtils
 
     /**
      * Liefert das Kanten Bild.
-     *
-     * @param image {@link Image}
-     *
-     * @return {@link BufferedImage}
      */
     public static BufferedImage toEdgeImage(final Image image)
     {

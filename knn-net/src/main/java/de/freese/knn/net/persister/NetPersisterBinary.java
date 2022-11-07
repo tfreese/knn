@@ -92,15 +92,6 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         }
     }
 
-    /**
-     * Laden einer Function.
-     *
-     * @param input {@link DataInput}
-     *
-     * @return {@link Layer}
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     protected Function loadFunction(final DataInput input) throws Exception
     {
         // Klassentyp
@@ -153,15 +144,6 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         return function;
     }
 
-    /**
-     * Laden eines Layers.
-     *
-     * @param input {@link DataInput}
-     *
-     * @return {@link Layer}
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     protected Layer loadLayer(final DataInput input) throws Exception
     {
         // Klassentyp
@@ -195,15 +177,6 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         return layer;
     }
 
-    /**
-     * Laden einer Matrix.
-     *
-     * @param input {@link DataInput}
-     *
-     * @return {@link Matrix}
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     protected Matrix loadMatrix(final DataInput input) throws Exception
     {
         int inputSize = input.readInt();
@@ -223,14 +196,6 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         return matrix;
     }
 
-    /**
-     * Speichert einen Layer.
-     *
-     * @param output {@link DataOutput}
-     * @param function {@link Function}
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     protected void saveFunction(final DataOutput output, final Function function) throws Exception
     {
         // Klassentyp
@@ -252,14 +217,6 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         }
     }
 
-    /**
-     * Speichert einen Layer.
-     *
-     * @param output {@link DataOutput}
-     * @param layer {@link Layer}
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     protected void saveLayer(final DataOutput output, final Layer layer) throws Exception
     {
         // Klassentyp
@@ -279,14 +236,6 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         }
     }
 
-    /**
-     * Speichert eine Matrix.
-     *
-     * @param output {@link DataOutput}
-     * @param matrix {@link Matrix}
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     protected void saveMatrix(final DataOutput output, final Matrix matrix) throws Exception
     {
         output.writeInt(matrix.getInputSize());

@@ -2,7 +2,7 @@
 package de.freese.knn.net.function;
 
 /**
- * Verrechnen der Eingangswerte durch die Tangenshyperbolikus Funktion.
+ * Verrechnen der Eingangswerte durch die Tangens-Hyperbolic Funktion.
  *
  * @author Thomas Freese
  */

@@ -11,69 +11,34 @@ import java.awt.image.ColorModel;
  */
 public class ImageColorChannelInfo
 {
-    /**
-     *
-     */
     private final BufferedImage bufferedImage;
-    /**
-     *
-     */
+
     private final ColorChannel colorChannel;
-    /**
-     *
-     */
+
     private int[][] coOccurrenceMatrix;
-    /**
-     *
-     */
+
     private double entropie = -1.0D;
-    /**
-     *
-     */
+
     private int farbTiefe = -1;
-    /**
-     *
-     */
+
     private int[] histogramm;
-    /**
-     *
-     */
+
     private double inverseDifferenz = -1.0D;
-    /**
-     *
-     */
+
     private double inversesDifferenzMoment = -1.0D;
-    /**
-     *
-     */
+
     private double kontrast = -1.0D;
-    /**
-     *
-     */
+
     private int maximalerFarbwert = -1;
-    /**
-     *
-     */
+
     private int minimalerFarbwert = -1;
-    /**
-     *
-     */
+
     private int mittlererFarbwert = -1;
-    /**
-     *
-     */
+
     private double unaehnlichkeit = -1.0D;
-    /**
-     *
-     */
+
     private double uniformitaet = -1.0D;
 
-    /**
-     * Erstellt ein neues {@link ImageColorChannelInfo} Object.
-     *
-     * @param bufferedImage {@link BufferedImage}
-     * @param colorChannel {@link ColorChannel}
-     */
     public ImageColorChannelInfo(final BufferedImage bufferedImage, final ColorChannel colorChannel)
     {
         super();
@@ -87,41 +52,27 @@ public class ImageColorChannelInfo
     /**
      * Liefert die "Grauwertübergangsmatrix".<br>
      * Zählt wie oft Farbwerte nebeneinander auftreten.
-     *
-     * @return int[][]
      */
     public int[][] getCoOccurrenceMatrix()
     {
         return this.coOccurrenceMatrix;
     }
 
-    /**
-     * @return {@link ColorChannel}
-     */
     public ColorChannel getColorChannel()
     {
         return this.colorChannel;
     }
 
-    /**
-     * @return double
-     */
     public double getEntropie()
     {
         return this.entropie;
     }
 
-    /**
-     * @return int
-     */
     public int getFarbTiefe()
     {
         return this.farbTiefe;
     }
 
-    /**
-     * @return int[]
-     */
     public int[] getHistogramm()
     {
         return this.histogramm;
@@ -129,57 +80,37 @@ public class ImageColorChannelInfo
 
     /**
      * Homogenität.
-     *
-     * @return double
      */
     public double getInverseDifferenz()
     {
         return this.inverseDifferenz;
     }
 
-    /**
-     * @return double
-     */
     public double getInversesDifferenzMoment()
     {
         return this.inversesDifferenzMoment;
     }
 
-    /**
-     * @return double
-     */
     public double getKontrast()
     {
         return this.kontrast;
     }
 
-    /**
-     * @return int
-     */
     public int getMaximalerFarbwert()
     {
         return this.maximalerFarbwert;
     }
 
-    /**
-     * @return int
-     */
     public int getMinimalerFarbwert()
     {
         return this.minimalerFarbwert;
     }
 
-    /**
-     * @return int
-     */
     public int getMittlererFarbwert()
     {
         return this.mittlererFarbwert;
     }
 
-    /**
-     * @return double
-     */
     public double getUnaehnlichkeit()
     {
         return this.unaehnlichkeit;
@@ -187,8 +118,6 @@ public class ImageColorChannelInfo
 
     /**
      * Energie.
-     *
-     * @return double
      */
     public double getUniformitaet()
     {

@@ -14,18 +14,10 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  */
 public class KnnButtonTrainingInputSource implements TrainingInputSource
 {
-    /**
-     *
-     */
     private final List<double[]> inputList = new ArrayList<>();
-    /**
-     *
-     */
+
     private final List<double[]> outputList = new ArrayList<>();
 
-    /**
-     * Creates a new {@link KnnButtonTrainingInputSource} object.
-     */
     public KnnButtonTrainingInputSource()
     {
         super();
@@ -60,13 +52,6 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
         return this.inputList.size();
     }
 
-    /**
-     * Erzeugt den Output für den Wert.
-     *
-     * @param value int
-     *
-     * @return double[]
-     */
     private double[] createOutput(final int value)
     {
         final double[] output = new double[10];
@@ -77,9 +62,6 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
         return output;
     }
 
-    /**
-     * Erzeugen der Trainingsdaten.
-     */
     private void createTrainingSet()
     {
         // 0

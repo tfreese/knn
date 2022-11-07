@@ -17,17 +17,10 @@ import org.slf4j.LoggerFactory;
  */
 public class NetTrainer
 {
-    /**
-     *
-     */
     private static final Logger LOGGER = LoggerFactory.getLogger(NetTrainer.class);
-    /**
-     *
-     */
+
     private final EventListenerList listenerList = new EventListenerList();
-    /**
-     *
-     */
+
     private int maxIterations = 2000;
     /**
      * Max. Netzfehler 5 %
@@ -51,10 +44,6 @@ public class NetTrainer
     private double teachFactor = 0.5D;
 
     /**
-     * Creates a new {@link NetTrainer} object.
-     *
-     * @param teachFactor double
-     * @param momentum double
      * @param maximumError double, max. Netzfehler 0-1
      * @param maxIterations int, max. Anzahl an Lernzyklen
      */
@@ -70,21 +59,11 @@ public class NetTrainer
         this.maxIterations = maxIterations;
     }
 
-    /**
-     * Hinzufügen eines {@link NetTrainerListener}.
-     *
-     * @param listener {@link NetTrainerListener}
-     */
     public void addNetTrainerListener(final NetTrainerListener listener)
     {
         this.listenerList.add(NetTrainerListener.class, listener);
     }
 
-    /**
-     * Entfernen eines {@link NetTrainerListener}.
-     *
-     * @param listener {@link NetTrainerListener}
-     */
     public void removeNetTrainerListener(final NetTrainerListener listener)
     {
         this.listenerList.remove(NetTrainerListener.class, listener);
@@ -92,9 +71,6 @@ public class NetTrainer
 
     /**
      * Trainiert das neurale Netz mit Daten aus dem {@link TrainingInputSource}.
-     *
-     * @param neuralNet {@link NeuralNet}
-     * @param inputSource {@link TrainingInputSource}
      */
     public void train(final NeuralNet neuralNet, final TrainingInputSource inputSource)
     {
@@ -143,11 +119,6 @@ public class NetTrainer
         trainingContext.clear();
     }
 
-    /**
-     * Feuert ein Event, wenn ein Lernzyklus beendet ist.
-     *
-     * @param event {@link NetTrainerCycleEndedEvent}
-     */
     private void fireCycleEnded(final NetTrainerCycleEndedEvent event)
     {
         Object[] listeners = this.listenerList.getListenerList();
@@ -164,11 +135,6 @@ public class NetTrainer
     /**
      * Trainiert das neurale Netz mit den Eingangs- und Ausgangsdaten und liefert den Netzfehler.<br>
      * Backpropagation Methode.
-     *
-     * @param trainingContext {@link TrainingContext}
-     * @param neuralNet {@link NeuralNet}
-     * @param inputs double[]
-     * @param outputs double[]
      *
      * @return double, Netzfehler
      */

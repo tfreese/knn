@@ -13,78 +13,33 @@ import de.freese.knn.net.neuron.NeuronList;
  */
 class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[]>
 {
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = 7164427207684076313L;
-    /**
-     *
-     */
+
     private final double[][] deltaWeights;
-    /**
-     *
-     */
+
     private final int from;
-    /**
-     *
-     */
+
     private final double[] leftOutputs;
-    /**
-     *
-     */
+
     private final KnnMathForkJoin math;
-    /**
-     *
-     */
+
     private final double momentum;
-    /**
-     *
-     */
+
     private final NeuronList neurons;
-    /**
-     *
-     */
+
     private final double[] rightErrors;
-    /**
-     *
-     */
+
     private final double teachFactor;
-    /**
-     *
-     */
+
     private final int to;
 
-    /**
-     * Erstellt ein neues {@link ForkJoinRefreshWeightsTask} Object.
-     *
-     * @param math {@link KnnMathForkJoin}
-     * @param neurons {@link NeuronList}
-     * @param teachFactor double
-     * @param momentum double
-     * @param leftOutputs double[]
-     * @param deltaWeights double[]
-     * @param rightErrors double[]
-     */
     ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum,
                                final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors)
     {
         this(math, neurons, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors, 0, neurons.size());
     }
 
-    /**
-     * Erstellt ein neues {@link ForkJoinRefreshWeightsTask} Object.
-     *
-     * @param math {@link KnnMathForkJoin}
-     * @param neurons {@link NeuronList}
-     * @param teachFactor double
-     * @param momentum double
-     * @param leftOutputs double[]
-     * @param deltaWeights double[]
-     * @param rightErrors double[]
-     * @param from int
-     * @param to int
-     */
     private ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum,
                                        final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors, final int from, final int to)
     {

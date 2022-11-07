@@ -17,30 +17,14 @@ import javax.imageio.ImageIO;
  */
 public class ImageInfo
 {
-    /**
-     *
-     */
     private final List<ImageColorChannelInfo> channelInfos = new ArrayList<>();
-    /**
-     *
-     */
+
     private BufferedImage coOccurrenceMatrixImage;
-    /**
-     *
-     */
+
     private double[] infoVector;
-    /**
-     *
-     */
+
     private double[] infoVectorReScaled;
 
-    /**
-     * Erstellt ein neues {@link ImageInfo} Object.
-     *
-     * @param fileName String
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     public ImageInfo(final String fileName) throws Exception
     {
         super();
@@ -63,9 +47,6 @@ public class ImageInfo
         this.channelInfos.add(new ImageColorChannelInfo(target, ColorChannel.BLUE));
     }
 
-    /**
-     * @return {@link BufferedImage}
-     */
     public BufferedImage createCoOccurrenceMatrixImage()
     {
         if (this.coOccurrenceMatrixImage == null)
@@ -112,9 +93,6 @@ public class ImageInfo
         return this.coOccurrenceMatrixImage;
     }
 
-    /**
-     * @return {@link List}
-     */
     public List<ImageColorChannelInfo> getChannelInfos()
     {
         return Collections.unmodifiableList(this.channelInfos);
@@ -131,8 +109,6 @@ public class ImageInfo
      * 7. Inverse Differenz<br>
      * 8. Inverses Differenzmoment<br>
      * 9. Kontrast<br>
-     *
-     * @return double[]
      */
     public double[] getInfoVector()
     {
@@ -179,8 +155,6 @@ public class ImageInfo
     /**
      * Liefert die gesammelten Daten aller Farbkanäle.<br>
      * Die Daten sind hier re-skaliert da grosse Werte dabei sind, wie Uniformität (Energie) und Kontrast.
-     *
-     * @return double[]
      */
     public double[] getInfoVectorReScaled()
     {

@@ -22,20 +22,10 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractKnnMath implements KnnMath
 {
-    /**
-     *
-     */
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    /**
-     *
-     */
+
     private final int parallelism;
 
-    /**
-     * Erstellt ein neues {@link AbstractKnnMath} Object.
-     *
-     * @param parallelism int
-     */
     protected AbstractKnnMath(final int parallelism)
     {
         super();
@@ -85,10 +75,6 @@ public abstract class AbstractKnnMath implements KnnMath
 
     /**
      * Mathematik für die Eingangsfehler eines Neurons.
-     *
-     * @param neuron {@link Neuron}
-     * @param errors double[]
-     * @param layerErrors double[]
      */
     protected void backward(final Neuron neuron, final double[] errors, final double[] layerErrors)
     {
@@ -110,10 +96,6 @@ public abstract class AbstractKnnMath implements KnnMath
 
     /**
      * Mathematik für die Ausgangswerte eines Neurons.
-     *
-     * @param neuron {@link Neuron}
-     * @param inputs double[]
-     * @param outputs double[]
      */
     protected void forward(final Neuron neuron, final double[] inputs, final double[] outputs)
     {
@@ -132,9 +114,6 @@ public abstract class AbstractKnnMath implements KnnMath
         outputs[layerIndex] = neuron.getFunction().calculate(eingangsSumme);
     }
 
-    /**
-     * @return {@link Logger}
-     */
     protected Logger getLogger()
     {
         return this.logger;
@@ -142,12 +121,6 @@ public abstract class AbstractKnnMath implements KnnMath
 
     /**
      * Liefert den aktuellen Netzfehler für ein bestimmtes Ausgangs-Neuron.
-     *
-     * @param neuronIndex int
-     * @param outputs double[]
-     * @param outputTargets double[]
-     *
-     * @return double
      */
     protected double getNetError(final int neuronIndex, final double[] outputs, final double[] outputTargets)
     {
@@ -157,9 +130,6 @@ public abstract class AbstractKnnMath implements KnnMath
         return Math.pow(outputTarget - output, 2.0D);
     }
 
-    /**
-     * @return int
-     */
     protected int getParallelism()
     {
         return this.parallelism;
@@ -169,11 +139,6 @@ public abstract class AbstractKnnMath implements KnnMath
      * Aufsplitten der Neuronen für parallele Verarbeitung.<br>
      * Es wird pro Thread eine SubList verarbeitet.<br>
      * Keine parallele Verarbeitung für einzelne Elemente, dadurch zu hoher Verwaltungsaufwand für die Runtime.
-     *
-     * @param neurons {@link NeuronList}
-     * @param parallelism int
-     *
-     * @return {@link List}<NeuronList>
      */
     protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism)
     {
@@ -224,9 +189,6 @@ public abstract class AbstractKnnMath implements KnnMath
 
     /**
      * Initialisiert die BIAS-Gewichte der Neuronen des Layers.
-     *
-     * @param layer {@link Layer}
-     * @param valueInitializer {@link ValueInitializer}
      */
     protected void initialize(final Layer layer, final ValueInitializer valueInitializer)
     {
@@ -268,13 +230,6 @@ public abstract class AbstractKnnMath implements KnnMath
 
     /**
      * Aktualisiert die Gewichte eines Neurons aus den Fehlern und Ausgangswerten des nachfolgenden Layers.
-     *
-     * @param neuron {@link Neuron}
-     * @param teachFactor double
-     * @param momentum double
-     * @param leftOutputs double[]
-     * @param deltaWeights double[][]
-     * @param rightErrors double[]
      */
     protected void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs,
                                        final double[][] deltaWeights, final double[] rightErrors)
@@ -305,11 +260,6 @@ public abstract class AbstractKnnMath implements KnnMath
 
     /**
      * Liefert den Ausgabefehler nach dem Gradientenabstiegsverfahren für ein bestimmtes Ausgangs-Neuron.
-     *
-     * @param neuronIndex int
-     * @param outputs double[]
-     * @param errors double[]
-     * @param visitor {@link BackwardVisitor}
      */
     protected void setOutputError(final int neuronIndex, final double[] outputs, final double[] errors, final BackwardVisitor visitor)
     {

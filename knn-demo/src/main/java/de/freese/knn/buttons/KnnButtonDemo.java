@@ -28,16 +28,9 @@ import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
  */
 public class KnnButtonDemo extends JFrame
 {
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = -2245301418603208848L;
 
-    /**
-     * @param args String[]
-     */
-    @SuppressWarnings("unused")
     public static void main(final String[] args)
     {
         // Training
@@ -76,9 +69,6 @@ public class KnnButtonDemo extends JFrame
         new KnnButtonDemo().showGui(neuralNet);
     }
 
-    /**
-     * @param neuralNet {@link NeuralNet}
-     */
     private void showGui(final NeuralNet neuralNet)
     {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

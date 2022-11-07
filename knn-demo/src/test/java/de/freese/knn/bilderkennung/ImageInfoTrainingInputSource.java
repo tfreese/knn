@@ -13,16 +13,8 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  */
 public class ImageInfoTrainingInputSource implements TrainingInputSource
 {
-    /**
-     *
-     */
     private final List<ImageInfo> imageInfos = new ArrayList<>();
 
-    /**
-     * Erstellt ein neues {@link ImageInfoTrainingInputSource} Object.
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     public ImageInfoTrainingInputSource() throws Exception
     {
         super();

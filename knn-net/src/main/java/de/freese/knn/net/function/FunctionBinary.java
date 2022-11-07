@@ -2,30 +2,19 @@
 package de.freese.knn.net.function;
 
 /**
- * Verrechnen der Eingangswerte durch die binaere Funktion.
+ * Verrechnen der Eingangswerte durch die binäre Funktion.
  *
  * @author Thomas Freese
  */
 public class FunctionBinary implements Function
 {
-    /**
-     *
-     */
     private final double threshold;
 
-    /**
-     * Creates a new {@link FunctionBinary} object.
-     */
     public FunctionBinary()
     {
         this(0.0D);
     }
 
-    /**
-     * Creates a new {@link FunctionBinary} object.
-     *
-     * @param threshold double
-     */
     public FunctionBinary(final double threshold)
     {
         super();
@@ -42,9 +31,6 @@ public class FunctionBinary implements Function
         return (value > getThreshold()) ? 1.0D : 0.0D;
     }
 
-    /**
-     * @return double
-     */
     public double getThreshold()
     {
         return this.threshold;

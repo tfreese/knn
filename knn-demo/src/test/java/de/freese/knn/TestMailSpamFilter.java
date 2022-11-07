@@ -26,11 +26,6 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
  */
 public class TestMailSpamFilter implements TrainingInputSource
 {
-    /**
-     * @param args String[]
-     *
-     * @throws Exception Falls was schiefgeht.
-     */
     public static void main(final String[] args) throws Exception
     {
         TestMailSpamFilter spamFilter = new TestMailSpamFilter();
@@ -59,22 +54,12 @@ public class TestMailSpamFilter implements TrainingInputSource
         spamFilter.closeDataSource();
     }
 
-    /**
-     *
-     */
     private final List<Map<String, Object>> messages;
-    /**
-     *
-     */
+
     private final List<String> token;
-    /**
-     *
-     */
+
     private JdbcTemplate jdbcTemplate;
 
-    /**
-     * Erstellt ein neues {@link TestMailSpamFilter} Object.
-     */
     public TestMailSpamFilter()
     {
         super();
@@ -82,7 +67,7 @@ public class TestMailSpamFilter implements TrainingInputSource
         SingleConnectionDataSource ds = new SingleConnectionDataSource();
         // ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setDriverClassName("org.mariadb.jdbc.Driver");
-        ds.setUrl("jdbc:mariadb://localhost:3306/tommy?user=tommy&password=tommy");
+        ds.setUrl("jdbc:mariadb://localhost:3306/mail?user=...&password=...");
         ds.setSuppressClose(true);
         ds.setAutoCommit(true);
 
@@ -92,9 +77,6 @@ public class TestMailSpamFilter implements TrainingInputSource
         this.token = this.jdbcTemplate.queryForList("select token from token order by token", String.class);
     }
 
-    /**
-     *
-     */
     public void cleanUp()
     {
         // Entfernen aller Token aus gleichen Zeichen.
@@ -115,9 +97,6 @@ public class TestMailSpamFilter implements TrainingInputSource
         // select count(*), is_spam from message group by is_spam
     }
 
-    /**
-     *
-     */
     public void closeDataSource()
     {
         DataSource dataSource = this.jdbcTemplate.getDataSource();
