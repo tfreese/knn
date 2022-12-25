@@ -9,7 +9,7 @@ import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.math.KnnMath;
-import de.freese.knn.net.math.stream.KnnMathStream;
+import de.freese.knn.net.math.KnnMathStream;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.matrix.ValueInitializerRandom;
 
@@ -78,6 +78,9 @@ public class NeuralNetBuilder
         return neuralNet;
     }
 
+    /**
+     * Default: {@link KnnMathStream}
+     */
     public NeuralNetBuilder knnMath(final KnnMath knnMath)
     {
         this.knnMath = knnMath;
@@ -106,6 +109,9 @@ public class NeuralNetBuilder
         return this;
     }
 
+    /**
+     * Default: {@link ValueInitializerRandom}
+     */
     public NeuralNetBuilder valueInitializer(final ValueInitializer valueInitializer)
     {
         this.valueInitializer = valueInitializer;

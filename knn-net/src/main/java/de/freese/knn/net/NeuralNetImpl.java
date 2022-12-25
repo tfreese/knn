@@ -82,7 +82,6 @@ class NeuralNetImpl implements NeuralNet
     }
 
     /**
-     * Fügt einen Layer hinzu.<br>
      * Der erste muss ein {@link InputLayer} sein, der letzte ein {@link OutputLayer}.
      */
     void addLayer(final Layer layer)

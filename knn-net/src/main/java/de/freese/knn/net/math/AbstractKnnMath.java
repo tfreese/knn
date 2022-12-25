@@ -26,6 +26,11 @@ public abstract class AbstractKnnMath implements KnnMath
 
     private final int parallelism;
 
+    protected AbstractKnnMath()
+    {
+        this(1);
+    }
+
     protected AbstractKnnMath(final int parallelism)
     {
         super();

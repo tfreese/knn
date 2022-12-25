@@ -1,15 +1,12 @@
 // Created: 04.04.2012
 package de.freese.knn.net.math;
 
-import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Mathematik des {@link NeuralNet}.
- *
  * @author Thomas Freese
  */
 public interface KnnMath
