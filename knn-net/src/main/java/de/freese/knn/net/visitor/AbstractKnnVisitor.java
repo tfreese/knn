@@ -60,14 +60,14 @@ public abstract class AbstractKnnVisitor implements Visitor
         return this.values;
     }
 
-    protected abstract void visitHiddenLayer(final Layer layer);
+    protected abstract void visitHiddenLayer(Layer layer);
 
-    protected abstract void visitInputLayer(final InputLayer layer);
+    protected abstract void visitInputLayer(InputLayer layer);
 
-    protected void visitKNN(final NeuralNet knn)
+    protected void visitKNN(NeuralNet knn)
     {
         this.knnMath = knn.getMath();
     }
 
-    protected abstract void visitOutputLayer(final OutputLayer layer);
+    protected abstract void visitOutputLayer(OutputLayer layer);
 }

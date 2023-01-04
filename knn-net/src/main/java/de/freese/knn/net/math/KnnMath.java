@@ -14,7 +14,7 @@ public interface KnnMath
     /**
      * Mathematik für die Eingangsfehler eines Layers.
      */
-    void backward(final Layer layer, final BackwardVisitor visitor);
+    void backward(Layer layer, BackwardVisitor visitor);
 
     default void close()
     {
@@ -24,27 +24,27 @@ public interface KnnMath
     /**
      * Mathematik für die Ausgangswerte eines Layers.
      */
-    void forward(final Layer layer, final ForwardVisitor visitor);
+    void forward(Layer layer, ForwardVisitor visitor);
 
     /**
      * Liefert den aktuellen Netzfehler.
      */
-    double getNetError(final double[] outputs, final double[] outputTargets);
+    double getNetError(double[] outputs, double[] outputTargets);
 
     /**
      * Initialisiert die BIAS-Gewichte der Neuronen eines Layers.
      */
-    void initialize(final ValueInitializer valueInitializer, final Layer[] layers);
+    void initialize(ValueInitializer valueInitializer, Layer[] layers);
 
     /**
      * Aktualisiert die Gewichte eines Layers aus den Fehlern und Ausgangswerten des nachfolgenden Layers.
      *
      * @param momentum double, Anteil der vorherigen Gewichtsveränderung
      */
-    void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor);
+    void refreshLayerWeights(Layer leftLayer, Layer rightLayer, double teachFactor, double momentum, BackwardVisitor visitor);
 
     /**
      * Liefert den Ausgabefehler nach dem Gradientenabstiegsverfahren.
      */
-    void setOutputError(final Layer layer, final BackwardVisitor visitor);
+    void setOutputError(Layer layer, BackwardVisitor visitor);
 }

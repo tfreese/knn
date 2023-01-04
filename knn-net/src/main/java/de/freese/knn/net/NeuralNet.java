@@ -30,5 +30,5 @@ public interface NeuralNet extends Visitable// , AutoCloseable
     /**
      * Berechnet und liefert die Ausgabewerte anhand der Eingabewerte.
      */
-    double[] getOutput(final double[] inputs);
+    double[] getOutput(double[] inputs);
 }

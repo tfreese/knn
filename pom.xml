@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -43,7 +43,12 @@
             <timezone>+2</timezone>
         </developer>
     </developers>
-    
+
+    <properties>
+        <checkstyle.skip>false</checkstyle.skip>
+        <checkstyle.xml>../parents/ci/config/checkstyle.xml</checkstyle.xml>
+    </properties>
+
     <modules>
         <module>knn-net</module>
         <module>knn-demo</module>
