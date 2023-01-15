@@ -27,7 +27,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath
      */
     private static class RunnableEvent
     {
-        Runnable runnable;
+        private Runnable runnable;
     }
 
     /**

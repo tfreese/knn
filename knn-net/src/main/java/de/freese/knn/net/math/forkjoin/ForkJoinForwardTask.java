@@ -20,9 +20,9 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
 
     private final double[] inputs;
 
-    private final KnnMathForkJoin math;
+    private final transient KnnMathForkJoin math;
 
-    private final NeuronList neurons;
+    private final transient NeuronList neurons;
 
     private final double[] outputs;
 

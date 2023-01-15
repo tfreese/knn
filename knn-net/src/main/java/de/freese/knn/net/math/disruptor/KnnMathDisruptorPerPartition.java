@@ -48,7 +48,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath
      */
     private static class MathEvent
     {
-        final Runnable[] runnables;
+        private final Runnable[] runnables;
 
         MathEvent(final int parallelism)
         {

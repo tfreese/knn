@@ -22,11 +22,11 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
 
     private final double[] leftOutputs;
 
-    private final KnnMathForkJoin math;
+    private final transient KnnMathForkJoin math;
 
     private final double momentum;
 
-    private final NeuronList neurons;
+    private final transient NeuronList neurons;
 
     private final double[] rightErrors;
 

@@ -23,7 +23,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  *
  * @author Thomas Freese
  */
-public class BildErkennungMain
+public final class BildErkennungMain
 {
     public static void main(final String[] args) throws Exception
     {
@@ -109,5 +109,10 @@ public class BildErkennungMain
         neuralNet.close();
 
         System.exit(0);
+    }
+
+    private BildErkennungMain()
+    {
+        super();
     }
 }

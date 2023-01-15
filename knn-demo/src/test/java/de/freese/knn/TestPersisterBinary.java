@@ -30,7 +30,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  *
  * @author Thomas Freese
  */
-public class TestPersisterBinary
+public final class TestPersisterBinary
 {
     public static void main(final String[] args) throws Exception
     {
@@ -81,5 +81,10 @@ public class TestPersisterBinary
 
             neuralNet.close();
         }
+    }
+
+    private TestPersisterBinary()
+    {
+        super();
     }
 }

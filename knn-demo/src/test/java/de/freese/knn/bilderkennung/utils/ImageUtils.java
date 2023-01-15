@@ -261,4 +261,9 @@ public final class ImageUtils
 
         return op.filter(bufferedImage, null);
     }
+
+    private ImageUtils()
+    {
+        super();
+    }
 }

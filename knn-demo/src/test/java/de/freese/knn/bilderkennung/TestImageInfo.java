@@ -13,7 +13,7 @@ import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
  *
  * @author Thomas Freese
  */
-public class TestImageInfo
+public final class TestImageInfo
 {
     public static void main(final String[] args) throws Exception
     {
@@ -38,5 +38,10 @@ public class TestImageInfo
         frame.add(new JLabel(new ImageIcon(imageInfo.createCoOccurrenceMatrixImage())));
         frame.setSize(550, 550);
         frame.setVisible(true);
+    }
+
+    private TestImageInfo()
+    {
+        super();
     }
 }

@@ -20,13 +20,13 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
 
     private final int from;
 
-    private final Layer[] layers;
+    private final transient Layer[] layers;
 
-    private final KnnMathForkJoin math;
+    private final transient KnnMathForkJoin math;
 
     private final int to;
 
-    private final ValueInitializer valueInitializer;
+    private final transient ValueInitializer valueInitializer;
 
     ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer)
     {
