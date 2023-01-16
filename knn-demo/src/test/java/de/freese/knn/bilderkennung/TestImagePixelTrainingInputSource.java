@@ -37,7 +37,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
         @Serial
         private static final long serialVersionUID = 1L;
 
-        private Image image;
+        private transient Image image;
 
         /**
          * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
@@ -98,7 +98,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
         @Serial
         private static final long serialVersionUID = 1L;
 
-        private final List<ImageData> dataList = new ArrayList<>();
+        private transient final List<ImageData> dataList = new ArrayList<>();
 
         /**
          * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
