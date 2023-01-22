@@ -22,7 +22,7 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
 
     private final double[] layerErrors;
 
-    private final KnnMathForkJoin math;
+    private transient final KnnMathForkJoin math;
 
     private final transient NeuronList neurons;
 
