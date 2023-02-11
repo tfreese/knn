@@ -12,40 +12,32 @@ import java.util.Spliterator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
+
 import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.neuron.NeuronImpl;
 import de.freese.knn.net.neuron.NeuronList;
-import org.junit.jupiter.api.Test;
 
 /**
  * @author Thomas Freese
  */
-class TestNeuronList
-{
-    static Neuron[] createNeurons()
-    {
-        return new Neuron[]
-                {
-                        new NeuronImpl(null, 0), new NeuronImpl(null, 1), new NeuronImpl(null, 2), new NeuronImpl(null, 3), new NeuronImpl(null, 4)
-                };
+class TestNeuronList {
+    static Neuron[] createNeurons() {
+        return new Neuron[]{new NeuronImpl(null, 0), new NeuronImpl(null, 1), new NeuronImpl(null, 2), new NeuronImpl(null, 3), new NeuronImpl(null, 4)};
     }
 
-    static Stream<Neuron[]> createNeuronsAsStream()
-    {
+    static Stream<Neuron[]> createNeuronsAsStream() {
         return Stream.of(1).map(v -> createNeurons());
     }
 
     @Test
-    void testForEach()
-    {
+    void testForEach() {
         Neuron[] neurons = createNeurons();
         NeuronList neuronList = new NeuronList(neurons);
 
         AtomicInteger atomicInteger = new AtomicInteger(0);
 
-        neuronList.forEach(neuron ->
-                assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex()))
-        ;
+        neuronList.forEach(neuron -> assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex()));
 
         assertEquals(5, atomicInteger.get());
 
@@ -56,8 +48,7 @@ class TestNeuronList
 
         atomicInteger.set(2);
 
-        subList.forEach(neuron ->
-        {
+        subList.forEach(neuron -> {
             System.out.println(neuron.getLayerIndex());
             assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex());
         });
@@ -68,15 +59,13 @@ class TestNeuronList
     // @ParameterizedTest
     // @MethodSource("createNeuronsAsStream")
     @Test
-    void testIterator()
-    {
+    void testIterator() {
         Neuron[] neurons = createNeurons();
         NeuronList neuronList = new NeuronList(neurons);
 
         int i = 0;
 
-        for (Neuron neuron : neuronList)
-        {
+        for (Neuron neuron : neuronList) {
             assertEquals(i++, neuron.getLayerIndex());
         }
 
@@ -84,8 +73,7 @@ class TestNeuronList
     }
 
     @Test
-    void testPartitionByModulo()
-    {
+    void testPartitionByModulo() {
         List<String> values = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i");
 
         int parallelism = 4;
@@ -104,8 +92,7 @@ class TestNeuronList
     }
 
     @Test
-    void testPartitionBySize()
-    {
+    void testPartitionBySize() {
         // 9
         List<String> values = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i");
         List<List<String>> partitions = getPartitionsBySize(values, 4);
@@ -152,22 +139,19 @@ class TestNeuronList
     // @ParameterizedTest
     // @MethodSource("createNeuronsAsStream")
     @Test
-    void testSizeAndIndex()
-    {
+    void testSizeAndIndex() {
         Neuron[] neurons = createNeurons();
         NeuronList neuronList = new NeuronList(neurons);
 
         assertEquals(neurons.length, neuronList.size());
 
-        for (int i = 0; i < neuronList.size(); i++)
-        {
+        for (int i = 0; i < neuronList.size(); i++) {
             assertEquals(i, neuronList.get(i).getLayerIndex());
         }
     }
 
     @Test
-    void testSpliterator()
-    {
+    void testSpliterator() {
         Neuron[] neurons = createNeurons();
         NeuronList neuronList = new NeuronList(neurons);
 
@@ -176,9 +160,7 @@ class TestNeuronList
 
         AtomicInteger atomicInteger = new AtomicInteger(0);
 
-        spliterator.forEachRemaining(neuron ->
-                assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex())
-        );
+        spliterator.forEachRemaining(neuron -> assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex()));
 
         assertEquals(neurons.length, atomicInteger.get());
 
@@ -188,16 +170,13 @@ class TestNeuronList
 
         atomicInteger.set(2);
 
-        spliterator.forEachRemaining(neuron ->
-                assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex())
-        );
+        spliterator.forEachRemaining(neuron -> assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex()));
 
         assertEquals(4, atomicInteger.get());
     }
 
     @Test
-    void testStream()
-    {
+    void testStream() {
         Neuron[] neurons = createNeurons();
         NeuronList neuronList = new NeuronList(neurons);
 
@@ -207,8 +186,7 @@ class TestNeuronList
     }
 
     @Test
-    void testSubList()
-    {
+    void testSubList() {
         Neuron[] neurons = createNeurons();
         NeuronList neuronList = new NeuronList(neurons);
 
@@ -223,8 +201,7 @@ class TestNeuronList
         assertEquals(4, subList.get(2).getLayerIndex());
     }
 
-    protected List<List<String>> getPartitionsBySize(final List<String> values, final int parallelism)
-    {
+    protected List<List<String>> getPartitionsBySize(final List<String> values, final int parallelism) {
         int partitionCount = Math.min(values.size(), parallelism);
         int partitionLength = values.size() / partitionCount;
 
@@ -237,8 +214,7 @@ class TestNeuronList
         // Von hinten Index für Index reduzieren bis es passt.
         int index = partitionCount - 1;
 
-        while (sum > values.size())
-        {
+        while (sum > values.size()) {
             partitionSizes[index]--;
 
             sum--;
@@ -249,8 +225,7 @@ class TestNeuronList
         // Von vorne Index für Index erhöhen bis es passt.
         index = 0;
 
-        while (sum < values.size())
-        {
+        while (sum < values.size()) {
             partitionSizes[index]++;
 
             sum++;
@@ -260,8 +235,7 @@ class TestNeuronList
         List<List<String>> partitions = new ArrayList<>(partitionCount);
         int fromIndex = 0;
 
-        for (int partitionSize : partitionSizes)
-        {
+        for (int partitionSize : partitionSizes) {
             partitions.add(values.subList(fromIndex, fromIndex + partitionSize));
 
             fromIndex += partitionSize;
@@ -270,12 +244,10 @@ class TestNeuronList
         return partitions;
     }
 
-    private List<List<String>> getPartitionsByModulo(final List<String> values, final int parallelism)
-    {
+    private List<List<String>> getPartitionsByModulo(final List<String> values, final int parallelism) {
         Map<Integer, List<String>> partitionMap = new HashMap<>();
 
-        for (int i = 0; i < values.size(); i++)
-        {
+        for (int i = 0; i < values.size(); i++) {
             String value = values.get(i);
             int indexToUse = i % parallelism;
 

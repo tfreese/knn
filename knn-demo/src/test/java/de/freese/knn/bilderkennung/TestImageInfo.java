@@ -13,10 +13,8 @@ import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
  *
  * @author Thomas Freese
  */
-public final class TestImageInfo
-{
-    public static void main(final String[] args) throws Exception
-    {
+public final class TestImageInfo {
+    public static void main(final String[] args) throws Exception {
         String fileName;
         // fileName = "Ampel.gif";
         // fileName = "Bahnkreuz.gif";
@@ -40,8 +38,7 @@ public final class TestImageInfo
         frame.setVisible(true);
     }
 
-    private TestImageInfo()
-    {
+    private TestImageInfo() {
         super();
     }
 }

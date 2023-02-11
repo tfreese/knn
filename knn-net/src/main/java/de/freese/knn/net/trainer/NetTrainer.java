@@ -3,20 +3,20 @@ package de.freese.knn.net.trainer;
 
 import javax.swing.event.EventListenerList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Trainer für das neurale Netz.
  *
  * @author Thomas Freese
  */
-public class NetTrainer
-{
+public class NetTrainer {
     private static final Logger LOGGER = LoggerFactory.getLogger(NetTrainer.class);
 
     private final EventListenerList listenerList = new EventListenerList();
@@ -47,8 +47,7 @@ public class NetTrainer
      * @param maximumError double, max. Netzfehler 0-1
      * @param maxIterations int, max. Anzahl an Lernzyklen
      */
-    public NetTrainer(final double teachFactor, final double momentum, final double maximumError, final int maxIterations)
-    {
+    public NetTrainer(final double teachFactor, final double momentum, final double maximumError, final int maxIterations) {
         super();
 
         this.teachFactor = teachFactor;
@@ -59,30 +58,25 @@ public class NetTrainer
         this.maxIterations = maxIterations;
     }
 
-    public void addNetTrainerListener(final NetTrainerListener listener)
-    {
+    public void addNetTrainerListener(final NetTrainerListener listener) {
         this.listenerList.add(NetTrainerListener.class, listener);
     }
 
-    public void removeNetTrainerListener(final NetTrainerListener listener)
-    {
+    public void removeNetTrainerListener(final NetTrainerListener listener) {
         this.listenerList.remove(NetTrainerListener.class, listener);
     }
 
     /**
      * Trainiert das neurale Netz mit Daten aus dem {@link TrainingInputSource}.
      */
-    public void train(final NeuralNet neuralNet, final TrainingInputSource inputSource)
-    {
+    public void train(final NeuralNet neuralNet, final TrainingInputSource inputSource) {
         long start = System.currentTimeMillis();
         TrainingContext trainingContext = new TrainingContext();
 
-        for (int iteration = 0; iteration < this.maxIterations; iteration++)
-        {
+        for (int iteration = 0; iteration < this.maxIterations; iteration++) {
             double error = 0.0D;
 
-            for (int index = 0; index < inputSource.getSize(); index++)
-            {
+            for (int index = 0; index < inputSource.getSize(); index++) {
                 double[] input = inputSource.getInputAt(index);
                 double[] output = inputSource.getOutputAt(index);
 
@@ -98,13 +92,11 @@ public class NetTrainer
             // int currCircle = this.maxIterations - iteration;
             // this.teachFactor = this.teachFactorInitial - (stepLR * currCircle);
             // this.momentum = this.momentumInitial - (stepMom * currCircle);
-            if (error <= this.maximumError)
-            {
+            if (error <= this.maximumError) {
                 // Letzter Stand loggen.
                 NetTrainerCycleEndedEvent event = new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum);
 
-                if (LOGGER.isInfoEnabled())
-                {
+                if (LOGGER.isInfoEnabled()) {
                     LOGGER.info(event.toString());
                 }
 
@@ -119,14 +111,11 @@ public class NetTrainer
         trainingContext.clear();
     }
 
-    private void fireCycleEnded(final NetTrainerCycleEndedEvent event)
-    {
+    private void fireCycleEnded(final NetTrainerCycleEndedEvent event) {
         Object[] listeners = this.listenerList.getListenerList();
 
-        for (int i = listeners.length - 2; i >= 0; i -= 2)
-        {
-            if (listeners[i] == NetTrainerListener.class)
-            {
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == NetTrainerListener.class) {
                 ((NetTrainerListener) listeners[i + 1]).trainingCycleEnded(event);
             }
         }
@@ -138,8 +127,7 @@ public class NetTrainer
      *
      * @return double, Netzfehler
      */
-    private double train(final TrainingContext trainingContext, final NeuralNet neuralNet, final double[] inputs, final double[] outputs)
-    {
+    private double train(final TrainingContext trainingContext, final NeuralNet neuralNet, final double[] inputs, final double[] outputs) {
         ForwardVisitor forwardVisitor = new ForwardVisitor(true);
         forwardVisitor.setInputs(inputs);
         neuralNet.visit(forwardVisitor);
@@ -152,8 +140,7 @@ public class NetTrainer
         Layer[] layer = neuralNet.getLayer();
 
         // Gewichte durch die Hidden- bis zum InputLayer aktualisieren.
-        for (int i = layer.length - 1; i > 0; i--)
-        {
+        for (int i = layer.length - 1; i > 0; i--) {
             Layer rightLayer = layer[i];
             Layer leftLayer = layer[i - 1];
 

@@ -8,10 +8,8 @@ import de.freese.knn.net.function.Function;
  *
  * @author Thomas Freese
  */
-public class HiddenLayer extends AbstractLayer
-{
-    public HiddenLayer(final int size, final Function function)
-    {
+public class HiddenLayer extends AbstractLayer {
+    public HiddenLayer(final int size, final Function function) {
         super(size, function);
     }
 }

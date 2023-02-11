@@ -7,16 +7,14 @@ package de.freese.knn.net.matrix;
  *
  * @author Thomas Freese
  */
-public class Matrix
-{
+public class Matrix {
     private final int inputSize;
 
     private final int outputSize;
 
     private final double[][] weights;
 
-    public Matrix(final int inputSize, final int outputSize)
-    {
+    public Matrix(final int inputSize, final int outputSize) {
         super();
 
         this.inputSize = inputSize;
@@ -28,24 +26,21 @@ public class Matrix
     /**
      * Liefert die Anzahl der Eingangsneuronen.
      */
-    public int getInputSize()
-    {
+    public int getInputSize() {
         return this.inputSize;
     }
 
     /**
      * Liefert die Anzahl der Ausgangsneuronen.
      */
-    public int getOutputSize()
-    {
+    public int getOutputSize() {
         return this.outputSize;
     }
 
     /**
      * Gewichte. Die Rows sind die Neuronen des Layers, die Columns die Neuronen des vorherigen Layers.
      */
-    public double[][] getWeights()
-    {
+    public double[][] getWeights() {
         return this.weights;
     }
 }

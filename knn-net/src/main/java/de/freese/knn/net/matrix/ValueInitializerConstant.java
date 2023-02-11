@@ -6,12 +6,10 @@ package de.freese.knn.net.matrix;
  *
  * @author Thomas Freese
  */
-public class ValueInitializerConstant implements ValueInitializer
-{
+public class ValueInitializerConstant implements ValueInitializer {
     private final double weight;
 
-    public ValueInitializerConstant(final double weight)
-    {
+    public ValueInitializerConstant(final double weight) {
         super();
 
         this.weight = weight;
@@ -21,8 +19,7 @@ public class ValueInitializerConstant implements ValueInitializer
      * @see de.freese.knn.net.matrix.ValueInitializer#createNextValue()
      */
     @Override
-    public double createNextValue()
-    {
+    public double createNextValue() {
         return this.weight;
     }
 }

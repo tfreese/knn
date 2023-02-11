@@ -6,8 +6,7 @@ package de.freese.knn.net.trainer;
  *
  * @author Thomas Freese
  */
-public interface TrainingInputSource
-{
+public interface TrainingInputSource {
     /**
      * Liefert die Eingangswerte am Index.
      */

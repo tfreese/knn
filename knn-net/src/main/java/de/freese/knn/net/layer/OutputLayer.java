@@ -9,18 +9,15 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public class OutputLayer extends AbstractLayer
-{
-    public OutputLayer(final int size)
-    {
+public class OutputLayer extends AbstractLayer {
+    public OutputLayer(final int size) {
         super(size, new FunctionSigmoid());
     }
 
     /**
      * Anpassen der Outputs.
      */
-    public double[] adjustOutput(final ForwardVisitor visitor)
-    {
+    public double[] adjustOutput(final ForwardVisitor visitor) {
         return visitor.getLastOutputs();
     }
 }

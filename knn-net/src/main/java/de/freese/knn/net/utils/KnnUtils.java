@@ -11,17 +11,13 @@ import org.slf4j.Logger;
 /**
  * @author Thomas Freese
  */
-public final class KnnUtils
-{
-    public static final int DEFAULT_POOL_SIZE =
-            Optional.ofNullable(Integer.getInteger("knn.defaultPoolSize")).orElseGet(() -> Runtime.getRuntime().availableProcessors());
+public final class KnnUtils {
+    public static final int DEFAULT_POOL_SIZE = Optional.ofNullable(Integer.getInteger("knn.defaultPoolSize")).orElseGet(() -> Runtime.getRuntime().availableProcessors());
 
-    public static void shutdown(final ExecutorService executorService, final Logger logger)
-    {
+    public static void shutdown(final ExecutorService executorService, final Logger logger) {
         logger.info("shutdown ExecutorService");
 
-        if (executorService == null)
-        {
+        if (executorService == null) {
             logger.warn("ExecutorService is null");
 
             return;
@@ -29,11 +25,9 @@ public final class KnnUtils
 
         executorService.shutdown();
 
-        try
-        {
+        try {
             // Wait a while for existing tasks to terminate.
-            if (!executorService.awaitTermination(10, TimeUnit.SECONDS))
-            {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
                 logger.warn("Timed out while waiting for ExecutorService");
 
                 // Cancel currently executing tasks.
@@ -46,22 +40,18 @@ public final class KnnUtils
                 // @formatter:on
 
                 // Wait a while for tasks to respond to being cancelled.
-                if (!executorService.awaitTermination(5, TimeUnit.SECONDS))
-                {
+                if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
                     logger.error("ExecutorService did not terminate");
                 }
-                else
-                {
+                else {
                     logger.info("ExecutorService terminated");
                 }
             }
-            else
-            {
+            else {
                 logger.info("ExecutorService terminated");
             }
         }
-        catch (InterruptedException iex)
-        {
+        catch (InterruptedException iex) {
             logger.warn("Interrupted while waiting for ExecutorService");
 
             // (Re-)Cancel if current thread also interrupted.
@@ -72,8 +62,7 @@ public final class KnnUtils
         }
     }
 
-    private KnnUtils()
-    {
+    private KnnUtils() {
         super();
     }
 }

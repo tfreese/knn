@@ -28,13 +28,11 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
 
     private final transient ValueInitializer valueInitializer;
 
-    ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer)
-    {
+    ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer) {
         this(math, layers, valueInitializer, 0, layers.length);
     }
 
-    private ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer, final int from, final int to)
-    {
+    private ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer, final int from, final int to) {
         super();
 
         this.math = math;
@@ -48,19 +46,15 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
      * @see java.util.concurrent.RecursiveAction#compute()
      */
     @Override
-    protected void compute()
-    {
-        if ((this.to - this.from) < 20)
-        {
+    protected void compute() {
+        if ((this.to - this.from) < 20) {
             Layer[] l = Arrays.copyOfRange(this.layers, this.from, this.to);
 
-            for (Layer layer : l)
-            {
+            for (Layer layer : l) {
                 this.math.initialize(layer, this.valueInitializer);
             }
         }
-        else
-        {
+        else {
             int middle = (this.from + this.to) / 2;
 
             ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, this.from, middle);

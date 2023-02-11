@@ -15,8 +15,7 @@ import javax.imageio.ImageIO;
  *
  * @author Thomas Freese
  */
-public class ImageInfo
-{
+public class ImageInfo {
     private final List<ImageColorChannelInfo> channelInfos = new ArrayList<>();
 
     private BufferedImage coOccurrenceMatrixImage;
@@ -25,8 +24,7 @@ public class ImageInfo
 
     private double[] infoVectorReScaled;
 
-    public ImageInfo(final String fileName) throws Exception
-    {
+    public ImageInfo(final String fileName) throws Exception {
         super();
 
         // URL url = ClassLoader.getSystemClassLoader().getResource(fileName);
@@ -47,42 +45,33 @@ public class ImageInfo
         this.channelInfos.add(new ImageColorChannelInfo(target, ColorChannel.BLUE));
     }
 
-    public BufferedImage createCoOccurrenceMatrixImage()
-    {
-        if (this.coOccurrenceMatrixImage == null)
-        {
+    public BufferedImage createCoOccurrenceMatrixImage() {
+        if (this.coOccurrenceMatrixImage == null) {
             this.coOccurrenceMatrixImage = new BufferedImage(510, 510, BufferedImage.TYPE_INT_RGB);
 
-            for (ImageColorChannelInfo channelInfo : this.channelInfos)
-            {
+            for (ImageColorChannelInfo channelInfo : this.channelInfos) {
                 ColorChannel colorChannel = channelInfo.getColorChannel();
 
                 int xOffset = 0;
                 int yOffset = 0;
 
-                if (ColorChannel.RED.equals(colorChannel))
-                {
+                if (ColorChannel.RED.equals(colorChannel)) {
                     xOffset = 255;
                 }
-                else if (ColorChannel.GREEN.equals(colorChannel))
-                {
+                else if (ColorChannel.GREEN.equals(colorChannel)) {
                     xOffset = 0;
                     yOffset = 255;
                 }
-                else if (ColorChannel.BLUE.equals(colorChannel))
-                {
+                else if (ColorChannel.BLUE.equals(colorChannel)) {
                     xOffset = 255;
                     yOffset = 255;
                 }
 
-                for (int x = xOffset; x < (255 + xOffset); x++)
-                {
-                    for (int y = yOffset; y < (255 + yOffset); y++)
-                    {
+                for (int x = xOffset; x < (255 + xOffset); x++) {
+                    for (int y = yOffset; y < (255 + yOffset); y++) {
                         int value = channelInfo.getCoOccurrenceMatrix()[x - xOffset][y - yOffset];
 
-                        if (value > 0)
-                        {
+                        if (value > 0) {
                             this.coOccurrenceMatrixImage.setRGB(x, y, colorChannel.getColor().getRGB());
                         }
                     }
@@ -93,8 +82,7 @@ public class ImageInfo
         return this.coOccurrenceMatrixImage;
     }
 
-    public List<ImageColorChannelInfo> getChannelInfos()
-    {
+    public List<ImageColorChannelInfo> getChannelInfos() {
         return Collections.unmodifiableList(this.channelInfos);
     }
 
@@ -110,10 +98,8 @@ public class ImageInfo
      * 8. Inverses Differenzmoment<br>
      * 9. Kontrast<br>
      */
-    public double[] getInfoVector()
-    {
-        if (this.infoVector == null)
-        {
+    public double[] getInfoVector() {
+        if (this.infoVector == null) {
             this.infoVector = new double[9 * this.channelInfos.size()];
 
             int i = 0;
@@ -135,8 +121,7 @@ public class ImageInfo
             // }
             // }
 
-            for (ImageColorChannelInfo channelInfo : this.channelInfos)
-            {
+            for (ImageColorChannelInfo channelInfo : this.channelInfos) {
                 this.infoVector[i++] = channelInfo.getMinimalerFarbwert();
                 this.infoVector[i++] = channelInfo.getMaximalerFarbwert();
                 this.infoVector[i++] = channelInfo.getMittlererFarbwert();
@@ -156,37 +141,30 @@ public class ImageInfo
      * Liefert die gesammelten Daten aller Farbkanäle.<br>
      * Die Daten sind hier re-skaliert da grosse Werte dabei sind, wie Uniformität (Energie) und Kontrast.
      */
-    public double[] getInfoVectorReScaled()
-    {
-        if (this.infoVectorReScaled == null)
-        {
+    public double[] getInfoVectorReScaled() {
+        if (this.infoVectorReScaled == null) {
             this.infoVectorReScaled = new double[getInfoVector().length];
 
             double min = Double.MAX_VALUE;
             double max = Double.MIN_VALUE;
 
-            for (int i = 0; i < getInfoVector().length; i++)
-            {
+            for (int i = 0; i < getInfoVector().length; i++) {
                 double value = getInfoVector()[i];
 
                 // Sehr große Werte häppchenweise runterrechnen.
-                if (value > 1_000_000D)
-                {
+                if (value > 1_000_000D) {
                     value /= 1_000D;
                 }
 
-                if (value > 1_000_000D)
-                {
+                if (value > 1_000_000D) {
                     value /= 100D;
                 }
 
-                if (value > 1_000_000D)
-                {
+                if (value > 1_000_000D) {
                     value /= 10D;
                 }
 
-                if (value > 500_000D)
-                {
+                if (value > 500_000D) {
                     value /= 2D;
                 }
 
@@ -214,12 +192,10 @@ public class ImageInfo
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        for (ImageColorChannelInfo channelInfo : this.channelInfos)
-        {
+        for (ImageColorChannelInfo channelInfo : this.channelInfos) {
             sb.append(channelInfo.toString());
             sb.append("\n");
         }

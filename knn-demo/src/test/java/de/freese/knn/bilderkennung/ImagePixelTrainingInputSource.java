@@ -13,12 +13,10 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  *
  * @author Thomas Freese
  */
-public class ImagePixelTrainingInputSource implements TrainingInputSource
-{
+public class ImagePixelTrainingInputSource implements TrainingInputSource {
     private final List<ImageData> imageDataList = new ArrayList<>();
 
-    public ImagePixelTrainingInputSource() throws Exception
-    {
+    public ImagePixelTrainingInputSource() throws Exception {
         super();
 
         this.imageDataList.add(new ImageData("Ampel.gif"));
@@ -35,8 +33,7 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
     /**
      * Liefert die Liste der Bilderdaten.
      */
-    public List<ImageData> getImageData()
-    {
+    public List<ImageData> getImageData() {
         return this.imageDataList;
     }
 
@@ -44,8 +41,7 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
      */
     @Override
-    public double[] getInputAt(final int index)
-    {
+    public double[] getInputAt(final int index) {
         ImageData imageData = this.imageDataList.get(index);
 
         return imageData.getPixels();
@@ -55,8 +51,7 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
      */
     @Override
-    public double[] getOutputAt(final int index)
-    {
+    public double[] getOutputAt(final int index) {
         double[] output = new double[getSize()];
         Arrays.fill(output, 0.0D);
 
@@ -69,8 +64,7 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
      */
     @Override
-    public int getSize()
-    {
+    public int getSize() {
         return this.imageDataList.size();
     }
 }

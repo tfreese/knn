@@ -12,10 +12,8 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public class OutputWTALayer extends OutputLayer
-{
-    public OutputWTALayer(final int size)
-    {
+public class OutputWTALayer extends OutputLayer {
+    public OutputWTALayer(final int size) {
         super(size);
     }
 
@@ -23,17 +21,14 @@ public class OutputWTALayer extends OutputLayer
      * @see de.freese.knn.net.layer.OutputLayer#adjustOutput(de.freese.knn.net.visitor.ForwardVisitor)
      */
     @Override
-    public double[] adjustOutput(final ForwardVisitor visitor)
-    {
+    public double[] adjustOutput(final ForwardVisitor visitor) {
         double[] outputs = visitor.getLastOutputs();
 
         double maxOutput = Double.MIN_VALUE;
         int maxOutputIndex = -1;
 
-        for (int i = 0; i < outputs.length; i++)
-        {
-            if (outputs[i] > maxOutput)
-            {
+        for (int i = 0; i < outputs.length; i++) {
+            if (outputs[i] > maxOutput) {
                 maxOutput = outputs[i];
                 maxOutputIndex = i;
             }

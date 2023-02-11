@@ -9,8 +9,7 @@ import java.awt.image.ColorModel;
  *
  * @author Thomas Freese
  */
-public class ImageColorChannelInfo
-{
+public class ImageColorChannelInfo {
     private final BufferedImage bufferedImage;
 
     private final ColorChannel colorChannel;
@@ -39,8 +38,7 @@ public class ImageColorChannelInfo
 
     private double uniformitaet = -1.0D;
 
-    public ImageColorChannelInfo(final BufferedImage bufferedImage, final ColorChannel colorChannel)
-    {
+    public ImageColorChannelInfo(final BufferedImage bufferedImage, final ColorChannel colorChannel) {
         super();
 
         this.bufferedImage = bufferedImage;
@@ -53,74 +51,61 @@ public class ImageColorChannelInfo
      * Liefert die "Grauwertübergangsmatrix".<br>
      * Zählt wie oft Farbwerte nebeneinander auftreten.
      */
-    public int[][] getCoOccurrenceMatrix()
-    {
+    public int[][] getCoOccurrenceMatrix() {
         return this.coOccurrenceMatrix;
     }
 
-    public ColorChannel getColorChannel()
-    {
+    public ColorChannel getColorChannel() {
         return this.colorChannel;
     }
 
-    public double getEntropie()
-    {
+    public double getEntropie() {
         return this.entropie;
     }
 
-    public int getFarbTiefe()
-    {
+    public int getFarbTiefe() {
         return this.farbTiefe;
     }
 
-    public int[] getHistogramm()
-    {
+    public int[] getHistogramm() {
         return this.histogramm;
     }
 
     /**
      * Homogenität.
      */
-    public double getInverseDifferenz()
-    {
+    public double getInverseDifferenz() {
         return this.inverseDifferenz;
     }
 
-    public double getInversesDifferenzMoment()
-    {
+    public double getInversesDifferenzMoment() {
         return this.inversesDifferenzMoment;
     }
 
-    public double getKontrast()
-    {
+    public double getKontrast() {
         return this.kontrast;
     }
 
-    public int getMaximalerFarbwert()
-    {
+    public int getMaximalerFarbwert() {
         return this.maximalerFarbwert;
     }
 
-    public int getMinimalerFarbwert()
-    {
+    public int getMinimalerFarbwert() {
         return this.minimalerFarbwert;
     }
 
-    public int getMittlererFarbwert()
-    {
+    public int getMittlererFarbwert() {
         return this.mittlererFarbwert;
     }
 
-    public double getUnaehnlichkeit()
-    {
+    public double getUnaehnlichkeit() {
         return this.unaehnlichkeit;
     }
 
     /**
      * Energie.
      */
-    public double getUniformitaet()
-    {
+    public double getUniformitaet() {
         return this.uniformitaet;
     }
 
@@ -128,8 +113,7 @@ public class ImageColorChannelInfo
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("ChannelInfo: ").append(getColorChannel()).append("\n");
         sb.append("Minimaler Farbwert: ").append(getMinimalerFarbwert()).append("\n");
@@ -148,8 +132,7 @@ public class ImageColorChannelInfo
     /**
      * Berechnen aller Werte des Farbkanals.
      */
-    private void calculate()
-    {
+    private void calculate() {
         ColorModel colorModel = this.bufferedImage.getColorModel();
         int width = this.bufferedImage.getWidth();
         int height = this.bufferedImage.getHeight();
@@ -165,10 +148,8 @@ public class ImageColorChannelInfo
         this.mittlererFarbwert = 0;
 
         // Co-Occurrence-Matrix berechnen
-        for (int x = 0; x < (width - 1); x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
+        for (int x = 0; x < (width - 1); x++) {
+            for (int y = 0; y < height; y++) {
                 int pixel1 = this.bufferedImage.getRGB(x, y);
                 int pixel2 = this.bufferedImage.getRGB(x + 1, y);
 
@@ -185,8 +166,7 @@ public class ImageColorChannelInfo
         }
 
         // Letzte Pixelzeile für Histogramm nicht vergessen.
-        for (int y = 0; y < height; y++)
-        {
+        for (int y = 0; y < height; y++) {
             int pixel = this.bufferedImage.getRGB(width - 1, y);
 
             int color = this.colorChannel.getValue(pixel);
@@ -207,15 +187,12 @@ public class ImageColorChannelInfo
         this.inversesDifferenzMoment = 0.0D;
         this.kontrast = 0.0D;
 
-        for (int x = 0; x < this.farbTiefe; ++x)
-        {
-            for (int y = 0; y < this.farbTiefe; ++y)
-            {
+        for (int x = 0; x < this.farbTiefe; ++x) {
+            for (int y = 0; y < this.farbTiefe; ++y) {
                 final double c = this.coOccurrenceMatrix[x][y];
                 final double d = x - y;
 
-                if (c != 0.0)
-                {
+                if (c != 0.0) {
                     this.entropie += (c * Math.log(c));
                 }
 

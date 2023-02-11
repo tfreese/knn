@@ -17,8 +17,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-class NeuralNetImpl implements NeuralNet
-{
+class NeuralNetImpl implements NeuralNet {
     private KnnMath knnMath;
     /**
      * Das Array wird in der #addLayer-Methode entsprechend vergrößert.
@@ -27,8 +26,7 @@ class NeuralNetImpl implements NeuralNet
 
     private ValueInitializer valueInitializer;
 
-    NeuralNetImpl()
-    {
+    NeuralNetImpl() {
         super();
     }
 
@@ -36,8 +34,7 @@ class NeuralNetImpl implements NeuralNet
      * @see de.freese.knn.net.NeuralNet#close()
      */
     @Override
-    public void close()
-    {
+    public void close() {
         LOGGER.info("close");
 
         getMath().close();
@@ -49,8 +46,7 @@ class NeuralNetImpl implements NeuralNet
      * @see de.freese.knn.net.NeuralNet#getLayer()
      */
     @Override
-    public Layer[] getLayer()
-    {
+    public Layer[] getLayer() {
         return this.layers;
     }
 
@@ -58,8 +54,7 @@ class NeuralNetImpl implements NeuralNet
      * @see de.freese.knn.net.NeuralNet#getMath()
      */
     @Override
-    public KnnMath getMath()
-    {
+    public KnnMath getMath() {
         return this.knnMath;
     }
 
@@ -67,8 +62,7 @@ class NeuralNetImpl implements NeuralNet
      * @see de.freese.knn.net.NeuralNet#getOutput(double[])
      */
     @Override
-    public double[] getOutput(final double[] inputs)
-    {
+    public double[] getOutput(final double[] inputs) {
         ForwardVisitor visitor = new ForwardVisitor(false);
         visitor.setInputs(inputs);
 
@@ -84,8 +78,7 @@ class NeuralNetImpl implements NeuralNet
     /**
      * Der erste muss ein {@link InputLayer} sein, der letzte ein {@link OutputLayer}.
      */
-    void addLayer(final Layer layer)
-    {
+    void addLayer(final Layer layer) {
         // Array vergrößern.
         Layer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
 
@@ -96,10 +89,8 @@ class NeuralNetImpl implements NeuralNet
     /**
      * Verbindet die Layer mit den Matrixobjekten.
      */
-    void connectLayer()
-    {
-        for (int i = 0; i < (getLayer().length - 1); i++)
-        {
+    void connectLayer() {
+        for (int i = 0; i < (getLayer().length - 1); i++) {
             final Layer leftLayer = getLayer()[i];
             final Layer rightLayer = getLayer()[i + 1];
 
@@ -113,23 +104,19 @@ class NeuralNetImpl implements NeuralNet
         getMath().initialize(getValueInitializer(), getLayer());
     }
 
-    void setKnnMath(final KnnMath knnMath)
-    {
+    void setKnnMath(final KnnMath knnMath) {
         this.knnMath = Objects.requireNonNull(knnMath, "knnMath required");
     }
 
-    void setValueInitializer(final ValueInitializer valueInitializer)
-    {
+    void setValueInitializer(final ValueInitializer valueInitializer) {
         this.valueInitializer = Objects.requireNonNull(valueInitializer, "valueInitializer required");
     }
 
-    private OutputLayer getOutputLayer()
-    {
+    private OutputLayer getOutputLayer() {
         return (OutputLayer) getLayer()[getLayer().length - 1];
     }
 
-    private ValueInitializer getValueInitializer()
-    {
+    private ValueInitializer getValueInitializer() {
         return this.valueInitializer;
     }
 }

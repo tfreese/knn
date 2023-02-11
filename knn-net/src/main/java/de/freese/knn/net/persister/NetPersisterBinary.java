@@ -28,14 +28,12 @@ import de.freese.knn.net.neuron.NeuronList;
  *
  * @author Thomas Freese
  */
-public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
-{
+public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
     /**
      * @see de.freese.knn.net.persister.NetPersister#load(java.lang.Object)
      */
     @Override
-    public NeuralNet load(final DataInput input) throws Exception
-    {
+    public NeuralNet load(final DataInput input) throws Exception {
         NeuralNetBuilder builder = new NeuralNetBuilder();
 
         // Anzahl Layer lesen
@@ -44,18 +42,15 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         Layer leftLayer = loadLayer(input);
         builder.layerInput((InputLayer) leftLayer);
 
-        for (int i = 0; i < (layerCount - 1); i++)
-        {
+        for (int i = 0; i < (layerCount - 1); i++) {
             Matrix matrix = loadMatrix(input);
 
             Layer rightLayer = loadLayer(input);
 
-            if (i < (layerCount - 2))
-            {
+            if (i < (layerCount - 2)) {
                 builder.layerHidden((HiddenLayer) rightLayer);
             }
-            else
-            {
+            else {
                 builder.layerOutput((OutputLayer) rightLayer);
             }
 
@@ -73,27 +68,23 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
      * @see de.freese.knn.net.persister.NetPersister#save(java.lang.Object, de.freese.knn.net.NeuralNet)
      */
     @Override
-    public void save(final DataOutput output, final NeuralNet knn) throws Exception
-    {
+    public void save(final DataOutput output, final NeuralNet knn) throws Exception {
         // Anzahl Layer
         Layer[] layers = knn.getLayer();
 
         output.writeInt(layers.length);
 
-        for (int i = 0; i < layers.length; i++)
-        {
+        for (int i = 0; i < layers.length; i++) {
             Layer layer = layers[i];
             saveLayer(output, layer);
 
-            if (i < (layers.length - 1))
-            {
+            if (i < (layers.length - 1)) {
                 saveMatrix(output, layer.getOutputMatrix());
             }
         }
     }
 
-    protected Function loadFunction(final DataInput input) throws Exception
-    {
+    protected Function loadFunction(final DataInput input) throws Exception {
         // Klassentyp
         String clazzName = input.readUTF();
 
@@ -101,51 +92,42 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         Function function = null;
 
         // Funktions-Parameter
-        if (FunctionBinary.class.equals(clazz))
-        {
+        if (FunctionBinary.class.equals(clazz)) {
             double threshold = input.readDouble();
 
             function = new FunctionBinary(threshold);
         }
-        else if (FunctionGauss.class.equals(clazz))
-        {
+        else if (FunctionGauss.class.equals(clazz)) {
             function = new FunctionGauss();
         }
-        else if (FunctionLinear.class.equals(clazz))
-        {
+        else if (FunctionLinear.class.equals(clazz)) {
             double factor = input.readDouble();
 
             function = new FunctionLinear(factor);
         }
-        else if (FunctionLogarithmic.class.equals(clazz))
-        {
+        else if (FunctionLogarithmic.class.equals(clazz)) {
             function = new FunctionLogarithmic();
         }
-        else if (FunctionSigmoid.class.equals(clazz))
-        {
+        else if (FunctionSigmoid.class.equals(clazz)) {
             double durchgang = input.readDouble();
             double steigung = input.readDouble();
 
             function = new FunctionSigmoid(durchgang, steigung);
         }
-        else if (FunctionSinus.class.equals(clazz))
-        {
+        else if (FunctionSinus.class.equals(clazz)) {
             function = new FunctionSinus();
         }
-        else if (FunctionTanH.class.equals(clazz))
-        {
+        else if (FunctionTanH.class.equals(clazz)) {
             function = new FunctionTanH();
         }
-        else
-        {
+        else {
             throw new UnsupportedOperationException("unknown function type: " + clazz.getName());
         }
 
         return function;
     }
 
-    protected Layer loadLayer(final DataInput input) throws Exception
-    {
+    protected Layer loadLayer(final DataInput input) throws Exception {
         // Klassentyp
         String clazzName = input.readUTF();
 
@@ -157,38 +139,32 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         Class<?> clazz = Class.forName(clazzName);
         Layer layer = null;
 
-        if (HiddenLayer.class.equals(clazz))
-        {
+        if (HiddenLayer.class.equals(clazz)) {
             Constructor<?> constructor = clazz.getConstructor(int.class, Function.class);
             layer = (Layer) constructor.newInstance(size, function);
         }
-        else
-        {
+        else {
             Constructor<?> constructor = clazz.getConstructor(int.class);
             layer = (Layer) constructor.newInstance(size);
         }
 
         // BIAS Gewichte der Neuronen
-        for (Neuron neuron : layer.getNeurons())
-        {
+        for (Neuron neuron : layer.getNeurons()) {
             neuron.setInputBIAS(input.readDouble());
         }
 
         return layer;
     }
 
-    protected Matrix loadMatrix(final DataInput input) throws Exception
-    {
+    protected Matrix loadMatrix(final DataInput input) throws Exception {
         int inputSize = input.readInt();
         int outputSize = input.readInt();
 
         Matrix matrix = new Matrix(inputSize, outputSize);
 
         // Gewichte
-        for (int i = 0; i < inputSize; i++)
-        {
-            for (int j = 0; j < outputSize; j++)
-            {
+        for (int i = 0; i < inputSize; i++) {
+            for (int j = 0; j < outputSize; j++) {
                 matrix.getWeights()[i][j] = input.readDouble();
             }
         }
@@ -196,29 +172,24 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         return matrix;
     }
 
-    protected void saveFunction(final DataOutput output, final Function function) throws Exception
-    {
+    protected void saveFunction(final DataOutput output, final Function function) throws Exception {
         // Klassentyp
         output.writeUTF(function.getClass().getName());
 
         // Funktions-Parameter
-        if (function instanceof FunctionBinary f)
-        {
+        if (function instanceof FunctionBinary f) {
             output.writeDouble(f.getThreshold());
         }
-        else if (function instanceof FunctionLinear f)
-        {
+        else if (function instanceof FunctionLinear f) {
             output.writeDouble(f.getFactor());
         }
-        else if (function instanceof FunctionSigmoid f)
-        {
+        else if (function instanceof FunctionSigmoid f) {
             output.writeDouble(f.getDurchgang());
             output.writeDouble(f.getSteigung());
         }
     }
 
-    protected void saveLayer(final DataOutput output, final Layer layer) throws Exception
-    {
+    protected void saveLayer(final DataOutput output, final Layer layer) throws Exception {
         // Klassentyp
         output.writeUTF(layer.getClass().getName());
 
@@ -230,22 +201,18 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput>
         saveFunction(output, layer.getFunction());
 
         // BIAS Gewichte
-        for (Neuron neuron : neurons)
-        {
+        for (Neuron neuron : neurons) {
             output.writeDouble(neuron.getInputBIAS());
         }
     }
 
-    protected void saveMatrix(final DataOutput output, final Matrix matrix) throws Exception
-    {
+    protected void saveMatrix(final DataOutput output, final Matrix matrix) throws Exception {
         output.writeInt(matrix.getInputSize());
         output.writeInt(matrix.getOutputSize());
 
         // Gewichte
-        for (int i = 0; i < matrix.getInputSize(); i++)
-        {
-            for (int j = 0; j < matrix.getOutputSize(); j++)
-            {
+        for (int i = 0; i < matrix.getInputSize(); i++) {
+            for (int j = 0; j < matrix.getOutputSize(); j++) {
                 output.writeDouble(matrix.getWeights()[i][j]);
             }
         }

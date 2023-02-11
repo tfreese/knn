@@ -20,8 +20,7 @@ import de.freese.knn.net.NeuralNet;
  *
  * @author Thomas Freese
  */
-public class KnnButtonPanel extends JPanel implements ActionListener
-{
+public class KnnButtonPanel extends JPanel implements ActionListener {
     public static final int MAT_HEIGHT = 9;
 
     public static final int MAT_WIDTH = 6;
@@ -33,8 +32,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener
     private final JToggleButton[] toggleButtons = new JToggleButton[MAT_HEIGHT * MAT_WIDTH];
     private JLabel labelRecognized;
 
-    public KnnButtonPanel(final NeuralNet neuralNet)
-    {
+    public KnnButtonPanel(final NeuralNet neuralNet) {
         super();
 
         this.neuralNet = neuralNet;
@@ -44,34 +42,28 @@ public class KnnButtonPanel extends JPanel implements ActionListener
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
-    public void actionPerformed(final ActionEvent event)
-    {
+    public void actionPerformed(final ActionEvent event) {
         double[] outputVector = this.neuralNet.getOutput(getInputVector());
 
         double output = Double.MIN_VALUE;
         double value = Double.NaN;
 
-        for (int i = 0; i < outputVector.length; i++)
-        {
+        for (int i = 0; i < outputVector.length; i++) {
             double percent = outputVector[i] * 100D;
 
             this.labelsOutput[i].setText(String.format("%d: %6.3f %%", i, percent));
 
-            if (percent > 80D)
-            {
+            if (percent > 80D) {
                 this.labelsOutput[i].setForeground(Color.RED);
             }
-            else if (percent > 50D)
-            {
+            else if (percent > 50D) {
                 this.labelsOutput[i].setForeground(Color.BLUE);
             }
-            else
-            {
+            else {
                 this.labelsOutput[i].setForeground(Color.BLACK);
             }
 
-            if (outputVector[i] > output)
-            {
+            if (outputVector[i] > output) {
                 output = outputVector[i];
                 value = i;
             }
@@ -80,8 +72,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener
         this.labelRecognized.setText("Erkannt als: " + value);
     }
 
-    public KnnButtonPanel initGui()
-    {
+    public KnnButtonPanel initGui() {
         JPanel buttonPanel = createButtonPanel(this);
         JPanel outputPanel = createOutputPanel();
         this.labelRecognized = new JLabel("Erkannt als: ");
@@ -94,8 +85,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener
         return this;
     }
 
-    private JPanel createButtonPanel(final ActionListener actionListener)
-    {
+    private JPanel createButtonPanel(final ActionListener actionListener) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(MAT_HEIGHT, MAT_WIDTH));
         panel.setMinimumSize(new Dimension(MAT_WIDTH * 50, MAT_HEIGHT * 50));
@@ -104,10 +94,8 @@ public class KnnButtonPanel extends JPanel implements ActionListener
 
         int i = 0;
 
-        for (int x = 0; x < MAT_WIDTH; x++)
-        {
-            for (int y = 0; y < MAT_HEIGHT; y++, i++)
-            {
+        for (int x = 0; x < MAT_WIDTH; x++) {
+            for (int y = 0; y < MAT_HEIGHT; y++, i++) {
                 JToggleButton button = new JToggleButton(String.valueOf(i));
                 button.setBackground(Color.LIGHT_GRAY);
                 button.setPreferredSize(new Dimension(50, 50));
@@ -121,14 +109,12 @@ public class KnnButtonPanel extends JPanel implements ActionListener
         return panel;
     }
 
-    private JPanel createOutputPanel()
-    {
+    private JPanel createOutputPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(12, 1));
         panel.add(new JLabel("Output-Neuronen"));
 
-        for (int i = 0; i < this.labelsOutput.length; i++)
-        {
+        for (int i = 0; i < this.labelsOutput.length; i++) {
             this.labelsOutput[i] = new JLabel(String.valueOf(i));
             panel.add(this.labelsOutput[i]);
         }
@@ -139,12 +125,10 @@ public class KnnButtonPanel extends JPanel implements ActionListener
     /**
      * Eingangsvektor des NeuralenNetzes.
      */
-    private double[] getInputVector()
-    {
+    private double[] getInputVector() {
         double[] result = new double[this.toggleButtons.length];
 
-        for (int i = 0; i < this.toggleButtons.length; i++)
-        {
+        for (int i = 0; i < this.toggleButtons.length; i++) {
             result[i] = this.toggleButtons[i].isSelected() ? 1.0D : 0.0D;
         }
 

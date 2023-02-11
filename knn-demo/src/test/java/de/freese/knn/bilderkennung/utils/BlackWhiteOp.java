@@ -15,29 +15,25 @@ import java.awt.image.IndexColorModel;
  *
  * @author Thomas Freese
  */
-public class BlackWhiteOp implements BufferedImageOp
-{
+public class BlackWhiteOp implements BufferedImageOp {
     private final RenderingHints hints;
     private int colorLimit = 0;
 
-    public BlackWhiteOp()
-    {
+    public BlackWhiteOp() {
         this(0);
     }
 
     /**
      * @param colorLimit int, wenn eine Farbe > colorLimit wird sie als Weiß interpretiert.
      */
-    public BlackWhiteOp(final int colorLimit)
-    {
+    public BlackWhiteOp(final int colorLimit) {
         this(null, colorLimit);
     }
 
     /**
      * @param colorLimit int, wenn eine Farbe > colorLimit wird sie als Weiß interpretiert
      */
-    public BlackWhiteOp(final RenderingHints hints, final int colorLimit)
-    {
+    public BlackWhiteOp(final RenderingHints hints, final int colorLimit) {
         super();
 
         this.hints = hints;
@@ -48,19 +44,16 @@ public class BlackWhiteOp implements BufferedImageOp
      * @see java.awt.image.BufferedImageOp#createCompatibleDestImage(java.awt.image.BufferedImage, java.awt.image.ColorModel)
      */
     @Override
-    public BufferedImage createCompatibleDestImage(final BufferedImage src, final ColorModel destCM)
-    {
+    public BufferedImage createCompatibleDestImage(final BufferedImage src, final ColorModel destCM) {
         BufferedImage image;
 
         ColorModel colorModel = destCM;
 
-        if (colorModel == null)
-        {
+        if (colorModel == null) {
             colorModel = src.getColorModel();
 
             // Not much support for ICM
-            if (destCM instanceof IndexColorModel)
-            {
+            if (destCM instanceof IndexColorModel) {
                 colorModel = ColorModel.getRGBdefault();
             }
         }
@@ -76,22 +69,18 @@ public class BlackWhiteOp implements BufferedImageOp
      * @see java.awt.image.BufferedImageOp#filter(java.awt.image.BufferedImage, java.awt.image.BufferedImage)
      */
     @Override
-    public BufferedImage filter(final BufferedImage src, final BufferedImage dest)
-    {
-        if (src == null)
-        {
+    public BufferedImage filter(final BufferedImage src, final BufferedImage dest) {
+        if (src == null) {
             throw new NullPointerException("src image");
         }
 
-        if (src == dest)
-        {
+        if (src == dest) {
             throw new IllegalArgumentException("src image cannot be the " + "same as the dst image");
         }
 
         BufferedImage destImage = dest;
 
-        if (dest == null)
-        {
+        if (dest == null) {
             destImage = createCompatibleDestImage(src, null);
         }
 
@@ -101,27 +90,22 @@ public class BlackWhiteOp implements BufferedImageOp
         int rgbBlack = Color.BLACK.getRGB();
         int rgbWhite = Color.WHITE.getRGB();
 
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 int pixel = src.getRGB(x, y);
 
-                @SuppressWarnings("unused")
-                int alpha = (pixel >> 24) & 0xff;
+                @SuppressWarnings("unused") int alpha = (pixel >> 24) & 0xff;
                 int red = (pixel >> 16) & 0xff;
                 int green = (pixel >> 8) & 0xff;
                 int blue = (pixel >> 0) & 0xff;
 
-                if ((red > this.colorLimit) || (green > this.colorLimit) || (blue > this.colorLimit))
-                {
+                if ((red > this.colorLimit) || (green > this.colorLimit) || (blue > this.colorLimit)) {
                     //
                     // int rgb = ((255 & 0xFF) << 24) | ((255 & 0xFF) << 16) | ((255 & 0xFF) << 8) |
                     // ((255 & 0xFF) << 0);
                     destImage.setRGB(x, y, rgbWhite);
                 }
-                else
-                {
+                else {
                     destImage.setRGB(x, y, rgbBlack);
                 }
             }
@@ -134,8 +118,7 @@ public class BlackWhiteOp implements BufferedImageOp
      * @see java.awt.image.BufferedImageOp#getBounds2D(java.awt.image.BufferedImage)
      */
     @Override
-    public Rectangle2D getBounds2D(final BufferedImage src)
-    {
+    public Rectangle2D getBounds2D(final BufferedImage src) {
         return src.getRaster().getBounds();
     }
 
@@ -143,12 +126,10 @@ public class BlackWhiteOp implements BufferedImageOp
      * @see java.awt.image.BufferedImageOp#getPoint2D(java.awt.geom.Point2D, java.awt.geom.Point2D)
      */
     @Override
-    public Point2D getPoint2D(final Point2D srcPt, final Point2D dstPt)
-    {
+    public Point2D getPoint2D(final Point2D srcPt, final Point2D dstPt) {
         Point2D point2d = dstPt;
 
-        if (point2d == null)
-        {
+        if (point2d == null) {
             point2d = new Point2D.Float();
         }
 
@@ -161,8 +142,7 @@ public class BlackWhiteOp implements BufferedImageOp
      * @see java.awt.image.BufferedImageOp#getRenderingHints()
      */
     @Override
-    public RenderingHints getRenderingHints()
-    {
+    public RenderingHints getRenderingHints() {
         return this.hints;
     }
 }

@@ -9,14 +9,12 @@ import java.util.function.UnaryOperator;
  * @author Thomas Freese
  */
 @FunctionalInterface
-public interface Function extends UnaryOperator<Double>
-{
+public interface Function extends UnaryOperator<Double> {
     /**
      * @see java.util.function.Function#apply(java.lang.Object)
      */
     @Override
-    default Double apply(final Double t)
-    {
+    default Double apply(final Double t) {
         return calculate(t);
     }
 

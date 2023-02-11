@@ -12,14 +12,12 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  *
  * @author Thomas Freese
  */
-public class KnnButtonTrainingInputSource implements TrainingInputSource
-{
+public class KnnButtonTrainingInputSource implements TrainingInputSource {
     private final List<double[]> inputList = new ArrayList<>();
 
     private final List<double[]> outputList = new ArrayList<>();
 
-    public KnnButtonTrainingInputSource()
-    {
+    public KnnButtonTrainingInputSource() {
         super();
 
         createTrainingSet();
@@ -29,8 +27,7 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
      */
     @Override
-    public double[] getInputAt(final int index)
-    {
+    public double[] getInputAt(final int index) {
         return this.inputList.get(index);
     }
 
@@ -38,8 +35,7 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
      */
     @Override
-    public double[] getOutputAt(final int index)
-    {
+    public double[] getOutputAt(final int index) {
         return this.outputList.get(index);
     }
 
@@ -47,13 +43,11 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
      */
     @Override
-    public int getSize()
-    {
+    public int getSize() {
         return this.inputList.size();
     }
 
-    private double[] createOutput(final int value)
-    {
+    private double[] createOutput(final int value) {
         final double[] output = new double[10];
         Arrays.fill(output, 0.0D);
 
@@ -62,8 +56,7 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource
         return output;
     }
 
-    private void createTrainingSet()
-    {
+    private void createTrainingSet() {
         // 0
         double[] matrix = new double[KnnButtonPanel.MAT_HEIGHT * KnnButtonPanel.MAT_WIDTH];
         Arrays.fill(matrix, 0.0D);

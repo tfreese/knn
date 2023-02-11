@@ -6,23 +6,20 @@ package de.freese.knn.net.trainer;
  *
  * @author Thomas Freese
  */
-public abstract class AbstractNetTrainerListener implements NetTrainerListener
-{
+public abstract class AbstractNetTrainerListener implements NetTrainerListener {
     /**
      * Welches wievielte Event soll geloggt werden ?
      */
     private final int logModulo;
 
-    protected AbstractNetTrainerListener()
-    {
+    protected AbstractNetTrainerListener() {
         this(1);
     }
 
     /**
      * @param logModulo int Welches wievielte Event soll geloggt werden ?
      */
-    protected AbstractNetTrainerListener(final int logModulo)
-    {
+    protected AbstractNetTrainerListener(final int logModulo) {
         super();
 
         this.logModulo = logModulo;
@@ -31,13 +28,11 @@ public abstract class AbstractNetTrainerListener implements NetTrainerListener
     /**
      * Welches wievielte Event soll geloggt werden ?
      */
-    protected int getLogModulo()
-    {
+    protected int getLogModulo() {
         return this.logModulo;
     }
 
-    protected String toString(final NetTrainerCycleEndedEvent event)
-    {
+    protected String toString(final NetTrainerCycleEndedEvent event) {
         return event.toString();
     }
 }

@@ -24,8 +24,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public final class KnnMathPublishSubscribe extends AbstractKnnMath
-{
+public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     // /**
     // * @author Thomas Freese
     // */
@@ -88,8 +87,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
 
     private final Executor executor;
 
-    public KnnMathPublishSubscribe(final int parallelism, final Executor executor)
-    {
+    public KnnMathPublishSubscribe(final int parallelism, final Executor executor) {
         super(parallelism);
 
         this.executor = Objects.requireNonNull(executor, "executor required");
@@ -99,16 +97,14 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void backward(final Layer layer, final BackwardVisitor visitor)
-    {
+    public void backward(final Layer layer, final BackwardVisitor visitor) {
         double[] errors = visitor.getLastErrors();
         double[] layerErrors = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         CompletableFuture<Void> future = null;
 
-        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
-        {
+        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize())) {
             future = publisher.consume(list -> list.forEach(neuron -> backward(neuron, errors, layerErrors)));
 
             partitions.forEach(publisher::submit);
@@ -123,8 +119,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#close()
      */
     @Override
-    public void close()
-    {
+    public void close() {
         // Externen Executor nicht schliessen.
         // KnnUtils.shutdown(getExecutor(), getLogger());
     }
@@ -133,16 +128,14 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
      */
     @Override
-    public void forward(final Layer layer, final ForwardVisitor visitor)
-    {
+    public void forward(final Layer layer, final ForwardVisitor visitor) {
         double[] inputs = visitor.getLastOutputs();
         double[] outputs = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         CompletableFuture<Void> future = null;
 
-        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
-        {
+        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize())) {
             future = publisher.consume(list -> list.forEach(neuron -> forward(neuron, inputs, outputs)));
 
             partitions.forEach(publisher::submit);
@@ -157,16 +150,13 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
-    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
-    {
+    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         CountDownLatch latch = new CountDownLatch(layers.length);
 
-        for (Layer layer : layers)
-        {
+        for (Layer layer : layers) {
             // InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
             // this.executorService.execute(task);
-            getExecutor().execute(() ->
-            {
+            getExecutor().execute(() -> {
                 initialize(layer, valueInitializer);
 
                 latch.countDown();
@@ -181,9 +171,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
      * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
-                                    final BackwardVisitor visitor)
-    {
+    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         double[] leftOutputs = visitor.getOutputs(leftLayer);
         double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         double[] rightErrors = visitor.getErrors(rightLayer);
@@ -191,10 +179,8 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
         List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
         CompletableFuture<Void> future = null;
 
-        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize()))
-        {
-            future = publisher
-                    .consume(list -> list.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
+        try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize())) {
+            future = publisher.consume(list -> list.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
 
             partitions.forEach(publisher::submit);
         }
@@ -202,22 +188,18 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
         waitForFuture(future);
     }
 
-    private Executor getExecutor()
-    {
+    private Executor getExecutor() {
         return this.executor;
     }
 
     /**
      * Warten bis der Task fertig ist.
      */
-    private void waitForFuture(final Future<?> future)
-    {
-        try
-        {
+    private void waitForFuture(final Future<?> future) {
+        try {
             future.get();
         }
-        catch (InterruptedException | ExecutionException ex)
-        {
+        catch (InterruptedException | ExecutionException ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }
@@ -225,18 +207,14 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath
     /**
      * Blockiert den aktuellen Thread, bis der Latch auf 0 ist.
      */
-    private void waitForLatch(final CountDownLatch latch)
-    {
-        try
-        {
+    private void waitForLatch(final CountDownLatch latch) {
+        try {
             latch.await();
         }
-        catch (RuntimeException rex)
-        {
+        catch (RuntimeException rex) {
             throw rex;
         }
-        catch (Throwable th)
-        {
+        catch (Throwable th) {
             throw new RuntimeException(th);
         }
     }

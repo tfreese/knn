@@ -11,12 +11,10 @@ import de.freese.knn.net.matrix.Matrix;
  *
  * @author Thomas Freese
  */
-public class TrainingContext
-{
+public class TrainingContext {
     private Map<Matrix, double[][]> deltaWeights = new HashMap<>();
 
-    public void clear()
-    {
+    public void clear() {
         this.deltaWeights.clear();
         this.deltaWeights = null;
     }
@@ -24,8 +22,7 @@ public class TrainingContext
     /**
      * Liefert die vorherigen Gewichtsänderungen der Matrix-Neuronen.
      */
-    public double[][] getDeltaWeights(final Matrix matrix)
-    {
+    public double[][] getDeltaWeights(final Matrix matrix) {
         return this.deltaWeights.computeIfAbsent(matrix, key -> new double[matrix.getInputSize()][matrix.getOutputSize()]);
     }
 }

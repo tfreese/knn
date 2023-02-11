@@ -13,15 +13,13 @@ import javax.imageio.ImageIO;
  *
  * @author Thomas Freese
  */
-public class ImageData
-{
+public class ImageData {
     private final BufferedImage sourceImage;
     private BufferedImage blackWhiteImage;
     private BufferedImage edgeImage;
     private double[] pixels;
 
-    public ImageData(final String fileName) throws Exception
-    {
+    public ImageData(final String fileName) throws Exception {
         super();
 
         // String[] formats = ImageIO.getWriterFormatNames();
@@ -36,10 +34,8 @@ public class ImageData
     /**
      * Liefert das Schwarzweiss Bild.
      */
-    public BufferedImage getBlackWhiteImage()
-    {
-        if (this.blackWhiteImage == null)
-        {
+    public BufferedImage getBlackWhiteImage() {
+        if (this.blackWhiteImage == null) {
             this.blackWhiteImage = ImageUtils.toBlackWhiteImage(getEdgeImage());
         }
 
@@ -49,10 +45,8 @@ public class ImageData
     /**
      * Liefert das Kantenbild.
      */
-    public BufferedImage getEdgeImage()
-    {
-        if (this.edgeImage == null)
-        {
+    public BufferedImage getEdgeImage() {
+        if (this.edgeImage == null) {
             this.edgeImage = ImageUtils.toEdgeImage(getSourceImage());
         }
 
@@ -63,10 +57,8 @@ public class ImageData
      * Liefert die Pixel des Kantenbildes als double[].<br>
      * Schwarze Pixel haben den Wert -1, Weiße die +1.
      */
-    public double[] getPixels()
-    {
-        if (this.pixels == null)
-        {
+    public double[] getPixels() {
+        if (this.pixels == null) {
             BufferedImage image = getBlackWhiteImage();
 
             int width = image.getWidth();
@@ -77,14 +69,11 @@ public class ImageData
 
             int rgbWhite = Color.WHITE.getRGB();
 
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
                     int pixel = image.getRGB(x, y);
 
-                    if (pixel == rgbWhite)
-                    {
+                    if (pixel == rgbWhite) {
                         this.pixels[x + (width * y)] = 1.0D;
                     }
                 }
@@ -97,8 +86,7 @@ public class ImageData
     /**
      * Liefert das OriginalBild.
      */
-    public BufferedImage getSourceImage()
-    {
+    public BufferedImage getSourceImage() {
         return this.sourceImage;
     }
 }

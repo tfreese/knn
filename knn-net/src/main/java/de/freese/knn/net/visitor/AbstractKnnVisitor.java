@@ -14,14 +14,12 @@ import de.freese.knn.net.math.KnnMath;
  *
  * @author Thomas Freese
  */
-public abstract class AbstractKnnVisitor implements Visitor
-{
+public abstract class AbstractKnnVisitor implements Visitor {
     private KnnMath knnMath;
 
     private Map<Layer, double[]> values = new HashMap<>();
 
-    public void clear()
-    {
+    public void clear() {
         this.values.clear();
         this.values = null;
     }
@@ -30,33 +28,26 @@ public abstract class AbstractKnnVisitor implements Visitor
      * @see de.freese.knn.net.visitor.Visitor#visitObject(java.lang.Object)
      */
     @Override
-    public void visitObject(final Object object)
-    {
-        if (object instanceof NeuralNet o)
-        {
+    public void visitObject(final Object object) {
+        if (object instanceof NeuralNet o) {
             visitKNN(o);
         }
-        else if (object instanceof InputLayer o)
-        {
+        else if (object instanceof InputLayer o) {
             visitInputLayer(o);
         }
-        else if (object instanceof OutputLayer o)
-        {
+        else if (object instanceof OutputLayer o) {
             visitOutputLayer(o);
         }
-        else if (object instanceof Layer o)
-        {
+        else if (object instanceof Layer o) {
             visitHiddenLayer(o);
         }
     }
 
-    protected KnnMath getMath()
-    {
+    protected KnnMath getMath() {
         return this.knnMath;
     }
 
-    protected Map<Layer, double[]> getValues()
-    {
+    protected Map<Layer, double[]> getValues() {
         return this.values;
     }
 
@@ -64,8 +55,7 @@ public abstract class AbstractKnnVisitor implements Visitor
 
     protected abstract void visitInputLayer(InputLayer layer);
 
-    protected void visitKNN(NeuralNet knn)
-    {
+    protected void visitKNN(NeuralNet knn) {
         this.knnMath = knn.getMath();
     }
 

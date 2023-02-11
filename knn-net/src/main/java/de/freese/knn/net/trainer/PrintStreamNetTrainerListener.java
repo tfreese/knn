@@ -9,12 +9,10 @@ import java.util.Objects;
  *
  * @author Thomas Freese
  */
-public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener
-{
+public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener {
     private final PrintStream printStream;
 
-    public PrintStreamNetTrainerListener(final PrintStream printStream)
-    {
+    public PrintStreamNetTrainerListener(final PrintStream printStream) {
         super();
 
         this.printStream = printStream;
@@ -23,8 +21,7 @@ public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener
     /**
      * @param logModulo Welches wievielte Event soll geloggt werden ?
      */
-    public PrintStreamNetTrainerListener(final PrintStream printStream, final int logModulo)
-    {
+    public PrintStreamNetTrainerListener(final PrintStream printStream, final int logModulo) {
         super(logModulo);
 
         this.printStream = Objects.requireNonNull(printStream, "printStream required");
@@ -34,10 +31,8 @@ public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener
      * @see de.freese.knn.net.trainer.NetTrainerListener#trainingCycleEnded(de.freese.knn.net.trainer.NetTrainerCycleEndedEvent)
      */
     @Override
-    public void trainingCycleEnded(final NetTrainerCycleEndedEvent event)
-    {
-        if ((event.getIteration() % getLogModulo()) != 0)
-        {
+    public void trainingCycleEnded(final NetTrainerCycleEndedEvent event) {
+        if ((event.getIteration() % getLogModulo()) != 0) {
             return;
         }
 

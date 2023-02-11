@@ -9,8 +9,7 @@ import java.util.EventObject;
  *
  * @author Thomas Freese
  */
-public class NetTrainerCycleEndedEvent extends EventObject
-{
+public class NetTrainerCycleEndedEvent extends EventObject {
     @Serial
     private static final long serialVersionUID = -1343301845155055735L;
 
@@ -22,8 +21,7 @@ public class NetTrainerCycleEndedEvent extends EventObject
 
     private final double teachFactor;
 
-    public NetTrainerCycleEndedEvent(final Object source, final int iteration, final double error, final double teachFactor, final double momentum)
-    {
+    public NetTrainerCycleEndedEvent(final Object source, final int iteration, final double error, final double teachFactor, final double momentum) {
         super(source);
 
         this.iteration = iteration;
@@ -35,32 +33,28 @@ public class NetTrainerCycleEndedEvent extends EventObject
     /**
      * Netzfehler.
      */
-    public double getError()
-    {
+    public double getError() {
         return this.error;
     }
 
     /**
      * Lernzyklus.
      */
-    public int getIteration()
-    {
+    public int getIteration() {
         return this.iteration;
     }
 
     /**
      * Aktuelles Momentum.
      */
-    public double getMomentum()
-    {
+    public double getMomentum() {
         return this.momentum;
     }
 
     /**
      * Aktuelle Lernrate.
      */
-    public double getTeachFactor()
-    {
+    public double getTeachFactor() {
         return this.teachFactor;
     }
 
@@ -68,8 +62,7 @@ public class NetTrainerCycleEndedEvent extends EventObject
      * @see java.util.EventObject#toString()
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Iteration = ").append(getIteration());
         sb.append(", Lernrate = ").append(getTeachFactor());

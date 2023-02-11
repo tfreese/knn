@@ -11,17 +11,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Thomas Freese
  */
-public class LoggerNetTrainerListener extends AbstractNetTrainerListener
-{
+public class LoggerNetTrainerListener extends AbstractNetTrainerListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggerNetTrainerListener.class);
 
-    public LoggerNetTrainerListener()
-    {
+    public LoggerNetTrainerListener() {
         super();
     }
 
-    public LoggerNetTrainerListener(final int logModulo)
-    {
+    public LoggerNetTrainerListener(final int logModulo) {
         super(logModulo);
     }
 
@@ -29,15 +26,12 @@ public class LoggerNetTrainerListener extends AbstractNetTrainerListener
      * @see de.freese.knn.net.trainer.NetTrainerListener#trainingCycleEnded(de.freese.knn.net.trainer.NetTrainerCycleEndedEvent)
      */
     @Override
-    public void trainingCycleEnded(final NetTrainerCycleEndedEvent event)
-    {
-        if ((event.getIteration() % getLogModulo()) != 0)
-        {
+    public void trainingCycleEnded(final NetTrainerCycleEndedEvent event) {
+        if ((event.getIteration() % getLogModulo()) != 0) {
             return;
         }
 
-        if (LOGGER.isInfoEnabled())
-        {
+        if (LOGGER.isInfoEnabled()) {
             LOGGER.info(toString(event));
         }
     }

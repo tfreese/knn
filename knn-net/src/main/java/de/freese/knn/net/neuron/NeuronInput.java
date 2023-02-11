@@ -10,10 +10,8 @@ import de.freese.knn.net.layer.Layer;
  *
  * @author Thomas Freese
  */
-public class NeuronInput extends NeuronImpl
-{
-    public NeuronInput(final Layer layer, final int layerIndex)
-    {
+public class NeuronInput extends NeuronImpl {
+    public NeuronInput(final Layer layer, final int layerIndex) {
         super(layer, layerIndex);
     }
 
@@ -21,8 +19,7 @@ public class NeuronInput extends NeuronImpl
      * @see de.freese.knn.net.neuron.NeuronImpl#getInputBIAS()
      */
     @Override
-    public double getInputBIAS()
-    {
+    public double getInputBIAS() {
         return 0.0D;
     }
 
@@ -30,8 +27,7 @@ public class NeuronInput extends NeuronImpl
      * @see de.freese.knn.net.neuron.NeuronImpl#setInputBIAS(double)
      */
     @Override
-    public void setInputBIAS(final double value)
-    {
+    public void setInputBIAS(final double value) {
         // Empty
     }
 }

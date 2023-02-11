@@ -22,12 +22,10 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public final class KnnMathExecutorHalfWork extends AbstractKnnMath
-{
+public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
     private final ExecutorService executorService;
 
-    public KnnMathExecutorHalfWork(final ExecutorService executorService)
-    {
+    public KnnMathExecutorHalfWork(final ExecutorService executorService) {
         // Die Arbeit wird zwischen diesem und einem anderen Thread aufgeteilt.
         super(2);
 
@@ -38,8 +36,7 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void backward(final Layer layer, final BackwardVisitor visitor)
-    {
+    public void backward(final Layer layer, final BackwardVisitor visitor) {
         double[] errors = visitor.getLastErrors();
         double[] layerErrors = new double[layer.getSize()];
 
@@ -59,8 +56,7 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#close()
      */
     @Override
-    public void close()
-    {
+    public void close() {
         // Externen ExecutorService nicht schliessen.
         // KnnUtils.shutdown(getExecutorService(), getLogger());
     }
@@ -69,8 +65,7 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
      */
     @Override
-    public void forward(final Layer layer, final ForwardVisitor visitor)
-    {
+    public void forward(final Layer layer, final ForwardVisitor visitor) {
         double[] inputs = visitor.getLastOutputs();
         double[] outputs = new double[layer.getSize()];
 
@@ -90,8 +85,7 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
-    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
-    {
+    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         int middle = layers.length / getParallelism();
 
         List<Layer> layerList = Arrays.asList(layers);
@@ -112,17 +106,14 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
      * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
-                                    final BackwardVisitor visitor)
-    {
+    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         double[] leftOutputs = visitor.getOutputs(leftLayer);
         double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         double[] rightErrors = visitor.getErrors(rightLayer);
 
         List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
 
-        Future<?> future = getExecutorService()
-                .submit(() -> partitions.get(0).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
+        Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
 
         // In diesem Thread.
         partitions.get(1).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
@@ -134,8 +125,7 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
      * @see de.freese.knn.net.math.AbstractKnnMath#getPartitions(de.freese.knn.net.neuron.NeuronList, int)
      */
     @Override
-    protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism)
-    {
+    protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism) {
         int middle = neurons.size() / parallelism;
 
         NeuronList nl1 = neurons.subList(0, middle);
@@ -144,22 +134,18 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath
         return List.of(nl1, nl2);
     }
 
-    private ExecutorService getExecutorService()
-    {
+    private ExecutorService getExecutorService() {
         return this.executorService;
     }
 
     /**
      * Warten bis der Task fertig ist.
      */
-    private void waitForFuture(final Future<?> future)
-    {
-        try
-        {
+    private void waitForFuture(final Future<?> future) {
+        try {
             future.get();
         }
-        catch (InterruptedException | ExecutionException ex)
-        {
+        catch (InterruptedException | ExecutionException ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }

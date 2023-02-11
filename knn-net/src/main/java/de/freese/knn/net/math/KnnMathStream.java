@@ -16,10 +16,8 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public final class KnnMathStream extends AbstractKnnMath
-{
-    public KnnMathStream()
-    {
+public final class KnnMathStream extends AbstractKnnMath {
+    public KnnMathStream() {
         super();
     }
 
@@ -27,8 +25,7 @@ public final class KnnMathStream extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void backward(final Layer layer, final BackwardVisitor visitor)
-    {
+    public void backward(final Layer layer, final BackwardVisitor visitor) {
         final double[] errors = visitor.getLastErrors();
         final double[] layerErrors = new double[layer.getSize()];
 
@@ -46,8 +43,7 @@ public final class KnnMathStream extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
      */
     @Override
-    public void forward(final Layer layer, final ForwardVisitor visitor)
-    {
+    public void forward(final Layer layer, final ForwardVisitor visitor) {
         final double[] inputs = visitor.getLastOutputs();
         final double[] outputs = new double[layer.getSize()];
 
@@ -65,8 +61,7 @@ public final class KnnMathStream extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
-    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
-    {
+    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         // @formatter:off
         StreamSupport.stream(Arrays.spliterator(layers), true)
             .parallel()
@@ -80,9 +75,7 @@ public final class KnnMathStream extends AbstractKnnMath
      * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
-                                    final BackwardVisitor visitor)
-    {
+    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         final double[] leftOutputs = visitor.getOutputs(leftLayer);
         final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         final double[] rightErrors = visitor.getErrors(rightLayer);

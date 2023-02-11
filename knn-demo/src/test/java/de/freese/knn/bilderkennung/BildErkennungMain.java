@@ -23,10 +23,8 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  *
  * @author Thomas Freese
  */
-public final class BildErkennungMain
-{
-    public static void main(final String[] args) throws Exception
-    {
+public final class BildErkennungMain {
+    public static void main(final String[] args) throws Exception {
         // TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
         TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
 
@@ -49,16 +47,14 @@ public final class BildErkennungMain
                 ;
         // @formatter:on
 
-        if (trainingInputSource instanceof ImageInfoTrainingInputSource)
-        {
+        if (trainingInputSource instanceof ImageInfoTrainingInputSource) {
             // @formatter:off
             builder.layerInput(new InputLayer(trainingInputSource.getInputAt(0).length))
                 .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
                 ;
             // @formatter:on
         }
-        else if (trainingInputSource instanceof ImagePixelTrainingInputSource)
-        {
+        else if (trainingInputSource instanceof ImagePixelTrainingInputSource) {
             // @formatter:off
             builder.layerInput(new InputLayer(trainingInputSource.getInputAt(0).length))
                 .layerHidden(new HiddenLayer(1000, new FunctionSigmoid()))
@@ -89,14 +85,12 @@ public final class BildErkennungMain
 
         double[] outputs = null;
 
-        if (trainingInputSource instanceof ImageInfoTrainingInputSource)
-        {
+        if (trainingInputSource instanceof ImageInfoTrainingInputSource) {
             ImageInfo testImageInfo = new ImageInfo("Seaside.jpg");
 
             outputs = neuralNet.getOutput(testImageInfo.getInfoVectorReScaled());
         }
-        else if (trainingInputSource instanceof ImagePixelTrainingInputSource)
-        {
+        else if (trainingInputSource instanceof ImagePixelTrainingInputSource) {
             ImageData imageData = new ImageData("Seaside.jpg");
 
             outputs = neuralNet.getOutput(imageData.getPixels());
@@ -111,8 +105,7 @@ public final class BildErkennungMain
         System.exit(0);
     }
 
-    private BildErkennungMain()
-    {
+    private BildErkennungMain() {
         super();
     }
 }

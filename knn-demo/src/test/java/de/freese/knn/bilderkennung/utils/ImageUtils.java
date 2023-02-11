@@ -25,36 +25,30 @@ import java.util.Map;
  *
  * @author Thomas Freese
  */
-public final class ImageUtils
-{
+public final class ImageUtils {
     /**
      * Alle Icons in hoher Qualität.
      */
     public static final Map<Key, Object> RENDERING_HINTS = new HashMap<>();
 
-    static
-    {
+    static {
         ImageUtils.RENDERING_HINTS.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
     /**
      * Liefert true, wenn das {@link Image} transparente Pixel enthält.
      */
-    public static boolean hasAlpha(final Image image)
-    {
-        if (image instanceof BufferedImage bi)
-        {
+    public static boolean hasAlpha(final Image image) {
+        if (image instanceof BufferedImage bi) {
             return bi.getColorModel().hasAlpha();
         }
 
         PixelGrabber pg = new PixelGrabber(image, 0, 0, 1, 1, false);
 
-        try
-        {
+        try {
             pg.grabPixels();
         }
-        catch (InterruptedException ex)
-        {
+        catch (InterruptedException ex) {
             // Ignore
         }
 
@@ -66,8 +60,7 @@ public final class ImageUtils
     /**
      * Skaliert das Bild auf eine feste Größe.
      */
-    public static BufferedImage scaleImage(final Image src, final double scaleX, final double scaleY)
-    {
+    public static BufferedImage scaleImage(final Image src, final double scaleX, final double scaleY) {
         BufferedImage bufferedImage = ImageUtils.toBufferedImage(src);
         AffineTransform tx = new AffineTransform();
         tx.scale(scaleX, scaleY);
@@ -89,8 +82,7 @@ public final class ImageUtils
     /**
      * Skaliert das Bild auf eine feste Größe.
      */
-    public static BufferedImage scaleImageAbsolut(final Image src, final int width, final int height)
-    {
+    public static BufferedImage scaleImageAbsolut(final Image src, final int width, final int height) {
         BufferedImage bufferedImage = ImageUtils.toBufferedImage(src);
 
         double scaleX = ((double) width) / bufferedImage.getWidth();
@@ -102,8 +94,7 @@ public final class ImageUtils
     /**
      * Liefert das Schwarzweiss Bild.
      */
-    public static BufferedImage toBlackWhiteImage(final Image image)
-    {
+    public static BufferedImage toBlackWhiteImage(final Image image) {
         BufferedImage bufferedImage = ImageUtils.toBufferedImage(image);
 
         RenderingHints hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -173,10 +164,8 @@ public final class ImageUtils
     /**
      * Konvertiert ein {@link Image} in ein {@link BufferedImage}.
      */
-    public static BufferedImage toBufferedImage(final Image image)
-    {
-        if (image instanceof BufferedImage)
-        {
+    public static BufferedImage toBufferedImage(final Image image) {
+        if (image instanceof BufferedImage) {
             return (BufferedImage) image;
         }
 
@@ -187,12 +176,10 @@ public final class ImageUtils
         BufferedImage bimage = null;
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
-        try
-        {
+        try {
             int transparency = Transparency.OPAQUE;
 
-            if (hasAlpha)
-            {
+            if (hasAlpha) {
                 transparency = Transparency.BITMASK;
             }
 
@@ -201,17 +188,14 @@ public final class ImageUtils
 
             bimage = gc.createCompatibleImage(image.getWidth(null), image.getHeight(null), transparency);
         }
-        catch (HeadlessException ex)
-        {
+        catch (HeadlessException ex) {
             // Keine GUI vorhanden
         }
 
-        if (bimage == null)
-        {
+        if (bimage == null) {
             int type = BufferedImage.TYPE_INT_RGB;
 
-            if (hasAlpha)
-            {
+            if (hasAlpha) {
                 type = BufferedImage.TYPE_INT_ARGB;
             }
 
@@ -229,15 +213,11 @@ public final class ImageUtils
     /**
      * Liefert das Kanten Bild.
      */
-    public static BufferedImage toEdgeImage(final Image image)
-    {
+    public static BufferedImage toEdgeImage(final Image image) {
         BufferedImage bufferedImage = ImageUtils.toBufferedImage(image);
 
         // Sobel Operator, horizontal & vertikal
-        float[] matrix = new float[]
-                {
-                        0.0f, -1.0f, 0.0f, -1.0f, 4.0f, -1.0f, 0.0f, -1.0f, 0.0f
-                };
+        float[] matrix = new float[]{0.0f, -1.0f, 0.0f, -1.0f, 4.0f, -1.0f, 0.0f, -1.0f, 0.0f};
 
         // // Sobel Operator, horizontal
         // float[] matrix = new float[]
@@ -262,8 +242,7 @@ public final class ImageUtils
         return op.filter(bufferedImage, null);
     }
 
-    private ImageUtils()
-    {
+    private ImageUtils() {
         super();
     }
 }

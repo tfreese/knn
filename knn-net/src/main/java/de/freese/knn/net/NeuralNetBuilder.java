@@ -16,8 +16,7 @@ import de.freese.knn.net.matrix.ValueInitializerRandom;
 /**
  * @author Thomas Freese
  */
-public class NeuralNetBuilder
-{
+public class NeuralNetBuilder {
     private final List<HiddenLayer> hiddenLayers = new ArrayList<>();
 
     private InputLayer inputLayer;
@@ -28,13 +27,11 @@ public class NeuralNetBuilder
 
     private ValueInitializer valueInitializer;
 
-    public NeuralNet build()
-    {
+    public NeuralNet build() {
         return build(true);
     }
 
-    public NeuralNet build(final boolean connectLayer)
-    {
+    public NeuralNet build(final boolean connectLayer) {
         NeuralNetImpl neuralNet = new NeuralNetImpl();
 
         // KnnMath
@@ -44,34 +41,29 @@ public class NeuralNetBuilder
         neuralNet.setValueInitializer(Objects.requireNonNullElseGet(this.valueInitializer, ValueInitializerRandom::new));
 
         // InputLayer
-        if (this.inputLayer == null)
-        {
+        if (this.inputLayer == null) {
             throw new IllegalArgumentException("InputLayer required");
         }
 
         neuralNet.addLayer(this.inputLayer);
 
         // HiddenLayer
-        if (this.hiddenLayers.isEmpty())
-        {
+        if (this.hiddenLayers.isEmpty()) {
             throw new IllegalArgumentException("HiddenLayer required");
         }
 
-        for (HiddenLayer l : this.hiddenLayers)
-        {
+        for (HiddenLayer l : this.hiddenLayers) {
             neuralNet.addLayer(l);
         }
 
         // OutputLayer
-        if (this.outputLayer == null)
-        {
+        if (this.outputLayer == null) {
             throw new IllegalArgumentException("OutputLayer required");
         }
 
         neuralNet.addLayer(this.outputLayer);
 
-        if (connectLayer)
-        {
+        if (connectLayer) {
             neuralNet.connectLayer();
         }
 
@@ -81,29 +73,25 @@ public class NeuralNetBuilder
     /**
      * Default: {@link KnnMathStream}
      */
-    public NeuralNetBuilder knnMath(final KnnMath knnMath)
-    {
+    public NeuralNetBuilder knnMath(final KnnMath knnMath) {
         this.knnMath = knnMath;
 
         return this;
     }
 
-    public NeuralNetBuilder layerHidden(final HiddenLayer hiddenLayer)
-    {
+    public NeuralNetBuilder layerHidden(final HiddenLayer hiddenLayer) {
         this.hiddenLayers.add(hiddenLayer);
 
         return this;
     }
 
-    public NeuralNetBuilder layerInput(final InputLayer inputLayer)
-    {
+    public NeuralNetBuilder layerInput(final InputLayer inputLayer) {
         this.inputLayer = inputLayer;
 
         return this;
     }
 
-    public NeuralNetBuilder layerOutput(final OutputLayer outputLayer)
-    {
+    public NeuralNetBuilder layerOutput(final OutputLayer outputLayer) {
         this.outputLayer = outputLayer;
 
         return this;
@@ -112,8 +100,7 @@ public class NeuralNetBuilder
     /**
      * Default: {@link ValueInitializerRandom}
      */
-    public NeuralNetBuilder valueInitializer(final ValueInitializer valueInitializer)
-    {
+    public NeuralNetBuilder valueInitializer(final ValueInitializer valueInitializer) {
         this.valueInitializer = valueInitializer;
 
         return this;

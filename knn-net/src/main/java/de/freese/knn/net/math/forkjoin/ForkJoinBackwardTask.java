@@ -28,14 +28,11 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
 
     private final int to;
 
-    ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors)
-    {
+    ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors) {
         this(math, neurons, errors, layerErrors, 0, neurons.size());
     }
 
-    private ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors, final int from,
-                                 final int to)
-    {
+    private ForkJoinBackwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] errors, final double[] layerErrors, final int from, final int to) {
         super();
 
         this.math = math;
@@ -50,16 +47,13 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
      * @see java.util.concurrent.RecursiveAction#compute()
      */
     @Override
-    protected void compute()
-    {
-        if ((this.to - this.from) < 20)
-        {
+    protected void compute() {
+        if ((this.to - this.from) < 20) {
             NeuronList n = this.neurons.subList(this.from, this.to);
 
             n.forEach(neuron -> this.math.backward(neuron, this.errors, this.layerErrors));
         }
-        else
-        {
+        else {
             int middle = (this.from + this.to) / 2;
 
             ForkJoinBackwardTask task1 = new ForkJoinBackwardTask(this.math, this.neurons, this.errors, this.layerErrors, this.from, middle);

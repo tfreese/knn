@@ -9,10 +9,8 @@ import de.freese.knn.net.neuron.NeuronInput;
  *
  * @author Thomas Freese
  */
-public class InputLayer extends AbstractLayer
-{
-    public InputLayer(final int size)
-    {
+public class InputLayer extends AbstractLayer {
+    public InputLayer(final int size) {
         super(size, new FunctionLinear(), NeuronInput::new);
     }
 }

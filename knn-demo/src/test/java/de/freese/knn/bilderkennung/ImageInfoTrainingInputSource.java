@@ -11,12 +11,10 @@ import de.freese.knn.net.trainer.TrainingInputSource;
 /**
  * @author Thomas Freese
  */
-public class ImageInfoTrainingInputSource implements TrainingInputSource
-{
+public class ImageInfoTrainingInputSource implements TrainingInputSource {
     private final List<ImageInfo> imageInfos = new ArrayList<>();
 
-    public ImageInfoTrainingInputSource() throws Exception
-    {
+    public ImageInfoTrainingInputSource() throws Exception {
         super();
 
         this.imageInfos.add(new ImageInfo("Ampel.gif"));
@@ -34,8 +32,7 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
      */
     @Override
-    public double[] getInputAt(final int index)
-    {
+    public double[] getInputAt(final int index) {
         return this.imageInfos.get(index).getInfoVectorReScaled();
     }
 
@@ -43,8 +40,7 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
      */
     @Override
-    public double[] getOutputAt(final int index)
-    {
+    public double[] getOutputAt(final int index) {
         double[] output = new double[getSize()];
         Arrays.fill(output, 0.0D);
 
@@ -57,8 +53,7 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
      */
     @Override
-    public int getSize()
-    {
+    public int getSize() {
         return this.imageInfos.size();
     }
 }

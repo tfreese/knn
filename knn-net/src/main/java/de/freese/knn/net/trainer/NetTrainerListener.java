@@ -9,8 +9,7 @@ import java.util.EventListener;
  * @author Thomas Freese
  */
 @FunctionalInterface
-public interface NetTrainerListener extends EventListener
-{
+public interface NetTrainerListener extends EventListener {
     /**
      * Nachdem ein Lernzyklus beendet ist, wird die Nummer und der Netzfehler des Zyklus übergeben.
      */

@@ -15,21 +15,18 @@ import de.freese.knn.net.layer.Layer;
  *
  * @author Thomas Freese
  */
-public class NeuronList implements Iterable<Neuron>
-{
+public class NeuronList implements Iterable<Neuron> {
     /**
      * @author Thomas Freese
      */
-    private final class NeuronIterator implements Iterator<Neuron>
-    {
+    private final class NeuronIterator implements Iterator<Neuron> {
         private int position;
 
         /**
          * @see java.util.Iterator#hasNext()
          */
         @Override
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return this.position < size();
         }
 
@@ -37,10 +34,8 @@ public class NeuronList implements Iterable<Neuron>
          * @see java.util.Iterator#next()
          */
         @Override
-        public Neuron next()
-        {
-            if (hasNext())
-            {
+        public Neuron next() {
+            if (hasNext()) {
                 Neuron neuron = get(this.position);
                 this.position++;
 
@@ -54,8 +49,7 @@ public class NeuronList implements Iterable<Neuron>
          * @see java.util.Iterator#remove()
          */
         @Override
-        public void remove()
-        {
+        public void remove() {
             // set(this.position, null);
             throw new UnsupportedOperationException("remove() method is not supported");
         }
@@ -67,8 +61,7 @@ public class NeuronList implements Iterable<Neuron>
 
     private final int toIndex;
 
-    public NeuronList(final Neuron[] neurons)
-    {
+    public NeuronList(final Neuron[] neurons) {
         this(neurons, 0, neurons.length);
     }
 
@@ -76,8 +69,7 @@ public class NeuronList implements Iterable<Neuron>
      * @param fromIndex int; inklusive
      * @param toIndex int; exklusive
      */
-    private NeuronList(final Neuron[] neurons, final int fromIndex, final int toIndex)
-    {
+    private NeuronList(final Neuron[] neurons, final int fromIndex, final int toIndex) {
         super();
 
         this.neurons = neurons;
@@ -85,8 +77,7 @@ public class NeuronList implements Iterable<Neuron>
         this.toIndex = toIndex;
     }
 
-    public Neuron get(final int index)
-    {
+    public Neuron get(final int index) {
         return this.neurons[index + this.fromIndex];
     }
 
@@ -94,18 +85,15 @@ public class NeuronList implements Iterable<Neuron>
      * @see java.lang.Iterable#iterator()
      */
     @Override
-    public Iterator<Neuron> iterator()
-    {
+    public Iterator<Neuron> iterator() {
         return new NeuronIterator();
     }
 
-    public Stream<Neuron> parallelStream()
-    {
+    public Stream<Neuron> parallelStream() {
         return StreamSupport.stream(spliterator(), true);
     }
 
-    public int size()
-    {
+    public int size() {
         return this.toIndex - this.fromIndex;
     }
 
@@ -113,13 +101,11 @@ public class NeuronList implements Iterable<Neuron>
      * @see java.lang.Iterable#spliterator()
      */
     @Override
-    public Spliterator<Neuron> spliterator()
-    {
+    public Spliterator<Neuron> spliterator() {
         return Arrays.spliterator(this.neurons, this.fromIndex, this.toIndex);
     }
 
-    public Stream<Neuron> stream()
-    {
+    public Stream<Neuron> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
 
@@ -127,8 +113,7 @@ public class NeuronList implements Iterable<Neuron>
      * @param fromIndex int; inklusive
      * @param toIndex int; exklusive
      */
-    public NeuronList subList(final int fromIndex, final int toIndex)
-    {
+    public NeuronList subList(final int fromIndex, final int toIndex) {
         return new NeuronList(this.neurons, fromIndex, toIndex);
     }
 }

@@ -7,7 +7,6 @@ package de.freese.knn.net.matrix;
  * @author Thomas Freese
  */
 @FunctionalInterface
-public interface ValueInitializer
-{
+public interface ValueInitializer {
     double createNextValue();
 }

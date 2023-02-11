@@ -6,8 +6,7 @@ package de.freese.knn.net.function;
  *
  * @author Thomas Freese
  */
-public class FunctionSigmoid implements Function
-{
+public class FunctionSigmoid implements Function {
     /**
      * X-Durchgang für y = 0.5
      */
@@ -17,13 +16,11 @@ public class FunctionSigmoid implements Function
      */
     private final double steigung;
 
-    public FunctionSigmoid()
-    {
+    public FunctionSigmoid() {
         this(0.0D, 1.0D);
     }
 
-    public FunctionSigmoid(final double durchgang, final double steigung)
-    {
+    public FunctionSigmoid(final double durchgang, final double steigung) {
         super();
 
         this.durchgang = durchgang;
@@ -34,24 +31,21 @@ public class FunctionSigmoid implements Function
      * @see de.freese.knn.net.function.Function#calculate(double)
      */
     @Override
-    public double calculate(final double value)
-    {
+    public double calculate(final double value) {
         return (1.0D / (1.0D + Math.exp(-((value - getDurchgang()) / getSteigung()))));
     }
 
     /**
      * X-Durchgang für y = 0.5.
      */
-    public double getDurchgang()
-    {
+    public double getDurchgang() {
         return this.durchgang;
     }
 
     /**
      * Steigung -> 0 Treppenfunktion.
      */
-    public double getSteigung()
-    {
+    public double getSteigung() {
         return this.steigung;
     }
 }

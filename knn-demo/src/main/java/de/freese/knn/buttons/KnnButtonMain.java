@@ -26,13 +26,11 @@ import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
  *
  * @author Thomas Freese
  */
-public class KnnButtonMain extends JFrame
-{
+public class KnnButtonMain extends JFrame {
     @Serial
     private static final long serialVersionUID = -2245301418603208848L;
 
-    public static void main(final String[] args)
-    {
+    public static void main(final String[] args) {
         // Training
         int parallelism = Runtime.getRuntime().availableProcessors();
 
@@ -70,24 +68,19 @@ public class KnnButtonMain extends JFrame
         new KnnButtonMain().showGui(neuralNet);
     }
 
-    private void showGui(final NeuralNet neuralNet)
-    {
+    private void showGui(final NeuralNet neuralNet) {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        addWindowListener(new WindowAdapter()
-        {
+        addWindowListener(new WindowAdapter() {
             /**
              * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
              */
             @Override
-            public void windowClosing(final WindowEvent event)
-            {
-                try
-                {
+            public void windowClosing(final WindowEvent event) {
+                try {
                     neuralNet.close();
                     System.exit(0);
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     ex.printStackTrace();
                     System.exit(-1);
                 }

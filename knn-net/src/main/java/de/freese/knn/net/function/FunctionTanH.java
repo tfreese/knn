@@ -6,14 +6,12 @@ package de.freese.knn.net.function;
  *
  * @author Thomas Freese
  */
-public class FunctionTanH implements Function
-{
+public class FunctionTanH implements Function {
     /**
      * @see de.freese.knn.net.function.Function#calculate(double)
      */
     @Override
-    public double calculate(final double value)
-    {
+    public double calculate(final double value) {
         return -1.0D + (2.0D / (1.0D + Math.exp(-2.0D * value)));
     }
 }

@@ -11,6 +11,9 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RunnableFuture;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
@@ -18,29 +21,24 @@ import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Mathematik des {@link NeuralNet} mit QueueWorkers.
  *
  * @author Thomas Freese
  */
-public final class KnnMathQueueWorker extends AbstractKnnMath
-{
+public final class KnnMathQueueWorker extends AbstractKnnMath {
     /**
      * @author Thomas Freese
      */
-    private static final class QueueWorker extends Thread
-    {
+    private static final class QueueWorker extends Thread {
         private static final Logger LOGGER = LoggerFactory.getLogger(QueueWorker.class);
 
         private final BlockingQueue<Runnable> queue;
 
         private boolean stopped;
 
-        private QueueWorker(final BlockingQueue<Runnable> queue)
-        {
+        private QueueWorker(final BlockingQueue<Runnable> queue) {
             super();
 
             this.queue = Objects.requireNonNull(queue, "queue required");
@@ -50,27 +48,21 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
          * @see java.lang.Runnable#run()
          */
         @Override
-        public void run()
-        {
-            while (!Thread.interrupted())
-            {
-                if (this.stopped)
-                {
+        public void run() {
+            while (!Thread.interrupted()) {
+                if (this.stopped) {
                     break;
                 }
 
-                try
-                {
+                try {
                     Runnable runnable = this.queue.take();
 
                     runnable.run();
                 }
-                catch (InterruptedException iex)
-                {
+                catch (InterruptedException iex) {
                     // Ignore
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     LOGGER.error(ex.getMessage(), ex);
                 }
             }
@@ -78,8 +70,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
             LOGGER.debug("{}: terminated", getName());
         }
 
-        void stopWorker()
-        {
+        void stopWorker() {
             this.stopped = true;
 
             interrupt();
@@ -90,12 +81,10 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
 
     private final List<QueueWorker> workers = new ArrayList<>();
 
-    public KnnMathQueueWorker(final int parallelism)
-    {
+    public KnnMathQueueWorker(final int parallelism) {
         super(parallelism);
 
-        for (int i = 1; i <= (parallelism); i++)
-        {
+        for (int i = 1; i <= (parallelism); i++) {
             QueueWorker worker = new QueueWorker(this.queue);
             worker.setName(worker.getClass().getSimpleName() + "-" + i);
             worker.setDaemon(false);
@@ -109,16 +98,14 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void backward(final Layer layer, final BackwardVisitor visitor)
-    {
+    public void backward(final Layer layer, final BackwardVisitor visitor) {
         double[] errors = visitor.getLastErrors();
         double[] layerErrors = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
-        for (NeuronList partition : partitions)
-        {
+        for (NeuronList partition : partitions) {
             RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> backward(neuron, errors, layerErrors)), null);
 
             futures.add(future);
@@ -134,8 +121,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#close()
      */
     @Override
-    public void close()
-    {
+    public void close() {
         this.workers.forEach(QueueWorker::stopWorker);
 
         this.workers.clear();
@@ -146,16 +132,14 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
      */
     @Override
-    public void forward(final Layer layer, final ForwardVisitor visitor)
-    {
+    public void forward(final Layer layer, final ForwardVisitor visitor) {
         double[] inputs = visitor.getLastOutputs();
         double[] outputs = new double[layer.getSize()];
 
         List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
-        for (NeuronList partition : partitions)
-        {
+        for (NeuronList partition : partitions) {
             RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> forward(neuron, inputs, outputs)), null);
 
             futures.add(future);
@@ -171,12 +155,10 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
      */
     @Override
-    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
-    {
+    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         List<RunnableFuture<Void>> futures = new ArrayList<>(layers.length);
 
-        for (Layer layer : layers)
-        {
+        for (Layer layer : layers) {
             RunnableFuture<Void> future = new FutureTask<>(() -> initialize(layer, valueInitializer), null);
 
             futures.add(future);
@@ -191,9 +173,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
      * de.freese.knn.net.visitor.BackwardVisitor)
      */
     @Override
-    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
-                                    final BackwardVisitor visitor)
-    {
+    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         double[] leftOutputs = visitor.getOutputs(leftLayer);
         double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         double[] rightErrors = visitor.getErrors(rightLayer);
@@ -201,10 +181,8 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
         List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
         List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
-        for (NeuronList partition : partitions)
-        {
-            RunnableFuture<Void> future = new FutureTask<>(
-                    () -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
+        for (NeuronList partition : partitions) {
+            RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
 
             futures.add(future);
             getQueue().add(future);
@@ -213,22 +191,18 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
         waitForFutures(futures);
     }
 
-    private BlockingQueue<Runnable> getQueue()
-    {
+    private BlockingQueue<Runnable> getQueue() {
         return this.queue;
     }
 
     /**
      * Warten bis der Task fertig ist.
      */
-    private void waitForFuture(final Future<?> future)
-    {
-        try
-        {
+    private void waitForFuture(final Future<?> future) {
+        try {
             future.get();
         }
-        catch (InterruptedException | ExecutionException ex)
-        {
+        catch (InterruptedException | ExecutionException ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }
@@ -236,10 +210,8 @@ public final class KnnMathQueueWorker extends AbstractKnnMath
     /**
      * Warten bis alle Tasks fertig sind.
      */
-    private void waitForFutures(final List<? extends Future<Void>> futures)
-    {
-        for (Future<Void> future : futures)
-        {
+    private void waitForFutures(final List<? extends Future<Void>> futures) {
+        for (Future<Void> future : futures) {
             waitForFuture(future);
         }
     }

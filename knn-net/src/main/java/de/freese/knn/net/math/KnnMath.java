@@ -9,15 +9,13 @@ import de.freese.knn.net.visitor.ForwardVisitor;
 /**
  * @author Thomas Freese
  */
-public interface KnnMath
-{
+public interface KnnMath {
     /**
      * Mathematik für die Eingangsfehler eines Layers.
      */
     void backward(Layer layer, BackwardVisitor visitor);
 
-    default void close()
-    {
+    default void close() {
         // Empty
     }
 

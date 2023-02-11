@@ -30,10 +30,8 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  *
  * @author Thomas Freese
  */
-public final class TestPersisterBinary
-{
-    public static void main(final String[] args) throws Exception
-    {
+public final class TestPersisterBinary {
+    public static void main(final String[] args) throws Exception {
         TrainingInputSource trainingInputSource = new KnnButtonTrainingInputSource();
         Path knnFile = Paths.get(System.getProperty("java.io.tmpdir"), "ButtonNeuralNet.bin");
 
@@ -46,8 +44,7 @@ public final class TestPersisterBinary
                 ;
         // @formatter:on
 
-        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(knnFile))))
-        {
+        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(knnFile)))) {
             double teachFactor = 0.5D;
             double momentum = 0.5D;
             double maximumError = 0.05D;
@@ -67,8 +64,7 @@ public final class TestPersisterBinary
         neuralNet.close();
 
         // Laden
-        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(Files.newInputStream(knnFile))))
-        {
+        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(Files.newInputStream(knnFile)))) {
             NetPersister<DataInput, DataOutput> persister = new NetPersisterBinary();
 
             neuralNet = persister.load(dis);
@@ -83,8 +79,7 @@ public final class TestPersisterBinary
         }
     }
 
-    private TestPersisterBinary()
-    {
+    private TestPersisterBinary() {
         super();
     }
 }

@@ -10,8 +10,7 @@ import de.freese.knn.net.layer.OutputLayer;
  *
  * @author Thomas Freese
  */
-public interface Neuron
-{
+public interface Neuron {
     /**
      * Liefert die Aktivierungsfunktion des Neurons.
      */

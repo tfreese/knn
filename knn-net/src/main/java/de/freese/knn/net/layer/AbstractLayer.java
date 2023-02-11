@@ -15,25 +15,21 @@ import de.freese.knn.net.neuron.NeuronList;
  *
  * @author Thomas Freese
  */
-public abstract class AbstractLayer implements Layer
-{
+public abstract class AbstractLayer implements Layer {
     private final Function function;
     private final NeuronList neurons;
     private final int size;
     private Matrix inputMatrix;
     private Matrix outputMatrix;
 
-    protected AbstractLayer(final int size, final Function function)
-    {
+    protected AbstractLayer(final int size, final Function function) {
         this(size, function, NeuronImpl::new);
     }
 
-    protected AbstractLayer(final int size, final Function function, final BiFunction<Layer, Integer, Neuron> neuronSupplier)
-    {
+    protected AbstractLayer(final int size, final Function function, final BiFunction<Layer, Integer, Neuron> neuronSupplier) {
         super();
 
-        if (size <= 0)
-        {
+        if (size <= 0) {
             throw new IllegalArgumentException("size <= 0: " + size);
         }
 
@@ -42,8 +38,7 @@ public abstract class AbstractLayer implements Layer
 
         Neuron[] neuronArray = new Neuron[size];
 
-        for (int i = 0; i < neuronArray.length; i++)
-        {
+        for (int i = 0; i < neuronArray.length; i++) {
             neuronArray[i] = neuronSupplier.apply(this, i);
         }
 
@@ -54,8 +49,7 @@ public abstract class AbstractLayer implements Layer
      * @see de.freese.knn.net.layer.Layer#getFunction()
      */
     @Override
-    public Function getFunction()
-    {
+    public Function getFunction() {
         return this.function;
     }
 
@@ -63,8 +57,7 @@ public abstract class AbstractLayer implements Layer
      * @see de.freese.knn.net.layer.Layer#getInputMatrix()
      */
     @Override
-    public Matrix getInputMatrix()
-    {
+    public Matrix getInputMatrix() {
         return this.inputMatrix;
     }
 
@@ -72,8 +65,7 @@ public abstract class AbstractLayer implements Layer
      * @see de.freese.knn.net.layer.Layer#getNeurons()
      */
     @Override
-    public NeuronList getNeurons()
-    {
+    public NeuronList getNeurons() {
         return this.neurons;
     }
 
@@ -81,8 +73,7 @@ public abstract class AbstractLayer implements Layer
      * @see de.freese.knn.net.layer.Layer#getOutputMatrix()
      */
     @Override
-    public Matrix getOutputMatrix()
-    {
+    public Matrix getOutputMatrix() {
         return this.outputMatrix;
     }
 
@@ -90,8 +81,7 @@ public abstract class AbstractLayer implements Layer
      * @see de.freese.knn.net.layer.Layer#getSize()
      */
     @Override
-    public int getSize()
-    {
+    public int getSize() {
         return this.size;
     }
 
@@ -99,8 +89,7 @@ public abstract class AbstractLayer implements Layer
      * @see de.freese.knn.net.layer.Layer#setInputMatrix(de.freese.knn.net.matrix.Matrix)
      */
     @Override
-    public void setInputMatrix(final Matrix matrix)
-    {
+    public void setInputMatrix(final Matrix matrix) {
         this.inputMatrix = matrix;
     }
 
@@ -108,8 +97,7 @@ public abstract class AbstractLayer implements Layer
      * @see de.freese.knn.net.layer.Layer#setOutputMatrix(de.freese.knn.net.matrix.Matrix)
      */
     @Override
-    public void setOutputMatrix(final Matrix matrix)
-    {
+    public void setOutputMatrix(final Matrix matrix) {
         this.outputMatrix = matrix;
     }
 }

@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
 import de.freese.knn.net.function.FunctionSigmoid;
@@ -16,18 +19,14 @@ import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.trainer.LoggerNetTrainerListener;
 import de.freese.knn.net.trainer.NetTrainer;
 import de.freese.knn.net.trainer.TrainingInputSource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 /**
  * Klasse zum Test des BinaryPersisters.
  *
  * @author Thomas Freese
  */
-public class TestMailSpamFilter implements TrainingInputSource
-{
-    public static void main(final String[] args) throws Exception
-    {
+public class TestMailSpamFilter implements TrainingInputSource {
+    public static void main(final String[] args) throws Exception {
         TestMailSpamFilter spamFilter = new TestMailSpamFilter();
         // spamFilter.cleanUp();
 
@@ -60,8 +59,7 @@ public class TestMailSpamFilter implements TrainingInputSource
 
     private JdbcTemplate jdbcTemplate;
 
-    public TestMailSpamFilter()
-    {
+    public TestMailSpamFilter() {
         super();
 
         SingleConnectionDataSource ds = new SingleConnectionDataSource();
@@ -77,14 +75,11 @@ public class TestMailSpamFilter implements TrainingInputSource
         this.token = this.jdbcTemplate.queryForList("select token from token order by token", String.class);
     }
 
-    public void cleanUp()
-    {
+    public void cleanUp() {
         // Entfernen aller Token aus gleichen Zeichen.
         // a-z
-        for (char c = 97; c <= 122; c++)
-        {
-            for (int i = 3; i < 10; i++)
-            {
+        for (char c = 97; c <= 122; c++) {
+            for (int i = 3; i < 10; i++) {
                 String t = ("" + c).repeat(i);
                 t = "%" + t + "%";
                 int deleted = this.jdbcTemplate.update("delete from message_token where token like ?", t);
@@ -97,12 +92,10 @@ public class TestMailSpamFilter implements TrainingInputSource
         // select count(*), is_spam from message group by is_spam
     }
 
-    public void closeDataSource()
-    {
+    public void closeDataSource() {
         DataSource dataSource = this.jdbcTemplate.getDataSource();
 
-        if (dataSource instanceof SingleConnectionDataSource)
-        {
+        if (dataSource instanceof SingleConnectionDataSource) {
             ((SingleConnectionDataSource) dataSource).destroy();
         }
 
@@ -113,17 +106,14 @@ public class TestMailSpamFilter implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
      */
     @Override
-    public double[] getInputAt(final int index)
-    {
+    public double[] getInputAt(final int index) {
         String messageID = (String) this.messages.get(index).get("MESSAGE_ID");
 
         final double[] input = new double[this.token.size()];
         Arrays.fill(input, 0.0D);
 
-        this.jdbcTemplate.query("select token from message_token where message_id = ?", rs ->
-        {
-            while (rs.next())
-            {
+        this.jdbcTemplate.query("select token from message_token where message_id = ?", rs -> {
+            while (rs.next()) {
                 int i = TestMailSpamFilter.this.token.indexOf(rs.getString("token"));
                 input[i] = 1.0D;
             }
@@ -146,8 +136,7 @@ public class TestMailSpamFilter implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
      */
     @Override
-    public double[] getOutputAt(final int index)
-    {
+    public double[] getOutputAt(final int index) {
         Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
 
         return new double[]{isSpam ? 1.0D : 0.0D};
@@ -157,8 +146,7 @@ public class TestMailSpamFilter implements TrainingInputSource
      * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
      */
     @Override
-    public int getSize()
-    {
+    public int getSize() {
         return this.messages.size();
     }
 }

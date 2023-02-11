@@ -11,8 +11,7 @@ import de.freese.knn.net.NeuralNet;
  *
  * @author Thomas Freese
  */
-public interface NetPersister<IN, OUT>
-{
+public interface NetPersister<IN, OUT> {
     NeuralNet load(IN input) throws Exception;
 
     void save(OUT output, NeuralNet knn) throws Exception;

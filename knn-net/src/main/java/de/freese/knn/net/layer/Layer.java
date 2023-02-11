@@ -11,8 +11,7 @@ import de.freese.knn.net.visitor.Visitable;
  *
  * @author Thomas Freese
  */
-public interface Layer extends Visitable
-{
+public interface Layer extends Visitable {
     /**
      * Liefert die Funktion des Layers.
      */

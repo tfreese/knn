@@ -24,16 +24,14 @@ import de.freese.knn.bilderkennung.utils.ImageData;
  *
  * @author Thomas Freese
  */
-public class TestImagePixelTrainingInputSource extends JFrame
-{
+public class TestImagePixelTrainingInputSource extends JFrame {
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
      * @author Thomas Freese
      */
-    private static class ImageTableRenderer extends DefaultTableCellRenderer
-    {
+    private static class ImageTableRenderer extends DefaultTableCellRenderer {
         @Serial
         private static final long serialVersionUID = 1L;
 
@@ -43,17 +41,13 @@ public class TestImagePixelTrainingInputSource extends JFrame
          * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
          */
         @Override
-        public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row,
-                                                       final int column)
-        {
+        public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            if (this.image != null)
-            {
+            if (this.image != null) {
                 int imageHeight = this.image.getHeight(null);
 
-                if (table.getRowHeight(row) < imageHeight)
-                {
+                if (table.getRowHeight(row) < imageHeight) {
                     table.setRowHeight(row, imageHeight);
                 }
             }
@@ -65,12 +59,10 @@ public class TestImagePixelTrainingInputSource extends JFrame
          * @see javax.swing.JComponent#paint(java.awt.Graphics)
          */
         @Override
-        public void paint(final Graphics g)
-        {
+        public void paint(final Graphics g) {
             // super.paint(g);
 
-            if (this.image != null)
-            {
+            if (this.image != null) {
                 int imageWidth = this.image.getWidth(null);
                 int imageHeight = this.image.getHeight(null);
                 int x = (getWidth() - imageWidth) / 2;
@@ -84,8 +76,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
          * @see javax.swing.table.DefaultTableCellRenderer#setValue(java.lang.Object)
          */
         @Override
-        protected void setValue(final Object value)
-        {
+        protected void setValue(final Object value) {
             this.image = (value instanceof Image) ? (Image) value : null;
         }
     }
@@ -93,8 +84,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
     /**
      * @author Thomas Freese
      */
-    private static class TableModel extends AbstractTableModel
-    {
+    private static class TableModel extends AbstractTableModel {
         @Serial
         private static final long serialVersionUID = 1L;
 
@@ -104,8 +94,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
          * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
          */
         @Override
-        public Class<?> getColumnClass(final int columnIndex)
-        {
+        public Class<?> getColumnClass(final int columnIndex) {
             return Image.class;
         }
 
@@ -113,8 +102,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
          * @see javax.swing.table.TableModel#getColumnCount()
          */
         @Override
-        public int getColumnCount()
-        {
+        public int getColumnCount() {
             return 3;
         }
 
@@ -122,8 +110,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
          * @see javax.swing.table.TableModel#getRowCount()
          */
         @Override
-        public int getRowCount()
-        {
+        public int getRowCount() {
             return this.dataList.size();
         }
 
@@ -131,21 +118,18 @@ public class TestImagePixelTrainingInputSource extends JFrame
          * @see javax.swing.table.TableModel#getValueAt(int, int)
          */
         @Override
-        public Object getValueAt(final int rowIndex, final int columnIndex)
-        {
+        public Object getValueAt(final int rowIndex, final int columnIndex) {
             ImageData imageData = this.dataList.get(rowIndex);
 
-            return switch (columnIndex)
-                    {
-                        case 0 -> imageData.getSourceImage();
-                        case 1 -> imageData.getEdgeImage();
-                        case 2 -> imageData.getBlackWhiteImage();
-                        default -> null;
-                    };
+            return switch (columnIndex) {
+                case 0 -> imageData.getSourceImage();
+                case 1 -> imageData.getEdgeImage();
+                case 2 -> imageData.getBlackWhiteImage();
+                default -> null;
+            };
         }
 
-        public void setList(final List<ImageData> objects)
-        {
+        public void setList(final List<ImageData> objects) {
             this.dataList.clear();
             this.dataList.addAll(objects);
 
@@ -153,21 +137,18 @@ public class TestImagePixelTrainingInputSource extends JFrame
         }
     }
 
-    public static void main(final String[] args) throws Exception
-    {
+    public static void main(final String[] args) throws Exception {
         TestImagePixelTrainingInputSource imageTest = new TestImagePixelTrainingInputSource();
         imageTest.setVisible(true);
     }
 
-    public TestImagePixelTrainingInputSource() throws Exception
-    {
+    public TestImagePixelTrainingInputSource() throws Exception {
         super();
 
         init();
     }
 
-    private JTable createTable() throws Exception
-    {
+    private JTable createTable() throws Exception {
         JTable table = new JTable();
 
         ImagePixelTrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
@@ -181,8 +162,7 @@ public class TestImagePixelTrainingInputSource extends JFrame
         return table;
     }
 
-    private void init() throws Exception
-    {
+    private void init() throws Exception {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         Dimension dimension = new Dimension(1000, 1000);

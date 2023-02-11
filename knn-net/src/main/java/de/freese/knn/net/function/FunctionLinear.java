@@ -6,17 +6,14 @@ package de.freese.knn.net.function;
  *
  * @author Thomas Freese
  */
-public class FunctionLinear implements Function
-{
+public class FunctionLinear implements Function {
     private final double factor;
 
-    public FunctionLinear()
-    {
+    public FunctionLinear() {
         this(1.0D);
     }
 
-    public FunctionLinear(final double factor)
-    {
+    public FunctionLinear(final double factor) {
         super();
 
         this.factor = factor;
@@ -26,13 +23,11 @@ public class FunctionLinear implements Function
      * @see de.freese.knn.net.function.Function#calculate(double)
      */
     @Override
-    public double calculate(final double value)
-    {
+    public double calculate(final double value) {
         return value * getFactor();
     }
 
-    public double getFactor()
-    {
+    public double getFactor() {
         return this.factor;
     }
 }

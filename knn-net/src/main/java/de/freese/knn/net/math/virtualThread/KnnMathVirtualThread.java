@@ -17,12 +17,10 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  *
  * @author Thomas Freese
  */
-public final class KnnMathVirtualThread extends AbstractKnnMath
-{
+public final class KnnMathVirtualThread extends AbstractKnnMath {
     private final ThreadFactory threadFactory;
 
-    public KnnMathVirtualThread()
-    {
+    public KnnMathVirtualThread() {
         super();
 
         this.threadFactory = Thread.ofVirtual().factory();
@@ -32,16 +30,12 @@ public final class KnnMathVirtualThread extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#backward(Layer, BackwardVisitor)
      */
     @Override
-    public void backward(final Layer layer, final BackwardVisitor visitor)
-    {
+    public void backward(final Layer layer, final BackwardVisitor visitor) {
         final double[] errors = visitor.getLastErrors();
         final double[] layerErrors = new double[layer.getSize()];
 
-        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory))
-        {
-            layer.getNeurons().forEach(neuron ->
-                    executorService.execute(() -> backward(neuron, errors, layerErrors))
-            );
+        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
+            layer.getNeurons().forEach(neuron -> executorService.execute(() -> backward(neuron, errors, layerErrors)));
         }
 
         visitor.setErrors(layer, layerErrors);
@@ -51,16 +45,12 @@ public final class KnnMathVirtualThread extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#forward(Layer, ForwardVisitor)
      */
     @Override
-    public void forward(final Layer layer, final ForwardVisitor visitor)
-    {
+    public void forward(final Layer layer, final ForwardVisitor visitor) {
         final double[] inputs = visitor.getLastOutputs();
         final double[] outputs = new double[layer.getSize()];
 
-        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory))
-        {
-            layer.getNeurons().forEach(neuron ->
-                    executorService.execute(() -> forward(neuron, inputs, outputs))
-            );
+        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
+            layer.getNeurons().forEach(neuron -> executorService.execute(() -> forward(neuron, inputs, outputs)));
         }
 
         visitor.setOutputs(layer, outputs);
@@ -70,12 +60,9 @@ public final class KnnMathVirtualThread extends AbstractKnnMath
      * @see de.freese.knn.net.math.KnnMath#initialize(ValueInitializer, Layer[])
      */
     @Override
-    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers)
-    {
-        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory))
-        {
-            for (Layer layer : layers)
-            {
+    public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
+        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
+            for (Layer layer : layers) {
                 executorService.execute(() -> initialize(layer, valueInitializer));
             }
         }
@@ -86,18 +73,13 @@ public final class KnnMathVirtualThread extends AbstractKnnMath
      * BackwardVisitor)
      */
     @Override
-    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum,
-                                    final BackwardVisitor visitor)
-    {
+    public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         final double[] leftOutputs = visitor.getOutputs(leftLayer);
         final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory))
-        {
-            leftLayer.getNeurons().forEach(neuron ->
-                    executorService.execute(() -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
-            );
+        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
+            leftLayer.getNeurons().forEach(neuron -> executorService.execute(() -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
         }
     }
 }

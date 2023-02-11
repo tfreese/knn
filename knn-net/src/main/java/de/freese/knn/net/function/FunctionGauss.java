@@ -6,14 +6,12 @@ package de.freese.knn.net.function;
  *
  * @author Thomas Freese
  */
-public class FunctionGauss implements Function
-{
+public class FunctionGauss implements Function {
     /**
      * @see de.freese.knn.net.function.Function#calculate(double)
      */
     @Override
-    public double calculate(final double value)
-    {
+    public double calculate(final double value) {
         return Math.exp(-value * value);
     }
 }
