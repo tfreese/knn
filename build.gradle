@@ -56,7 +56,7 @@ project("knn-demo") {
         runtimeOnly("org.slf4j:slf4j-simple")
 
         testImplementation("org.junit.jupiter:junit-jupiter-engine")
+        testImplementation("org.mariadb.jdbc:mariadb-java-client")
         testImplementation("org.springframework:spring-jdbc")
-        testImplementation("mysql:mysql-connector-java")
     }
 }
