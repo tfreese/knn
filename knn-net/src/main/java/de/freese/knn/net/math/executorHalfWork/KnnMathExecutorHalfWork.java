@@ -32,9 +32,6 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
         this.executorService = Objects.requireNonNull(executorService, "executorService required");
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
         double[] errors = visitor.getLastErrors();
@@ -52,18 +49,12 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
         visitor.setErrors(layer, layerErrors);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#close()
-     */
     @Override
     public void close() {
         // Externen ExecutorService nicht schliessen.
         // KnnUtils.shutdown(getExecutorService(), getLogger());
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
-     */
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
         double[] inputs = visitor.getLastOutputs();
@@ -81,9 +72,6 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
-     */
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         int middle = layers.length / getParallelism();
@@ -101,10 +89,6 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
         waitForFuture(future);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     * de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         double[] leftOutputs = visitor.getOutputs(leftLayer);
@@ -121,9 +105,6 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
         waitForFuture(future);
     }
 
-    /**
-     * @see de.freese.knn.net.math.AbstractKnnMath#getPartitions(de.freese.knn.net.neuron.NeuronList, int)
-     */
     @Override
     protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism) {
         int middle = neurons.size() / parallelism;

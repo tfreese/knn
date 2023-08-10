@@ -52,9 +52,6 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
         this.to = to;
     }
 
-    /**
-     * @see java.util.concurrent.RecursiveAction#compute()
-     */
     @Override
     protected void compute() {
         if ((this.to - this.from) < 20) {

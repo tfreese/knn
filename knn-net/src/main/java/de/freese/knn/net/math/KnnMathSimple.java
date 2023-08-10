@@ -17,9 +17,6 @@ public final class KnnMathSimple extends AbstractKnnMath {
         super();
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
         double[] errors = visitor.getLastErrors();
@@ -30,9 +27,6 @@ public final class KnnMathSimple extends AbstractKnnMath {
         visitor.setErrors(layer, layerErrors);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
-     */
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
         double[] inputs = visitor.getLastOutputs();
@@ -43,9 +37,6 @@ public final class KnnMathSimple extends AbstractKnnMath {
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
-     */
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         for (Layer layer : layers) {
@@ -53,10 +44,6 @@ public final class KnnMathSimple extends AbstractKnnMath {
         }
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     * de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         double[] leftOutputs = visitor.getOutputs(leftLayer);

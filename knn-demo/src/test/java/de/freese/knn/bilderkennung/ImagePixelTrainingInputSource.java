@@ -30,16 +30,10 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource {
         this.imageDataList.add(new ImageData("winnt.bmp"));
     }
 
-    /**
-     * Liefert die Liste der Bilderdaten.
-     */
     public List<ImageData> getImageData() {
         return this.imageDataList;
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
-     */
     @Override
     public double[] getInputAt(final int index) {
         ImageData imageData = this.imageDataList.get(index);
@@ -47,9 +41,6 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource {
         return imageData.getPixels();
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
-     */
     @Override
     public double[] getOutputAt(final int index) {
         double[] output = new double[getSize()];
@@ -60,9 +51,6 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource {
         return output;
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
-     */
     @Override
     public int getSize() {
         return this.imageDataList.size();

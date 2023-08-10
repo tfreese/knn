@@ -27,13 +27,10 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     // /**
     // * @author Thomas Freese
     // */
-    // private static class JoiningHandler implements EventHandler<MathEvent>
+    // private static final class JoiningHandler implements EventHandler<MathEvent>
     // {
     // private CountDownLatch latch;
     //
-    // /**
-    // * @see com.lmax.disruptor.EventHandler#onEvent(java.lang.Object, long, boolean)
-    // */
     // @Override
     // public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) throws Exception
     // {
@@ -46,7 +43,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     /**
      * @author Thomas Freese
      */
-    private static class MathEvent {
+    private static final class MathEvent {
         private final Runnable[] runnables;
 
         MathEvent(final int parallelism) {
@@ -59,7 +56,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     /**
      * @author Thomas Freese
      */
-    private static class MathHandler implements EventHandler<MathEvent> {
+    private static final class MathHandler implements EventHandler<MathEvent> {
         private final int ordinal;
 
         MathHandler(final int ordinal) {
@@ -68,9 +65,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
             this.ordinal = ordinal;
         }
 
-        /**
-         * @see com.lmax.disruptor.EventHandler#onEvent(java.lang.Object, long, boolean)
-         */
         @Override
         public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) throws Exception {
             event.runnables[this.ordinal].run();
@@ -116,9 +110,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         this.disruptor.start();
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
         double[] errors = visitor.getLastErrors();
@@ -141,9 +132,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         visitor.setErrors(layer, layerErrors);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#close()
-     */
     @Override
     public void close() {
         // Nur notwendig, wenn die Event-Publizierung noch nicht abgeschlossen ist.
@@ -157,9 +145,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         }
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
-     */
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
         double[] inputs = visitor.getLastOutputs();
@@ -183,9 +168,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
-     */
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         for (Layer layer : layers) {
@@ -193,10 +175,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         }
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     * de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         double[] leftOutputs = visitor.getOutputs(leftLayer);

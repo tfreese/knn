@@ -26,9 +26,6 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
         this.threadFactory = Thread.ofVirtual().factory();
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#backward(Layer, BackwardVisitor)
-     */
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
         final double[] errors = visitor.getLastErrors();
@@ -41,9 +38,6 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
         visitor.setErrors(layer, layerErrors);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#forward(Layer, ForwardVisitor)
-     */
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
         final double[] inputs = visitor.getLastOutputs();
@@ -56,9 +50,6 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#initialize(ValueInitializer, Layer[])
-     */
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
@@ -68,10 +59,6 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
         }
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(Layer, Layer, double, double,
-     * BackwardVisitor)
-     */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         final double[] leftOutputs = visitor.getOutputs(leftLayer);

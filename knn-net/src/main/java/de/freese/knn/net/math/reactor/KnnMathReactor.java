@@ -41,9 +41,6 @@ public final class KnnMathReactor extends AbstractKnnMath {
         this.scheduler = Schedulers.fromExecutor(Executors.newFixedThreadPool(parallelism, new KnnThreadFactory("knn-scheduler-")));
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
         final double[] errors = visitor.getLastErrors();
@@ -62,17 +59,11 @@ public final class KnnMathReactor extends AbstractKnnMath {
         visitor.setErrors(layer, layerErrors);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#close()
-     */
     @Override
     public void close() {
         getScheduler().dispose();
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
-     */
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
         final double[] inputs = visitor.getLastOutputs();
@@ -91,9 +82,6 @@ public final class KnnMathReactor extends AbstractKnnMath {
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
-     */
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         // @formatter:off
@@ -107,9 +95,6 @@ public final class KnnMathReactor extends AbstractKnnMath {
         // @formatter:on
     }
 
-    // /**
-    // * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
-    // */
     // @Override
     // public double getNetError(final double[] outputs, final double[] outputTargets)
     // {
@@ -133,10 +118,6 @@ public final class KnnMathReactor extends AbstractKnnMath {
     // return error;
     // }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     * de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         final double[] leftOutputs = visitor.getOutputs(leftLayer);
@@ -158,9 +139,6 @@ public final class KnnMathReactor extends AbstractKnnMath {
         return this.scheduler;
     }
 
-    // /**
-    // * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-    // */
     // @Override
     // public void setOutputError(final Layer layer, final BackwardVisitor visitor)
     // {

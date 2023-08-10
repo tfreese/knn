@@ -31,15 +31,12 @@ public class TestImagePixelTrainingInputSource extends JFrame {
     /**
      * @author Thomas Freese
      */
-    private static class ImageTableRenderer extends DefaultTableCellRenderer {
+    private static final class ImageTableRenderer extends DefaultTableCellRenderer {
         @Serial
         private static final long serialVersionUID = 1L;
 
         private transient Image image;
 
-        /**
-         * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
-         */
         @Override
         public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -55,9 +52,6 @@ public class TestImagePixelTrainingInputSource extends JFrame {
             return this;
         }
 
-        /**
-         * @see javax.swing.JComponent#paint(java.awt.Graphics)
-         */
         @Override
         public void paint(final Graphics g) {
             // super.paint(g);
@@ -72,9 +66,6 @@ public class TestImagePixelTrainingInputSource extends JFrame {
             }
         }
 
-        /**
-         * @see javax.swing.table.DefaultTableCellRenderer#setValue(java.lang.Object)
-         */
         @Override
         protected void setValue(final Object value) {
             this.image = (value instanceof Image) ? (Image) value : null;
@@ -84,39 +75,27 @@ public class TestImagePixelTrainingInputSource extends JFrame {
     /**
      * @author Thomas Freese
      */
-    private static class TableModel extends AbstractTableModel {
+    private static final class TableModel extends AbstractTableModel {
         @Serial
         private static final long serialVersionUID = 1L;
 
         private transient final List<ImageData> dataList = new ArrayList<>();
 
-        /**
-         * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
-         */
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
             return Image.class;
         }
 
-        /**
-         * @see javax.swing.table.TableModel#getColumnCount()
-         */
         @Override
         public int getColumnCount() {
             return 3;
         }
 
-        /**
-         * @see javax.swing.table.TableModel#getRowCount()
-         */
         @Override
         public int getRowCount() {
             return this.dataList.size();
         }
 
-        /**
-         * @see javax.swing.table.TableModel#getValueAt(int, int)
-         */
         @Override
         public Object getValueAt(final int rowIndex, final int columnIndex) {
             ImageData imageData = this.dataList.get(rowIndex);

@@ -40,9 +40,6 @@ public abstract class AbstractKnnMath implements KnnMath {
         this.parallelism = parallelism;
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#getNetError(double[], double[])
-     */
     @Override
     public double getNetError(final double[] outputs, final double[] outputTargets) {
         double error = 0.0D;
@@ -56,9 +53,6 @@ public abstract class AbstractKnnMath implements KnnMath {
         return error;
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#setOutputError(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void setOutputError(final Layer layer, final BackwardVisitor visitor) {
         double[] outputs = visitor.getOutputs(layer);

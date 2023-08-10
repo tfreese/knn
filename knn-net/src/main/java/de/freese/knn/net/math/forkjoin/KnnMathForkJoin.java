@@ -26,9 +26,6 @@ public final class KnnMathForkJoin extends AbstractKnnMath {
         this.forkJoinPool = Objects.requireNonNull(forkJoinPool, "forkJoinPool required");
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
         double[] errors = visitor.getLastErrors();
@@ -41,17 +38,11 @@ public final class KnnMathForkJoin extends AbstractKnnMath {
         visitor.setErrors(layer, layerErrors);
     }
 
-    /**
-     * @see de.freese.knn.net.math.AbstractKnnMath#backward(de.freese.knn.net.neuron.Neuron, double[], double[])
-     */
     @Override
     public void backward(final Neuron neuron, final double[] errors, final double[] layerErrors) {
         super.backward(neuron, errors, layerErrors);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
-     */
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
         double[] inputs = visitor.getLastOutputs();
@@ -64,17 +55,11 @@ public final class KnnMathForkJoin extends AbstractKnnMath {
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.AbstractKnnMath#forward(de.freese.knn.net.neuron.Neuron, double[], double[])
-     */
     @Override
     public void forward(final Neuron neuron, final double[] inputs, final double[] outputs) {
         super.forward(neuron, inputs, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.AbstractKnnMath#initialize(de.freese.knn.net.layer.Layer, de.freese.knn.net.matrix.ValueInitializer)
-     */
     @Override
     public void initialize(final Layer layer, final ValueInitializer valueInitializer) {
         super.initialize(layer, valueInitializer);
@@ -90,10 +75,6 @@ public final class KnnMathForkJoin extends AbstractKnnMath {
         getForkJoinPool().invoke(task);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     * de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         double[] leftOutputs = visitor.getOutputs(leftLayer);
@@ -105,9 +86,6 @@ public final class KnnMathForkJoin extends AbstractKnnMath {
         getForkJoinPool().invoke(task);
     }
 
-    /**
-     * @see de.freese.knn.net.math.AbstractKnnMath#refreshLayerWeights(de.freese.knn.net.neuron.Neuron, double, double, double[], double[][], double[])
-     */
     @Override
     public void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors) {
         super.refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);

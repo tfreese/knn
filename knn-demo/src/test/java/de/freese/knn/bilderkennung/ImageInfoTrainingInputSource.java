@@ -28,17 +28,11 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource {
         this.imageInfos.add(new ImageInfo("winnt.bmp"));
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
-     */
     @Override
     public double[] getInputAt(final int index) {
         return this.imageInfos.get(index).getInfoVectorReScaled();
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
-     */
     @Override
     public double[] getOutputAt(final int index) {
         double[] output = new double[getSize()];
@@ -49,9 +43,6 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource {
         return output;
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
-     */
     @Override
     public int getSize() {
         return this.imageInfos.size();

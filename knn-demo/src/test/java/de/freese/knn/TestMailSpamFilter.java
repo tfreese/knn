@@ -102,9 +102,6 @@ public class TestMailSpamFilter implements TrainingInputSource {
         this.jdbcTemplate = null;
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
-     */
     @Override
     public double[] getInputAt(final int index) {
         String messageID = (String) this.messages.get(index).get("MESSAGE_ID");
@@ -132,9 +129,6 @@ public class TestMailSpamFilter implements TrainingInputSource {
         return input;
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
-     */
     @Override
     public double[] getOutputAt(final int index) {
         Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
@@ -142,9 +136,6 @@ public class TestMailSpamFilter implements TrainingInputSource {
         return new double[]{isSpam ? 1.0D : 0.0D};
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
-     */
     @Override
     public int getSize() {
         return this.messages.size();

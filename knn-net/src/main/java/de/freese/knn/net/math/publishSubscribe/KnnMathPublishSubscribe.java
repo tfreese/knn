@@ -44,27 +44,18 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     // this.consumer = Objects.requireNonNull(consumer, "consumer required");
     // }
     //
-    // /**
-    // * @see java.util.concurrent.Flow.Subscriber#onComplete()
-    // */
     // @Override
     // public void onComplete()
     // {
     // this.latch.countDown();
     // }
     //
-    // /**
-    // * @see java.util.concurrent.Flow.Subscriber#onError(java.lang.Throwable)
-    // */
     // @Override
     // public void onError(final Throwable t)
     // {
     // // Empty
     // }
     //
-    // /**
-    // * @see java.util.concurrent.Flow.Subscriber#onNext(java.lang.Object)
-    // */
     // @Override
     // public void onNext(final NeuronList list)
     // {
@@ -73,9 +64,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     // this.subscription.request(1); // Nächstes Element anfordern.
     // }
     //
-    // /**
-    // * @see java.util.concurrent.Flow.Subscriber#onSubscribe(java.util.concurrent.Flow.Subscription)
-    // */
     // @Override
     // public void onSubscribe(final Subscription subscription)
     // {
@@ -93,9 +81,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
         this.executor = Objects.requireNonNull(executor, "executor required");
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#backward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
         double[] errors = visitor.getLastErrors();
@@ -115,18 +100,12 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
         visitor.setErrors(layer, layerErrors);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#close()
-     */
     @Override
     public void close() {
         // Externen Executor nicht schliessen.
         // KnnUtils.shutdown(getExecutor(), getLogger());
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#forward(de.freese.knn.net.layer.Layer, de.freese.knn.net.visitor.ForwardVisitor)
-     */
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
         double[] inputs = visitor.getLastOutputs();
@@ -146,9 +125,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
         visitor.setOutputs(layer, outputs);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
-     */
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         CountDownLatch latch = new CountDownLatch(layers.length);
@@ -166,10 +142,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
         waitForLatch(latch);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#refreshLayerWeights(de.freese.knn.net.layer.Layer, de.freese.knn.net.layer.Layer, double, double,
-     * de.freese.knn.net.visitor.BackwardVisitor)
-     */
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
         double[] leftOutputs = visitor.getOutputs(leftLayer);
