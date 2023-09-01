@@ -19,9 +19,6 @@ public class FunctionLinear implements Function {
         this.factor = factor;
     }
 
-    /**
-     * @see de.freese.knn.net.function.Function#calculate(double)
-     */
     @Override
     public double calculate(final double value) {
         return value * getFactor();

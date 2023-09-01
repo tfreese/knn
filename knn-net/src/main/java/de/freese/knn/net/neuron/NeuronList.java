@@ -22,17 +22,11 @@ public class NeuronList implements Iterable<Neuron> {
     private final class NeuronIterator implements Iterator<Neuron> {
         private int position;
 
-        /**
-         * @see java.util.Iterator#hasNext()
-         */
         @Override
         public boolean hasNext() {
             return this.position < size();
         }
 
-        /**
-         * @see java.util.Iterator#next()
-         */
         @Override
         public Neuron next() {
             if (hasNext()) {
@@ -45,9 +39,6 @@ public class NeuronList implements Iterable<Neuron> {
             throw new NoSuchElementException("Array index: " + this.position);
         }
 
-        /**
-         * @see java.util.Iterator#remove()
-         */
         @Override
         public void remove() {
             // set(this.position, null);
@@ -81,9 +72,6 @@ public class NeuronList implements Iterable<Neuron> {
         return this.neurons[index + this.fromIndex];
     }
 
-    /**
-     * @see java.lang.Iterable#iterator()
-     */
     @Override
     public Iterator<Neuron> iterator() {
         return new NeuronIterator();
@@ -97,9 +85,6 @@ public class NeuronList implements Iterable<Neuron> {
         return this.toIndex - this.fromIndex;
     }
 
-    /**
-     * @see java.lang.Iterable#spliterator()
-     */
     @Override
     public Spliterator<Neuron> spliterator() {
         return Arrays.spliterator(this.neurons, this.fromIndex, this.toIndex);

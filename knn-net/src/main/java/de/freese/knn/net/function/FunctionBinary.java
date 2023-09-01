@@ -19,9 +19,6 @@ public class FunctionBinary implements Function {
         this.threshold = threshold;
     }
 
-    /**
-     * @see de.freese.knn.net.function.Function#calculate(double)
-     */
     @Override
     public double calculate(final double value) {
         return (value > getThreshold()) ? 1.0D : 0.0D;

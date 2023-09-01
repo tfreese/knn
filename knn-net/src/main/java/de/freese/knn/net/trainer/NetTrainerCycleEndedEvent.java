@@ -58,9 +58,6 @@ public class NetTrainerCycleEndedEvent extends EventObject {
         return this.teachFactor;
     }
 
-    /**
-     * @see java.util.EventObject#toString()
-     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

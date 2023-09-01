@@ -27,9 +27,6 @@ public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener {
         this.printStream = Objects.requireNonNull(printStream, "printStream required");
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.NetTrainerListener#trainingCycleEnded(de.freese.knn.net.trainer.NetTrainerCycleEndedEvent)
-     */
     @Override
     public void trainingCycleEnded(final NetTrainerCycleEndedEvent event) {
         if ((event.getIteration() % getLogModulo()) != 0) {

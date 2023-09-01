@@ -65,9 +65,6 @@ public final class KnnMathForkJoin extends AbstractKnnMath {
         super.initialize(layer, valueInitializer);
     }
 
-    /**
-     * @see de.freese.knn.net.math.KnnMath#initialize(de.freese.knn.net.matrix.ValueInitializer, de.freese.knn.net.layer.Layer[])
-     */
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         ForkJoinInitializeTask task = new ForkJoinInitializeTask(this, layers, valueInitializer);

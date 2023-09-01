@@ -28,9 +28,6 @@ public class BackwardVisitor extends AbstractKnnVisitor {
         this.forwardVisitor = forwardVisitor;
     }
 
-    /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#clear()
-     */
     @Override
     public void clear() {
         super.clear();
@@ -102,25 +99,16 @@ public class BackwardVisitor extends AbstractKnnVisitor {
         this.outputTargets = outputTargets;
     }
 
-    /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitHiddenLayer(de.freese.knn.net.layer.Layer)
-     */
     @Override
     protected void visitHiddenLayer(final Layer layer) {
         getMath().backward(layer, this);
     }
 
-    /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitInputLayer(de.freese.knn.net.layer.InputLayer)
-     */
     @Override
     protected void visitInputLayer(final InputLayer layer) {
         getMath().backward(layer, this);
     }
 
-    /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitKNN(de.freese.knn.net.NeuralNet)
-     */
     @Override
     protected void visitKNN(final NeuralNet knn) {
         super.visitKNN(knn);
@@ -133,9 +121,6 @@ public class BackwardVisitor extends AbstractKnnVisitor {
         }
     }
 
-    /**
-     * @see de.freese.knn.net.visitor.AbstractKnnVisitor#visitOutputLayer(de.freese.knn.net.layer.OutputLayer)
-     */
     @Override
     protected void visitOutputLayer(final OutputLayer layer) {
         getMath().setOutputError(layer, this);

@@ -109,9 +109,6 @@ public class ImageColorChannelInfo {
         return this.uniformitaet;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

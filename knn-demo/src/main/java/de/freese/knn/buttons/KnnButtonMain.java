@@ -71,9 +71,6 @@ public class KnnButtonMain extends JFrame {
     private void showGui(final NeuralNet neuralNet) {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
-            /**
-             * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
-             */
             @Override
             public void windowClosing(final WindowEvent event) {
                 try {

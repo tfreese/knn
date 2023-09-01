@@ -27,9 +27,6 @@ public class FunctionSigmoid implements Function {
         this.steigung = steigung;
     }
 
-    /**
-     * @see de.freese.knn.net.function.Function#calculate(double)
-     */
     @Override
     public double calculate(final double value) {
         return (1.0D / (1.0D + Math.exp(-((value - getDurchgang()) / getSteigung()))));

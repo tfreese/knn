@@ -24,9 +24,6 @@ public abstract class AbstractKnnVisitor implements Visitor {
         this.values = null;
     }
 
-    /**
-     * @see de.freese.knn.net.visitor.Visitor#visitObject(java.lang.Object)
-     */
     @Override
     public void visitObject(final Object object) {
         if (object instanceof NeuralNet o) {

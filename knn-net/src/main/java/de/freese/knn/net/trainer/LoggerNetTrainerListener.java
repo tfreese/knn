@@ -22,9 +22,6 @@ public class LoggerNetTrainerListener extends AbstractNetTrainerListener {
         super(logModulo);
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.NetTrainerListener#trainingCycleEnded(de.freese.knn.net.trainer.NetTrainerCycleEndedEvent)
-     */
     @Override
     public void trainingCycleEnded(final NetTrainerCycleEndedEvent event) {
         if ((event.getIteration() % getLogModulo()) != 0) {

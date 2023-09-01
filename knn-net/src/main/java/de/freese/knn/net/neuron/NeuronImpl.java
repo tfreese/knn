@@ -24,25 +24,16 @@ public class NeuronImpl implements Neuron {
         this.layerIndex = layerIndex;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#getFunction()
-     */
     @Override
     public Function getFunction() {
         return this.layer.getFunction();
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#getInputBIAS()
-     */
     @Override
     public double getInputBIAS() {
         return this.inputBIAS;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#getInputSize()
-     */
     @Override
     public int getInputSize() {
         Matrix matrix = getInputMatrix();
@@ -54,9 +45,6 @@ public class NeuronImpl implements Neuron {
         return 0;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#getInputWeight(int)
-     */
     @Override
     public double getInputWeight(final int index) {
         Matrix matrix = getInputMatrix();
@@ -68,17 +56,11 @@ public class NeuronImpl implements Neuron {
         return 0.0D;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#getLayerIndex()
-     */
     @Override
     public int getLayerIndex() {
         return this.layerIndex;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#getOutputSize()
-     */
     @Override
     public int getOutputSize() {
         Matrix matrix = getOutputMatrix();
@@ -90,9 +72,6 @@ public class NeuronImpl implements Neuron {
         return 0;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#getOutputWeight(int)
-     */
     @Override
     public double getOutputWeight(final int index) {
         Matrix matrix = getOutputMatrix();
@@ -104,17 +83,11 @@ public class NeuronImpl implements Neuron {
         return 0.0D;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#setInputBIAS(double)
-     */
     @Override
     public void setInputBIAS(final double value) {
         this.inputBIAS = value;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#setInputWeight(int, double)
-     */
     @Override
     public void setInputWeight(final int index, final double weight) {
         Matrix matrix = getInputMatrix();
@@ -124,9 +97,6 @@ public class NeuronImpl implements Neuron {
         }
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.Neuron#setOutputWeight(int, double)
-     */
     @Override
     public void setOutputWeight(final int index, final double weight) {
         Matrix matrix = getOutputMatrix();
@@ -136,9 +106,6 @@ public class NeuronImpl implements Neuron {
         }
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

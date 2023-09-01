@@ -38,9 +38,6 @@ public class KnnButtonPanel extends JPanel implements ActionListener {
         this.neuralNet = neuralNet;
     }
 
-    /**
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent event) {
         double[] outputVector = this.neuralNet.getOutput(getInputVector());

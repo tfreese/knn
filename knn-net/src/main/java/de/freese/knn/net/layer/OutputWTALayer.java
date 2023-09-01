@@ -17,9 +17,6 @@ public class OutputWTALayer extends OutputLayer {
         super(size);
     }
 
-    /**
-     * @see de.freese.knn.net.layer.OutputLayer#adjustOutput(de.freese.knn.net.visitor.ForwardVisitor)
-     */
     @Override
     public double[] adjustOutput(final ForwardVisitor visitor) {
         double[] outputs = visitor.getLastOutputs();
@@ -36,7 +33,7 @@ public class OutputWTALayer extends OutputLayer {
 
         // Alles auf 0 setzen
         double[] wtaOutputs = new double[outputs.length];
-        Arrays.fill(wtaOutputs, 0);
+        Arrays.fill(wtaOutputs, 0D);
 
         // 1 setzen
         wtaOutputs[maxOutputIndex] = 1.0D;

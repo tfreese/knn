@@ -30,9 +30,6 @@ class NeuralNetImpl implements NeuralNet {
         super();
     }
 
-    /**
-     * @see de.freese.knn.net.NeuralNet#close()
-     */
     @Override
     public void close() {
         LOGGER.info("close");
@@ -42,25 +39,16 @@ class NeuralNetImpl implements NeuralNet {
         this.layers = null;
     }
 
-    /**
-     * @see de.freese.knn.net.NeuralNet#getLayer()
-     */
     @Override
     public Layer[] getLayer() {
         return this.layers;
     }
 
-    /**
-     * @see de.freese.knn.net.NeuralNet#getMath()
-     */
     @Override
     public KnnMath getMath() {
         return this.knnMath;
     }
 
-    /**
-     * @see de.freese.knn.net.NeuralNet#getOutput(double[])
-     */
     @Override
     public double[] getOutput(final double[] inputs) {
         ForwardVisitor visitor = new ForwardVisitor(false);

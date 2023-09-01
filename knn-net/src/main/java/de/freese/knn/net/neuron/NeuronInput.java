@@ -15,17 +15,11 @@ public class NeuronInput extends NeuronImpl {
         super(layer, layerIndex);
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.NeuronImpl#getInputBIAS()
-     */
     @Override
     public double getInputBIAS() {
         return 0.0D;
     }
 
-    /**
-     * @see de.freese.knn.net.neuron.NeuronImpl#setInputBIAS(double)
-     */
     @Override
     public void setInputBIAS(final double value) {
         // Empty

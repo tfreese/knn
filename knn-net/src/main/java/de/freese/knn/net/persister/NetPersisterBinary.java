@@ -29,9 +29,6 @@ import de.freese.knn.net.neuron.NeuronList;
  * @author Thomas Freese
  */
 public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
-    /**
-     * @see de.freese.knn.net.persister.NetPersister#load(java.lang.Object)
-     */
     @Override
     public NeuralNet load(final DataInput input) throws Exception {
         NeuralNetBuilder builder = new NeuralNetBuilder();
@@ -64,9 +61,6 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
         return builder.build(false);
     }
 
-    /**
-     * @see de.freese.knn.net.persister.NetPersister#save(java.lang.Object, de.freese.knn.net.NeuralNet)
-     */
     @Override
     public void save(final DataOutput output, final NeuralNet knn) throws Exception {
         // Anzahl Layer

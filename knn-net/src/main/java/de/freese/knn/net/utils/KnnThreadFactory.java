@@ -20,9 +20,6 @@ public class KnnThreadFactory implements ThreadFactory {
         this.namePrefix = Objects.requireNonNull(namePrefix, "namePrefix required");
     }
 
-    /**
-     * @see java.util.concurrent.ThreadFactory#newThread(java.lang.Runnable)
-     */
     @Override
     public Thread newThread(final Runnable r) {
         Thread thread = this.defaultThreadFactory.newThread(r);

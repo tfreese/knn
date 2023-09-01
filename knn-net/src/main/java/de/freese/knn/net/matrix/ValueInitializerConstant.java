@@ -15,9 +15,6 @@ public class ValueInitializerConstant implements ValueInitializer {
         this.weight = weight;
     }
 
-    /**
-     * @see de.freese.knn.net.matrix.ValueInitializer#createNextValue()
-     */
     @Override
     public double createNextValue() {
         return this.weight;

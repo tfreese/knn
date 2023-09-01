@@ -23,25 +23,16 @@ public class KnnButtonTrainingInputSource implements TrainingInputSource {
         createTrainingSet();
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getInputAt(int)
-     */
     @Override
     public double[] getInputAt(final int index) {
         return this.inputList.get(index);
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getOutputAt(int)
-     */
     @Override
     public double[] getOutputAt(final int index) {
         return this.outputList.get(index);
     }
 
-    /**
-     * @see de.freese.knn.net.trainer.TrainingInputSource#getSize()
-     */
     @Override
     public int getSize() {
         return this.inputList.size();

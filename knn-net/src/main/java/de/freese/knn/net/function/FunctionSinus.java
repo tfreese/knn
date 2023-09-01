@@ -7,9 +7,6 @@ package de.freese.knn.net.function;
  * @author Thomas Freese
  */
 public class FunctionSinus implements Function {
-    /**
-     * @see de.freese.knn.net.function.Function#calculate(double)
-     */
     @Override
     public double calculate(final double value) {
         return Math.sin(value);

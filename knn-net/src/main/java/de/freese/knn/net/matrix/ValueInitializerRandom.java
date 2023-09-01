@@ -28,9 +28,6 @@ public class ValueInitializerRandom implements ValueInitializer {
         this.upperLimit = upperLimit;
     }
 
-    /**
-     * @see de.freese.knn.net.matrix.ValueInitializer#createNextValue()
-     */
     @Override
     public double createNextValue() {
         // double weight = -0.05D + (Math.random() * 0.1D); // -0.05 bis +0.05
