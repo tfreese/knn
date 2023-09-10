@@ -41,6 +41,7 @@ project("knn-net") {
         api("org.slf4j:slf4j-api")
 
         testImplementation("org.junit.jupiter:junit-jupiter")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 }
 
@@ -57,5 +58,6 @@ project("knn-demo") {
         testImplementation("org.junit.jupiter:junit-jupiter")
         testImplementation("org.mariadb.jdbc:mariadb-java-client")
         testImplementation("org.springframework:spring-jdbc")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 }
