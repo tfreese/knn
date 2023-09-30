@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 
 import de.freese.knn.net.layer.Layer;
@@ -32,7 +31,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
     /**
      * @author Thomas Freese
      */
-    private static final class RunnableHandler implements EventHandler<RunnableEvent>, WorkHandler<RunnableEvent> {
+    private static final class RunnableHandler implements EventHandler<RunnableEvent> {
         private final int ordinal;
 
         private final int parallelism;
@@ -49,18 +48,13 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
         }
 
         @Override
-        public void onEvent(final RunnableEvent event) throws Exception {
-            event.runnable.run();
-
-            event.runnable = null;
-        }
-
-        @Override
         public void onEvent(final RunnableEvent event, final long sequence, final boolean endOfBatch) throws Exception {
             // Load-Balancing auf die Handler über die Sequence.
             // Sonst würden alle Handler gleichzeitig eine Sequence bearbeiten.
             if ((this.ordinal == -1) || (this.ordinal == (sequence % this.parallelism))) {
-                onEvent(event);
+                event.runnable.run();
+
+                event.runnable = null;
             }
         }
     }
@@ -88,22 +82,13 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
 
         this.disruptor = new Disruptor<>(RunnableEvent::new, ringBufferSize, new KnnThreadFactory("knn-disruptor-"));
 
-        //        EventHandler<RunnableEvent>[] handlers = new RunnableHandler[parallelism];
-        //
-        //        for (int i = 0; i < handlers.length; i++)
-        //        {
-        //            handlers[i] = new RunnableHandler(parallelism, i);
-        //        }
-        //
-        //        this.disruptor.handleEventsWith(handlers);
+        EventHandler<RunnableEvent>[] handlers = new RunnableHandler[parallelism];
 
-        WorkHandler<RunnableEvent>[] workers = new RunnableHandler[parallelism];
-
-        for (int i = 0; i < workers.length; i++) {
-            workers[i] = new RunnableHandler();
+        for (int i = 0; i < handlers.length; i++) {
+            handlers[i] = new RunnableHandler(parallelism, i);
         }
 
-        this.disruptor.handleEventsWithWorkerPool(workers);
+        this.disruptor.handleEventsWith(handlers);
 
         this.disruptor.start();
     }

@@ -7,40 +7,40 @@ buildscript {
     }
 
     dependencies {
-        classpath "de.freese.gradle:gradle-plugins:0.0.1-SNAPSHOT"
-        classpath "io.spring.gradle:dependency-management-plugin:$version_springDependencyManagement"
+        classpath("de.freese.gradle:gradle-plugins:$version_myConventionPlugin")
+        classpath("io.spring.gradle:dependency-management-plugin:$version_springDependencyManagement")
     }
 }
 
 subprojects {
     apply plugin: "java"
-    apply plugin: "maven-publish"
+//    apply plugin: "maven-publish"
     apply plugin: "io.spring.dependency-management"
     apply plugin: "de.freese.gradle.plugin.conventions"
 
     dependencyManagement {
         imports {
-            mavenBom "org.springframework.boot:spring-boot-dependencies:$version_springBoot"
+            mavenBom("org.springframework.boot:spring-boot-dependencies:$version_springBoot")
         }
 
         dependencies {
-            dependency "com.lmax:disruptor:$version_disruptor"
+            dependency("com.lmax:disruptor:$version_disruptor")
         }
+    }
+
+    dependencies {
+        testImplementation("org.junit.jupiter:junit-jupiter")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 }
 
 project("knn-net") {
     apply plugin: "java-library"
-    description = "Künstliches neurales Netz"
+    description = "Künstliches neuronales Netz (Artificial neural network)"
     dependencies {
-        api("de.freese.base:base-core:$project.version")
-
         api("com.lmax:disruptor")
         api("io.projectreactor:reactor-core")
         api("org.slf4j:slf4j-api")
-
-        testImplementation("org.junit.jupiter:junit-jupiter")
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 }
 
@@ -54,9 +54,7 @@ project("knn-demo") {
 
         runtimeOnly("org.slf4j:slf4j-simple")
 
-        testImplementation("org.junit.jupiter:junit-jupiter")
         testImplementation("org.mariadb.jdbc:mariadb-java-client")
         testImplementation("org.springframework:spring-jdbc")
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 }
