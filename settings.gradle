@@ -1,5 +1,68 @@
+// Can not be configured by Conventions-Plugin.
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        mavenLocal()
+    }
+}
+
 // Ohne rootProject.name würde der Name des Projekt-Verzeichnisses verwendet werden.
 rootProject.name = "knn"
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://repository.primefaces.org"
+            name "primefaces"
+            content {
+                excludeGroupByRegex("de.freese\\..*")
+            }
+            mavenContent {
+                releasesOnly()
+                //snapshotsOnly()
+            }
+        }
+        maven {
+            url "https://repo.gradle.org/gradle/libs-releases"
+            name "gradle-libs-releases"
+            content {
+                excludeGroupByRegex("de.freese\\..*")
+            }
+            mavenContent {
+                releasesOnly()
+                //snapshotsOnly()
+            }
+        }
+        mavenLocal()
+
+//        flatDir {
+//            dirs "libs"
+//        }
+
+//     ivy {
+//        url <URL>
+//        name "my-ivy"
+//        patternLayout {
+//            artifact "app1/[organisation]/jars/[artifact]-[revision].[ext]"
+//            artifact "app2/[organisation]/jars/[artifact]-[revision].[ext]"
+//        }
+//        metadataSources {
+//            artifact() // Only look for Jar.
+//        }
+//        content {
+//            excludeGroup "or.orga"
+//            excludeGroupByRegex("com\\..*")
+//            excludeGroupByRegex "io\\..*"
+//            excludeGroupByRegex "jakarta\\..*"
+//            excludeGroupByRegex "org\\..*"
+//        }
+//    }
+//    Ivy Dependencies.
+//    implementation("app1:artifact:version") // app1/app1/jars/artifact-version.jar
+    }
+}
 
 include "knn-net"
 include "knn-demo"
