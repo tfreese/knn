@@ -1,18 +1,21 @@
 // Execute Tasks in SubModule: gradle MODUL:clean build
 plugins {
+    id "com.github.ben-manes.versions" version "$version_gradleVersionsPlugin" apply false
+//    id "de.freese.gradle.plugin.conventions" version "$version_myConventionPlugin" apply false
     id "io.spring.dependency-management" version "$version_springDependencyManagement" apply false
 //    id "org.openjfx.javafxplugin" version "$version_javafxPlugin" apply false
-    id "org.springframework.boot" version "$version_springBoot" apply false
-//    id "com.github.ben-manes.versions" version "0.48.0" apply false
+//    id "org.springframework.boot" version "$version_springBoot" apply false
 }
 
 subprojects {
-    apply plugin: "java"
+    apply plugin: "base"
     apply plugin: "io.spring.dependency-management"
+    apply plugin: "com.github.ben-manes.versions"
 
     dependencyManagement {
         imports {
-            mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+//            mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+            mavenBom("org.springframework.boot:spring-boot-dependencies:$version_springBoot")
         }
 
         dependencies {
@@ -23,158 +26,186 @@ subprojects {
         }
     }
 
-    configurations.configureEach {
-        exclude group: "ch.qos.logback", module: "logback-classic"
-    }
+    afterEvaluate { project ->
+        if (project.plugins.hasPlugin("java") || project.plugins.hasPlugin("java-library") || project.plugins.hasPlugin("application")) {
+            configurations.configureEach {
+                exclude group: "ch.qos.logback", module: "logback-classic"
+            }
 
-    dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter")
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    }
+            dependencies {
+                //implementation(platform("de.freese:maven-bom:$version_mavenBom"))
+                testImplementation("org.junit.jupiter:junit-jupiter-engine")
+                testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+            }
 
-    //java {
-    //    withJavadocJar()
-    //    withSourcesJar()
-    //}
+            java {
+//                withJavadocJar()
+//                withSourcesJar()
 
-    // Eigenes Jar für sources.
-    tasks.register("sourcesJar", Jar) {
-        group = "My Tasks"
-        description = "Creates a jar from the source files."
+                toolchain {
+                    languageVersion = JavaLanguageVersion.of(21)
+//                    vendor = JvmVendorSpec.ORACLE
+//                    implementation = JvmImplementation.J9
+                }
+            }
 
-        dependsOn("classes")
+            javadoc {
+                if (JavaVersion.current().isJava9Compatible()) {
+                    options.addBooleanOption('html5', true)
+                }
 
-        getArchiveClassifier().set("sources")
-        from sourceSets.main.allSource
-    }
+                options.locale = "de"
+                options.encoding = "UTF-8"
+//                options.addStringOption("charset", "UTF-8")
 
-    // Eigenes Jar für tests.
-    tasks.register("testJar", Jar) {
-        group = "My Tasks"
-        description = "Creates a jar from the test files."
+                // No Errors for missing JavaDoc.
+                options.addBooleanOption("Xdoclint:none", true)
+                options.addStringOption("-quiet")
+            }
 
-        dependsOn("testClasses")
+            test {
+                enabled = true
+                ignoreFailures = false
+                maxParallelForks = 4
 
-        getArchiveClassifier().set("test")
-        from sourceSets.test.output
-    }
+                useJUnitPlatform()
 
-    // Eigenes Jar für test-sources
-    tasks.register("testSourcesJar", Jar) {
-        group = "My Tasks"
-        description = "Creates a jar from the test-source files."
+                reports {
+                    junitXml.required = false
+                    html.required = true
+                }
 
-        dependsOn("testClasses")
+                testLogging {
+                    showStandardStreams = false
+//                    events = ["PASSED", "FAILED", "SKIPPED", "STANDARD_OUT", "STANDARD_ERROR"]
+                    events = ["FAILED", "SKIPPED"]
+//                    showExceptions = true
+//                    showCauses = true
+//                    showStackTraces = true
+//                    exceptionFormat = TestExceptionFormat.FULL
+                }
 
-        getArchiveClassifier().set("test-sources")
-        from sourceSets.test.allSource
-    }
+                jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
 
-    // Eigenes Jar für javadoc
-    tasks.register("javadocJar", Jar) {
-        group = "My Tasks"
-        description = "Creates a jar from the javadoc files."
+                afterSuite { desc, result ->
+                    if (!desc.parent) {
+                        String output = "Results: ${result.resultType} - ${result.testCount} Tests -  ${result.successfulTestCount} SUCCESSFUL, ${result.failedTestCount} FAILED, ${result.skippedTestCount} SKIPPED"
 
-        dependsOn("javadoc")
+                        String lines = "-".repeat(output.length())
+                        // String lines = Stream.generate(() -> "-").limit(output.length()).collect(Collectors.joining());
 
-        getArchiveClassifier().set("javadoc")
-        from javadoc.destinationDir
-    }
+                        logger.lifecycle(lines)
+                        logger.lifecycle(output)
+                        logger.lifecycle(lines)
+                    }
+                }
+            }
 
-    // Artefakte zusammenführen
-    artifacts {
-        archives sourcesJar
-        archives testJar
-        archives testSourcesJar
-        archives javadocJar
-    }
+            [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
+            [compileJava, compileTestJava]*.options*.debug = true
+            [compileJava, compileTestJava]*.options*.compilerArgs = [
+                    "--add-modules=ALL-SYSTEM",
+                    //"--add-modules=jdk.incubator.concurrent",
+                    //"-verbose",
+                    // Compiler Warnings as Errors.
+                    //"-Werror",
+                    // Enable all.
+                    //"-Xlint:all",
+                    // Überflüssige Typecast, wie zum Beispiel in der Anweisung int i = (int) 0;
+                    "-Xlint:cast",
+                    // Verdächtige Bytecode-Dateien, beispielsweise mit anderen Merkmalen als die ebenfalls enthaltene Versionsangabe eigentlich gestattet.
+                    "-Xlint:classfile",
+                    // Verwendung von Klassen oder Methoden, die als Deprecated markiert sind.
+                    "-Xlint:deprecation",
+                    // Annotation @Deprecated und @deprecated-Tag im Javadoc-Kommentar widersprechen sich.
+                    "-Xlint:dep-ann",
+                    // Potenzielle Division durch null.
+                    "-Xlint:divzero",
+                    // Leere Anweisung nach if.
+                    "-Xlint:empty",
+                    // case-Block in einer switch-Anweisung ohne abschließendes break.
+                    "-Xlint:fallthrough",
+                    // return-Anweisung in einem finally-Block. Diese Konstruktion kann eine andere return-Anweisung im try-Block maskieren und zu schwer nachvollziehbarem Verhalten führen.
+                    "-Xlint:finally",
+                    // Aufruf des Compilers mit einer älteren Version für den Quelltext (Schalter -source) als für die Laufzeitbibliothek (-bootclasspath).
+                    // Dabei kann Bytecode entstehen, der auf der älteren Plattform nicht funktioniert, weil er sich auf die neuere Laufzeitbibliothek bezieht.
+                    "-Xlint:options",
+                    // Fehlende @Override-Annotation.
+                    "-Xlint:overrides",
+                    // Unerreichbares Element im Classpath.
+                    "-Xlint:path",
+                    // Annotation gefunden, für die sich kein Prozessor zuständig erklärt.
+                    "-Xlint:processing",
+                    // Verwendung einer generischen Klasse oder eines generischen Interface ohne Typ-Argument.
+                    "-Xlint:rawtypes",
+                    // Fehlende oder falsche Definition von serialVersionUID in einer Klasse, die das Interface Serializable implementiert.
+                    "-Xlint:serial",
+                    // Bezug auf ein statisches Element über eine Objektreferenz statt über den Klassennamen.
+                    "-Xlint:static",
+                    // Verdächtiger ARM-Block, wie beispielsweise ARM-Block mit einer Ressource, die nicht verwendet wird, ARM-Block mit einem expliziten close-Aufruf,
+                    // Definition einer close-Methode mit einer anderen Exception als IOException.
+                    "-Xlint:try",
+                    // Einsatz eines generischen Typs in einem Kontext, in dem die statische Typprüfung des Compilers nicht mehr sicherstellen kann, dass Typfehler zur Laufzeit ausgeschlossen sind.
+                    "-Xlint:unchecked"
+                    // Vararg-Parameter mit einem generischen Typ verbieten.
+                    , "-Xlint:varargs"
+                    // Disable annotation processing.
+                    //"-proc:none"
+            ]
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
-//            vendor = JvmVendorSpec.ORACLE
+            // Jar for sources.
+            tasks.register("sourcesJar", Jar) {
+                group = "My Tasks"
+                description = "Creates a jar from the source files."
+
+                dependsOn("classes")
+
+                getArchiveClassifier().set("sources")
+                from sourceSets.main.allSource
+            }
+
+            // Jar for tests.
+            tasks.register("testJar", Jar) {
+                group = "My Tasks"
+                description = "Creates a jar from the test files."
+
+                dependsOn("testClasses")
+
+                getArchiveClassifier().set("test")
+                from sourceSets.test.output
+            }
+
+            // Jar for test-sources.
+            tasks.register("testSourcesJar", Jar) {
+                group = "My Tasks"
+                description = "Creates a jar from the test-source files."
+
+                dependsOn("testClasses")
+
+                getArchiveClassifier().set("test-sources")
+                from sourceSets.test.allSource
+            }
+
+            // Jar for javadoc.
+            tasks.register("javadocJar", Jar) {
+                group = "My Tasks"
+                description = "Creates a jar from the javadoc files."
+
+                dependsOn("javadoc")
+
+                getArchiveClassifier().set("javadoc")
+                from javadoc.destinationDir
+            }
+
+            // Merge Artefacts.
+            artifacts {
+                archives sourcesJar
+                archives testJar
+                archives testSourcesJar
+                archives javadocJar
+            }
         }
     }
-
-    javadoc {
-        if (JavaVersion.current().isJava9Compatible()) {
-            options.addBooleanOption('html5', true)
-        }
-
-        // No Errors for missing JavaDoc.
-        options.addBooleanOption("Xdoclint:none", true)
-        options.addStringOption("-quiet")
-    }
-
-    test {
-        enabled = true
-        ignoreFailures = false
-        maxParallelForks = 4
-
-        useJUnitPlatform()
-
-        testLogging {
-            showStandardStreams = false
-//            events = ["PASSED", "FAILED", "SKIPPED", "STANDARD_OUT", "STANDARD_ERROR"]
-            events = ["FAILED", "SKIPPED"]
-//            showExceptions = true
-//            showCauses = true
-//            showStackTraces = true
-//            exceptionFormat = TestExceptionFormat.FULL
-        }
-
-        jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
-    }
-
-    [compileJava, compileTestJava]*.options*.compilerArgs = [
-            "--add-modules=ALL-SYSTEM",
-            //"--add-modules=jdk.incubator.concurrent",
-            //"-verbose",
-            // Compiler Warnings as Errors.
-            //"-Werror",
-            // Enable all.
-            //"-Xlint:all",
-            // Überflüssige Typecast, wie zum Beispiel in der Anweisung int i = (int) 0;
-            "-Xlint:cast",
-            // Verdächtige Bytecode-Dateien, beispielsweise mit anderen Merkmalen als die ebenfalls enthaltene Versionsangabe eigentlich gestattet.
-            "-Xlint:classfile",
-            // Verwendung von Klassen oder Methoden, die als Deprecated markiert sind.
-            "-Xlint:deprecation",
-            // Annotation @Deprecated und @deprecated-Tag im Javadoc-Kommentar widersprechen sich.
-            "-Xlint:dep-ann",
-            // Potenzielle Division durch null.
-            "-Xlint:divzero",
-            // Leere Anweisung nach if.
-            "-Xlint:empty",
-            // case-Block in einer switch-Anweisung ohne abschließendes break.
-            "-Xlint:fallthrough",
-            // return-Anweisung in einem finally-Block. Diese Konstruktion kann eine andere return-Anweisung im try-Block maskieren und zu schwer nachvollziehbarem Verhalten führen.
-            "-Xlint:finally",
-            // Aufruf des Compilers mit einer älteren Version für den Quelltext (Schalter -source) als für die Laufzeitbibliothek (-bootclasspath).
-            // Dabei kann Bytecode entstehen, der auf der älteren Plattform nicht funktioniert, weil er sich auf die neuere Laufzeitbibliothek bezieht.
-            "-Xlint:options",
-            // Fehlende @Override-Annotation.
-            "-Xlint:overrides",
-            // Unerreichbares Element im Classpath.
-            "-Xlint:path",
-            // Annotation gefunden, für die sich kein Prozessor zuständig erklärt.
-            "-Xlint:processing",
-            // Verwendung einer generischen Klasse oder eines generischen Interface ohne Typ-Argument.
-            "-Xlint:rawtypes",
-            // Fehlende oder falsche Definition von serialVersionUID in einer Klasse, die das Interface Serializable implementiert.
-            "-Xlint:serial",
-            // Bezug auf ein statisches Element über eine Objektreferenz statt über den Klassennamen.
-            "-Xlint:static",
-            // Verdächtiger ARM-Block, wie beispielsweise ARM-Block mit einer Ressource, die nicht verwendet wird, ARM-Block mit einem expliziten close-Aufruf,
-            // Definition einer close-Methode mit einer anderen Exception als IOException.
-            "-Xlint:try",
-            // Einsatz eines generischen Typs in einem Kontext, in dem die statische Typprüfung des Compilers nicht mehr sicherstellen kann, dass Typfehler zur Laufzeit ausgeschlossen sind.
-            "-Xlint:unchecked"
-            // Vararg-Parameter mit einem generischen Typ verbieten.
-            , "-Xlint:varargs"
-            // Disable annotation processing.
-            //"-proc:none"
-    ]
 }
 
 project("knn-net") {
