@@ -1,3 +1,5 @@
+import java.time.LocalDateTime
+
 // Execute Tasks in SubModule: gradle MODUL:clean build
 plugins {
     id "com.github.ben-manes.versions" version "$version_gradleVersionsPlugin" apply false
@@ -49,6 +51,18 @@ subprojects {
                 }
             }
 
+            jar {
+                manifest {
+                    attributes(
+                            "Build-By": "Thomas Freese",
+                            "Build-Date": LocalDateTime.now(),
+                            "Build-JDK": System.getProperty("java.version") + " - " + System.getProperty("java.specification.vendor"),
+                            "Build-Title": project.name,
+                            "Build-Version": project.version
+                    )
+                }
+            }
+
             javadoc {
                 if (JavaVersion.current().isJava9Compatible()) {
                     options.addBooleanOption('html5', true)
@@ -71,8 +85,8 @@ subprojects {
                 useJUnitPlatform()
 
                 reports {
-                    junitXml.required = false
-                    html.required = true
+                    junitXml.required = true
+                    html.required = false
                 }
 
                 testLogging {
