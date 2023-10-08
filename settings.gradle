@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-// Ohne rootProject.name würde der Name des Projekt-Verzeichnisses verwendet werden.
+// Without rootProject.name the Name of the Projekt-Directory is used.
 //rootProject.name = "knn"
 
 dependencyResolutionManagement {
@@ -60,10 +60,28 @@ dependencyResolutionManagement {
 //            }
 //        }
 //
-//        //Ivy Dependencies.
+//        // Ivy Dependencies.
 //        implementation("app1:artifact:version") // app1/app1/jars/artifact-version.jar
     }
 }
 
 include "knn-net"
 include "knn-demo"
+
+//buildCache {
+//    local {
+//        directory = new File("/tmp", "build-cache")
+//        removeUnusedEntriesAfterDays = 7
+//    }
+//}
+
+// init.gradle
+//beforeSettings { settings ->
+//    settings.caches {
+//        cleanup = Cleanup.DEFAULT
+//        releasedWrappers.removeUnusedEntriesAfterDays = 7
+//        snapshotWrappers.removeUnusedEntriesAfterDays = 7
+//        downloadedResources.removeUnusedEntriesAfterDays = 7
+//        createdResources.removeUnusedEntriesAfterDays = 7
+//    }
+//}

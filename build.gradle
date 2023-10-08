@@ -14,6 +14,8 @@ subprojects {
     apply plugin: "io.spring.dependency-management"
     apply plugin: "com.github.ben-manes.versions"
 
+//    project.layout.buildDirectory = "target"
+
     dependencyManagement {
         imports {
 //            mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
@@ -54,7 +56,7 @@ subprojects {
             jar {
                 manifest {
                     attributes(
-                            "Build-By": "Thomas Freese",
+                            "Build-By": "https://github.com/tfreese",
                             "Build-Date": LocalDateTime.now(),
                             "Build-JDK": System.getProperty("java.version") + " - " + System.getProperty("java.specification.vendor"),
                             "Build-Title": project.name,
