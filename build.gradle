@@ -16,6 +16,9 @@ subprojects {
 
 //    project.layout.buildDirectory = "target"
 
+//    apply from: "../dependencies.gradle"
+//    apply from: "../dependencies.properties"
+
     dependencyManagement {
         imports {
 //            mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
@@ -37,7 +40,7 @@ subprojects {
             }
 
             dependencies {
-                //implementation(platform("de.freese:maven-bom:$version_mavenBom"))
+                //implementation(platform("org.springframework.boot:spring-boot-dependencies:$version_springBoot"))
                 testImplementation("org.junit.jupiter:junit-jupiter-engine")
                 testRuntimeOnly("org.junit.platform:junit-platform-launcher")
             }
@@ -119,6 +122,7 @@ subprojects {
 
             [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
             [compileJava, compileTestJava]*.options*.debug = true
+            [compileJava, compileTestJava]*.options*.incremental = true
             [compileJava, compileTestJava]*.options*.compilerArgs = [
                     "--add-modules=ALL-SYSTEM",
                     //"--add-modules=jdk.incubator.concurrent",
