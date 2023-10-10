@@ -1,5 +1,3 @@
-import java.time.LocalDateTime
-
 // Execute Tasks in SubModule: gradle MODUL:clean build
 plugins {
     id "com.github.ben-manes.versions" version "$version_gradleVersionsPlugin" apply false
@@ -7,7 +5,20 @@ plugins {
     id "io.spring.dependency-management" version "$version_springDependencyManagement" apply false
 //    id "org.openjfx.javafxplugin" version "$version_javafxPlugin" apply false
 //    id "org.springframework.boot" version "$version_springBoot" apply false
+
+    //    id "checkstyle"
 }
+
+//checkstyle {
+//    // gradle checkstyleMain / check
+//    configFile file("${System.getProperty('user.home')}/git/parents/ci/config/checkstyle.xml")
+//}
+
+//// Register ANT-Tasks as Gradle-Tasks with Prefix "ant-" in Group "other".
+//ant.importBuild("ant_build.xml") { antTargetName -> "ant-" + antTargetName }
+//
+//// Set group property for all Ant tasks.
+//tasks.matching { task -> task.name.startsWith("ant-") }.configureEach{ group = "Ant" }
 
 subprojects {
     apply plugin: "base"
@@ -60,7 +71,7 @@ subprojects {
                 manifest {
                     attributes(
                             "Build-By": "https://github.com/tfreese",
-                            "Build-Date": LocalDateTime.now(),
+                            "Build-Date": java.time.LocalDateTime.now(),
                             "Build-JDK": System.getProperty("java.version") + " - " + System.getProperty("java.specification.vendor"),
                             "Build-Title": project.name,
                             "Build-Version": project.version
@@ -184,7 +195,7 @@ subprojects {
                 options.compilerArgs.addAll(compilerArgs)
             }
 
-            tasks.withType(JavaCompile) {
+            tasks.withType(JavaCompile).configureEach {
                 doFirst {
                     println "Compiler args: " + options.compilerArgs
                 }
