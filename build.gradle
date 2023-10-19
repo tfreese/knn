@@ -280,13 +280,16 @@ project("knn-demo") {
         testImplementation("org.mariadb.jdbc:mariadb-java-client")
         testImplementation("org.springframework:spring-jdbc")
     }
+    ext {
+        main = "de.freese.knn.buttons.KnnButtonMain"
+    }
     application {
-        mainClass = "de.freese.knn.buttons.KnnButtonMain"
+        mainClass = project.main
     }
     jar {
         manifest {
             attributes(
-                    "Main-Class": "de.freese.knn.buttons.KnnButtonMain"
+                    "Main-Class": project.main
             )
         }
     }
