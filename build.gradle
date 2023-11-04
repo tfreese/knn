@@ -57,14 +57,17 @@ subprojects {
             }
 
             java {
-//                withJavadocJar()
-//                withSourcesJar()
+                sourceCompatibility = 21
+                targetCompatibility = 21
 
                 toolchain {
                     languageVersion = JavaLanguageVersion.of(21)
 //                    vendor = JvmVendorSpec.ORACLE
 //                    implementation = JvmImplementation.J9
                 }
+
+//                withJavadocJar()
+//                withSourcesJar()
             }
 
             jar {
@@ -119,7 +122,7 @@ subprojects {
 
                 afterSuite { desc, result ->
                     if (!desc.parent) {
-                        String output = "Results: ${result.resultType} - ${result.testCount} Tests -  ${result.successfulTestCount} SUCCESSFUL, ${result.failedTestCount} FAILED, ${result.skippedTestCount} SKIPPED"
+                        String output = "Results: ${result.resultType} - ${result.testCount} Tests - ${result.successfulTestCount} SUCCESSFUL, ${result.failedTestCount} FAILED, ${result.skippedTestCount} SKIPPED"
 
                         String lines = "-".repeat(output.length())
                         // String lines = Stream.generate(() -> "-").limit(output.length()).collect(Collectors.joining());
