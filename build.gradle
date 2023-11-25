@@ -136,7 +136,7 @@ subprojects {
 
             // --add-opens=java.base/java.util.concurrent=ALL-UNNAMED // Hat zur Kompilierungszeit keine Auswirkungen
             def compilerArgs = [
-                    "--add-modules=ALL-SYSTEM"
+                    //"--add-modules=ALL-SYSTEM"
                     //, "--add-modules=jdk.incubator.concurrent",
                     //, "--add-exports=java.base/sun.security.action=ALL-UNNAMED"
                     //, "-verbose"
@@ -145,7 +145,7 @@ subprojects {
                     // Enable all.
                     //, "-Xlint:all"
                     // Überflüssige Typecast, wie zum Beispiel in der Anweisung int i = (int) 0;
-                    , "-Xlint:cast"
+                    "-Xlint:cast"
                     // Verdächtige Bytecode-Dateien, beispielsweise mit anderen Merkmalen als die ebenfalls enthaltene Versionsangabe eigentlich gestattet.
                     , "-Xlint:classfile"
                     // Verwendung von Klassen oder Methoden, die als Deprecated markiert sind.
