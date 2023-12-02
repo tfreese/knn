@@ -1,4 +1,19 @@
 // Execute Tasks in SubModule: gradle MODUL:clean build
+//buildscript {
+//    repositories {
+//        mavenLocal()
+//        mavenCentral()
+//        gradlePluginPortal()
+//    }
+//
+//    dependencies {
+//        classpath("com.github.ben-manes:gradle-versions-plugin:$version_gradleVersionsPlugin")
+//        classpath("io.spring.gradle:dependency-management-plugin:$version_springDependencyManagement")
+//    }
+//}
+//
+// or as alternative newer Variant
+//
 plugins {
     id "com.github.ben-manes.versions" version "$version_gradleVersionsPlugin" apply false
 //    id "de.freese.gradle.plugin.conventions" version "$version_myConventionPlugin" apply false
@@ -22,8 +37,8 @@ plugins {
 
 subprojects {
     apply plugin: "base"
-    apply plugin: "io.spring.dependency-management"
     apply plugin: "com.github.ben-manes.versions"
+    apply plugin: "io.spring.dependency-management"
 
 //    project.layout.buildDirectory = "target"
 
@@ -83,6 +98,8 @@ subprojects {
             }
 
             javadoc {
+                enabled = true
+
                 if (JavaVersion.current().isJava9Compatible()) {
                     options.addBooleanOption('html5', true)
                 }
@@ -118,7 +135,7 @@ subprojects {
 //                    exceptionFormat = TestExceptionFormat.FULL
                 }
 
-                jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
+//                jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
 
                 afterSuite { desc, result ->
                     if (!desc.parent) {
@@ -204,7 +221,6 @@ subprojects {
                 }
             }
 
-            // Jar for sources.
             tasks.register("sourcesJar", Jar) {
                 group = "My Tasks"
                 description = "Creates a jar from the source files."
@@ -215,7 +231,6 @@ subprojects {
                 from sourceSets.main.allSource
             }
 
-            // Jar for tests.
             tasks.register("testJar", Jar) {
                 group = "My Tasks"
                 description = "Creates a jar from the test files."
@@ -226,7 +241,6 @@ subprojects {
                 from sourceSets.test.output
             }
 
-            // Jar for test-sources.
             tasks.register("testSourcesJar", Jar) {
                 group = "My Tasks"
                 description = "Creates a jar from the test-source files."
@@ -237,7 +251,6 @@ subprojects {
                 from sourceSets.test.allSource
             }
 
-            // Jar for javadoc.
             tasks.register("javadocJar", Jar) {
                 group = "My Tasks"
                 description = "Creates a jar from the javadoc files."
