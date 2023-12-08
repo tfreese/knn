@@ -21,13 +21,7 @@ plugins {
 //    id "org.openjfx.javafxplugin" version "$version_javafxPlugin" apply false
 //    id "org.springframework.boot" version "$version_springBoot" apply false
 
-    //    id "checkstyle"
 }
-
-//checkstyle {
-//    // gradle checkstyleMain / check
-//    configFile file("${System.getProperty('user.home')}/git/parents/ci/config/checkstyle.xml")
-//}
 
 //// Register ANT-Tasks as Gradle-Tasks with Prefix "ant-" in Group "other".
 //ant.importBuild("ant_build.xml") { antTargetName -> "ant-" + antTargetName }
@@ -39,6 +33,7 @@ subprojects {
     apply plugin: "base"
     apply plugin: "com.github.ben-manes.versions"
     apply plugin: "io.spring.dependency-management"
+    apply plugin: "checkstyle"
 
 //    project.layout.buildDirectory = "target"
 
@@ -56,6 +51,27 @@ subprojects {
 
             // JARs aus libs-Folder.
             //implementation fileTree(dir: "libs", include: "*.jar")
+        }
+    }
+
+    // https://checkstyle.sourceforge.io
+    checkstyle {
+        // Default Directory: <root>/config/checkstyle/
+        configDirectory = file("${System.getProperty('user.home')}/git/parents/ci/config")
+//        configFile file("${System.getProperty('user.home')}/git/parents/ci/config/checkstyle.xml")
+//    configFile rootProject.file("config/checkstyle/checkstyle.xml")
+
+        configProperties.put("org.checkstyle.suppressionFilter", file("${System.getProperty('user.home')}/git/parents/ci/config/checkstyle-suppressions.xml"))
+
+        ignoreFailures = false
+        showViolations = true
+    }
+
+    tasks.withType(Checkstyle).configureEach {
+        reports {
+            xml.required = false
+            html.required = true
+//        html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
         }
     }
 
