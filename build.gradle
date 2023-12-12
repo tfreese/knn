@@ -57,11 +57,11 @@ subprojects {
     // https://checkstyle.sourceforge.io
     checkstyle {
         // Default Directory: <root>/config/checkstyle/
-        configDirectory = file("${System.getProperty('user.home')}/git/parents/ci/config")
-//        configFile file("${System.getProperty('user.home')}/git/parents/ci/config/checkstyle.xml")
+        configDirectory = file("${System.getProperty('user.home')}/git/parents/config/checkstyle")
+//        configFile file("${System.getProperty('user.home')}/git/parents/config/checkstyle/checkstyle.xml")
 //    configFile rootProject.file("config/checkstyle/checkstyle.xml")
 
-        configProperties.put("org.checkstyle.suppressionFilter", file("${System.getProperty('user.home')}/git/parents/ci/config/checkstyle-suppressions.xml"))
+        configProperties.put("org.checkstyle.suppressionFilter", file("${System.getProperty('user.home')}/git/parents/config/checkstyle/suppressions.xml"))
 
         ignoreFailures = false
         showViolations = true
