@@ -28,7 +28,7 @@ public final class BildErkennungMain {
         // TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
         TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
 
-        int parallelism = Runtime.getRuntime().availableProcessors();
+        //        int parallelism = Runtime.getRuntime().availableProcessors();
 
         // @formatter:off
         NeuralNetBuilder builder = new NeuralNetBuilder()

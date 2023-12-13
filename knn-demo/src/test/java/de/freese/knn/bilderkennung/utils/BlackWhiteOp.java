@@ -89,7 +89,7 @@ public class BlackWhiteOp implements BufferedImageOp {
             for (int x = 0; x < width; x++) {
                 int pixel = src.getRGB(x, y);
 
-                @SuppressWarnings("unused") int alpha = (pixel >> 24) & 0xff;
+                //                int alpha = (pixel >> 24) & 0xff;
                 int red = (pixel >> 16) & 0xff;
                 int green = (pixel >> 8) & 0xff;
                 int blue = (pixel >> 0) & 0xff;

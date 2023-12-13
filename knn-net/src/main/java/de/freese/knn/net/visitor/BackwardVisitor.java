@@ -110,8 +110,8 @@ public class BackwardVisitor extends AbstractKnnVisitor {
     }
 
     @Override
-    protected void visitKNN(final NeuralNet knn) {
-        super.visitKNN(knn);
+    protected void visitKnn(final NeuralNet knn) {
+        super.visitKnn(knn);
 
         Layer[] layers = knn.getLayer();
 

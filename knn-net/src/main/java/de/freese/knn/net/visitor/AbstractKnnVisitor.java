@@ -27,7 +27,7 @@ public abstract class AbstractKnnVisitor implements Visitor {
     @Override
     public void visitObject(final Object object) {
         if (object instanceof NeuralNet o) {
-            visitKNN(o);
+            visitKnn(o);
         }
         else if (object instanceof InputLayer o) {
             visitInputLayer(o);
@@ -52,7 +52,7 @@ public abstract class AbstractKnnVisitor implements Visitor {
 
     protected abstract void visitInputLayer(InputLayer layer);
 
-    protected void visitKNN(NeuralNet knn) {
+    protected void visitKnn(final NeuralNet knn) {
         this.knnMath = knn.getMath();
     }
 

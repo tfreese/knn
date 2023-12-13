@@ -32,7 +32,7 @@ public class KnnButtonMain extends JFrame {
 
     public static void main(final String[] args) {
         // Training
-        int parallelism = Runtime.getRuntime().availableProcessors();
+        //        int parallelism = Runtime.getRuntime().availableProcessors();
 
         // @formatter:off
         NeuralNet neuralNet = new NeuralNetBuilder()
