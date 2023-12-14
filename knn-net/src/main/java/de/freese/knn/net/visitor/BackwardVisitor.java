@@ -16,7 +16,6 @@ import de.freese.knn.net.trainer.TrainingContext;
  */
 public class BackwardVisitor extends AbstractKnnVisitor {
     private final ForwardVisitor forwardVisitor;
-
     private final TrainingContext trainingContext;
 
     private double[] outputTargets;
@@ -39,7 +38,7 @@ public class BackwardVisitor extends AbstractKnnVisitor {
      * Liefert die vorherigen Gewichtsänderungen der Neuronen.
      */
     public double[][] getDeltaWeights(final Layer layer) {
-        Matrix matrix = layer.getOutputMatrix();
+        final Matrix matrix = layer.getOutputMatrix();
 
         return this.trainingContext.getDeltaWeights(matrix);
     }
@@ -62,8 +61,8 @@ public class BackwardVisitor extends AbstractKnnVisitor {
      * Liefert den aktuellen Netzfehler.
      */
     public double getNetError() {
-        double[] outputs = getLastOutputs();
-        double[] targets = getOutputTargets();
+        final double[] outputs = getLastOutputs();
+        final double[] targets = getOutputTargets();
 
         return getMath().getNetError(outputs, targets);
     }
@@ -113,7 +112,7 @@ public class BackwardVisitor extends AbstractKnnVisitor {
     protected void visitKnn(final NeuralNet knn) {
         super.visitKnn(knn);
 
-        Layer[] layers = knn.getLayer();
+        final Layer[] layers = knn.getLayer();
 
         // Rückwärts
         for (int i = layers.length - 1; i >= 0; i--) {

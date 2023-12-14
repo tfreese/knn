@@ -70,15 +70,15 @@ public class NetTrainer {
      * Trainiert das neurale Netz mit Daten aus dem {@link TrainingInputSource}.
      */
     public void train(final NeuralNet neuralNet, final TrainingInputSource inputSource) {
-        long start = System.currentTimeMillis();
-        TrainingContext trainingContext = new TrainingContext();
+        final long start = System.currentTimeMillis();
+        final TrainingContext trainingContext = new TrainingContext();
 
         for (int iteration = 0; iteration < this.maxIterations; iteration++) {
             double error = 0.0D;
 
             for (int index = 0; index < inputSource.getSize(); index++) {
-                double[] input = inputSource.getInputAt(index);
-                double[] output = inputSource.getOutputAt(index);
+                final double[] input = inputSource.getInputAt(index);
+                final double[] output = inputSource.getOutputAt(index);
 
                 error += train(trainingContext, neuralNet, input, output);
             }
@@ -87,20 +87,20 @@ public class NetTrainer {
 
             // Dynamische Anpassung der Lernrate und Momentum.
             // TODO da passt was noch nicht
-            // double stepLR = (this.teachFactorInitial - this.teachFactor) / this.maxIterations;
-            // double stepMom = (this.momentumInitial - this.momentum) / this.maxIterations;
-            // int currCircle = this.maxIterations - iteration;
+            // final double stepLR = (this.teachFactorInitial - this.teachFactor) / this.maxIterations;
+            // final double stepMom = (this.momentumInitial - this.momentum) / this.maxIterations;
+            // final int currCircle = this.maxIterations - iteration;
             // this.teachFactor = this.teachFactorInitial - (stepLR * currCircle);
             // this.momentum = this.momentumInitial - (stepMom * currCircle);
             if (error <= this.maximumError) {
                 // Letzter Stand loggen.
-                NetTrainerCycleEndedEvent event = new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum);
+                final NetTrainerCycleEndedEvent event = new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum);
 
                 if (LOGGER.isInfoEnabled()) {
                     LOGGER.info(event.toString());
                 }
 
-                long ms = System.currentTimeMillis() - start;
+                final long ms = System.currentTimeMillis() - start;
 
                 LOGGER.info("Required Time: {} ms", ms);
 
@@ -112,7 +112,7 @@ public class NetTrainer {
     }
 
     private void fireCycleEnded(final NetTrainerCycleEndedEvent event) {
-        Object[] listeners = this.listenerList.getListenerList();
+        final Object[] listeners = this.listenerList.getListenerList();
 
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == NetTrainerListener.class) {
@@ -128,26 +128,26 @@ public class NetTrainer {
      * @return double, Netzfehler
      */
     private double train(final TrainingContext trainingContext, final NeuralNet neuralNet, final double[] inputs, final double[] outputs) {
-        ForwardVisitor forwardVisitor = new ForwardVisitor(true);
+        final ForwardVisitor forwardVisitor = new ForwardVisitor(true);
         forwardVisitor.setInputs(inputs);
         neuralNet.visit(forwardVisitor);
 
         // Fehler durch die Hidden- bis zum InputLayer propagieren, Gradientenabstiegsverfahren
-        BackwardVisitor backwardVisitor = new BackwardVisitor(trainingContext, forwardVisitor);
+        final BackwardVisitor backwardVisitor = new BackwardVisitor(trainingContext, forwardVisitor);
         backwardVisitor.setOutputTargets(outputs);
         neuralNet.visit(backwardVisitor);
 
-        Layer[] layer = neuralNet.getLayer();
+        final Layer[] layer = neuralNet.getLayer();
 
         // Gewichte durch die Hidden- bis zum InputLayer aktualisieren.
         for (int i = layer.length - 1; i > 0; i--) {
-            Layer rightLayer = layer[i];
-            Layer leftLayer = layer[i - 1];
+            final Layer rightLayer = layer[i];
+            final Layer leftLayer = layer[i - 1];
 
             neuralNet.getMath().refreshLayerWeights(leftLayer, rightLayer, this.teachFactor, this.momentum, backwardVisitor);
         }
 
-        double netzFehler = backwardVisitor.getNetError();
+        final double netzFehler = backwardVisitor.getNetError();
 
         backwardVisitor.clear();
 

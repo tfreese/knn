@@ -19,23 +19,21 @@ public class ImageInfo {
     private final List<ImageColorChannelInfo> channelInfos = new ArrayList<>();
 
     private BufferedImage coOccurrenceMatrixImage;
-
     private double[] infoVector;
-
     private double[] infoVectorReScaled;
 
     public ImageInfo(final String fileName) throws Exception {
         super();
 
         // URL url = ClassLoader.getSystemClassLoader().getResource(fileName);
-        URL url = ClassLoader.getSystemResource(fileName);
-        BufferedImage source = ImageIO.read(url);
+        final URL url = ClassLoader.getSystemResource(fileName);
+        final BufferedImage source = ImageIO.read(url);
 
         // In RGB umwandeln
-        int w = source.getWidth();
-        int h = source.getHeight();
-        BufferedImage target = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = target.createGraphics();
+        final int w = source.getWidth();
+        final int h = source.getHeight();
+        final BufferedImage target = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        final Graphics2D g = target.createGraphics();
         g.drawRenderedImage(source, null);
         g.dispose();
 
@@ -50,7 +48,7 @@ public class ImageInfo {
             this.coOccurrenceMatrixImage = new BufferedImage(510, 510, BufferedImage.TYPE_INT_RGB);
 
             for (ImageColorChannelInfo channelInfo : this.channelInfos) {
-                ColorChannel colorChannel = channelInfo.getColorChannel();
+                final ColorChannel colorChannel = channelInfo.getColorChannel();
 
                 int xOffset = 0;
                 int yOffset = 0;
@@ -69,7 +67,7 @@ public class ImageInfo {
 
                 for (int x = xOffset; x < (255 + xOffset); x++) {
                     for (int y = yOffset; y < (255 + yOffset); y++) {
-                        int value = channelInfo.getCoOccurrenceMatrix()[x - xOffset][y - yOffset];
+                        final int value = channelInfo.getCoOccurrenceMatrix()[x - xOffset][y - yOffset];
 
                         if (value > 0) {
                             this.coOccurrenceMatrixImage.setRGB(x, y, colorChannel.getColor().getRGB());
@@ -105,7 +103,7 @@ public class ImageInfo {
             int i = 0;
 
             // Co-Occurrence-Matrix direkt verwenden
-            // ImageColorChannelInfo channelInfo = this.channelInfos.get(1);
+            // final ImageColorChannelInfo channelInfo = this.channelInfos.get(1);
             // int[][] matrix = channelInfo.getCoOccurrenceMatrix();
             //
             // for (int x = 0; x < 255; x++)
@@ -190,7 +188,7 @@ public class ImageInfo {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
 
         for (ImageColorChannelInfo channelInfo : this.channelInfos) {
             sb.append(channelInfo.toString());

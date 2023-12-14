@@ -22,14 +22,14 @@ import de.freese.knn.net.NeuralNet;
  */
 public class KnnButtonPanel extends JPanel implements ActionListener {
     public static final int MAT_HEIGHT = 9;
-
     public static final int MAT_WIDTH = 6;
-
     @Serial
     private static final long serialVersionUID = 1L;
+
     private final JLabel[] labelsOutput = new JLabel[10];
     private final transient NeuralNet neuralNet;
     private final JToggleButton[] toggleButtons = new JToggleButton[MAT_HEIGHT * MAT_WIDTH];
+
     private JLabel labelRecognized;
 
     public KnnButtonPanel(final NeuralNet neuralNet) {
@@ -40,13 +40,13 @@ public class KnnButtonPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent event) {
-        double[] outputVector = this.neuralNet.getOutput(getInputVector());
+        final double[] outputVector = this.neuralNet.getOutput(getInputVector());
 
         double output = Double.MIN_VALUE;
         double value = Double.NaN;
 
         for (int i = 0; i < outputVector.length; i++) {
-            double percent = outputVector[i] * 100D;
+            final double percent = outputVector[i] * 100D;
 
             this.labelsOutput[i].setText(String.format("%d: %6.3f %%", i, percent));
 
@@ -70,8 +70,8 @@ public class KnnButtonPanel extends JPanel implements ActionListener {
     }
 
     public KnnButtonPanel initGui() {
-        JPanel buttonPanel = createButtonPanel(this);
-        JPanel outputPanel = createOutputPanel();
+        final JPanel buttonPanel = createButtonPanel(this);
+        final JPanel outputPanel = createOutputPanel();
         this.labelRecognized = new JLabel("Erkannt als: ");
 
         setLayout(new BorderLayout());
@@ -83,7 +83,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener {
     }
 
     private JPanel createButtonPanel(final ActionListener actionListener) {
-        JPanel panel = new JPanel();
+        final JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(MAT_HEIGHT, MAT_WIDTH));
         panel.setMinimumSize(new Dimension(MAT_WIDTH * 50, MAT_HEIGHT * 50));
         panel.setMaximumSize(new Dimension(MAT_WIDTH * 50, MAT_HEIGHT * 50));
@@ -93,7 +93,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener {
 
         for (int x = 0; x < MAT_WIDTH; x++) {
             for (int y = 0; y < MAT_HEIGHT; y++, i++) {
-                JToggleButton button = new JToggleButton(String.valueOf(i));
+                final JToggleButton button = new JToggleButton(String.valueOf(i));
                 button.setBackground(Color.LIGHT_GRAY);
                 button.setPreferredSize(new Dimension(50, 50));
                 button.addActionListener(actionListener);
@@ -107,7 +107,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener {
     }
 
     private JPanel createOutputPanel() {
-        JPanel panel = new JPanel();
+        final JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(12, 1));
         panel.add(new JLabel("Output-Neuronen"));
 
@@ -123,7 +123,7 @@ public class KnnButtonPanel extends JPanel implements ActionListener {
      * Eingangsvektor des NeuralenNetzes.
      */
     private double[] getInputVector() {
-        double[] result = new double[this.toggleButtons.length];
+        final double[] result = new double[this.toggleButtons.length];
 
         for (int i = 0; i < this.toggleButtons.length; i++) {
             result[i] = this.toggleButtons[i].isSelected() ? 1.0D : 0.0D;

@@ -57,7 +57,7 @@ public class ForwardVisitor extends AbstractKnnVisitor {
      * Liefert die Output-Daten des Layers.
      */
     double[] getOutputs(final Layer layer) {
-        Layer key = this.trainingMode ? layer : null;
+        final Layer key = this.trainingMode ? layer : null;
 
         return getValues().get(key);
     }
@@ -76,7 +76,7 @@ public class ForwardVisitor extends AbstractKnnVisitor {
     protected void visitKnn(final NeuralNet knn) {
         super.visitKnn(knn);
 
-        Layer[] layers = knn.getLayer();
+        final Layer[] layers = knn.getLayer();
 
         // Vorwärts
         visitArray(layers);

@@ -33,7 +33,6 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
      */
     private static final class RunnableHandler implements EventHandler<RunnableEvent> {
         private final int ordinal;
-
         private final int parallelism;
 
         RunnableHandler() {
@@ -74,7 +73,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
         // 8 << 4 = 128<br>
         // 4 << 4 = 64<br>
         // 2 << 4 = 32<br>
-        int ringBufferSize = Integer.highestOneBit(parallelism) << 4;
+        final int ringBufferSize = Integer.highestOneBit(parallelism) << 4;
 
         if (Integer.bitCount(ringBufferSize) != 1) {
             throw new IllegalArgumentException("bufferSize must be a power of 2");
@@ -82,7 +81,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
 
         this.disruptor = new Disruptor<>(RunnableEvent::new, ringBufferSize, new KnnThreadFactory("knn-disruptor-"));
 
-        EventHandler<RunnableEvent>[] handlers = new RunnableHandler[parallelism];
+        final EventHandler<RunnableEvent>[] handlers = new RunnableHandler[parallelism];
 
         for (int i = 0; i < handlers.length; i++) {
             handlers[i] = new RunnableHandler(parallelism, i);
@@ -95,17 +94,17 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
 
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
-        double[] errors = visitor.getLastErrors();
-        double[] layerErrors = new double[layer.getSize()];
+        final double[] errors = visitor.getLastErrors();
+        final double[] layerErrors = new double[layer.getSize()];
 
-        CountDownLatch latch = new CountDownLatch(layer.getSize());
-        RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
+        final CountDownLatch latch = new CountDownLatch(layer.getSize());
+        final RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
 
         layer.getNeurons().forEach(neuron -> {
-            long sequence = ringBuffer.next();
+            final long sequence = ringBuffer.next();
 
             try {
-                RunnableEvent event = ringBuffer.get(sequence);
+                final RunnableEvent event = ringBuffer.get(sequence);
 
                 event.runnable = () -> {
                     backward(neuron, errors, layerErrors);
@@ -137,17 +136,17 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
 
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
-        double[] inputs = visitor.getLastOutputs();
-        double[] outputs = new double[layer.getSize()];
+        final double[] inputs = visitor.getLastOutputs();
+        final double[] outputs = new double[layer.getSize()];
 
-        CountDownLatch latch = new CountDownLatch(layer.getSize());
-        RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
+        final CountDownLatch latch = new CountDownLatch(layer.getSize());
+        final RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
 
         layer.getNeurons().forEach(neuron -> {
-            long sequence = ringBuffer.next();
+            final long sequence = ringBuffer.next();
 
             try {
-                RunnableEvent event = ringBuffer.get(sequence);
+                final RunnableEvent event = ringBuffer.get(sequence);
 
                 event.runnable = () -> {
                     forward(neuron, inputs, outputs);
@@ -173,18 +172,18 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
 
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
-        double[] leftOutputs = visitor.getOutputs(leftLayer);
-        double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
-        double[] rightErrors = visitor.getErrors(rightLayer);
+        final double[] leftOutputs = visitor.getOutputs(leftLayer);
+        final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
+        final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        CountDownLatch latch = new CountDownLatch(leftLayer.getSize());
-        RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
+        final CountDownLatch latch = new CountDownLatch(leftLayer.getSize());
+        final RingBuffer<RunnableEvent> ringBuffer = getDisruptor().getRingBuffer();
 
         leftLayer.getNeurons().forEach(neuron -> {
-            long sequence = ringBuffer.next();
+            final long sequence = ringBuffer.next();
 
             try {
-                RunnableEvent event = ringBuffer.get(sequence);
+                final RunnableEvent event = ringBuffer.get(sequence);
 
                 event.runnable = () -> {
                     refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);

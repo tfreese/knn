@@ -55,8 +55,8 @@ public abstract class AbstractKnnMath implements KnnMath {
 
     @Override
     public void setOutputError(final Layer layer, final BackwardVisitor visitor) {
-        double[] outputs = visitor.getOutputs(layer);
-        double[] errors = new double[outputs.length];
+        final double[] outputs = visitor.getOutputs(layer);
+        final double[] errors = new double[outputs.length];
 
         for (int i = 0; i < outputs.length; i++) {
             setOutputError(i, outputs, errors, visitor);
@@ -69,11 +69,11 @@ public abstract class AbstractKnnMath implements KnnMath {
      * Mathematik für die Eingangsfehler eines Neurons.
      */
     protected void backward(final Neuron neuron, final double[] errors, final double[] layerErrors) {
-        int layerIndex = neuron.getLayerIndex();
+        final int layerIndex = neuron.getLayerIndex();
         double error = 0.0D;
 
         for (int i = 0; i < neuron.getOutputSize(); i++) {
-            double weight = neuron.getOutputWeight(i);
+            final double weight = neuron.getOutputWeight(i);
 
             error += (weight * errors[i]);
 
@@ -88,13 +88,13 @@ public abstract class AbstractKnnMath implements KnnMath {
      * Mathematik für die Ausgangswerte eines Neurons.
      */
     protected void forward(final Neuron neuron, final double[] inputs, final double[] outputs) {
-        int layerIndex = neuron.getLayerIndex();
+        final int layerIndex = neuron.getLayerIndex();
 
         // Bias Neuron draufrechnen.
         double eingangsSumme = neuron.getInputBIAS();
 
         for (int i = 0; i < neuron.getInputSize(); i++) {
-            double weight = neuron.getInputWeight(i);
+            final double weight = neuron.getInputWeight(i);
             eingangsSumme += (weight * inputs[i]);
         }
 
@@ -110,8 +110,8 @@ public abstract class AbstractKnnMath implements KnnMath {
      * Liefert den aktuellen Netzfehler für ein bestimmtes Ausgangs-Neuron.
      */
     protected double getNetError(final int neuronIndex, final double[] outputs, final double[] outputTargets) {
-        double output = outputs[neuronIndex];
-        double outputTarget = outputTargets[neuronIndex];
+        final double output = outputs[neuronIndex];
+        final double outputTarget = outputTargets[neuronIndex];
 
         return Math.pow(outputTarget - output, 2.0D);
     }
@@ -126,10 +126,10 @@ public abstract class AbstractKnnMath implements KnnMath {
      * Keine parallele Verarbeitung für einzelne Elemente, dadurch zu hoher Verwaltungsaufwand für die Runtime.
      */
     protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism) {
-        int partitionCount = Math.min(neurons.size(), parallelism);
-        int partitionLength = neurons.size() / partitionCount;
+        final int partitionCount = Math.min(neurons.size(), parallelism);
+        final int partitionLength = neurons.size() / partitionCount;
 
-        int[] partitionSizes = new int[partitionCount];
+        final int[] partitionSizes = new int[partitionCount];
         Arrays.fill(partitionSizes, partitionLength);
 
         int sum = partitionCount * partitionLength;
@@ -156,7 +156,7 @@ public abstract class AbstractKnnMath implements KnnMath {
             index++;
         }
 
-        List<NeuronList> partitions = new ArrayList<>(partitionCount);
+        final List<NeuronList> partitions = new ArrayList<>(partitionCount);
         int fromIndex = 0;
 
         for (int partitionSize : partitionSizes) {
@@ -176,13 +176,13 @@ public abstract class AbstractKnnMath implements KnnMath {
         layer.getNeurons().forEach(neuron -> neuron.setInputBIAS(valueInitializer.createNextValue()));
 
         // Gewichte.
-        Matrix matrix = layer.getOutputMatrix();
+        final Matrix matrix = layer.getOutputMatrix();
 
         if (matrix != null) {
             // Gewichte
             for (int column = 0; column < matrix.getOutputSize(); column++) {
                 for (int row = 0; row < matrix.getInputSize(); row++) {
-                    double weight = valueInitializer.createNextValue();
+                    final double weight = valueInitializer.createNextValue();
                     matrix.getWeights()[row][column] = weight;
                 }
             }
@@ -209,10 +209,10 @@ public abstract class AbstractKnnMath implements KnnMath {
      * Aktualisiert die Gewichte eines Neurons aus den Fehlern und Ausgangswerten des nachfolgenden Layers.
      */
     protected void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors) {
-        int layerIndex = neuron.getLayerIndex();
+        final int layerIndex = neuron.getLayerIndex();
 
         for (int i = 0; i < neuron.getOutputSize(); i++) {
-            double weight = neuron.getOutputWeight(i);
+            final double weight = neuron.getOutputWeight(i);
             double deltaWeight = teachFactor * rightErrors[i] * leftOutputs[layerIndex];
 
             // Momentum-Term berücksichtigen (konjugierter Gradientenabstieg).
@@ -236,11 +236,11 @@ public abstract class AbstractKnnMath implements KnnMath {
      * Liefert den Ausgabefehler nach dem Gradientenabstiegsverfahren für ein bestimmtes Ausgangs-Neuron.
      */
     protected void setOutputError(final int neuronIndex, final double[] outputs, final double[] errors, final BackwardVisitor visitor) {
-        double output = outputs[neuronIndex];
-        double outputTarget = visitor.getOutputTargets()[neuronIndex];
+        final double output = outputs[neuronIndex];
+        final double outputTarget = visitor.getOutputTargets()[neuronIndex];
 
         // Berechnung des Mittleren quadratischen Fehlers.
-        double error = (outputTarget - output) * output * (1.0D - output);
+        final double error = (outputTarget - output) * output * (1.0D - output);
 
         // FlatSpot-Problem korrigieren.
         // error += 0.01D;

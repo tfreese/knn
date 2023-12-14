@@ -43,7 +43,7 @@ public final class ImageUtils {
             return bi.getColorModel().hasAlpha();
         }
 
-        PixelGrabber pg = new PixelGrabber(image, 0, 0, 1, 1, false);
+        final PixelGrabber pg = new PixelGrabber(image, 0, 0, 1, 1, false);
 
         try {
             pg.grabPixels();
@@ -52,7 +52,7 @@ public final class ImageUtils {
             // Ignore
         }
 
-        ColorModel cm = pg.getColorModel();
+        final ColorModel cm = pg.getColorModel();
 
         return cm.hasAlpha();
     }
@@ -61,20 +61,20 @@ public final class ImageUtils {
      * Skaliert das Bild auf eine feste Größe.
      */
     public static BufferedImage scaleImage(final Image src, final double scaleX, final double scaleY) {
-        BufferedImage bufferedImage = ImageUtils.toBufferedImage(src);
-        AffineTransform tx = new AffineTransform();
+        final BufferedImage bufferedImage = ImageUtils.toBufferedImage(src);
+        final AffineTransform tx = new AffineTransform();
         tx.scale(scaleX, scaleY);
 
         // tx.shear(shiftx, shifty);
         // tx.translate(x, y);
         // tx.rotate(radians, origin.getWidth()/2, origin.getHeight()/2);
 
-        RenderingHints hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        final RenderingHints hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         // hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        AffineTransformOp op = new AffineTransformOp(tx, hints);
+        final AffineTransformOp op = new AffineTransformOp(tx, hints);
 
         return op.filter(bufferedImage, null);
     }
@@ -83,10 +83,10 @@ public final class ImageUtils {
      * Skaliert das Bild auf eine feste Größe.
      */
     public static BufferedImage scaleImageAbsolut(final Image src, final int width, final int height) {
-        BufferedImage bufferedImage = ImageUtils.toBufferedImage(src);
+        final BufferedImage bufferedImage = ImageUtils.toBufferedImage(src);
 
-        double scaleX = ((double) width) / bufferedImage.getWidth();
-        double scaleY = ((double) height) / bufferedImage.getHeight();
+        final double scaleX = ((double) width) / bufferedImage.getWidth();
+        final double scaleY = ((double) height) / bufferedImage.getHeight();
 
         return ImageUtils.scaleImage(bufferedImage, scaleX, scaleY);
     }
@@ -95,19 +95,18 @@ public final class ImageUtils {
      * Liefert das Schwarzweiss Bild.
      */
     public static BufferedImage toBlackWhiteImage(final Image image) {
-        BufferedImage bufferedImage = ImageUtils.toBufferedImage(image);
+        final BufferedImage bufferedImage = ImageUtils.toBufferedImage(image);
 
-        RenderingHints hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        final RenderingHints hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
         BufferedImageOp op = null;
 
-        // int width = getSourceImage().getWidth();
-        // int height = getSourceImage().getHeight();
-        // ColorModel colorModel = ColorModel.getRGBdefault();
+        // final int width = getSourceImage().getWidth();
+        // final int height = getSourceImage().getHeight();
+        // final ColorModel colorModel = ColorModel.getRGBdefault();
         //
-        // BufferedImage blackWhiteImage = new BufferedImage(width, height,
-        // BufferedImage.TYPE_INT_RGB);
-        // byte[] data = new byte[256];
+        // final BufferedImage blackWhiteImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        // final byte[] data = new byte[256];
         // Arrays.fill(data, (byte) 255);
         // data[0] = (byte)0;
         // data[254] = (byte)255;
@@ -116,19 +115,18 @@ public final class ImageUtils {
         // data[251] = (byte)255;
         // data[250] = (byte)255;
         //
-        // IndexColorModel colorModel = new IndexColorModel(2, 256, data, data, data);
+        // final IndexColorModel colorModel = new IndexColorModel(2, 256, data, data, data);
         //
-        // blackWhiteImage = new BufferedImage(width, height,
-        // BufferedImage.TYPE_BYTE_INDEXED, colorModel);
+        // blackWhiteImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_INDEXED, colorModel);
         //
-        // Graphics2D g2d = this.blackWhiteImage.createGraphics();
+        // final Graphics2D g2d = this.blackWhiteImage.createGraphics();
         // g2d.drawRenderedImage(getEdgeImage(), null);
         // g2d.dispose();
         //
         //
-        // short[] red = new short[256];
-        // short[] green = new short[256];
-        // short[] blue = new short[256];
+        // final short[] red = new short[256];
+        // final short[] green = new short[256];
+        // final short[] blue = new short[256];
         //
         // for (int i = 0; i < 255; i++)
         // {
@@ -141,11 +139,11 @@ public final class ImageUtils {
         // green[0]=0;
         // blue[0]=0;
         //
-        // short[][] data = new short[][] {
+        // final short[][] data = new short[][] {
         // red, green, blue
         // };
         //
-        // LookupTable lookupTable = new ShortLookupTable(0, data);
+        // final LookupTable lookupTable = new ShortLookupTable(0, data);
         // op = new LookupOp(lookupTable, hints);
         //
         //
@@ -169,12 +167,12 @@ public final class ImageUtils {
             return (BufferedImage) image;
         }
 
-        // Image m_Image = new ImageIcon(image).getImage();
+        // final Image mImage = new ImageIcon(image).getImage();
 
-        boolean hasAlpha = ImageUtils.hasAlpha(image);
+        final boolean hasAlpha = ImageUtils.hasAlpha(image);
 
         BufferedImage bimage = null;
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
         try {
             int transparency = Transparency.OPAQUE;
@@ -183,8 +181,8 @@ public final class ImageUtils {
                 transparency = Transparency.BITMASK;
             }
 
-            GraphicsDevice gs = ge.getDefaultScreenDevice();
-            GraphicsConfiguration gc = gs.getDefaultConfiguration();
+            final GraphicsDevice gs = ge.getDefaultScreenDevice();
+            final GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
             bimage = gc.createCompatibleImage(image.getWidth(null), image.getHeight(null), transparency);
         }
@@ -202,7 +200,7 @@ public final class ImageUtils {
             bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
         }
 
-        Graphics g = bimage.createGraphics();
+        final Graphics g = bimage.createGraphics();
 
         g.drawImage(image, 0, 0, null);
         g.dispose();
@@ -214,30 +212,21 @@ public final class ImageUtils {
      * Liefert das Kanten Bild.
      */
     public static BufferedImage toEdgeImage(final Image image) {
-        BufferedImage bufferedImage = ImageUtils.toBufferedImage(image);
+        final BufferedImage bufferedImage = ImageUtils.toBufferedImage(image);
 
         // Sobel Operator, horizontal & vertikal
-        float[] matrix = new float[]{0.0f, -1.0f, 0.0f, -1.0f, 4.0f, -1.0f, 0.0f, -1.0f, 0.0f};
+        final float[] matrix = new float[]{0.0f, -1.0f, 0.0f, -1.0f, 4.0f, -1.0f, 0.0f, -1.0f, 0.0f};
 
         // // Sobel Operator, horizontal
-        // float[] matrix = new float[]
-        // {
-        // 1.0f, 2.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, -2.0f, -1.0f
-        // };
+        // final float[] matrix = new float[] {1.0f, 2.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, -2.0f, -1.0f};
         // // Sobel Operator, vertikal
-        // float[] matrix = new float[]
-        // {
-        // 1.0f, 0.0f, -1.0f, 2.0f, 0.0f, -2.0f, 1.0f, 0.0f, -1.0f
-        // };
+        // final float[] matrix = new float[] {1.0f, 0.0f, -1.0f, 2.0f, 0.0f, -2.0f, 1.0f, 0.0f, -1.0f};
         // // Sobel Operator, diagonal
-        // float[] matrix =
-        // {
-        // -1.0f, -2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 2.0f, 1.0f
-        // };
+        // final float[] matrix = {-1.0f, -2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 2.0f, 1.0f};
 
-        Kernel kernel = new Kernel(3, 3, matrix);
-        RenderingHints hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        ConvolveOp op = new ConvolveOp(kernel, ConvolveOp.EDGE_NO_OP, hints);
+        final Kernel kernel = new Kernel(3, 3, matrix);
+        final RenderingHints hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        final ConvolveOp op = new ConvolveOp(kernel, ConvolveOp.EDGE_NO_OP, hints);
 
         return op.filter(bufferedImage, null);
     }

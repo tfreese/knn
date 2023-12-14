@@ -52,7 +52,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
                 }
 
                 try {
-                    Runnable runnable = this.queue.take();
+                    final Runnable runnable = this.queue.take();
 
                     runnable.run();
                 }
@@ -82,7 +82,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         super(parallelism);
 
         for (int i = 1; i <= (parallelism); i++) {
-            QueueWorker worker = new QueueWorker(this.queue);
+            final QueueWorker worker = new QueueWorker(this.queue);
             worker.setName(worker.getClass().getSimpleName() + "-" + i);
             worker.setDaemon(false);
 
@@ -93,14 +93,14 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
 
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
-        double[] errors = visitor.getLastErrors();
-        double[] layerErrors = new double[layer.getSize()];
+        final double[] errors = visitor.getLastErrors();
+        final double[] layerErrors = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
-        List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
         for (NeuronList partition : partitions) {
-            RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> backward(neuron, errors, layerErrors)), null);
+            final RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> backward(neuron, errors, layerErrors)), null);
 
             futures.add(future);
             getQueue().add(future);
@@ -121,14 +121,14 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
 
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
-        double[] inputs = visitor.getLastOutputs();
-        double[] outputs = new double[layer.getSize()];
+        final double[] inputs = visitor.getLastOutputs();
+        final double[] outputs = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
-        List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
         for (NeuronList partition : partitions) {
-            RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> forward(neuron, inputs, outputs)), null);
+            final RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> forward(neuron, inputs, outputs)), null);
 
             futures.add(future);
             getQueue().add(future);
@@ -141,10 +141,10 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        List<RunnableFuture<Void>> futures = new ArrayList<>(layers.length);
+        final List<RunnableFuture<Void>> futures = new ArrayList<>(layers.length);
 
         for (Layer layer : layers) {
-            RunnableFuture<Void> future = new FutureTask<>(() -> initialize(layer, valueInitializer), null);
+            final RunnableFuture<Void> future = new FutureTask<>(() -> initialize(layer, valueInitializer), null);
 
             futures.add(future);
             getQueue().add(future);
@@ -155,15 +155,15 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
 
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
-        double[] leftOutputs = visitor.getOutputs(leftLayer);
-        double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
-        double[] rightErrors = visitor.getErrors(rightLayer);
+        final double[] leftOutputs = visitor.getOutputs(leftLayer);
+        final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
+        final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
-        List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
+        final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
+        final List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
         for (NeuronList partition : partitions) {
-            RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
+            final RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
 
             futures.add(future);
             getQueue().add(future);

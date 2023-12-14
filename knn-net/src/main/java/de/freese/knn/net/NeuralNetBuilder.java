@@ -20,11 +20,8 @@ public class NeuralNetBuilder {
     private final List<HiddenLayer> hiddenLayers = new ArrayList<>();
 
     private InputLayer inputLayer;
-
     private KnnMath knnMath;
-
     private OutputLayer outputLayer;
-
     private ValueInitializer valueInitializer;
 
     public NeuralNet build() {
@@ -32,7 +29,7 @@ public class NeuralNetBuilder {
     }
 
     public NeuralNet build(final boolean connectLayer) {
-        NeuralNetImpl neuralNet = new NeuralNetImpl();
+        final NeuralNetImpl neuralNet = new NeuralNetImpl();
 
         // KnnMath
         neuralNet.setKnnMath(Objects.requireNonNullElseGet(this.knnMath, KnnMathStream::new));

@@ -36,7 +36,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public int getInputSize() {
-        Matrix matrix = getInputMatrix();
+        final Matrix matrix = getInputMatrix();
 
         if (matrix != null) {
             return matrix.getWeights().length;
@@ -47,7 +47,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public double getInputWeight(final int index) {
-        Matrix matrix = getInputMatrix();
+        final Matrix matrix = getInputMatrix();
 
         if (matrix != null) {
             return matrix.getWeights()[index][getLayerIndex()];
@@ -63,7 +63,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public int getOutputSize() {
-        Matrix matrix = getOutputMatrix();
+        final Matrix matrix = getOutputMatrix();
 
         if (matrix != null) {
             return matrix.getWeights()[0].length;
@@ -74,7 +74,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public double getOutputWeight(final int index) {
-        Matrix matrix = getOutputMatrix();
+        final Matrix matrix = getOutputMatrix();
 
         if (matrix != null) {
             return matrix.getWeights()[getLayerIndex()][index];
@@ -90,7 +90,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public void setInputWeight(final int index, final double weight) {
-        Matrix matrix = getInputMatrix();
+        final Matrix matrix = getInputMatrix();
 
         if (matrix != null) {
             matrix.getWeights()[index][getLayerIndex()] = weight;
@@ -99,7 +99,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public void setOutputWeight(final int index, final double weight) {
-        Matrix matrix = getOutputMatrix();
+        final Matrix matrix = getOutputMatrix();
 
         if (matrix != null) {
             matrix.getWeights()[getLayerIndex()][index] = weight;
@@ -108,7 +108,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append("Neuron: ");
         sb.append("layerIndex=").append(this.layerIndex);
         sb.append("/").append(this.layer.getSize() - 1);

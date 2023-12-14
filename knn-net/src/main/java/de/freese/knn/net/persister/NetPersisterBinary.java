@@ -31,18 +31,18 @@ import de.freese.knn.net.neuron.NeuronList;
 public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
     @Override
     public NeuralNet load(final DataInput input) throws Exception {
-        NeuralNetBuilder builder = new NeuralNetBuilder();
+        final NeuralNetBuilder builder = new NeuralNetBuilder();
 
         // Anzahl Layer lesen
-        int layerCount = input.readInt();
+        final int layerCount = input.readInt();
 
         Layer leftLayer = loadLayer(input);
         builder.layerInput((InputLayer) leftLayer);
 
         for (int i = 0; i < (layerCount - 1); i++) {
-            Matrix matrix = loadMatrix(input);
+            final Matrix matrix = loadMatrix(input);
 
-            Layer rightLayer = loadLayer(input);
+            final Layer rightLayer = loadLayer(input);
 
             if (i < (layerCount - 2)) {
                 builder.layerHidden((HiddenLayer) rightLayer);
@@ -64,12 +64,12 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
     @Override
     public void save(final DataOutput output, final NeuralNet knn) throws Exception {
         // Anzahl Layer
-        Layer[] layers = knn.getLayer();
+        final Layer[] layers = knn.getLayer();
 
         output.writeInt(layers.length);
 
         for (int i = 0; i < layers.length; i++) {
-            Layer layer = layers[i];
+            final Layer layer = layers[i];
             saveLayer(output, layer);
 
             if (i < (layers.length - 1)) {
@@ -80,14 +80,14 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
 
     protected Function loadFunction(final DataInput input) throws Exception {
         // Klassentyp
-        String clazzName = input.readUTF();
+        final String clazzName = input.readUTF();
 
-        Class<?> clazz = Class.forName(clazzName);
+        final Class<?> clazz = Class.forName(clazzName);
         Function function = null;
 
         // Funktions-Parameter
         if (FunctionBinary.class.equals(clazz)) {
-            double threshold = input.readDouble();
+            final double threshold = input.readDouble();
 
             function = new FunctionBinary(threshold);
         }
@@ -95,7 +95,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
             function = new FunctionGauss();
         }
         else if (FunctionLinear.class.equals(clazz)) {
-            double factor = input.readDouble();
+            final double factor = input.readDouble();
 
             function = new FunctionLinear(factor);
         }
@@ -103,8 +103,8 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
             function = new FunctionLogarithmic();
         }
         else if (FunctionSigmoid.class.equals(clazz)) {
-            double durchgang = input.readDouble();
-            double steigung = input.readDouble();
+            final double durchgang = input.readDouble();
+            final double steigung = input.readDouble();
 
             function = new FunctionSigmoid(durchgang, steigung);
         }
@@ -123,22 +123,22 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
 
     protected Layer loadLayer(final DataInput input) throws Exception {
         // Klassentyp
-        String clazzName = input.readUTF();
+        final String clazzName = input.readUTF();
 
         // Neuronen
-        int size = input.readInt();
+        final int size = input.readInt();
 
-        Function function = loadFunction(input);
+        final Function function = loadFunction(input);
 
-        Class<?> clazz = Class.forName(clazzName);
+        final Class<?> clazz = Class.forName(clazzName);
         Layer layer = null;
 
         if (HiddenLayer.class.equals(clazz)) {
-            Constructor<?> constructor = clazz.getConstructor(int.class, Function.class);
+            final Constructor<?> constructor = clazz.getConstructor(int.class, Function.class);
             layer = (Layer) constructor.newInstance(size, function);
         }
         else {
-            Constructor<?> constructor = clazz.getConstructor(int.class);
+            final Constructor<?> constructor = clazz.getConstructor(int.class);
             layer = (Layer) constructor.newInstance(size);
         }
 
@@ -151,10 +151,10 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
     }
 
     protected Matrix loadMatrix(final DataInput input) throws Exception {
-        int inputSize = input.readInt();
-        int outputSize = input.readInt();
+        final int inputSize = input.readInt();
+        final int outputSize = input.readInt();
 
-        Matrix matrix = new Matrix(inputSize, outputSize);
+        final Matrix matrix = new Matrix(inputSize, outputSize);
 
         // Gewichte
         for (int i = 0; i < inputSize; i++) {
@@ -188,7 +188,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
         output.writeUTF(layer.getClass().getName());
 
         // Neuronen
-        NeuronList neurons = layer.getNeurons();
+        final NeuronList neurons = layer.getNeurons();
         output.writeInt(neurons.size());
 
         // Funktion

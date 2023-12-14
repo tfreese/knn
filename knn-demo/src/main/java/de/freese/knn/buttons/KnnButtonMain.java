@@ -35,7 +35,7 @@ public class KnnButtonMain extends JFrame {
         //        int parallelism = Runtime.getRuntime().availableProcessors();
 
         // @formatter:off
-        NeuralNet neuralNet = new NeuralNetBuilder()
+        final NeuralNet neuralNet = new NeuralNetBuilder()
 //                .knnMath(new KnnMathSimple())
                 .knnMath(new KnnMathStream()) // Ist Default im NeuralNetBuilder
 //                .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
@@ -55,12 +55,12 @@ public class KnnButtonMain extends JFrame {
                 ;
         // @formatter:on
 
-        double teachFactor = 0.5D;
-        double momentum = 0.5D;
-        double maximumError = 0.05D; // 5 %
-        int maximumIteration = 2000;
+        final double teachFactor = 0.5D;
+        final double momentum = 0.5D;
+        final double maximumError = 0.05D; // 5 %
+        final int maximumIteration = 2000;
 
-        NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
+        final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
         trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
         // trainer.addNetTrainerListener(new LoggerNetTrainerListener());
         trainer.train(neuralNet, new KnnButtonTrainingInputSource());
@@ -87,17 +87,17 @@ public class KnnButtonMain extends JFrame {
         setResizable(true);
         setLayout(new BorderLayout());
 
-        KnnButtonPanel buttonPanel = new KnnButtonPanel(neuralNet).initGui();
+        final KnnButtonPanel buttonPanel = new KnnButtonPanel(neuralNet).initGui();
 
         getContentPane().add(buttonPanel, BorderLayout.CENTER);
         pack();
 
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        final Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 
-        int w = getSize().width;
-        int h = getSize().height;
-        int x = (dimension.width - w) / 2;
-        int y = (dimension.height - h) / 2;
+        final int w = getSize().width;
+        final int h = getSize().height;
+        final int x = (dimension.width - w) / 2;
+        final int y = (dimension.height - h) / 2;
 
         setLocation(x, y);
 

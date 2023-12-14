@@ -11,31 +11,19 @@ import java.awt.image.ColorModel;
  */
 public class ImageColorChannelInfo {
     private final BufferedImage bufferedImage;
-
     private final ColorChannel colorChannel;
 
     private int[][] coOccurrenceMatrix;
-
     private double entropie = -1.0D;
-
     private int farbTiefe = -1;
-
     private int[] histogramm;
-
     private double inverseDifferenz = -1.0D;
-
     private double inversesDifferenzMoment = -1.0D;
-
     private double kontrast = -1.0D;
-
     private int maximalerFarbwert = -1;
-
     private int minimalerFarbwert = -1;
-
     private int mittlererFarbwert = -1;
-
     private double unaehnlichkeit = -1.0D;
-
     private double uniformitaet = -1.0D;
 
     public ImageColorChannelInfo(final BufferedImage bufferedImage, final ColorChannel colorChannel) {
@@ -111,7 +99,7 @@ public class ImageColorChannelInfo {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append("ChannelInfo: ").append(getColorChannel()).append("\n");
         sb.append("Minimaler Farbwert: ").append(getMinimalerFarbwert()).append("\n");
         sb.append("Maximaler Farbwert: ").append(getMaximalerFarbwert()).append("\n");
@@ -130,12 +118,12 @@ public class ImageColorChannelInfo {
      * Berechnen aller Werte des Farbkanals.
      */
     private void calculate() {
-        ColorModel colorModel = this.bufferedImage.getColorModel();
-        int width = this.bufferedImage.getWidth();
-        int height = this.bufferedImage.getHeight();
+        final ColorModel colorModel = this.bufferedImage.getColorModel();
+        final int width = this.bufferedImage.getWidth();
+        final int height = this.bufferedImage.getHeight();
 
-        double pixelSize = colorModel.getPixelSize();
-        double colorBands = colorModel.getNumComponents();
+        final double pixelSize = colorModel.getPixelSize();
+        final double colorBands = colorModel.getNumComponents();
         this.farbTiefe = (int) Math.pow(2.0, pixelSize / colorBands);
         this.coOccurrenceMatrix = new int[this.farbTiefe][this.farbTiefe];
         this.histogramm = new int[this.farbTiefe];
@@ -147,11 +135,11 @@ public class ImageColorChannelInfo {
         // Co-Occurrence-Matrix berechnen
         for (int x = 0; x < (width - 1); x++) {
             for (int y = 0; y < height; y++) {
-                int pixel1 = this.bufferedImage.getRGB(x, y);
-                int pixel2 = this.bufferedImage.getRGB(x + 1, y);
+                final int pixel1 = this.bufferedImage.getRGB(x, y);
+                final int pixel2 = this.bufferedImage.getRGB(x + 1, y);
 
-                int color1 = this.colorChannel.getValue(pixel1);
-                int color2 = this.colorChannel.getValue(pixel2);
+                final int color1 = this.colorChannel.getValue(pixel1);
+                final int color2 = this.colorChannel.getValue(pixel2);
 
                 this.coOccurrenceMatrix[color1][color2]++;
 
@@ -164,9 +152,9 @@ public class ImageColorChannelInfo {
 
         // Letzte Pixelzeile für Histogramm nicht vergessen.
         for (int y = 0; y < height; y++) {
-            int pixel = this.bufferedImage.getRGB(width - 1, y);
+            final int pixel = this.bufferedImage.getRGB(width - 1, y);
 
-            int color = this.colorChannel.getValue(pixel);
+            final int color = this.colorChannel.getValue(pixel);
 
             this.minimalerFarbwert = Math.min(this.minimalerFarbwert, color);
             this.maximalerFarbwert = Math.max(this.maximalerFarbwert, color);

@@ -14,7 +14,6 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  */
 public class KnnButtonTrainingInputSource implements TrainingInputSource {
     private final List<double[]> inputList = new ArrayList<>();
-
     private final List<double[]> outputList = new ArrayList<>();
 
     public KnnButtonTrainingInputSource() {

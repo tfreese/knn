@@ -90,7 +90,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         // 8 << 4 = 128<br>
         // 4 << 4 = 64<br>
         // 2 << 4 = 32<br>
-        int ringBufferSize = Integer.highestOneBit(parallelism) << 4;
+        final int ringBufferSize = Integer.highestOneBit(parallelism) << 4;
 
         if (Integer.bitCount(ringBufferSize) != 1) {
             throw new IllegalArgumentException("bufferSize must be a power of 2");
@@ -98,7 +98,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
 
         this.disruptor = new Disruptor<>(() -> new MathEvent(parallelism), ringBufferSize, new KnnThreadFactory("knn-disruptor-"));
 
-        MathHandler[] handlers = new MathHandler[parallelism];
+        final MathHandler[] handlers = new MathHandler[parallelism];
 
         for (int i = 0; i < handlers.length; i++) {
             handlers[i] = new MathHandler(i);
@@ -112,14 +112,14 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
 
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
-        double[] errors = visitor.getLastErrors();
-        double[] layerErrors = new double[layer.getSize()];
+        final double[] errors = visitor.getLastErrors();
+        final double[] layerErrors = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final CountDownLatch latch = new CountDownLatch(partitions.size());
 
         publish(ordinal -> {
-            NeuronList partition = partitions.get(ordinal);
+            final NeuronList partition = partitions.get(ordinal);
 
             return () -> {
                 partition.forEach(neuron -> backward(neuron, errors, layerErrors));
@@ -147,14 +147,14 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
 
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
-        double[] inputs = visitor.getLastOutputs();
-        double[] outputs = new double[layer.getSize()];
+        final double[] inputs = visitor.getLastOutputs();
+        final double[] outputs = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final CountDownLatch latch = new CountDownLatch(partitions.size());
 
         publish(ordinal -> {
-            NeuronList partition = partitions.get(ordinal);
+            final NeuronList partition = partitions.get(ordinal);
 
             return () -> {
                 partition.forEach(neuron -> forward(neuron, inputs, outputs));
@@ -177,15 +177,15 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
 
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
-        double[] leftOutputs = visitor.getOutputs(leftLayer);
-        double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
-        double[] rightErrors = visitor.getErrors(rightLayer);
+        final double[] leftOutputs = visitor.getOutputs(leftLayer);
+        final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
+        final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
-        CountDownLatch latch = new CountDownLatch(partitions.size());
+        final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
+        final CountDownLatch latch = new CountDownLatch(partitions.size());
 
         publish(ordinal -> {
-            NeuronList partition = partitions.get(ordinal);
+            final NeuronList partition = partitions.get(ordinal);
 
             return () -> {
                 partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
@@ -202,12 +202,12 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     }
 
     private void publish(final IntFunction<Runnable> functionRunnables) {
-        RingBuffer<MathEvent> ringBuffer = getDisruptor().getRingBuffer();
+        final RingBuffer<MathEvent> ringBuffer = getDisruptor().getRingBuffer();
 
-        long sequence = ringBuffer.next();
+        final long sequence = ringBuffer.next();
 
         try {
-            MathEvent event = ringBuffer.get(sequence);
+            final MathEvent event = ringBuffer.get(sequence);
 
             for (int i = 0; i < getParallelism(); i++) {
                 event.runnables[i] = functionRunnables.apply(i);

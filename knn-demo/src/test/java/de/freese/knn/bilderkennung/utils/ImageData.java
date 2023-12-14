@@ -23,12 +23,10 @@ public class ImageData {
         super();
 
         // String[] formats = ImageIO.getWriterFormatNames();
-        URL url = ClassLoader.getSystemResource(fileName);
-        BufferedImage bufferedImage = ImageIO.read(url);
+        final URL url = ClassLoader.getSystemResource(fileName);
+        final BufferedImage bufferedImage = ImageIO.read(url);
 
-        bufferedImage = ImageUtils.scaleImageAbsolut(bufferedImage, 100, 100);
-
-        this.sourceImage = bufferedImage;
+        this.sourceImage = ImageUtils.scaleImageAbsolut(bufferedImage, 100, 100);
     }
 
     /**
@@ -59,19 +57,19 @@ public class ImageData {
      */
     public double[] getPixels() {
         if (this.pixels == null) {
-            BufferedImage image = getBlackWhiteImage();
+            final BufferedImage image = getBlackWhiteImage();
 
-            int width = image.getWidth();
-            int height = image.getHeight();
+            final int width = image.getWidth();
+            final int height = image.getHeight();
 
             this.pixels = new double[width * height];
             Arrays.fill(this.pixels, -1.0D);
 
-            int rgbWhite = Color.WHITE.getRGB();
+            final int rgbWhite = Color.WHITE.getRGB();
 
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    int pixel = image.getRGB(x, y);
+                    final int pixel = image.getRGB(x, y);
 
                     if (pixel == rgbWhite) {
                         this.pixels[x + (width * y)] = 1.0D;

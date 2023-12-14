@@ -30,7 +30,7 @@ public class NeuronList implements Iterable<Neuron> {
         @Override
         public Neuron next() {
             if (hasNext()) {
-                Neuron neuron = get(this.position);
+                final Neuron neuron = get(this.position);
                 this.position++;
 
                 return neuron;
@@ -47,9 +47,7 @@ public class NeuronList implements Iterable<Neuron> {
     }
 
     private final int fromIndex;
-
     private final Neuron[] neurons;
-
     private final int toIndex;
 
     public NeuronList(final Neuron[] neurons) {

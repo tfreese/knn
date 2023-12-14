@@ -9,9 +9,7 @@ package de.freese.knn.net.matrix;
  */
 public class Matrix {
     private final int inputSize;
-
     private final int outputSize;
-
     private final double[][] weights;
 
     public Matrix(final int inputSize, final int outputSize) {

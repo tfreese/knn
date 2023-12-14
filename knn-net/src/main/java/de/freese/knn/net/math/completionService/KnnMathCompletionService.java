@@ -22,7 +22,6 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  */
 public final class KnnMathCompletionService extends AbstractKnnMath {
     private final CompletionService<Void> completionService;
-
     private final Executor executor;
 
     public KnnMathCompletionService(final int parallelism, final Executor executor) {
@@ -35,10 +34,10 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
 
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
-        double[] errors = visitor.getLastErrors();
-        double[] layerErrors = new double[layer.getSize()];
+        final double[] errors = visitor.getLastErrors();
+        final double[] layerErrors = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
 
         for (NeuronList partition : partitions) {
             getCompletionService().submit(() -> partition.forEach(neuron -> backward(neuron, errors, layerErrors)), null);
@@ -57,10 +56,10 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
 
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
-        double[] inputs = visitor.getLastOutputs();
-        double[] outputs = new double[layer.getSize()];
+        final double[] inputs = visitor.getLastOutputs();
+        final double[] outputs = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
 
         for (NeuronList partition : partitions) {
             getCompletionService().submit(() -> partition.forEach(neuron -> forward(neuron, inputs, outputs)), null);
@@ -82,11 +81,11 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
 
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
-        double[] leftOutputs = visitor.getOutputs(leftLayer);
-        double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
-        double[] rightErrors = visitor.getErrors(rightLayer);
+        final double[] leftOutputs = visitor.getOutputs(leftLayer);
+        final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
+        final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
 
         for (NeuronList partition : partitions) {
             getCompletionService().submit(() -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);

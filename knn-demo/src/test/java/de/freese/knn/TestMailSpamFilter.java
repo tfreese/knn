@@ -27,11 +27,11 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  */
 public class TestMailSpamFilter implements TrainingInputSource {
     public static void main(final String[] args) throws Exception {
-        TestMailSpamFilter spamFilter = new TestMailSpamFilter();
+        final TestMailSpamFilter spamFilter = new TestMailSpamFilter();
         // spamFilter.cleanUp();
 
         // @formatter:off
-        NeuralNet neuralNet = new NeuralNetBuilder()
+        final NeuralNet neuralNet = new NeuralNetBuilder()
                 .layerInput(new InputLayer(spamFilter.token.size()))
                 .layerHidden(new HiddenLayer(20000, new FunctionSigmoid()))
                 .layerOutput(new OutputLayer(1))
@@ -39,12 +39,12 @@ public class TestMailSpamFilter implements TrainingInputSource {
                 ;
           // @formatter:on
 
-        double teachFactor = 0.5D;
-        double momentum = 0.5D;
-        double maximumError = 0.05D;
-        int maximumIteration = 10000;
+        final double teachFactor = 0.5D;
+        final double momentum = 0.5D;
+        final double maximumError = 0.05D;
+        final int maximumIteration = 10000;
 
-        NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
+        final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
         // trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
         trainer.addNetTrainerListener(new LoggerNetTrainerListener());
         trainer.train(neuralNet, spamFilter);
@@ -62,7 +62,7 @@ public class TestMailSpamFilter implements TrainingInputSource {
     public TestMailSpamFilter() {
         super();
 
-        SingleConnectionDataSource ds = new SingleConnectionDataSource();
+        final SingleConnectionDataSource ds = new SingleConnectionDataSource();
         // ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setDriverClassName("org.mariadb.jdbc.Driver");
         ds.setUrl("jdbc:mariadb://localhost:3306/mail?user=...&password=...");
@@ -93,7 +93,7 @@ public class TestMailSpamFilter implements TrainingInputSource {
     }
 
     public void closeDataSource() {
-        DataSource dataSource = this.jdbcTemplate.getDataSource();
+        final DataSource dataSource = this.jdbcTemplate.getDataSource();
 
         if (dataSource instanceof SingleConnectionDataSource) {
             ((SingleConnectionDataSource) dataSource).destroy();
@@ -104,14 +104,14 @@ public class TestMailSpamFilter implements TrainingInputSource {
 
     @Override
     public double[] getInputAt(final int index) {
-        String messageID = (String) this.messages.get(index).get("MESSAGE_ID");
+        final String messageID = (String) this.messages.get(index).get("MESSAGE_ID");
 
         final double[] input = new double[this.token.size()];
         Arrays.fill(input, 0.0D);
 
         this.jdbcTemplate.query("select token from message_token where message_id = ?", rs -> {
             while (rs.next()) {
-                int i = TestMailSpamFilter.this.token.indexOf(rs.getString("token"));
+                final int i = TestMailSpamFilter.this.token.indexOf(rs.getString("token"));
                 input[i] = 1.0D;
             }
 
@@ -131,7 +131,7 @@ public class TestMailSpamFilter implements TrainingInputSource {
 
     @Override
     public double[] getOutputAt(final int index) {
-        Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
+        final Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
 
         return new double[]{isSpam ? 1.0D : 0.0D};
     }

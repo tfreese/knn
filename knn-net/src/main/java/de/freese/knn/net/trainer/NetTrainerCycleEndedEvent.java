@@ -14,11 +14,8 @@ public class NetTrainerCycleEndedEvent extends EventObject {
     private static final long serialVersionUID = -1343301845155055735L;
 
     private final double error;
-
     private final int iteration;
-
     private final double momentum;
-
     private final double teachFactor;
 
     public NetTrainerCycleEndedEvent(final Object source, final int iteration, final double error, final double teachFactor, final double momentum) {
@@ -60,7 +57,7 @@ public class NetTrainerCycleEndedEvent extends EventObject {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append("Iteration = ").append(getIteration());
         sb.append(", Lernrate = ").append(getTeachFactor());
         sb.append(", Momentum = ").append(getMomentum());

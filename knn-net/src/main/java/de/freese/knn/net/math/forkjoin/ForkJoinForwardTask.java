@@ -17,15 +17,10 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
     private static final long serialVersionUID = 4449740515431715497L;
 
     private final int from;
-
     private final double[] inputs;
-
     private final transient KnnMathForkJoin math;
-
     private final transient NeuronList neurons;
-
     private final double[] outputs;
-
     private final int to;
 
     ForkJoinForwardTask(final KnnMathForkJoin math, final NeuronList neurons, final double[] inputs, final double[] outputs) {
@@ -46,15 +41,15 @@ class ForkJoinForwardTask extends RecursiveAction// RecursiveTask<double[]>
     @Override
     protected void compute() {
         if ((this.to - this.from) < 20) {
-            NeuronList n = this.neurons.subList(this.from, this.to);
+            final NeuronList n = this.neurons.subList(this.from, this.to);
 
             n.forEach(neuron -> this.math.forward(neuron, this.inputs, this.outputs));
         }
         else {
-            int middle = (this.from + this.to) / 2;
+            final int middle = (this.from + this.to) / 2;
 
-            ForkJoinForwardTask task1 = new ForkJoinForwardTask(this.math, this.neurons, this.inputs, this.outputs, this.from, middle);
-            ForkJoinForwardTask task2 = new ForkJoinForwardTask(this.math, this.neurons, this.inputs, this.outputs, middle, this.to);
+            final ForkJoinForwardTask task1 = new ForkJoinForwardTask(this.math, this.neurons, this.inputs, this.outputs, this.from, middle);
+            final ForkJoinForwardTask task2 = new ForkJoinForwardTask(this.math, this.neurons, this.inputs, this.outputs, middle, this.to);
 
             invokeAll(task1, task2);
         }

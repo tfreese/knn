@@ -31,7 +31,6 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     // private static final class NeuronSubscriber implements Subscriber<NeuronList>
     // {
     // private final Consumer<NeuronList> consumer;
-    //
     // private final CountDownLatch latch;
     //
     // private Subscription subscription;
@@ -83,10 +82,10 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
 
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
-        double[] errors = visitor.getLastErrors();
-        double[] layerErrors = new double[layer.getSize()];
+        final double[] errors = visitor.getLastErrors();
+        final double[] layerErrors = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         CompletableFuture<Void> future = null;
 
         try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize())) {
@@ -108,10 +107,10 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
 
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
-        double[] inputs = visitor.getLastOutputs();
-        double[] outputs = new double[layer.getSize()];
+        final double[] inputs = visitor.getLastOutputs();
+        final double[] outputs = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         CompletableFuture<Void> future = null;
 
         try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize())) {
@@ -127,7 +126,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        CountDownLatch latch = new CountDownLatch(layers.length);
+        final CountDownLatch latch = new CountDownLatch(layers.length);
 
         for (Layer layer : layers) {
             // InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
@@ -144,11 +143,11 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
 
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
-        double[] leftOutputs = visitor.getOutputs(leftLayer);
-        double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
-        double[] rightErrors = visitor.getErrors(rightLayer);
+        final double[] leftOutputs = visitor.getOutputs(leftLayer);
+        final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
+        final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
         CompletableFuture<Void> future = null;
 
         try (SubmissionPublisher<NeuronList> publisher = new SubmissionPublisher<>(getExecutor(), Flow.defaultBufferSize())) {

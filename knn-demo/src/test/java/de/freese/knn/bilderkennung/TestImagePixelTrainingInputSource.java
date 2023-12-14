@@ -42,7 +42,7 @@ public class TestImagePixelTrainingInputSource extends JFrame {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             if (this.image != null) {
-                int imageHeight = this.image.getHeight(null);
+                final int imageHeight = this.image.getHeight(null);
 
                 if (table.getRowHeight(row) < imageHeight) {
                     table.setRowHeight(row, imageHeight);
@@ -57,10 +57,10 @@ public class TestImagePixelTrainingInputSource extends JFrame {
             // super.paint(g);
 
             if (this.image != null) {
-                int imageWidth = this.image.getWidth(null);
-                int imageHeight = this.image.getHeight(null);
-                int x = (getWidth() - imageWidth) / 2;
-                int y = (getHeight() - imageHeight) / 2;
+                final int imageWidth = this.image.getWidth(null);
+                final int imageHeight = this.image.getHeight(null);
+                final int x = (getWidth() - imageWidth) / 2;
+                final int y = (getHeight() - imageHeight) / 2;
 
                 g.drawImage(this.image, x, y, imageWidth, imageHeight, this);
             }
@@ -98,7 +98,7 @@ public class TestImagePixelTrainingInputSource extends JFrame {
 
         @Override
         public Object getValueAt(final int rowIndex, final int columnIndex) {
-            ImageData imageData = this.dataList.get(rowIndex);
+            final ImageData imageData = this.dataList.get(rowIndex);
 
             return switch (columnIndex) {
                 case 0 -> imageData.getSourceImage();
@@ -117,7 +117,7 @@ public class TestImagePixelTrainingInputSource extends JFrame {
     }
 
     public static void main(final String[] args) throws Exception {
-        TestImagePixelTrainingInputSource imageTest = new TestImagePixelTrainingInputSource();
+        final TestImagePixelTrainingInputSource imageTest = new TestImagePixelTrainingInputSource();
         imageTest.setVisible(true);
     }
 
@@ -128,10 +128,10 @@ public class TestImagePixelTrainingInputSource extends JFrame {
     }
 
     private JTable createTable() throws Exception {
-        JTable table = new JTable();
+        final JTable table = new JTable();
 
-        ImagePixelTrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
-        TableModel tableModel = new TableModel();
+        final ImagePixelTrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
+        final TableModel tableModel = new TableModel();
         tableModel.setList(trainingInputSource.getImageData());
 
         table.setModel(tableModel);
@@ -144,11 +144,11 @@ public class TestImagePixelTrainingInputSource extends JFrame {
     private void init() throws Exception {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        Dimension dimension = new Dimension(1000, 1000);
+        final Dimension dimension = new Dimension(1000, 1000);
         setSize(dimension);
         getContentPane().setLayout(new BorderLayout());
 
-        JScrollPane scrollPane = new JScrollPane(createTable());
+        final JScrollPane scrollPane = new JScrollPane(createTable());
 
         getContentPane().add(scrollPane, BorderLayout.CENTER);
     }

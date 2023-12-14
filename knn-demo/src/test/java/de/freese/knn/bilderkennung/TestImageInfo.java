@@ -15,7 +15,7 @@ import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
  */
 public final class TestImageInfo {
     public static void main(final String[] args) throws Exception {
-        String fileName;
+        final String fileName;
         // fileName = "Ampel.gif";
         // fileName = "Bahnkreuz.gif";
         // fileName = "BigBrother.jpg";
@@ -26,12 +26,12 @@ public final class TestImageInfo {
         // fileName = "Sylvester.jpg";
         // fileName = "winnt.bmp";
 
-        ImageInfo imageInfo = new ImageInfo(fileName);
+        final ImageInfo imageInfo = new ImageInfo(fileName);
         System.out.println(imageInfo);
 
         imageInfo.getInfoVectorReScaled();
 
-        JFrame frame = new JFrame(fileName);
+        final JFrame frame = new JFrame(fileName);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.add(new JLabel(new ImageIcon(imageInfo.createCoOccurrenceMatrixImage())));
         frame.setSize(550, 550);

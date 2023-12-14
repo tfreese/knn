@@ -51,7 +51,7 @@ class NeuralNetImpl implements NeuralNet {
 
     @Override
     public double[] getOutput(final double[] inputs) {
-        ForwardVisitor visitor = new ForwardVisitor(false);
+        final ForwardVisitor visitor = new ForwardVisitor(false);
         visitor.setInputs(inputs);
 
         visit(visitor);
@@ -68,7 +68,7 @@ class NeuralNetImpl implements NeuralNet {
      */
     void addLayer(final Layer layer) {
         // Array vergrößern.
-        Layer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
+        final Layer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
 
         array[this.layers.length] = layer;
         this.layers = array;

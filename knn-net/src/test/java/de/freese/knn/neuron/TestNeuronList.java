@@ -32,17 +32,17 @@ class TestNeuronList {
 
     @Test
     void testForEach() {
-        Neuron[] neurons = createNeurons();
-        NeuronList neuronList = new NeuronList(neurons);
+        final Neuron[] neurons = createNeurons();
+        final NeuronList neuronList = new NeuronList(neurons);
 
-        AtomicInteger atomicInteger = new AtomicInteger(0);
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
 
         neuronList.forEach(neuron -> assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex()));
 
         assertEquals(5, atomicInteger.get());
 
         // SubList
-        NeuronList subList = neuronList.subList(2, 4);
+        final NeuronList subList = neuronList.subList(2, 4);
 
         assertEquals(2, subList.size());
 
@@ -60,8 +60,8 @@ class TestNeuronList {
     // @MethodSource("createNeuronsAsStream")
     @Test
     void testIterator() {
-        Neuron[] neurons = createNeurons();
-        NeuronList neuronList = new NeuronList(neurons);
+        final Neuron[] neurons = createNeurons();
+        final NeuronList neuronList = new NeuronList(neurons);
 
         int i = 0;
 
@@ -74,11 +74,11 @@ class TestNeuronList {
 
     @Test
     void testPartitionByModulo() {
-        List<String> values = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i");
+        final List<String> values = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i");
 
-        int parallelism = 4;
+        final int parallelism = 4;
 
-        List<List<String>> partitions = getPartitionsByModulo(values, parallelism);
+        final List<List<String>> partitions = getPartitionsByModulo(values, parallelism);
 
         assertEquals(3, partitions.get(0).size());
         assertEquals(2, partitions.get(1).size());
@@ -140,8 +140,8 @@ class TestNeuronList {
     // @MethodSource("createNeuronsAsStream")
     @Test
     void testSizeAndIndex() {
-        Neuron[] neurons = createNeurons();
-        NeuronList neuronList = new NeuronList(neurons);
+        final Neuron[] neurons = createNeurons();
+        final NeuronList neuronList = new NeuronList(neurons);
 
         assertEquals(neurons.length, neuronList.size());
 
@@ -152,13 +152,13 @@ class TestNeuronList {
 
     @Test
     void testSpliterator() {
-        Neuron[] neurons = createNeurons();
-        NeuronList neuronList = new NeuronList(neurons);
+        final Neuron[] neurons = createNeurons();
+        final NeuronList neuronList = new NeuronList(neurons);
 
         Spliterator<Neuron> spliterator = neuronList.spliterator();
         assertEquals(neurons.length, spliterator.getExactSizeIfKnown());
 
-        AtomicInteger atomicInteger = new AtomicInteger(0);
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
 
         spliterator.forEachRemaining(neuron -> assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex()));
 
@@ -177,8 +177,8 @@ class TestNeuronList {
 
     @Test
     void testStream() {
-        Neuron[] neurons = createNeurons();
-        NeuronList neuronList = new NeuronList(neurons);
+        final Neuron[] neurons = createNeurons();
+        final NeuronList neuronList = new NeuronList(neurons);
 
         assertEquals(10, neuronList.stream().mapToInt(Neuron::getLayerIndex).sum());
         assertEquals(10, neuronList.stream().parallel().mapToInt(Neuron::getLayerIndex).sum());
@@ -187,8 +187,8 @@ class TestNeuronList {
 
     @Test
     void testSubList() {
-        Neuron[] neurons = createNeurons();
-        NeuronList neuronList = new NeuronList(neurons);
+        final Neuron[] neurons = createNeurons();
+        final NeuronList neuronList = new NeuronList(neurons);
 
         NeuronList subList = neuronList.subList(1, 2);
         assertEquals(1, subList.size());
@@ -202,10 +202,10 @@ class TestNeuronList {
     }
 
     protected List<List<String>> getPartitionsBySize(final List<String> values, final int parallelism) {
-        int partitionCount = Math.min(values.size(), parallelism);
-        int partitionLength = values.size() / partitionCount;
+        final int partitionCount = Math.min(values.size(), parallelism);
+        final int partitionLength = values.size() / partitionCount;
 
-        int[] partitionSizes = new int[partitionCount];
+        final int[] partitionSizes = new int[partitionCount];
         Arrays.fill(partitionSizes, partitionLength);
 
         int sum = partitionCount * partitionLength;
@@ -232,7 +232,7 @@ class TestNeuronList {
             index++;
         }
 
-        List<List<String>> partitions = new ArrayList<>(partitionCount);
+        final List<List<String>> partitions = new ArrayList<>(partitionCount);
         int fromIndex = 0;
 
         for (int partitionSize : partitionSizes) {
@@ -245,11 +245,11 @@ class TestNeuronList {
     }
 
     private List<List<String>> getPartitionsByModulo(final List<String> values, final int parallelism) {
-        Map<Integer, List<String>> partitionMap = new HashMap<>();
+        final Map<Integer, List<String>> partitionMap = new HashMap<>();
 
         for (int i = 0; i < values.size(); i++) {
-            String value = values.get(i);
-            int indexToUse = i % parallelism;
+            final String value = values.get(i);
+            final int indexToUse = i % parallelism;
 
             partitionMap.computeIfAbsent(indexToUse, key -> new ArrayList<>()).add(value);
         }

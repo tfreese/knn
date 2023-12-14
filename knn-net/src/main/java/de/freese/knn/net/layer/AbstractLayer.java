@@ -19,6 +19,7 @@ public abstract class AbstractLayer implements Layer {
     private final Function function;
     private final NeuronList neurons;
     private final int size;
+
     private Matrix inputMatrix;
     private Matrix outputMatrix;
 
@@ -36,7 +37,7 @@ public abstract class AbstractLayer implements Layer {
         this.size = size;
         this.function = Objects.requireNonNull(function, "function required");
 
-        Neuron[] neuronArray = new Neuron[size];
+        final Neuron[] neuronArray = new Neuron[size];
 
         for (int i = 0; i < neuronArray.length; i++) {
             neuronArray[i] = neuronSupplier.apply(this, i);

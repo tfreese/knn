@@ -25,13 +25,13 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  */
 public final class BildErkennungMain {
     public static void main(final String[] args) throws Exception {
-        // TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
-        TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
+        // final TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
+        final TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
 
-        //        int parallelism = Runtime.getRuntime().availableProcessors();
+        //        final int parallelism = Runtime.getRuntime().availableProcessors();
 
         // @formatter:off
-        NeuralNetBuilder builder = new NeuralNetBuilder()
+        final NeuralNetBuilder builder = new NeuralNetBuilder()
 //                .knnMath(new KnnMathSimple())
                 .knnMath(new KnnMathStream()) // Ist Default im NeuralNetBuilder
 //                .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
@@ -64,9 +64,9 @@ public final class BildErkennungMain {
         }
 
         builder.layerOutput(new OutputLayer(trainingInputSource.getSize()));
-        // builder.layerOutput(new OutputWTALayer(trainingInputSource.getSize()));
+        // builder.layerOutput(new OutputWtaLayer(trainingInputSource.getSize()));
 
-        NeuralNet neuralNet = builder.build();
+        final NeuralNet neuralNet = builder.build();
 
         final double teachFactor = 0.5D;
         final double momentum = 0.5D;
@@ -86,12 +86,12 @@ public final class BildErkennungMain {
         double[] outputs = null;
 
         if (trainingInputSource instanceof ImageInfoTrainingInputSource) {
-            ImageInfo testImageInfo = new ImageInfo("Seaside.jpg");
+            final ImageInfo testImageInfo = new ImageInfo("Seaside.jpg");
 
             outputs = neuralNet.getOutput(testImageInfo.getInfoVectorReScaled());
         }
         else if (trainingInputSource instanceof ImagePixelTrainingInputSource) {
-            ImageData imageData = new ImageData("Seaside.jpg");
+            final ImageData imageData = new ImageData("Seaside.jpg");
 
             outputs = neuralNet.getOutput(imageData.getPixels());
         }

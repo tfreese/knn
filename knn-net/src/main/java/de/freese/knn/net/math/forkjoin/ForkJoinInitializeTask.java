@@ -19,13 +19,9 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     private static final long serialVersionUID = 687804634087313634L;
 
     private final int from;
-
     private final transient Layer[] layers;
-
     private final transient KnnMathForkJoin math;
-
     private final int to;
-
     private final transient ValueInitializer valueInitializer;
 
     ForkJoinInitializeTask(final KnnMathForkJoin math, final Layer[] layers, final ValueInitializer valueInitializer) {
@@ -45,17 +41,17 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
     @Override
     protected void compute() {
         if ((this.to - this.from) < 20) {
-            Layer[] l = Arrays.copyOfRange(this.layers, this.from, this.to);
+            final Layer[] l = Arrays.copyOfRange(this.layers, this.from, this.to);
 
             for (Layer layer : l) {
                 this.math.initialize(layer, this.valueInitializer);
             }
         }
         else {
-            int middle = (this.from + this.to) / 2;
+            final int middle = (this.from + this.to) / 2;
 
-            ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, this.from, middle);
-            ForkJoinInitializeTask task2 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, middle, this.to);
+            final ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, this.from, middle);
+            final ForkJoinInitializeTask task2 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, middle, this.to);
 
             invokeAll(task1, task2);
         }

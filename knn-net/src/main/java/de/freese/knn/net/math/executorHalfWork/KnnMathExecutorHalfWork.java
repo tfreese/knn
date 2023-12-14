@@ -34,12 +34,12 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
 
     @Override
     public void backward(final Layer layer, final BackwardVisitor visitor) {
-        double[] errors = visitor.getLastErrors();
-        double[] layerErrors = new double[layer.getSize()];
+        final double[] errors = visitor.getLastErrors();
+        final double[] layerErrors = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
 
-        Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> backward(neuron, errors, layerErrors)));
+        final Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> backward(neuron, errors, layerErrors)));
 
         // In diesem Thread.
         partitions.get(1).forEach(neuron -> backward(neuron, errors, layerErrors));
@@ -57,12 +57,12 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
 
     @Override
     public void forward(final Layer layer, final ForwardVisitor visitor) {
-        double[] inputs = visitor.getLastOutputs();
-        double[] outputs = new double[layer.getSize()];
+        final double[] inputs = visitor.getLastOutputs();
+        final double[] outputs = new double[layer.getSize()];
 
-        List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
 
-        Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> forward(neuron, inputs, outputs)));
+        final Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> forward(neuron, inputs, outputs)));
 
         // In diesem Thread.
         partitions.get(1).forEach(neuron -> forward(neuron, inputs, outputs));
@@ -74,14 +74,14 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        int middle = layers.length / getParallelism();
+        final int middle = layers.length / getParallelism();
 
-        List<Layer> layerList = Arrays.asList(layers);
+        final List<Layer> layerList = Arrays.asList(layers);
 
-        List<Layer> list1 = layerList.subList(0, middle);
-        List<Layer> list2 = layerList.subList(middle, layers.length);
+        final List<Layer> list1 = layerList.subList(0, middle);
+        final List<Layer> list2 = layerList.subList(middle, layers.length);
 
-        Future<?> future = getExecutorService().submit(() -> list1.forEach(layer -> initialize(layer, valueInitializer)));
+        final Future<?> future = getExecutorService().submit(() -> list1.forEach(layer -> initialize(layer, valueInitializer)));
 
         // In diesem Thread.
         list2.forEach(layer -> initialize(layer, valueInitializer));
@@ -91,13 +91,13 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
 
     @Override
     public void refreshLayerWeights(final Layer leftLayer, final Layer rightLayer, final double teachFactor, final double momentum, final BackwardVisitor visitor) {
-        double[] leftOutputs = visitor.getOutputs(leftLayer);
-        double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
-        double[] rightErrors = visitor.getErrors(rightLayer);
+        final double[] leftOutputs = visitor.getOutputs(leftLayer);
+        final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
+        final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
+        final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
 
-        Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
+        final Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
 
         // In diesem Thread.
         partitions.get(1).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
@@ -107,10 +107,10 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
 
     @Override
     protected List<NeuronList> getPartitions(final NeuronList neurons, final int parallelism) {
-        int middle = neurons.size() / parallelism;
+        final int middle = neurons.size() / parallelism;
 
-        NeuronList nl1 = neurons.subList(0, middle);
-        NeuronList nl2 = neurons.subList(middle, neurons.size());
+        final NeuronList nl1 = neurons.subList(0, middle);
+        final NeuronList nl2 = neurons.subList(middle, neurons.size());
 
         return List.of(nl1, nl2);
     }
