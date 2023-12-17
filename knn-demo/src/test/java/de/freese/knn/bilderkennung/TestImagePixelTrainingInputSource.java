@@ -79,7 +79,7 @@ public class TestImagePixelTrainingInputSource extends JFrame {
         @Serial
         private static final long serialVersionUID = 1L;
 
-        private transient final List<ImageData> dataList = new ArrayList<>();
+        private final transient List<ImageData> dataList = new ArrayList<>();
 
         @Override
         public Class<?> getColumnClass(final int columnIndex) {
