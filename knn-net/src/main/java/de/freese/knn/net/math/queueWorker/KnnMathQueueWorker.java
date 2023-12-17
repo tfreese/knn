@@ -56,8 +56,11 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
 
                     runnable.run();
                 }
-                catch (InterruptedException iex) {
-                    // Ignore
+                catch (InterruptedException ex) {
+                    LOGGER.error(ex.getMessage(), ex);
+
+                    // Restore interrupted state.
+                    Thread.currentThread().interrupt();
                 }
                 catch (Exception ex) {
                     LOGGER.error(ex.getMessage(), ex);
@@ -183,7 +186,13 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         try {
             future.get();
         }
-        catch (InterruptedException | ExecutionException ex) {
+        catch (InterruptedException ex) {
+            getLogger().error(ex.getMessage(), ex);
+
+            // Restore interrupted state.
+            Thread.currentThread().interrupt();
+        }
+        catch (ExecutionException ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }

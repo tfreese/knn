@@ -126,7 +126,13 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
         try {
             future.get();
         }
-        catch (InterruptedException | ExecutionException ex) {
+        catch (InterruptedException ex) {
+            getLogger().error(ex.getMessage(), ex);
+
+            // Restore interrupted state.
+            Thread.currentThread().interrupt();
+        }
+        catch (ExecutionException ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }

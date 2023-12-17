@@ -212,6 +212,12 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
         catch (RuntimeException rex) {
             throw rex;
         }
+        catch (InterruptedException ex) {
+            getLogger().error(ex.getMessage(), ex);
+
+            // Restore interrupted state.
+            Thread.currentThread().interrupt();
+        }
         catch (Throwable th) {
             throw new RuntimeException(th);
         }

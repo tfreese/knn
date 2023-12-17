@@ -104,6 +104,9 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
             }
             catch (InterruptedException ex) {
                 getLogger().error(ex.getMessage(), ex);
+
+                // Restore interrupted state.
+                Thread.currentThread().interrupt();
             }
         }
     }

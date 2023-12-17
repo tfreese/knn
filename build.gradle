@@ -20,7 +20,7 @@ plugins {
     id "io.spring.dependency-management" version "$version_springDependencyManagement" apply false
 //    id "org.openjfx.javafxplugin" version "$version_javafxPlugin" apply false
 //    id "org.springframework.boot" version "$version_springBoot" apply false
-
+    id("name.remal.sonarlint") version "3.4.0" apply false
 }
 
 //// Register ANT-Tasks as Gradle-Tasks with Prefix "ant-" in Group "other".
@@ -34,6 +34,7 @@ subprojects {
     apply plugin: "com.github.ben-manes.versions"
     apply plugin: "io.spring.dependency-management"
     apply plugin: "checkstyle"
+    apply plugin: "name.remal.sonarlint"
 
 //    project.layout.buildDirectory = "target"
 
@@ -75,6 +76,76 @@ subprojects {
         }
     }
 
+    // https://github.com/remal-gradle-plugins/sonarlint
+    // https://sonar.wob.vw.vwg:8443/sonar/coding_rules
+    sonarLint {
+        ignoreFailures = true
+        isGeneratedCodeIgnored = true
+
+        languages {
+            include("java") // Enable Java language only, all other languages become disabled
+            exclude("kotlin") // Disable Kotlin language, all other languages remain enabled
+        }
+
+        logging {
+            withDescription = false // Show rule descriptions in console output
+        }
+
+        rules {
+            enable(
+                    // Method names should comply with a naming convention. (that is disabled by default)
+                    "java:S100",
+                    // Class names should comply with a naming convention.(that is disabled by default)
+                    "java:S101",
+                    // Lines should not be too long.
+                    "java:S103",
+                    // Tabulation characters should not be used.
+                    "java:S105"
+            )
+            disable(
+                    // Replace this use of System.out by a logger.
+                    "java:S106",
+                    // Define and throw a dedicated exception instead of using a generic one.
+                    "java:S112",
+                    // This block of commented-out lines of code should be removed.
+                    "java:S125",
+                    // Loops should not contain more than a single "break" or "continue" statement.
+                    "java:S135",
+                    // Refactor your code to get this URI from a customizable parameter.
+                    "java:S1075",
+                    // Catch Exception instead of Throwable.
+                    "java:S1181",
+                    //  Define a constant instead of duplicating this literal.
+                    "java:S1192",
+                    // Invoke method(s) only conditionally. (Logger)
+                    "java:S2629",
+                    // Cognitive Complexity of methods should not be too high.
+                    "java:S3776"
+            )
+
+            rule("java:S103") {
+                property("maximumLineLength", "180")
+            }
+        }
+
+        // Allow upper camel-case for type parameter names
+        // ruleParameter("java:S119", "format", "^[A-Z][a-zA-Z0-9]*$")
+
+        // ignoredPaths.add("**/demo/FailsafeDemo.java")
+    }
+
+    clean {
+        doFirst {
+            Directory dir = layout.projectDirectory.dir("target")
+
+            if (dir.getAsFile().exists()) {
+                println("delete " + dir)
+//        delete fileTree(dir).include("**/*")
+                delete dir
+            }
+        }
+    }
+
 //    configurations.configureEach {
 //        exclude group: "ch.qos.logback", module: "logback-classic"
 //    }
@@ -102,6 +173,8 @@ subprojects {
             }
 
             jar {
+                enabled = true
+
                 manifest {
                     attributes(
                             "Build-By": "https://github.com/tfreese",

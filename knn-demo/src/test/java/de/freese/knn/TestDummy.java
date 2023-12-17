@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Thomas Freese
  */
-public class TestDummy {
+class TestDummy {
     @Test
     void testDummy() {
         Assertions.assertTrue(true);
