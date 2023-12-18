@@ -1,5 +1,5 @@
 // Created: 23.05.2016
-package de.freese.knn.net.math.virtualThread;
+package de.freese.knn.net.math;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -7,7 +7,6 @@ import java.util.concurrent.ThreadFactory;
 
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;

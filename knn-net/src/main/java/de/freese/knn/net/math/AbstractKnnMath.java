@@ -208,7 +208,8 @@ public abstract class AbstractKnnMath implements KnnMath {
     /**
      * Aktualisiert die Gewichte eines Neurons aus den Fehlern und Ausgangswerten des nachfolgenden Layers.
      */
-    protected void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors) {
+    protected void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs, final double[][] deltaWeights,
+                                       final double[] rightErrors) {
         final int layerIndex = neuron.getLayerIndex();
 
         for (int i = 0; i < neuron.getOutputSize(); i++) {

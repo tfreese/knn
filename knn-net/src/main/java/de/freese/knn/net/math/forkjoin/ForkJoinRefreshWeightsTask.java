@@ -26,11 +26,15 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
     private final double teachFactor;
     private final int to;
 
-    ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum, final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors) {
+    //    @SuppressWarnings("java:S107")
+    ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum, final double[] leftOutputs,
+                               final double[][] deltaWeights, final double[] rightErrors) {
         this(math, neurons, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors, 0, neurons.size());
     }
 
-    private ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum, final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors, final int from, final int to) {
+    //    @SuppressWarnings("java:S107")
+    private ForkJoinRefreshWeightsTask(final KnnMathForkJoin math, final NeuronList neurons, final double teachFactor, final double momentum, final double[] leftOutputs,
+                                       final double[][] deltaWeights, final double[] rightErrors, final int from, final int to) {
         super();
 
         this.math = math;
@@ -54,8 +58,10 @@ class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[
         else {
             final int middle = (this.from + this.to) / 2;
 
-            final ForkJoinRefreshWeightsTask task1 = new ForkJoinRefreshWeightsTask(this.math, this.neurons, this.teachFactor, this.momentum, this.leftOutputs, this.deltaWeights, this.rightErrors, this.from, middle);
-            final ForkJoinRefreshWeightsTask task2 = new ForkJoinRefreshWeightsTask(this.math, this.neurons, this.teachFactor, this.momentum, this.leftOutputs, this.deltaWeights, this.rightErrors, middle, this.to);
+            final ForkJoinRefreshWeightsTask task1 = new ForkJoinRefreshWeightsTask(this.math, this.neurons, this.teachFactor, this.momentum, this.leftOutputs, this.deltaWeights,
+                    this.rightErrors, this.from, middle);
+            final ForkJoinRefreshWeightsTask task2 = new ForkJoinRefreshWeightsTask(this.math, this.neurons, this.teachFactor, this.momentum, this.leftOutputs, this.deltaWeights,
+                    this.rightErrors, middle, this.to);
 
             invokeAll(task1, task2);
         }

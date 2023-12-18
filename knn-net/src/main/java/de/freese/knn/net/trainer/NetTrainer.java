@@ -86,7 +86,8 @@ public class NetTrainer {
             fireCycleEnded(new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum));
 
             // Dynamische Anpassung der Lernrate und Momentum.
-            // TODO da passt was noch nicht
+            // Da passt was noch nicht !
+            //
             // final double stepLR = (this.teachFactorInitial - this.teachFactor) / this.maxIterations;
             // final double stepMom = (this.momentumInitial - this.momentum) / this.maxIterations;
             // final int currCircle = this.maxIterations - iteration;

@@ -1,5 +1,5 @@
 // Created: 02.10.2011
-package de.freese.knn.net.math.queueWorker;
+package de.freese.knn.net.math;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.visitor.BackwardVisitor;
@@ -166,7 +165,8 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         final List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
         for (NeuronList partition : partitions) {
-            final RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
+            final RunnableFuture<Void> future = new FutureTask<>(
+                    () -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
 
             futures.add(future);
             getQueue().add(future);

@@ -84,7 +84,8 @@ public final class KnnMathForkJoin extends AbstractKnnMath {
     }
 
     @Override
-    public void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs, final double[][] deltaWeights, final double[] rightErrors) {
+    public void refreshLayerWeights(final Neuron neuron, final double teachFactor, final double momentum, final double[] leftOutputs, final double[][] deltaWeights,
+                                    final double[] rightErrors) {
         super.refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors);
     }
 

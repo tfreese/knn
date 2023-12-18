@@ -1,5 +1,5 @@
 // Created: 02.10.2011
-package de.freese.knn.net.math.executorHalfWork;
+package de.freese.knn.net.math;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.concurrent.Future;
 
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.visitor.BackwardVisitor;
@@ -97,7 +96,8 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
 
         final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
 
-        final Future<?> future = getExecutorService().submit(() -> partitions.get(0).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
+        final Future<?> future = getExecutorService().submit(
+                () -> partitions.get(0).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
 
         // In diesem Thread.
         partitions.get(1).forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));

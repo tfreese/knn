@@ -1,5 +1,5 @@
 // Created: 02.10.2011
-package de.freese.knn.net.math.publishSubscribe;
+package de.freese.knn.net.math;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +13,6 @@ import java.util.concurrent.SubmissionPublisher;
 
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
-import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
 import de.freese.knn.net.neuron.NeuronList;
 import de.freese.knn.net.visitor.BackwardVisitor;

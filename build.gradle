@@ -76,8 +76,8 @@ subprojects {
         }
     }
 
+    // https://rules.sonarsource.com/java
     // https://github.com/remal-gradle-plugins/sonarlint
-    // https://sonar.wob.vw.vwg:8443/sonar/coding_rules
     sonarLint {
         ignoreFailures = true
         isGeneratedCodeIgnored = true
@@ -125,6 +125,12 @@ subprojects {
 
             rule("java:S103") {
                 property("maximumLineLength", "180")
+            }
+
+            // Constructor/Method has <N> parameters, which is greater than <X> authorized.
+            rule("java:S107") {
+                property("max", "10")
+                property("constructorMax", "10")
             }
         }
 
