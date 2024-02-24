@@ -213,6 +213,23 @@ subprojects {
                 ignoreFailures = false
                 maxParallelForks = 4
 
+                // No parallel Tests: gradle --no-parallel --max-workers 1 test
+                // or 'maxParallelForks = 1'
+
+                filter {
+                    // Deactivate Class
+                    // excludeTestsMatching "PACKAGE.CLASS"
+
+                    // Deactivate Method
+                    // excludeTestsMatching "PACKAGE.CLASS.METHOD"
+
+                    // Deactivate Package with Wildcards
+                    // excludeTestsMatching "*.integration.*"
+
+                    // Deactivate Method with Wildcards
+                    // excludeTestsMatching "*stress*"
+                }
+
                 useJUnitPlatform()
 
                 reports {
