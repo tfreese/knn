@@ -157,7 +157,10 @@ subprojects {
 //    }
 
     afterEvaluate { project ->
-        if (project.plugins.hasPlugin("java") || project.plugins.hasPlugin("java-library") || project.plugins.hasPlugin("application") || project.plugins.hasPlugin("war")) {
+        if (project.plugins.hasPlugin("java")
+                || project.plugins.hasPlugin("java-library")
+                || project.plugins.hasPlugin("application")
+                || project.plugins.hasPlugin("war")) {
             dependencies {
                 //implementation(platform("org.springframework.boot:spring-boot-dependencies:$version_springBoot"))
                 testImplementation("org.junit.jupiter:junit-jupiter-engine")
@@ -405,8 +408,8 @@ project("knn-demo") {
 
         runtimeOnly("org.slf4j:slf4j-simple")
 
-        testImplementation("org.mariadb.jdbc:mariadb-java-client")
-        testImplementation("org.springframework:spring-jdbc")
+        // testImplementation("org.mariadb.jdbc:mariadb-java-client")
+        // testImplementation("org.springframework:spring-jdbc")
     }
     ext {
         main = "de.freese.knn.buttons.KnnButtonMain"

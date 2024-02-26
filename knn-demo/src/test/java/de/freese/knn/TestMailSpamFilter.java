@@ -4,11 +4,12 @@ package de.freese.knn;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
@@ -26,50 +27,100 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * @author Thomas Freese
  */
 public class TestMailSpamFilter implements TrainingInputSource {
+
     public static void main(final String[] args) throws Exception {
-        final TestMailSpamFilter spamFilter = new TestMailSpamFilter();
-        // spamFilter.cleanUp();
 
-        // @formatter:off
-        final NeuralNet neuralNet = new NeuralNetBuilder()
-                .layerInput(new InputLayer(spamFilter.token.size()))
-                .layerHidden(new HiddenLayer(20000, new FunctionSigmoid()))
-                .layerOutput(new OutputLayer(1))
-                .build()
-                ;
-          // @formatter:on
+        final DataSource dataSource = createDataSource();
 
-        final double teachFactor = 0.5D;
-        final double momentum = 0.5D;
-        final double maximumError = 0.05D;
-        final int maximumIteration = 10000;
+        try {
+            final TestMailSpamFilter spamFilter = new TestMailSpamFilter(dataSource);
+            // spamFilter.cleanUp();
 
-        final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
-        // trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
-        trainer.addNetTrainerListener(new LoggerNetTrainerListener());
-        trainer.train(neuralNet, spamFilter);
+            // @formatter:off
+            final NeuralNet neuralNet = new NeuralNetBuilder()
+                    .layerInput(new InputLayer(spamFilter.token.size()))
+                    .layerHidden(new HiddenLayer(20000, new FunctionSigmoid()))
+                    .layerOutput(new OutputLayer(1))
+                    .build()
+                    ;
+            // @formatter:on
 
-        neuralNet.close();
-        spamFilter.closeDataSource();
+            final double teachFactor = 0.5D;
+            final double momentum = 0.5D;
+            final double maximumError = 0.05D;
+            final int maximumIteration = 10000;
+
+            final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
+            // trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
+            trainer.addNetTrainerListener(new LoggerNetTrainerListener());
+            trainer.train(neuralNet, spamFilter);
+
+            neuralNet.close();
+        }
+        finally {
+            if (dataSource instanceof AutoCloseable ds) {
+                ds.close();
+            }
+            // else if (dataSource instanceof JDBCPool p) {
+            //     p.close(1);
+            // }
+            // else if (dataSource instanceof JdbcConnectionPool p) {
+            //     p.dispose();
+            // }
+            else if (dataSource instanceof DisposableBean db) {
+                db.destroy();
+            }
+        }
     }
 
-    private final List<Map<String, Object>> messages;
+    private static DataSource createDataSource() {
+        // return new MariaDbPoolDataSource("jdbc:mariadb://localhost:3306/testdb?user=root&password=rootpw&maxPoolSize=3");
 
+        // final SingleConnectionDataSource dataSource = new SingleConnectionDataSource();
+        // // dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        // dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
+        // dataSource.setUrl("jdbc:mariadb://localhost:3306/mail?user=...&password=...");
+        // dataSource.setSuppressClose(true);
+        // dataSource.setAutoCommit(true);
+        //
+        // return dataSource;
+
+        // H2
+        // final JdbcConnectionPool pool = JdbcConnectionPool.create("jdbc:h2:file:" + dbPath.resolve("h2"), "sa", "sa");
+        // pool.setMaxConnections(3);
+
+        // Hsqldb
+        // final JDBCPool pool = new JDBCPool(3);
+        // pool.setUrl("jdbc:hsqldb:file:" + dbPath.resolve("hsqldb") + ";shutdown=true");
+        // pool.setUser("sa");
+        // pool.setPassword("sa");
+
+        // Oracle
+        // final HikariConfig config = new HikariConfig();
+        // config.setDriverClassName("oracle.jdbc.OracleDriver");
+        // config.setJdbcUrl("jdbc:oracle:thin:@//localhost:1521/XEPDB1");
+        // config.setUsername("testuser");
+        // config.setPassword("testpw");
+        // config.setMinimumIdle(1);
+        // config.setMaximumPoolSize(3);
+        // config.setConnectionTimeout(5 * 1000L); // Sekunden
+        // config.addDataSourceProperty("cachePrepStmts", "true");
+        // config.addDataSourceProperty("prepStmtCacheSize", "250");
+        // config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        //
+        // final HikariDataSource pool = new HikariDataSource(config);
+
+        return null;
+    }
+
+    private final JdbcTemplate jdbcTemplate;
+    private final List<Map<String, Object>> messages;
     private final List<String> token;
 
-    private JdbcTemplate jdbcTemplate;
-
-    public TestMailSpamFilter() {
+    public TestMailSpamFilter(final DataSource dataSource) {
         super();
 
-        final SingleConnectionDataSource ds = new SingleConnectionDataSource();
-        // ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setDriverClassName("org.mariadb.jdbc.Driver");
-        ds.setUrl("jdbc:mariadb://localhost:3306/mail?user=...&password=...");
-        ds.setSuppressClose(true);
-        ds.setAutoCommit(true);
-
-        this.jdbcTemplate = new JdbcTemplate(ds);
+        this.jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(dataSource, "dataSource required"));
 
         this.messages = this.jdbcTemplate.queryForList("select message_id, is_spam from message");
         this.token = this.jdbcTemplate.queryForList("select token from token order by token", String.class);
@@ -80,26 +131,15 @@ public class TestMailSpamFilter implements TrainingInputSource {
         // a-z
         for (char c = 97; c <= 122; c++) {
             for (int i = 3; i < 10; i++) {
-                String t = ("" + c).repeat(i);
-                t = "%" + t + "%";
-                int deleted = this.jdbcTemplate.update("delete from message_token where token like ?", t);
-                deleted += this.jdbcTemplate.update("delete from token where token like ?", t);
+                final String t = ("" + c).repeat(i);
+                int deleted = this.jdbcTemplate.update("delete from message_token where token like %?%", t);
+                deleted += this.jdbcTemplate.update("delete from token where token like %?%", t);
 
                 System.out.printf("%s: %d deleted%n", t, deleted);
             }
         }
 
         // select count(*), is_spam from message group by is_spam
-    }
-
-    public void closeDataSource() {
-        final DataSource dataSource = this.jdbcTemplate.getDataSource();
-
-        if (dataSource instanceof SingleConnectionDataSource) {
-            ((SingleConnectionDataSource) dataSource).destroy();
-        }
-
-        this.jdbcTemplate = null;
     }
 
     @Override
