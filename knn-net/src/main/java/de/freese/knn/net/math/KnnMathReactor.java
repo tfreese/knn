@@ -102,15 +102,13 @@ public final class KnnMathReactor extends AbstractKnnMath {
     // //
     // // Siehe auch MathFlux für math. Operatoren !
     //
-    //        // @formatter:off
-//        double error = Flux.range(0, outputs.length)
-//            .parallel(getParallelism()
-//            .runOn(getScheduler())
-//            .map(i -> getNetError(i, outputs, outputTargets))
-//            .reduce((error1, error2) -> error1 + error2)
-//            .block()
-//            ;
-//        // @formatter:on
+    //    double error = Flux.range(0, outputs.length)
+    //        .parallel(getParallelism()
+    //        .runOn(getScheduler())
+    //        .map(i -> getNetError(i, outputs, outputTargets))
+    //        .reduce((error1, error2) -> error1 + error2)
+    //        .block()
+    //        ;
     //
     // error /= 2.0D;
     //
@@ -144,17 +142,15 @@ public final class KnnMathReactor extends AbstractKnnMath {
     // final double[] outputs = visitor.getOutputs(layer);
     // final double[] errors = new double[outputs.length];
     //
-    //        // @formatter:off
-//        //Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
-//        //Flux.fromStream(IntStream.range(0, outputs.length).boxed())
-//        Flux.range(0, outputs.length)
-//            .parallel(getParallelism()
-//            .runOn(getScheduler())
-//            .doOnNext(i -> setOutputError(i, outputs, errors, visitor))
-//            .sequential()
-//            .blockLast()
-//            ;
-//        // @formatter:on
+    //    //Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
+    //    //Flux.fromStream(IntStream.range(0, outputs.length).boxed())
+    //    Flux.range(0, outputs.length)
+    //        .parallel(getParallelism()
+    //        .runOn(getScheduler())
+    //        .doOnNext(i -> setOutputError(i, outputs, errors, visitor))
+    //        .sequential()
+    //        .blockLast()
+    //        ;
     //
     // visitor.setErrors(layer, errors);
     // }

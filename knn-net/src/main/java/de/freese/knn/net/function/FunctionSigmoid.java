@@ -29,7 +29,7 @@ public class FunctionSigmoid implements Function {
 
     @Override
     public double calculate(final double value) {
-        return (1.0D / (1.0D + Math.exp(-((value - getDurchgang()) / getSteigung()))));
+        return 1.0D / (1.0D + Math.exp(-((value - getDurchgang()) / getSteigung())));
     }
 
     /**

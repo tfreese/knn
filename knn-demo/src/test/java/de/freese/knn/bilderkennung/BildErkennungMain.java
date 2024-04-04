@@ -30,29 +30,25 @@ public final class BildErkennungMain {
 
         //        final int parallelism = Runtime.getRuntime().availableProcessors();
 
-        // @formatter:off
         final NeuralNetBuilder builder = new NeuralNetBuilder()
-//                .knnMath(new KnnMathSimple())
+                // .knnMath(new KnnMathSimple())
                 .knnMath(new KnnMathStream()) // Ist Default im NeuralNetBuilder
-//                .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
-//                .knnMath(new KnnMathExecutor(Executors.newFixedThreadPool(parallelism), parallelism))
-//                .knnMath(new KnnMathQueueWorker(parallelism))
-//                .knnMath(new KnnMathReactor(parallelism))
-//                .knnMath(new KnnMathPublishSubscribe(Executors.newFixedThreadPool(parallelism), parallelism))
-//                .knnMath(new KnnMathCompletionService(Executors.newFixedThreadPool(parallelism), parallelism))
-//                .knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(1)))
-//                .knnMath(new KnnMathDisruptorPerPartition(parallelism))
-//                .knnMath(new KnnMathDisruptorPerNeuron(parallelism))
-//                .knnMath(new KnnMathVirtualThread())
+                // .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
+                // .knnMath(new KnnMathExecutor(Executors.newFixedThreadPool(parallelism), parallelism))
+                // .knnMath(new KnnMathQueueWorker(parallelism))
+                // .knnMath(new KnnMathReactor(parallelism))
+                // .knnMath(new KnnMathPublishSubscribe(Executors.newFixedThreadPool(parallelism), parallelism))
+                // .knnMath(new KnnMathCompletionService(Executors.newFixedThreadPool(parallelism), parallelism))
+                // .knnMath(new KnnMathExecutorHalfWork(Executors.newFixedThreadPool(1)))
+                // .knnMath(new KnnMathDisruptorPerPartition(parallelism))
+                // .knnMath(new KnnMathDisruptorPerNeuron(parallelism))
+                // .knnMath(new KnnMathVirtualThread())
                 ;
-        // @formatter:on
 
         if (trainingInputSource instanceof ImageInfoTrainingInputSource) {
-            // @formatter:off
             builder.layerInput(new InputLayer(trainingInputSource.getInputAt(0).length))
-                .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
-                ;
-            // @formatter:on
+                    .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
+            ;
         }
         else if (trainingInputSource instanceof ImagePixelTrainingInputSource) {
             // @formatter:off

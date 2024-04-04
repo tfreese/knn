@@ -83,7 +83,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
     public KnnMathQueueWorker(final int parallelism) {
         super(parallelism);
 
-        for (int i = 1; i <= (parallelism); i++) {
+        for (int i = 1; i <= parallelism; i++) {
             final QueueWorker worker = new QueueWorker(this.queue);
             worker.setName(worker.getClass().getSimpleName() + "-" + i);
             worker.setDaemon(false);
@@ -165,8 +165,8 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         final List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
         for (NeuronList partition : partitions) {
-            final RunnableFuture<Void> future = new FutureTask<>(
-                    () -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
+            final Runnable runnable = () -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
+            final RunnableFuture<Void> future = new FutureTask<>(runnable, null);
 
             futures.add(future);
             getQueue().add(future);

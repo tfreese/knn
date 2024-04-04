@@ -106,7 +106,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
 
         // this.joiningHandler = new JoiningHandler();
 
-        this.disruptor.handleEventsWith(handlers);// .then(this.joiningHandler);
+        this.disruptor.handleEventsWith(handlers); // .then(this.joiningHandler);
         this.disruptor.start();
     }
 

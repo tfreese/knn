@@ -16,9 +16,8 @@ import java.awt.image.IndexColorModel;
  * @author Thomas Freese
  */
 public class BlackWhiteOp implements BufferedImageOp {
+    private final int colorLimit;
     private final RenderingHints hints;
-
-    private int colorLimit = 0;
 
     public BlackWhiteOp() {
         this(0);
@@ -94,7 +93,7 @@ public class BlackWhiteOp implements BufferedImageOp {
                 final int green = (pixel >> 8) & 0xff;
                 final int blue = (pixel >> 0) & 0xff;
 
-                if ((red > this.colorLimit) || (green > this.colorLimit) || (blue > this.colorLimit)) {
+                if (red > this.colorLimit || green > this.colorLimit || blue > this.colorLimit) {
                     //
                     // int rgb = ((255 & 0xFF) << 24) | ((255 & 0xFF) << 16) | ((255 & 0xFF) << 8) |
                     // ((255 & 0xFF) << 0);

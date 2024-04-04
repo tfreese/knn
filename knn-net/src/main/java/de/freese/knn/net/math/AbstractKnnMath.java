@@ -75,10 +75,10 @@ public abstract class AbstractKnnMath implements KnnMath {
         for (int i = 0; i < neuron.getOutputSize(); i++) {
             final double weight = neuron.getOutputWeight(i);
 
-            error += (weight * errors[i]);
+            error += weight * errors[i];
 
             // Bias Neuron draufrechnen.
-            error += (neuron.getInputBIAS() * errors[i]);
+            error += neuron.getInputBIAS() * errors[i];
         }
 
         layerErrors[layerIndex] = error;
@@ -95,7 +95,7 @@ public abstract class AbstractKnnMath implements KnnMath {
 
         for (int i = 0; i < neuron.getInputSize(); i++) {
             final double weight = neuron.getInputWeight(i);
-            eingangsSumme += (weight * inputs[i]);
+            eingangsSumme += weight * inputs[i];
         }
 
         // Aktivierungsfunktion.
@@ -217,9 +217,8 @@ public abstract class AbstractKnnMath implements KnnMath {
             double deltaWeight = teachFactor * rightErrors[i] * leftOutputs[layerIndex];
 
             // Momentum-Term berücksichtigen (konjugierter Gradientenabstieg).
-            // Der Momentum-Term erhöht die Schrittweite auf flachen Niveaus und reduziert
-            // in Tälern.
-            deltaWeight += (momentum * deltaWeights[layerIndex][i]);
+            // Der Momentum-Term erhöht die Schrittweite auf flachen Niveaus und reduziert in Tälern.
+            deltaWeight += momentum * deltaWeights[layerIndex][i];
 
             neuron.setOutputWeight(i, weight + deltaWeight);
             deltaWeights[layerIndex][i] = deltaWeight;

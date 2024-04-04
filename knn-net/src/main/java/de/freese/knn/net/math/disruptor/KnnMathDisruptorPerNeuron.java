@@ -50,7 +50,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
         public void onEvent(final RunnableEvent event, final long sequence, final boolean endOfBatch) throws Exception {
             // Load-Balancing auf die Handler über die Sequence.
             // Sonst würden alle Handler gleichzeitig eine Sequence bearbeiten.
-            if ((this.ordinal == -1) || (this.ordinal == (sequence % this.parallelism))) {
+            if (this.ordinal == -1 || this.ordinal == (sequence % this.parallelism)) {
                 event.runnable.run();
 
                 event.runnable = null;

@@ -32,28 +32,25 @@ public class KnnButtonMain extends JFrame {
 
     public static void main(final String[] args) {
         // Training
-        //        int parallelism = Runtime.getRuntime().availableProcessors();
+        // int parallelism = Runtime.getRuntime().availableProcessors();
 
-        // @formatter:off
         final NeuralNet neuralNet = new NeuralNetBuilder()
-//                .knnMath(new KnnMathSimple())
+                // .knnMath(new KnnMathSimple())
                 .knnMath(new KnnMathStream()) // Ist Default im NeuralNetBuilder
-//                .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
-//                .knnMath(new KnnMathExecutor(parallelism, Executors.newFixedThreadPool(parallelism)))
-//                .knnMath(new KnnMathQueueWorker(parallelism))
-//                .knnMath(new KnnMathReactor(parallelism))
-//                .knnMath(new KnnMathPublishSubscribe(parallelism, Executors.newFixedThreadPool(parallelism)))
-//                .knnMath(new KnnMathCompletionService(parallelism, Executors.newFixedThreadPool(parallelism) ))
-//                .knnMath(new KnnMathExecutorHalfWork(Executors.newSingleThreadExecutor()))
-//                .knnMath(new KnnMathDisruptorPerPartition(parallelism))
-//                .knnMath(new KnnMathDisruptorPerNeuron(parallelism))
-//                .knnMath(new KnnMathVirtualThread())
+                // .knnMath(new KnnMathForkJoin(ForkJoinPool.commonPool()))
+                // .knnMath(new KnnMathExecutor(parallelism, Executors.newFixedThreadPool(parallelism)))
+                // .knnMath(new KnnMathQueueWorker(parallelism))
+                // .knnMath(new KnnMathReactor(parallelism))
+                // .knnMath(new KnnMathPublishSubscribe(parallelism, Executors.newFixedThreadPool(parallelism)))
+                // .knnMath(new KnnMathCompletionService(parallelism, Executors.newFixedThreadPool(parallelism) ))
+                // .knnMath(new KnnMathExecutorHalfWork(Executors.newSingleThreadExecutor()))
+                // .knnMath(new KnnMathDisruptorPerPartition(parallelism))
+                // .knnMath(new KnnMathDisruptorPerNeuron(parallelism))
+                // .knnMath(new KnnMathVirtualThread())
                 .layerInput(new InputLayer(54))
                 .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
                 .layerOutput(new OutputLayer(10))
-                .build()
-                ;
-        // @formatter:on
+                .build();
 
         final double teachFactor = 0.5D;
         final double momentum = 0.5D;

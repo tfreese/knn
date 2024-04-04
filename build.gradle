@@ -168,11 +168,11 @@ subprojects {
             }
 
             java {
-                sourceCompatibility = 21
-                targetCompatibility = 21
+                sourceCompatibility = 22
+                targetCompatibility = 22
 
 //                toolchain {
-//                    languageVersion = JavaLanguageVersion.of(21)
+//                    languageVersion = JavaLanguageVersion.of(22)
 ////                    vendor = JvmVendorSpec.ORACLE
 ////                    implementation = JvmImplementation.J9
 //                }
@@ -332,7 +332,7 @@ subprojects {
 
             tasks.withType(JavaCompile).configureEach {
                 // options.encoding = "UTF-8"
-                
+
                 doFirst {
                     println "Compiler args: " + options.compilerArgs
                 }
