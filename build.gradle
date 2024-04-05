@@ -168,8 +168,8 @@ subprojects {
             }
 
             java {
-                sourceCompatibility = 22
-                targetCompatibility = 22
+                sourceCompatibility = 21
+                targetCompatibility = 21
 
 //                toolchain {
 //                    languageVersion = JavaLanguageVersion.of(22)
