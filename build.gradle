@@ -168,17 +168,17 @@ subprojects {
             }
 
             java {
-                sourceCompatibility = 21
-                targetCompatibility = 21
+                //sourceCompatibility = 21
+                //targetCompatibility = 21
 
-//                toolchain {
-//                    languageVersion = JavaLanguageVersion.of(22)
-////                    vendor = JvmVendorSpec.ORACLE
-////                    implementation = JvmImplementation.J9
-//                }
+                toolchain {
+                    languageVersion = JavaLanguageVersion.of(22)
+                    // vendor = JvmVendorSpec.ORACLE
+                    // implementation = JvmImplementation.J9
+                }
 
-//                withJavadocJar()
-//                withSourcesJar()
+                // withJavadocJar()
+                // withSourcesJar()
             }
 
             jar {
