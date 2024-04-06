@@ -10,7 +10,7 @@ import reactor.core.scheduler.Schedulers;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.matrix.ValueInitializer;
-import de.freese.knn.net.utils.KnnThreadFactory;
+import de.freese.knn.net.utils.NamedThreadFactory;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
@@ -37,7 +37,7 @@ public final class KnnMathReactor extends AbstractKnnMath {
         // this.scheduler = Schedulers.newParallel("knn-scheduler-", parallelism);
 
         // Recht schnell
-        this.scheduler = Schedulers.fromExecutor(Executors.newFixedThreadPool(parallelism, new KnnThreadFactory("knn-scheduler-")));
+        this.scheduler = Schedulers.fromExecutor(Executors.newFixedThreadPool(parallelism, new NamedThreadFactory("knn-scheduler-%d")));
     }
 
     @Override

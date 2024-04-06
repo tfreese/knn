@@ -11,7 +11,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import de.freese.knn.net.layer.Layer;
 import de.freese.knn.net.math.AbstractKnnMath;
 import de.freese.knn.net.matrix.ValueInitializer;
-import de.freese.knn.net.utils.KnnThreadFactory;
+import de.freese.knn.net.utils.NamedThreadFactory;
 import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
@@ -79,7 +79,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
             throw new IllegalArgumentException("bufferSize must be a power of 2");
         }
 
-        this.disruptor = new Disruptor<>(RunnableEvent::new, ringBufferSize, new KnnThreadFactory("knn-disruptor-"));
+        this.disruptor = new Disruptor<>(RunnableEvent::new, ringBufferSize, new NamedThreadFactory("knn-disruptor-%d"));
 
         final EventHandler<RunnableEvent>[] handlers = new RunnableHandler[parallelism];
 
