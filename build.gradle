@@ -20,7 +20,7 @@ plugins {
     id "io.spring.dependency-management" version "$version_springDependencyManagement" apply false
 //    id "org.openjfx.javafxplugin" version "$version_javafxPlugin" apply false
 //    id "org.springframework.boot" version "$version_springBoot" apply false
-    id("name.remal.sonarlint") version "3.4.11" apply false
+    id("name.remal.sonarlint") version "4.0.0" apply false
 }
 
 //// Register ANT-Tasks as Gradle-Tasks with Prefix "ant-" in Group "other".
@@ -36,14 +36,14 @@ subprojects {
     apply plugin: "checkstyle"
     apply plugin: "name.remal.sonarlint"
 
-//    project.layout.buildDirectory = "target"
-
-//    apply from: "../dependencies.gradle"
-//    apply from: "../dependencies.properties"
+    // project.layout.buildDirectory = "target"
+    //
+    // apply from: "../dependencies.gradle"
+    // apply from: "../dependencies.properties"
 
     dependencyManagement {
         imports {
-//            mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+            // mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
             mavenBom("org.springframework.boot:spring-boot-dependencies:$version_springBoot")
         }
 
@@ -59,8 +59,8 @@ subprojects {
     checkstyle {
         // Default Directory: <root>/config/checkstyle/
         configDirectory = file("${System.getProperty('user.home')}/git/parents/config/checkstyle")
-//        configFile file("${System.getProperty('user.home')}/git/parents/config/checkstyle/checkstyle.xml")
-//    configFile rootProject.file("config/checkstyle/checkstyle.xml")
+        // configFile file("${System.getProperty('user.home')}/git/parents/config/checkstyle/checkstyle.xml")
+        // configFile rootProject.file("config/checkstyle/checkstyle.xml")
 
         configProperties.put("org.checkstyle.suppressionFilter", file("${System.getProperty('user.home')}/git/parents/config/checkstyle/suppressions.xml"))
 
@@ -72,7 +72,7 @@ subprojects {
         reports {
             xml.required = false
             html.required = true
-//        html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+            // html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
         }
     }
 
@@ -146,15 +146,15 @@ subprojects {
 
             if (dir.getAsFile().exists()) {
                 println("delete " + dir)
-//        delete fileTree(dir).include("**/*")
+                // delete fileTree(dir).include("**/*")
                 delete dir
             }
         }
     }
 
-//    configurations.configureEach {
-//        exclude group: "ch.qos.logback", module: "logback-classic"
-//    }
+    // configurations.configureEach {
+    //     exclude group: "ch.qos.logback", module: "logback-classic"
+    // }
 
     afterEvaluate { project ->
         if (project.plugins.hasPlugin("java")
@@ -187,7 +187,7 @@ subprojects {
                 manifest {
                     attributes(
                             "Build-By": "https://github.com/tfreese",
-                            "Build-Date": java.time.LocalDateTime.now(),
+                            "Build-Date": java.time.LocalDateTime.now().withNano(0),
                             "Build-JDK": System.getProperty("java.version") + " - " + System.getProperty("java.specification.vendor"),
                             "Build-Title": project.name,
                             "Build-Version": project.version
@@ -204,7 +204,7 @@ subprojects {
 
                 options.locale = "de"
                 options.encoding = "UTF-8"
-//                options.addStringOption("charset", "UTF-8")
+                // options.addStringOption("charset", "UTF-8")
 
                 // No Errors for missing JavaDoc.
                 options.addBooleanOption("Xdoclint:none", true)
@@ -242,15 +242,15 @@ subprojects {
 
                 testLogging {
                     showStandardStreams = false
-//                    events = ["PASSED", "FAILED", "SKIPPED", "STANDARD_OUT", "STANDARD_ERROR"]
-                    events = ["FAILED", "SKIPPED"]
-//                    showExceptions = true
-//                    showCauses = true
-//                    showStackTraces = true
-//                    exceptionFormat = TestExceptionFormat.FULL
+                    events = ["PASSED", "FAILED", "SKIPPED", "STANDARD_OUT", "STANDARD_ERROR"]
+                    // events = ["FAILED", "SKIPPED"]
+                    // showExceptions = true
+                    // showCauses = true
+                    // showStackTraces = true
+                    // exceptionFormat = TestExceptionFormat.FULL
                 }
 
-//                jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
+                // jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
 
                 afterSuite { desc, result ->
                     if (!desc.parent) {
