@@ -163,7 +163,7 @@ subprojects {
                 || project.plugins.hasPlugin("war")) {
             dependencies {
                 //implementation(platform("org.springframework.boot:spring-boot-dependencies:$version_springBoot"))
-                testImplementation("org.junit.jupiter:junit-jupiter-engine")
+                testImplementation("org.junit.jupiter:junit-jupiter")
                 testRuntimeOnly("org.junit.platform:junit-platform-launcher")
             }
 
