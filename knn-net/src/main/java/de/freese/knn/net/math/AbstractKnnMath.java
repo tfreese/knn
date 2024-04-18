@@ -188,7 +188,6 @@ public abstract class AbstractKnnMath implements KnnMath {
             }
 
             // Diese Methode wird selbst schon parallel ausgeführt !
-            // @formatter:off
             //            IntStream.range(0, matrix.getOutputSize())
             //                    .parallel()
             //                    .forEach(column ->
@@ -200,7 +199,6 @@ public abstract class AbstractKnnMath implements KnnMath {
             //                        }
             //                    })
             //            ;
-            //            // @formatter:on
 
         }
     }

@@ -45,15 +45,13 @@ public final class KnnMathReactor extends AbstractKnnMath {
         final double[] errors = visitor.getLastErrors();
         final double[] layerErrors = new double[layer.getSize()];
 
-        // @formatter:off
         Flux.fromIterable(layer.getNeurons())
-            .parallel(getParallelism())
-            .runOn(getScheduler())
-            .doOnNext(neuron -> backward(neuron, errors, layerErrors))
-            .sequential()
-            .blockLast()
-            ;
-        // @formatter:on
+                .parallel(getParallelism())
+                .runOn(getScheduler())
+                .doOnNext(neuron -> backward(neuron, errors, layerErrors))
+                .sequential()
+                .blockLast()
+        ;
 
         visitor.setErrors(layer, layerErrors);
     }
@@ -68,35 +66,30 @@ public final class KnnMathReactor extends AbstractKnnMath {
         final double[] inputs = visitor.getLastOutputs();
         final double[] outputs = new double[layer.getSize()];
 
-        // @formatter:off
         Flux.fromIterable(layer.getNeurons())
-            .parallel(getParallelism())
-            .runOn(getScheduler())
-            .doOnNext(neuron -> forward(neuron, inputs, outputs))
-            .sequential()
-            .blockLast()
-            ;
-        // @formatter:on
+                .parallel(getParallelism())
+                .runOn(getScheduler())
+                .doOnNext(neuron -> forward(neuron, inputs, outputs))
+                .sequential()
+                .blockLast()
+        ;
 
         visitor.setOutputs(layer, outputs);
     }
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        // @formatter:off
         Flux.fromArray(layers)
-            .parallel(getParallelism())
-            .runOn(getScheduler())
-            .doOnNext(layer -> initialize(layer, valueInitializer))
-            .sequential()
-            .blockLast()
-            ;
-        // @formatter:on
+                .parallel(getParallelism())
+                .runOn(getScheduler())
+                .doOnNext(layer -> initialize(layer, valueInitializer))
+                .sequential()
+                .blockLast()
+        ;
     }
 
     // @Override
-    // public double getNetError(final double[] outputs, final double[] outputTargets)
-    // {
+    // public double getNetError(final double[] outputs, final double[] outputTargets) {
     // // Flux.create((final FluxSink<Integer> fluxSink) -> IntStream.range(0, outputs.length).forEach(fluxSink::next))
     // // Flux.fromStream(IntStream.range(0, outputs.length).boxed())
     // //
@@ -121,15 +114,13 @@ public final class KnnMathReactor extends AbstractKnnMath {
         final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        // @formatter:off
         Flux.fromIterable(leftLayer.getNeurons())
-            .parallel(getParallelism())
-            .runOn(getScheduler())
-            .doOnNext(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
-            .sequential()
-            .blockLast()
-            ;
-        // @formatter:on
+                .parallel(getParallelism())
+                .runOn(getScheduler())
+                .doOnNext(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
+                .sequential()
+                .blockLast()
+        ;
     }
 
     private Scheduler getScheduler() {
@@ -137,8 +128,7 @@ public final class KnnMathReactor extends AbstractKnnMath {
     }
 
     // @Override
-    // public void setOutputError(final Layer layer, final BackwardVisitor visitor)
-    // {
+    // public void setOutputError(final Layer layer, final BackwardVisitor visitor) {
     // final double[] outputs = visitor.getOutputs(layer);
     // final double[] errors = new double[outputs.length];
     //

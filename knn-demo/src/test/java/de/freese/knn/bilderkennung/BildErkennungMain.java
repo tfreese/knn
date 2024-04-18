@@ -51,12 +51,10 @@ public final class BildErkennungMain {
             ;
         }
         else if (trainingInputSource instanceof ImagePixelTrainingInputSource) {
-            // @formatter:off
             builder.layerInput(new InputLayer(trainingInputSource.getInputAt(0).length))
-                .layerHidden(new HiddenLayer(1000, new FunctionSigmoid()))
-                .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
-                ;
-            // @formatter:on
+                    .layerHidden(new HiddenLayer(1000, new FunctionSigmoid()))
+                    .layerHidden(new HiddenLayer(100, new FunctionSigmoid()))
+            ;
         }
 
         builder.layerOutput(new OutputLayer(trainingInputSource.getSize()));

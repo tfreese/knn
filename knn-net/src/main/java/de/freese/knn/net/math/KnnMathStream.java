@@ -26,12 +26,10 @@ public final class KnnMathStream extends AbstractKnnMath {
         final double[] errors = visitor.getLastErrors();
         final double[] layerErrors = new double[layer.getSize()];
 
-        // @formatter:off
         layer.getNeurons()
-            .parallelStream()
-            .forEach(neuron -> backward(neuron, errors, layerErrors))
-            ;
-        // @formatter:on
+                .parallelStream()
+                .forEach(neuron -> backward(neuron, errors, layerErrors))
+        ;
 
         visitor.setErrors(layer, layerErrors);
     }
@@ -41,24 +39,20 @@ public final class KnnMathStream extends AbstractKnnMath {
         final double[] inputs = visitor.getLastOutputs();
         final double[] outputs = new double[layer.getSize()];
 
-        // @formatter:off
         layer.getNeurons()
-            .parallelStream()
-            .forEach(neuron -> forward(neuron, inputs, outputs))
-            ;
-        // @formatter:on
+                .parallelStream()
+                .forEach(neuron -> forward(neuron, inputs, outputs))
+        ;
 
         visitor.setOutputs(layer, outputs);
     }
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        // @formatter:off
         StreamSupport.stream(Arrays.spliterator(layers), true)
-            .parallel()
-            .forEach(layer -> initialize(layer, valueInitializer))
-            ;
-        // @formatter:on
+                .parallel()
+                .forEach(layer -> initialize(layer, valueInitializer))
+        ;
     }
 
     @Override
@@ -67,11 +61,9 @@ public final class KnnMathStream extends AbstractKnnMath {
         final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        // @formatter:off
         leftLayer.getNeurons()
-            .parallelStream()
-            .forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
-            ;
-        // @formatter:on
+                .parallelStream()
+                .forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors))
+        ;
     }
 }

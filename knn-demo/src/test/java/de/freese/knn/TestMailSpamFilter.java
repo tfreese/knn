@@ -36,14 +36,11 @@ public class TestMailSpamFilter implements TrainingInputSource {
             final TestMailSpamFilter spamFilter = new TestMailSpamFilter(dataSource);
             // spamFilter.cleanUp();
 
-            // @formatter:off
             final NeuralNet neuralNet = new NeuralNetBuilder()
                     .layerInput(new InputLayer(spamFilter.token.size()))
                     .layerHidden(new HiddenLayer(20000, new FunctionSigmoid()))
                     .layerOutput(new OutputLayer(1))
-                    .build()
-                    ;
-            // @formatter:on
+                    .build();
 
             final double teachFactor = 0.5D;
             final double momentum = 0.5D;

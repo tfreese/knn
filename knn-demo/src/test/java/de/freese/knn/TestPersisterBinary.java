@@ -35,14 +35,11 @@ public final class TestPersisterBinary {
         final TrainingInputSource trainingInputSource = new KnnButtonTrainingInputSource();
         final Path knnFile = Paths.get(System.getProperty("java.io.tmpdir"), "ButtonNeuralNet.bin");
 
-        // @formatter:off
         NeuralNet neuralNet = new NeuralNetBuilder()
                 .layerInput(new InputLayer(54))
                 .layerHidden(new HiddenLayer(25, new FunctionSigmoid()))
                 .layerOutput(new OutputLayer(10))
-                .build()
-                ;
-        // @formatter:on
+                .build();
 
         try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(knnFile)))) {
             final double teachFactor = 0.5D;
