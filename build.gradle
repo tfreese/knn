@@ -339,7 +339,7 @@ subprojects {
             }
 
             tasks.register("sourcesJar", Jar) {
-                group = "My Tasks"
+                group = "MyTasks"
                 description = "Creates a jar from the source files."
 
                 dependsOn("classes")
@@ -349,7 +349,7 @@ subprojects {
             }
 
             tasks.register("testJar", Jar) {
-                group = "My Tasks"
+                group = "MyTasks"
                 description = "Creates a jar from the test files."
 
                 dependsOn("testClasses")
@@ -359,7 +359,7 @@ subprojects {
             }
 
             tasks.register("testSourcesJar", Jar) {
-                group = "My Tasks"
+                group = "MyTasks"
                 description = "Creates a jar from the test-source files."
 
                 dependsOn("testClasses")
@@ -369,13 +369,24 @@ subprojects {
             }
 
             tasks.register("javadocJar", Jar) {
-                group = "My Tasks"
+                group = "MyTasks"
                 description = "Creates a jar from the javadoc files."
 
                 dependsOn("javadoc")
 
                 getArchiveClassifier().set("javadoc")
                 from javadoc.destinationDir
+            }
+
+            tasks.register("listRepos") {
+                group = "MyTasks"
+                description "Shows configured Repositories"
+
+                doLast {
+                    println "Repositories:"
+                    project.buildscript.repositories.each { println "- " + it.properties.displayName }
+                    // project.buildscript.repositories.each { println it.properties }
+                }
             }
 
             // Merge Artefacts.
