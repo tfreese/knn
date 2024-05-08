@@ -16,7 +16,7 @@
 //
 plugins {
     id "com.github.ben-manes.versions" version "$version_gradleVersionsPlugin" apply false
-//    id "de.freese.gradle.plugin.conventions" version "$version_myConventionPlugin" apply false
+//    id "de.freese.gradle.conventions" version "$version_myConventionPlugin" apply false
     id "io.spring.dependency-management" version "$version_springDependencyManagement" apply false
 //    id "org.openjfx.javafxplugin" version "$version_javafxPlugin" apply false
 //    id "org.springframework.boot" version "$version_springBoot" apply false
