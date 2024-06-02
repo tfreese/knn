@@ -68,12 +68,12 @@ dependencyResolutionManagement {
 include "knn-net"
 include "knn-demo"
 
-//buildCache {
-//    local {
-//        directory = new File("/tmp", "build-cache")
-//        removeUnusedEntriesAfterDays = 7
-//    }
-//}
+// beforeSettings {
+//     caches {
+//         buildCache.directory = new File("/tmp", "build-cache")
+//         buildCache.setRemoveUnusedEntriesAfterDays(7)
+//     }
+// }
 
 // init.gradle
 //beforeSettings { settings ->
