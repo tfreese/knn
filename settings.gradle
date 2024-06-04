@@ -37,54 +37,50 @@ dependencyResolutionManagement {
             }
         }
 
-//        flatDir {
-//            dirs "libs"
-//        }
-//
-//        ivy {
-//            url<URL>
-//            name "my-ivy"
-//            patternLayout {
-//                artifact "app1/[organisation]/jars/[artifact]-[revision].[ext]"
-//                artifact "app2/[organisation]/jars/[artifact]-[revision].[ext]"
-//            }
-//            metadataSources {
-//                artifact() // Only look for Jar.
-//            }
-//            content {
-//                excludeGroup "or.orga"
-//                excludeGroupByRegex("com\\..*")
-//                excludeGroupByRegex "io\\..*"
-//                excludeGroupByRegex "jakarta\\..*"
-//                excludeGroupByRegex "org\\..*"
-//            }
-//        }
-//
-//        // Ivy Dependencies.
-//        implementation("app1:artifact:version") // app1/app1/jars/artifact-version.jar
+        // flatDir {
+        //     dirs "libs"
+        // }
+        //
+        // ivy {
+        //     url<URL>
+        //     name "my-ivy"
+        //     patternLayout {
+        //         artifact "app1/[organisation]/jars/[artifact]-[revision].[ext]"
+        //         artifact "app2/[organisation]/jars/[artifact]-[revision].[ext]"
+        //     }
+        //     metadataSources {
+        //         artifact() // Only look for Jar.
+        //     }
+        //     content {
+        //         excludeGroup "or.orga"
+        //         excludeGroupByRegex("com\\..*")
+        //         excludeGroupByRegex "io\\..*"
+        //         excludeGroupByRegex "jakarta\\..*"
+        //         excludeGroupByRegex "org\\..*"
+        //     }
+        // }
+        //
+        // // Ivy Dependencies.
+        // implementation("app1:artifact:version") // app1/app1/jars/artifact-version.jar
     }
 }
 
 include "knn-net"
 include "knn-demo"
 
-// beforeSettings {
-//     caches {
-//         buildCache.directory = new File("/tmp", "build-cache")
-//         buildCache.setRemoveUnusedEntriesAfterDays(7)
+// buildCache {
+//     local {
+//         directory = new File("/tmp", "build-cache")
 //     }
 // }
 
 // init.gradle
-//beforeSettings { settings ->
-//    settings.caches {
-//        cleanup = Cleanup.DEFAULT
-//        releasedWrappers.removeUnusedEntriesAfterDays = 7
-//        snapshotWrappers.removeUnusedEntriesAfterDays = 7
-//        downloadedResources.removeUnusedEntriesAfterDays = 7
-//        createdResources.removeUnusedEntriesAfterDays = 7
-//    }
-//}
+// beforeSettings {
+//     caches {
+//         cleanup = Cleanup.ALWAYS
+//         buildCache.setRemoveUnusedEntriesAfterDays(30)
+//     }
+// }
 
 println(">>>>>>>>>")
 println("Running with Gradle version ${GradleVersion.current().version}")

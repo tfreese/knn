@@ -20,7 +20,7 @@ plugins {
     id "io.spring.dependency-management" version "$version_springDependencyManagement" apply false
 //    id "org.openjfx.javafxplugin" version "$version_javafxPlugin" apply false
 //    id "org.springframework.boot" version "$version_springBoot" apply false
-    id("name.remal.sonarlint") version "4.0.0" apply false
+    id("name.remal.sonarlint") version "$version_nameRemalSonarlint" apply false
 }
 
 //// Register ANT-Tasks as Gradle-Tasks with Prefix "ant-" in Group "other".
@@ -29,12 +29,18 @@ plugins {
 //// Set group property for all Ant tasks.
 //tasks.matching { task -> task.name.startsWith("ant-") }.configureEach{ group = "Ant" }
 
+def versions = [:]
+versions["checkstyle"] = "10.17.0"
+ext.set("versions", versions)
+
 subprojects {
     apply plugin: "base"
     apply plugin: "com.github.ben-manes.versions"
     apply plugin: "io.spring.dependency-management"
     apply plugin: "checkstyle"
     apply plugin: "name.remal.sonarlint"
+    apply plugin: "jacoco"
+    // apply plugin: "maven-publish"
 
     // project.layout.buildDirectory = "target"
     //
@@ -57,10 +63,13 @@ subprojects {
 
     // https://checkstyle.sourceforge.io
     checkstyle {
+        // toolVersion = "${versions.checkstyle}"
+        toolVersion = "$version_checkstyle"
+
         // Default Directory: <root>/config/checkstyle/
         configDirectory = file("${System.getProperty('user.home')}/git/parents/config/checkstyle")
-        // configFile file("${System.getProperty('user.home')}/git/parents/config/checkstyle/checkstyle.xml")
-        // configFile rootProject.file("config/checkstyle/checkstyle.xml")
+        // configDirectory = layout.projectDirectory.dir("..").dir("..").dir("config").dir("checkstyle").asFile
+        // configFile = layout.projectDirectory.dir("..").dir("..").dir("config").dir("checkstyle").file("checkstyle.xml").asFile
 
         configProperties.put("org.checkstyle.suppressionFilter", file("${System.getProperty('user.home')}/git/parents/config/checkstyle/suppressions.xml"))
 
@@ -145,7 +154,7 @@ subprojects {
             Directory dir = layout.projectDirectory.dir("target")
 
             if (dir.getAsFile().exists()) {
-                println("delete " + dir)
+                println("delete: " + dir)
                 // delete fileTree(dir).include("**/*")
                 delete dir
             }
@@ -168,8 +177,8 @@ subprojects {
             }
 
             java {
-                //sourceCompatibility = 21
-                //targetCompatibility = 21
+                //sourceCompatibility = 22
+                //targetCompatibility = 22
 
                 toolchain {
                     languageVersion = JavaLanguageVersion.of(22)
@@ -193,22 +202,6 @@ subprojects {
                             "Build-Version": project.version
                     )
                 }
-            }
-
-            javadoc {
-                enabled = true
-
-                if (JavaVersion.current().isJava9Compatible()) {
-                    options.addBooleanOption('html5', true)
-                }
-
-                options.locale = "de"
-                options.encoding = "UTF-8"
-                // options.addStringOption("charset", "UTF-8")
-
-                // No Errors for missing JavaDoc.
-                options.addBooleanOption("Xdoclint:none", true)
-                options.addStringOption("-quiet")
             }
 
             test {
@@ -235,6 +228,8 @@ subprojects {
 
                 useJUnitPlatform()
 
+                jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
+
                 reports {
                     junitXml.required = true
                     html.required = false
@@ -242,8 +237,8 @@ subprojects {
 
                 testLogging {
                     showStandardStreams = false
-                    events = ["PASSED", "FAILED", "SKIPPED", "STANDARD_OUT", "STANDARD_ERROR"]
-                    // events = ["FAILED", "SKIPPED"]
+                    // events = ["PASSED", "FAILED", "SKIPPED", "STANDARD_OUT", "STANDARD_ERROR"]
+                    events = ["FAILED", "SKIPPED"]
                     // showExceptions = true
                     // showCauses = true
                     // showStackTraces = true
@@ -264,6 +259,24 @@ subprojects {
                         logger.lifecycle(lines)
                     }
                 }
+
+                finalizedBy jacocoTestReport
+            }
+
+            javadoc {
+                enabled = true
+
+                if (JavaVersion.current().isJava9Compatible()) {
+                    options.addBooleanOption('html5', true)
+                }
+
+                // No Errors for missing JavaDoc.
+                options.addBooleanOption("Xdoclint:none", true)
+                options.addStringOption("-quiet")
+                // options.addStringOption("charset", "UTF-8")
+
+                options.locale = "de"
+                options.encoding = "UTF-8"
             }
 
             // --add-opens=java.base/java.util.concurrent=ALL-UNNAMED // Hat zur Kompilierungszeit keine Auswirkungen
@@ -321,7 +334,7 @@ subprojects {
             [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
             [compileJava, compileTestJava]*.options*.debug = true
             [compileJava, compileTestJava]*.options*.incremental = true
-//            [compileJava, compileTestJava]*.options*.compilerArgs += compilerArgs
+            // [compileJava, compileTestJava]*.options*.compilerArgs += compilerArgs
 
             tasks.compileJava {
                 options.compilerArgs.addAll(compilerArgs)
@@ -396,6 +409,14 @@ subprojects {
                 archives testSourcesJar
                 archives javadocJar
             }
+
+            // publishing {
+            //     publications {
+            //         maven(MavenPublication) {
+            //             from components.java
+            //         }
+            //     }
+            // }
         }
     }
 }
