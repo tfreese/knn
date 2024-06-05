@@ -75,9 +75,21 @@ include "knn-demo"
 // }
 
 // init.gradle
+// beforeSettings { settings ->
+//     settings.caches {
+//         releasedWrappers.removeUnusedEntriesAfterDays = 45
+//         snapshotWrappers.removeUnusedEntriesAfterDays = 10
+//         downloadedResources.removeUnusedEntriesAfterDays = 45
+//         createdResources.removeUnusedEntriesAfterDays = 10
+//         buildCache.removeUnusedEntriesAfterDays = 5
+//     }
+// }
+//
 // beforeSettings {
 //     caches {
-//         cleanup = Cleanup.ALWAYS
+//         // cleanup = Cleanup.DISABLED
+//         // cleanup = Cleanup.ALWAYS  // Cleanup is performed at the end of each build session, this can be expensive.
+//         cleanup = Cleanup.DEFAULT    // Cleanup is performed periodically in the background (currently once every 24 hours).
 //         buildCache.setRemoveUnusedEntriesAfterDays(30)
 //     }
 // }

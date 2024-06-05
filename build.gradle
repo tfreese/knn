@@ -29,9 +29,9 @@ plugins {
 //// Set group property for all Ant tasks.
 //tasks.matching { task -> task.name.startsWith("ant-") }.configureEach{ group = "Ant" }
 
-def versions = [:]
-versions["checkstyle"] = "10.17.0"
-ext.set("versions", versions)
+// def versions = [:]
+// versions["checkstyle"] = "10.17.0"
+// ext.set("versions", versions)
 
 subprojects {
     apply plugin: "base"
@@ -245,8 +245,6 @@ subprojects {
                     // exceptionFormat = TestExceptionFormat.FULL
                 }
 
-                // jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
-
                 afterSuite { desc, result ->
                     if (!desc.parent) {
                         String output = "Results: ${result.resultType} - ${result.testCount} Tests - ${result.successfulTestCount} SUCCESSFUL, ${result.failedTestCount} FAILED, ${result.skippedTestCount} SKIPPED"
@@ -266,6 +264,8 @@ subprojects {
             javadoc {
                 enabled = true
 
+                // destinationDir = layout.buildDirectory.dir("customJavaDocDir")
+
                 if (JavaVersion.current().isJava9Compatible()) {
                     options.addBooleanOption('html5', true)
                 }
@@ -281,52 +281,52 @@ subprojects {
 
             // --add-opens=java.base/java.util.concurrent=ALL-UNNAMED // Hat zur Kompilierungszeit keine Auswirkungen
             def compilerArgs = [
-                    //"--add-modules=ALL-SYSTEM"
-                    //, "--add-modules=jdk.incubator.concurrent",
-                    //, "--add-exports=java.base/sun.security.action=ALL-UNNAMED"
-                    //, "-verbose"
+                    // "--add-modules=ALL-SYSTEM",
+                    // "--add-modules=jdk.incubator.concurrent",
+                    // "--add-exports=java.base/sun.security.action=ALL-UNNAMED",
+                    // "-verbose",
                     // Compiler Warnings as Errors.
-                    //, "-Werror"
+                    // "-Werror",
                     // Enable all.
-                    //, "-Xlint:all"
+                    // "-Xlint:all",
                     // Überflüssige Typecast, wie zum Beispiel in der Anweisung int i = (int) 0;
-                    "-Xlint:cast"
+                    "-Xlint:cast",
                     // Verdächtige Bytecode-Dateien, beispielsweise mit anderen Merkmalen als die ebenfalls enthaltene Versionsangabe eigentlich gestattet.
-                    , "-Xlint:classfile"
+                    "-Xlint:classfile",
                     // Verwendung von Klassen oder Methoden, die als Deprecated markiert sind.
-                    , "-Xlint:deprecation"
+                    "-Xlint:deprecation",
                     // Annotation @Deprecated und @deprecated-Tag im Javadoc-Kommentar widersprechen sich.
-                    , "-Xlint:dep-ann"
+                    "-Xlint:dep-ann",
                     // Potenzielle Division durch null.
-                    , "-Xlint:divzero"
+                    "-Xlint:divzero",
                     // Leere Anweisung nach if.
-                    , "-Xlint:empty"
+                    "-Xlint:empty",
                     // case-Block in einer switch-Anweisung ohne abschließendes break.
-                    , "-Xlint:fallthrough"
+                    "-Xlint:fallthrough",
                     // return-Anweisung in einem finally-Block. Diese Konstruktion kann eine andere return-Anweisung im try-Block maskieren und zu schwer nachvollziehbarem Verhalten führen.
-                    , "-Xlint:finally"
+                    "-Xlint:finally",
                     // Aufruf des Compilers mit einer älteren Version für den Quelltext (Schalter -source) als für die Laufzeitbibliothek (-bootclasspath).
                     // Dabei kann Bytecode entstehen, der auf der älteren Plattform nicht funktioniert, weil er sich auf die neuere Laufzeitbibliothek bezieht.
-                    , "-Xlint:options"
+                    "-Xlint:options",
                     // Fehlende @Override-Annotation.
-                    , "-Xlint:overrides"
+                    "-Xlint:overrides",
                     // Unerreichbares Element im Classpath.
-                    , "-Xlint:path"
+                    "-Xlint:path",
                     // Annotation gefunden, für die sich kein Prozessor zuständig erklärt.
-                    , "-Xlint:processing"
+                    "-Xlint:processing",
                     // Verwendung einer generischen Klasse oder eines generischen Interface ohne Typ-Argument.
-                    , "-Xlint:rawtypes"
+                    "-Xlint:rawtypes",
                     // Fehlende oder falsche Definition von serialVersionUID in einer Klasse, die das Interface Serializable implementiert.
-                    , "-Xlint:serial"
+                    "-Xlint:serial",
                     // Bezug auf ein statisches Element über eine Objektreferenz statt über den Klassennamen.
-                    , "-Xlint:static"
+                    "-Xlint:static",
                     // Verdächtiger ARM-Block, wie beispielsweise ARM-Block mit einer Ressource, die nicht verwendet wird, ARM-Block mit einem expliziten close-Aufruf,
                     // Definition einer close-Methode mit einer anderen Exception als IOException.
-                    , "-Xlint:try"
+                    "-Xlint:try",
                     // Einsatz eines generischen Typs in einem Kontext, in dem die statische Typprüfung des Compilers nicht mehr sicherstellen kann, dass Typfehler zur Laufzeit ausgeschlossen sind.
-                    , "-Xlint:unchecked"
+                    "-Xlint:unchecked",
                     // Vararg-Parameter mit einem generischen Typ verbieten.
-                    , "-Xlint:varargs"
+                    "-Xlint:varargs"
                     // Disable annotation processing.
                     //, "-proc:none"
             ]
