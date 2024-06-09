@@ -12,8 +12,8 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        mavenLocal()
-        mavenCentral()
+        // mavenLocal()
+        // mavenCentral()
         maven {
             url "https://repository.primefaces.org"
             name "primefaces"

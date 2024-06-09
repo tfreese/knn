@@ -7,7 +7,6 @@
 //    }
 //
 //    dependencies {
-//        classpath("com.github.ben-manes:gradle-versions-plugin:$version_gradleVersionsPlugin")
 //        classpath("io.spring.gradle:dependency-management-plugin:$version_springDependencyManagement")
 //    }
 //}
@@ -46,6 +45,11 @@ subprojects {
     //
     // apply from: "../dependencies.gradle"
     // apply from: "../dependencies.properties"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
 
     dependencyManagement {
         imports {
