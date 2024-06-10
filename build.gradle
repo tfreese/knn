@@ -168,13 +168,18 @@ subprojects {
 
     clean {
         doFirst {
-            Directory dir = layout.projectDirectory.dir("target")
+            def dirs = ["target", "bin"]
 
-            if (dir.getAsFile().exists()) {
-                println("delete: " + dir)
-                // delete fileTree(dir).include("**/*")
-                delete dir
-            }
+            dirs.each(dir -> {
+                Directory directory = layout.projectDirectory.dir(dir)
+
+                if (directory.getAsFile().exists()) {
+                    // println("delete: " + directory)
+                    logger.lifecycle("delete: {}", directory)
+                    // delete fileTree(directory).include("**/*")
+                    delete directory
+                }
+            })
         }
     }
 
