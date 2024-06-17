@@ -22,15 +22,38 @@ plugins {
     id("name.remal.sonarlint") version "$version_nameRemalSonarlint" apply false
 }
 
+// def versions = [:]
+// versions["checkstyle"] = "10.17.0"
+// ext.set("versions", versions)
+
+// configurations.configureEach {
+//     exclude group: "ch.qos.logback", module: "logback-classic"
+// }
+
 //// Register ANT-Tasks as Gradle-Tasks with Prefix "ant-" in Group "other".
 //ant.importBuild("ant_build.xml") { antTargetName -> "ant-" + antTargetName }
 //
 //// Set group property for all Ant tasks.
 //tasks.matching { task -> task.name.startsWith("ant-") }.configureEach{ group = "Ant" }
 
-// def versions = [:]
-// versions["checkstyle"] = "10.17.0"
-// ext.set("versions", versions)
+//// Dynamic Tasks
+// def apps = ["App1", "App2"]
+// def appProperties = [:]
+// appProperties["valueApp1"] = "app1-value"
+// appProperties["valueApp2"] = "app2-value"
+//
+// apps.each { app ->
+//     tasks.register("taskFor${app}") {
+//         group = "MyTasks"
+//         description "some generic task"
+//
+//         var value = "${appProperties."value$app"}"
+//
+//         doLast {
+//             logger.lifecycle("app value: {}", value)
+//         }
+//     }
+// }
 
 subprojects {
     apply plugin: "base"
