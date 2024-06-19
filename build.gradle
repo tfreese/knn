@@ -1,18 +1,3 @@
-// Execute Tasks in SubModule: gradle MODUL:clean build
-//buildscript {
-//    repositories {
-//        mavenLocal()
-//        mavenCentral()
-//        gradlePluginPortal()
-//    }
-//
-//    dependencies {
-//        classpath("io.spring.gradle:dependency-management-plugin:$version_springDependencyManagement")
-//    }
-//}
-//
-// or as alternative newer Variant
-//
 plugins {
     id "com.github.ben-manes.versions" version "$version_gradleVersionsPlugin" apply false
 //    id "de.freese.gradle.conventions" version "$version_myConventionPlugin" apply false
@@ -22,39 +7,6 @@ plugins {
     id("name.remal.sonarlint") version "$version_nameRemalSonarlint" apply false
 }
 
-// def versions = [:]
-// versions["checkstyle"] = "10.17.0"
-// ext.set("versions", versions)
-
-// configurations.configureEach {
-//     exclude group: "ch.qos.logback", module: "logback-classic"
-// }
-
-//// Register ANT-Tasks as Gradle-Tasks with Prefix "ant-" in Group "other".
-//ant.importBuild("ant_build.xml") { antTargetName -> "ant-" + antTargetName }
-//
-//// Set group property for all Ant tasks.
-//tasks.matching { task -> task.name.startsWith("ant-") }.configureEach{ group = "Ant" }
-
-//// Dynamic Tasks
-// def apps = ["App1", "App2"]
-// def appProperties = [:]
-// appProperties["valueApp1"] = "app1-value"
-// appProperties["valueApp2"] = "app2-value"
-//
-// apps.each { app ->
-//     tasks.register("taskFor${app}") {
-//         group = "MyTasks"
-//         description "some generic task"
-//
-//         var value = "${appProperties."value$app"}"
-//
-//         doLast {
-//             logger.lifecycle("app value: {}", value)
-//         }
-//     }
-// }
-
 subprojects {
     apply plugin: "base"
     apply plugin: "com.github.ben-manes.versions"
@@ -62,12 +14,6 @@ subprojects {
     apply plugin: "checkstyle"
     apply plugin: "name.remal.sonarlint"
     apply plugin: "jacoco"
-    // apply plugin: "maven-publish"
-
-    // project.layout.buildDirectory = "target"
-    //
-    // apply from: "../dependencies.gradle"
-    // apply from: "../dependencies.properties"
 
     repositories {
         mavenLocal()
@@ -76,15 +22,11 @@ subprojects {
 
     dependencyManagement {
         imports {
-            // mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
             mavenBom("org.springframework.boot:spring-boot-dependencies:$version_springBoot")
         }
 
         dependencies {
             dependency("com.lmax:disruptor:$version_disruptor")
-
-            // JARs aus libs-Folder.
-            //implementation fileTree(dir: "libs", include: "*.jar")
         }
     }
 
@@ -206,10 +148,6 @@ subprojects {
         }
     }
 
-    // configurations.configureEach {
-    //     exclude group: "ch.qos.logback", module: "logback-classic"
-    // }
-
     afterEvaluate { project ->
         if (project.plugins.hasPlugin("java")
                 || project.plugins.hasPlugin("java-library")
@@ -222,17 +160,9 @@ subprojects {
             }
 
             java {
-                //sourceCompatibility = 22
-                //targetCompatibility = 22
-
                 toolchain {
                     languageVersion = JavaLanguageVersion.of(22)
-                    // vendor = JvmVendorSpec.ORACLE
-                    // implementation = JvmImplementation.J9
                 }
-
-                // withJavadocJar()
-                // withSourcesJar()
             }
 
             jar {
@@ -254,23 +184,6 @@ subprojects {
                 ignoreFailures = false
                 maxParallelForks = 4
 
-                // No parallel Tests: gradle --no-parallel --max-workers 1 test
-                // or 'maxParallelForks = 1'
-
-                filter {
-                    // Deactivate Class
-                    // excludeTestsMatching "PACKAGE.CLASS"
-
-                    // Deactivate Method
-                    // excludeTestsMatching "PACKAGE.CLASS.METHOD"
-
-                    // Deactivate Package with Wildcards
-                    // excludeTestsMatching "*.integration.*"
-
-                    // Deactivate Method with Wildcards
-                    // excludeTestsMatching "*stress*"
-                }
-
                 useJUnitPlatform()
 
                 jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
@@ -282,186 +195,15 @@ subprojects {
 
                 testLogging {
                     showStandardStreams = false
-                    // events = ["PASSED", "FAILED", "SKIPPED", "STANDARD_OUT", "STANDARD_ERROR"]
                     events = ["FAILED", "SKIPPED"]
-                    // showExceptions = true
-                    // showCauses = true
-                    // showStackTraces = true
-                    // exceptionFormat = TestExceptionFormat.FULL
-                }
-
-                afterSuite { desc, result ->
-                    if (!desc.parent) {
-                        String output = "Results: ${result.resultType} - ${result.testCount} Tests - ${result.successfulTestCount} SUCCESSFUL, ${result.failedTestCount} FAILED, ${result.skippedTestCount} SKIPPED"
-
-                        String lines = "-".repeat(output.length())
-                        // String lines = Stream.generate(() -> "-").limit(output.length()).collect(Collectors.joining());
-
-                        logger.lifecycle(lines)
-                        logger.lifecycle(output)
-                        logger.lifecycle(lines)
-                    }
                 }
 
                 finalizedBy jacocoTestReport
             }
 
             javadoc {
-                enabled = true
-
-                // destinationDir = layout.buildDirectory.dir("customJavaDocDir")
-
-                if (JavaVersion.current().isJava9Compatible()) {
-                    options.addBooleanOption('html5', true)
-                }
-
-                // No Errors for missing JavaDoc.
-                options.addBooleanOption("Xdoclint:none", true)
-                options.addStringOption("-quiet")
-                // options.addStringOption("charset", "UTF-8")
-
-                options.locale = "de"
-                options.encoding = "UTF-8"
+                enabled = false
             }
-
-            // --add-opens=java.base/java.util.concurrent=ALL-UNNAMED // Hat zur Kompilierungszeit keine Auswirkungen
-            def compilerArgs = [
-                    // "--add-modules=ALL-SYSTEM",
-                    // "--add-modules=jdk.incubator.concurrent",
-                    // "--add-exports=java.base/sun.security.action=ALL-UNNAMED",
-                    // "-verbose",
-                    // Compiler Warnings as Errors.
-                    // "-Werror",
-                    // Enable all.
-                    // "-Xlint:all",
-                    // Überflüssige Typecast, wie zum Beispiel in der Anweisung int i = (int) 0;
-                    "-Xlint:cast",
-                    // Verdächtige Bytecode-Dateien, beispielsweise mit anderen Merkmalen als die ebenfalls enthaltene Versionsangabe eigentlich gestattet.
-                    "-Xlint:classfile",
-                    // Verwendung von Klassen oder Methoden, die als Deprecated markiert sind.
-                    "-Xlint:deprecation",
-                    // Annotation @Deprecated und @deprecated-Tag im Javadoc-Kommentar widersprechen sich.
-                    "-Xlint:dep-ann",
-                    // Potenzielle Division durch null.
-                    "-Xlint:divzero",
-                    // Leere Anweisung nach if.
-                    "-Xlint:empty",
-                    // case-Block in einer switch-Anweisung ohne abschließendes break.
-                    "-Xlint:fallthrough",
-                    // return-Anweisung in einem finally-Block. Diese Konstruktion kann eine andere return-Anweisung im try-Block maskieren und zu schwer nachvollziehbarem Verhalten führen.
-                    "-Xlint:finally",
-                    // Aufruf des Compilers mit einer älteren Version für den Quelltext (Schalter -source) als für die Laufzeitbibliothek (-bootclasspath).
-                    // Dabei kann Bytecode entstehen, der auf der älteren Plattform nicht funktioniert, weil er sich auf die neuere Laufzeitbibliothek bezieht.
-                    "-Xlint:options",
-                    // Fehlende @Override-Annotation.
-                    "-Xlint:overrides",
-                    // Unerreichbares Element im Classpath.
-                    "-Xlint:path",
-                    // Annotation gefunden, für die sich kein Prozessor zuständig erklärt.
-                    "-Xlint:processing",
-                    // Verwendung einer generischen Klasse oder eines generischen Interface ohne Typ-Argument.
-                    "-Xlint:rawtypes",
-                    // Fehlende oder falsche Definition von serialVersionUID in einer Klasse, die das Interface Serializable implementiert.
-                    "-Xlint:serial",
-                    // Bezug auf ein statisches Element über eine Objektreferenz statt über den Klassennamen.
-                    "-Xlint:static",
-                    // Verdächtiger ARM-Block, wie beispielsweise ARM-Block mit einer Ressource, die nicht verwendet wird, ARM-Block mit einem expliziten close-Aufruf,
-                    // Definition einer close-Methode mit einer anderen Exception als IOException.
-                    "-Xlint:try",
-                    // Einsatz eines generischen Typs in einem Kontext, in dem die statische Typprüfung des Compilers nicht mehr sicherstellen kann, dass Typfehler zur Laufzeit ausgeschlossen sind.
-                    "-Xlint:unchecked",
-                    // Vararg-Parameter mit einem generischen Typ verbieten.
-                    "-Xlint:varargs"
-                    // Disable annotation processing.
-                    //, "-proc:none"
-            ]
-
-            [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
-            [compileJava, compileTestJava]*.options*.debug = true
-            [compileJava, compileTestJava]*.options*.incremental = true
-            // [compileJava, compileTestJava]*.options*.compilerArgs += compilerArgs
-
-            tasks.compileJava {
-                options.compilerArgs.addAll(compilerArgs)
-            }
-            tasks.compileTestJava {
-                options.compilerArgs.addAll(compilerArgs)
-            }
-
-            tasks.withType(JavaCompile).configureEach {
-                // options.encoding = "UTF-8"
-
-                doFirst {
-                    println "Compiler args: " + options.compilerArgs
-                }
-            }
-
-            tasks.register("sourcesJar", Jar) {
-                group = "MyTasks"
-                description = "Creates a jar from the source files."
-
-                dependsOn("classes")
-
-                getArchiveClassifier().set("sources")
-                from sourceSets.main.allSource
-            }
-
-            tasks.register("testJar", Jar) {
-                group = "MyTasks"
-                description = "Creates a jar from the test files."
-
-                dependsOn("testClasses")
-
-                getArchiveClassifier().set("test")
-                from sourceSets.test.output
-            }
-
-            tasks.register("testSourcesJar", Jar) {
-                group = "MyTasks"
-                description = "Creates a jar from the test-source files."
-
-                dependsOn("testClasses")
-
-                getArchiveClassifier().set("test-sources")
-                from sourceSets.test.allSource
-            }
-
-            tasks.register("javadocJar", Jar) {
-                group = "MyTasks"
-                description = "Creates a jar from the javadoc files."
-
-                dependsOn("javadoc")
-
-                getArchiveClassifier().set("javadoc")
-                from javadoc.destinationDir
-            }
-
-            tasks.register("listRepos") {
-                group = "MyTasks"
-                description "Shows configured Repositories"
-
-                doLast {
-                    println "Repositories:"
-                    project.buildscript.repositories.each { println "- " + it.properties.displayName }
-                    // project.buildscript.repositories.each { println it.properties }
-                }
-            }
-
-            // Merge Artefacts.
-            artifacts {
-                archives sourcesJar
-                archives testJar
-                archives testSourcesJar
-                archives javadocJar
-            }
-
-            // publishing {
-            //     publications {
-            //         maven(MavenPublication) {
-            //             from components.java
-            //         }
-            //     }
-            // }
         }
     }
 }

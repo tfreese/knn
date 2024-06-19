@@ -7,9 +7,6 @@ pluginManagement {
     }
 }
 
-// Without rootProject.name the Name of the Projekt-Directory is used.
-//rootProject.name = "knn"
-
 dependencyResolutionManagement {
     repositories {
         // mavenLocal()
@@ -33,70 +30,10 @@ dependencyResolutionManagement {
             }
             mavenContent {
                 releasesOnly()
-                //snapshotsOnly()
             }
         }
-
-        // flatDir {
-        //     dirs "libs"
-        // }
-        //
-        // ivy {
-        //     url<URL>
-        //     name "my-ivy"
-        //     patternLayout {
-        //         artifact "app1/[organisation]/jars/[artifact]-[revision].[ext]"
-        //         artifact "app2/[organisation]/jars/[artifact]-[revision].[ext]"
-        //     }
-        //     metadataSources {
-        //         artifact() // Only look for Jar.
-        //     }
-        //     content {
-        //         excludeGroup "or.orga"
-        //         excludeGroupByRegex("com\\..*")
-        //         excludeGroupByRegex "io\\..*"
-        //         excludeGroupByRegex "jakarta\\..*"
-        //         excludeGroupByRegex "org\\..*"
-        //     }
-        // }
-        //
-        // // Ivy Dependencies.
-        // implementation("app1:artifact:version") // app1/app1/jars/artifact-version.jar
     }
 }
 
 include "knn-net"
 include "knn-demo"
-
-// buildCache {
-//     local {
-//         directory = new File("/tmp", "build-cache")
-//     }
-// }
-
-// init.gradle
-// beforeSettings { settings ->
-//     settings.caches {
-//         releasedWrappers.removeUnusedEntriesAfterDays = 45
-//         snapshotWrappers.removeUnusedEntriesAfterDays = 10
-//         downloadedResources.removeUnusedEntriesAfterDays = 45
-//         createdResources.removeUnusedEntriesAfterDays = 10
-//         buildCache.removeUnusedEntriesAfterDays = 5
-//     }
-// }
-//
-// beforeSettings {
-//     caches {
-//         // cleanup = Cleanup.DISABLED
-//         // cleanup = Cleanup.ALWAYS  // Cleanup is performed at the end of each build session, this can be expensive.
-//         cleanup = Cleanup.DEFAULT    // Cleanup is performed periodically in the background (currently once every 24 hours).
-//         buildCache.setRemoveUnusedEntriesAfterDays(30)
-//     }
-// }
-
-println(">>>>>>>>>")
-println("Gradle version: ${GradleVersion.current().version}")
-println("MaxWorkerCount: ${gradle.getStartParameter().getMaxWorkerCount()}")
-//println("ParallelThreadCount: ${gradle.getStartParameter().getParallelThreadCount()}")
-println(">>>>>>>>>")
-// project.getGradle()
