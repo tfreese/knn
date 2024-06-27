@@ -1,24 +1,15 @@
 plugins {
-    id "com.github.ben-manes.versions" version "$version_gradleVersionsPlugin" apply false
-//    id "de.freese.gradle.conventions" version "$version_myConventionPlugin" apply false
+    id "de.freese.gradle.conventions" version "$version_myConventionPlugin" apply false
     id "io.spring.dependency-management" version "$version_springDependencyManagement" apply false
-//    id "org.openjfx.javafxplugin" version "$version_javafxPlugin" apply false
-//    id "org.springframework.boot" version "$version_springBoot" apply false
     id("name.remal.sonarlint") version "$version_nameRemalSonarlint" apply false
 }
 
 subprojects {
     apply plugin: "base"
-    apply plugin: "com.github.ben-manes.versions"
+    apply plugin: "de.freese.gradle.conventions"
     apply plugin: "io.spring.dependency-management"
-    apply plugin: "checkstyle"
     apply plugin: "name.remal.sonarlint"
-    apply plugin: "jacoco"
-
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
+    apply plugin: "de.freese.gradle.sonarlint-conventions"
 
     dependencyManagement {
         imports {
@@ -30,179 +21,14 @@ subprojects {
         }
     }
 
-    // https://checkstyle.sourceforge.io
-    checkstyle {
-        // toolVersion = "${versions.checkstyle}"
-        toolVersion = "$version_checkstyle"
-
-        // Default Directory: <root>/config/checkstyle/
-        configDirectory = file("${System.getProperty('user.home')}/git/parents/config/checkstyle")
-        // configDirectory = layout.projectDirectory.dir("..").dir("..").dir("config").dir("checkstyle").asFile
-        // configFile = layout.projectDirectory.dir("..").dir("..").dir("config").dir("checkstyle").file("checkstyle.xml").asFile
-
-        configProperties.put("org.checkstyle.suppressionFilter", file("${System.getProperty('user.home')}/git/parents/config/checkstyle/suppressions.xml"))
-
-        ignoreFailures = false
-        showViolations = true
-    }
-
-    tasks.withType(Checkstyle).configureEach {
-        reports {
-            xml.required = false
-            html.required = true
-            // html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
-        }
-    }
-
-    // https://rules.sonarsource.com/java
-    // https://github.com/remal-gradle-plugins/sonarlint
-    sonarLint {
-        ignoreFailures = true
-        isGeneratedCodeIgnored = true
-
-        nodeJs {
-            detectNodeJs = true    // If not exist, try to Download: https://nodejs.org/dist
-            logNodeJsNotFound = false
-        }
-
-        languages {
-            include("java") // Enable Java language only, all other languages become disabled
-            exclude("kotlin") // Disable Kotlin language, all other languages remain enabled
-        }
-
-        logging {
-            withDescription = false // Show rule descriptions in console output
-        }
-
-        rules {
-            enable(
-                    // Method names should comply with a naming convention. (that is disabled by default)
-                    "java:S100",
-                    // Class names should comply with a naming convention.(that is disabled by default)
-                    "java:S101",
-                    // Lines should not be too long.
-                    "java:S103",
-                    // Tabulation characters should not be used.
-                    "java:S105"
-            )
-            disable(
-                    // Replace this use of System.out by a logger.
-                    "java:S106",
-                    // Inheritance tree of classes should not be too deep.
-                    "java:S110",
-                    // Define and throw a dedicated exception instead of using a generic one.
-                    "java:S112",
-                    // This block of commented-out lines of code should be removed.
-                    "java:S125",
-                    // Loops should not contain more than a single "break" or "continue" statement.
-                    "java:S135",
-                    // Mergeable "if" statements should be combined.
-                    "java:S1066",
-                    // Refactor your code to get this URI from a customizable parameter.
-                    "java:S1075",
-                    // Catch Exception instead of Throwable.
-                    "java:S1181",
-                    //  Define a constant instead of duplicating this literal.
-                    "java:S1192",
-                    // Invoke method(s) only conditionally. (Logger)
-                    "java:S2629",
-                    // Cognitive Complexity of methods should not be too high.
-                    "java:S3776",
-                    // The Singleton design pattern should be used with care
-                    "java:S6548",
-                    // Don't use the query "SELECT *"
-                    "java:S6905"
-            )
-
-            rule("java:S103") {
-                property("maximumLineLength", "180")
-            }
-
-            // Constructor/Method has <N> parameters, which is greater than <X> authorized.
-            rule("java:S107") {
-                property("max", "10")
-                property("constructorMax", "10")
-            }
-        }
-
-        // Allow upper camel-case for type parameter names
-        // ruleParameter("java:S119", "format", "^[A-Z][a-zA-Z0-9]*$")
-
-        // ignoredPaths.add("**/demo/FailsafeDemo.java")
-    }
-
-    clean {
-        doFirst {
-            def dirs = ["target", "bin"]
-
-            dirs.each(dir -> {
-                Directory directory = layout.projectDirectory.dir(dir)
-
-                if (directory.getAsFile().exists()) {
-                    // println("delete: " + directory)
-                    logger.lifecycle("delete: {}", directory)
-                    // delete fileTree(directory).include("**/*")
-                    delete directory
-                }
-            })
-        }
-    }
-
     afterEvaluate { project ->
         if (project.plugins.hasPlugin("java")
                 || project.plugins.hasPlugin("java-library")
                 || project.plugins.hasPlugin("application")
                 || project.plugins.hasPlugin("war")) {
             dependencies {
-                //implementation(platform("org.springframework.boot:spring-boot-dependencies:$version_springBoot"))
                 testImplementation("org.junit.jupiter:junit-jupiter")
                 testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-            }
-
-            java {
-                toolchain {
-                    languageVersion = JavaLanguageVersion.of(22)
-                }
-            }
-
-            jar {
-                enabled = true
-
-                manifest {
-                    attributes(
-                            "Build-By": "https://github.com/tfreese",
-                            "Build-Date": java.time.LocalDateTime.now().withNano(0),
-                            "Build-JDK": System.getProperty("java.version") + " - " + System.getProperty("java.specification.vendor"),
-                            "Build-Title": project.name,
-                            "Build-Version": project.version
-                    )
-                }
-            }
-
-            test {
-                enabled = true
-                ignoreFailures = false
-                maxParallelForks = 4
-
-                useJUnitPlatform()
-
-                jvmArgs += "--add-opens=java.base/java.net=ALL-UNNAMED"
-
-                reports {
-                    junitXml.required = true
-                    html.required = false
-                }
-
-                testLogging {
-                    showStandardStreams = false
-                    events = ["FAILED", "SKIPPED"]
-                }
-
-                finalizedBy jacocoTestReport
-            }
-
-            javadoc {
-                enabled = false
             }
         }
     }

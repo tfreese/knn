@@ -7,33 +7,5 @@ pluginManagement {
     }
 }
 
-dependencyResolutionManagement {
-    repositories {
-        // mavenLocal()
-        // mavenCentral()
-        maven {
-            url "https://repository.primefaces.org"
-            name "primefaces"
-            content {
-                excludeGroupByRegex("de.freese\\..*")
-            }
-            mavenContent {
-                releasesOnly()
-                //snapshotsOnly()
-            }
-        }
-        maven {
-            url "https://repo.gradle.org/gradle/libs-releases"
-            name "gradle-libs-releases"
-            content {
-                excludeGroupByRegex("de.freese\\..*")
-            }
-            mavenContent {
-                releasesOnly()
-            }
-        }
-    }
-}
-
 include "knn-net"
 include "knn-demo"
