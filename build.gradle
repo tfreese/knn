@@ -34,6 +34,14 @@ subprojects {
     }
 }
 
+// For Composite Build.
+tasks.register("cleanAll", GradleBuild) {
+    tasks = ["clean"]
+}
+tasks.register("buildAll", GradleBuild) {
+    tasks = ["build"]
+}
+
 project("knn-net") {
     apply plugin: "java-library"
     description = "Künstliches neuronales Netz (Artificial neural network)"
