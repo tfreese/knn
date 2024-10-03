@@ -1,7 +1,7 @@
 plugins {
     id "de.freese.gradle.conventions" version "$version_myConventionPlugin" apply false
     id "io.spring.dependency-management" version "$version_springDependencyManagement" apply false
-    id("name.remal.sonarlint") version "$version_nameRemalSonarlint" apply false
+    id("name.remal.sonarlint") version "$version_nameRemalSonarlintPlugin" apply false
 }
 
 subprojects {
