@@ -21,15 +21,11 @@ subprojects {
         }
     }
 
-    afterEvaluate { project ->
-        if (project.plugins.hasPlugin("java")
-                || project.plugins.hasPlugin("java-library")
-                || project.plugins.hasPlugin("application")
-                || project.plugins.hasPlugin("war")) {
-            dependencies {
-                testImplementation("org.junit.jupiter:junit-jupiter")
-                testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-            }
+    pluginManager.withPlugin("java") {
+        dependencies {
+            testImplementation("org.junit.jupiter:junit-jupiter")
+
+            testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         }
     }
 }
@@ -58,7 +54,6 @@ project("knn-demo") {
     dependencies {
         implementation(project(":knn-net"))
 
-        implementation("org.apache.commons:commons-lang3")
         implementation("org.springframework:spring-jdbc")
 
         runtimeOnly("org.slf4j:slf4j-simple")
