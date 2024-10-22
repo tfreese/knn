@@ -4,8 +4,34 @@ plugins {
     id("name.remal.sonarlint") version "$version_nameRemalSonarlintPlugin" apply false
 }
 
-subprojects {
+allprojects {
     apply plugin: "base"
+
+    clean {
+        doFirst {
+            def dirs = ["bin", "logs", "out", "target"]
+
+            dirs.each(dir -> {
+                Directory directory = layout.projectDirectory.dir(dir)
+
+                if (directory.getAsFile().exists()) {
+                    // println("delete: " + directory)
+                    logger.lifecycle("delete: {}", directory)
+                    // delete fileTree(directory).include("**/*")
+                    delete directory
+                }
+            })
+        }
+    }
+
+    ant.lifecycleLogLevel = "INFO"
+
+    // repositories {
+    //
+    // }
+}
+
+subprojects {
     apply plugin: "de.freese.gradle.conventions"
     apply plugin: "io.spring.dependency-management"
     apply plugin: "name.remal.sonarlint"
