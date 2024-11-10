@@ -30,7 +30,7 @@ public class ImageData {
     }
 
     /**
-     * Liefert das Schwarzweiss Bild.
+     * Liefert das Schwarzweissbild.
      */
     public BufferedImage getBlackWhiteImage() {
         if (this.blackWhiteImage == null) {

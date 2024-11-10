@@ -2,7 +2,7 @@
 package de.freese.knn.net.function;
 
 /**
- * Verrechnen der Eingangswerte durch die Logarithmus Funktion.
+ * Verrechnen der Eingangswerte durch die Logarithmusfunktion.
  *
  * @author Thomas Freese
  */

@@ -13,6 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.neuron.NeuronImpl;
@@ -22,6 +24,8 @@ import de.freese.knn.net.neuron.NeuronList;
  * @author Thomas Freese
  */
 class TestNeuronList {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestNeuronList.class);
+
     static Neuron[] createNeurons() {
         return new Neuron[]{new NeuronImpl(null, 0), new NeuronImpl(null, 1), new NeuronImpl(null, 2), new NeuronImpl(null, 3), new NeuronImpl(null, 4)};
     }
@@ -49,7 +53,7 @@ class TestNeuronList {
         atomicInteger.set(2);
 
         subList.forEach(neuron -> {
-            System.out.println(neuron.getLayerIndex());
+            LOGGER.info("{}", neuron.getLayerIndex());
             assertEquals(atomicInteger.getAndIncrement(), neuron.getLayerIndex());
         });
 

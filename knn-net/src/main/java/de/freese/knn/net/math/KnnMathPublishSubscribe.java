@@ -27,15 +27,13 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     // /**
     // * @author Thomas Freese
     // */
-    // private static final class NeuronSubscriber implements Subscriber<NeuronList>
-    // {
+    // private static final class NeuronSubscriber implements Subscriber<NeuronList> {
     // private final Consumer<NeuronList> consumer;
     // private final CountDownLatch latch;
     //
     // private Subscription subscription;
     //
-    // private NeuronSubscriber(final CountDownLatch latch, final Consumer<NeuronList> consumer)
-    // {
+    // private NeuronSubscriber(final CountDownLatch latch, final Consumer<NeuronList> consumer) {
     // super();
     //
     // this.latch = Objects.requireNonNull(latch, "latch required");
@@ -43,28 +41,24 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     // }
     //
     // @Override
-    // public void onComplete()
-    // {
+    // public void onComplete() {
     // this.latch.countDown();
     // }
     //
     // @Override
-    // public void onError(final Throwable t)
-    // {
+    // public void onError(final Throwable t) {
     // // Empty
     // }
     //
     // @Override
-    // public void onNext(final NeuronList list)
-    // {
+    // public void onNext(final NeuronList list) {
     // this.consumer.accept(list);
     //
     // this.subscription.request(1); // Nächstes Element anfordern.
     // }
     //
     // @Override
-    // public void onSubscribe(final Subscription subscription)
-    // {
+    // public void onSubscribe(final Subscription subscription)  {
     // this.subscription = subscription;
     // this.subscription.request(1); // Erstes Element anfordern.
     // // subscription.request(Long.MAX_VALUE); // Alle Elemente anfordern.

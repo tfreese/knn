@@ -11,6 +11,9 @@ import java.io.Serial;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
 import de.freese.knn.net.function.FunctionSigmoid;
@@ -18,8 +21,8 @@ import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.math.KnnMathStream;
+import de.freese.knn.net.trainer.LoggerNetTrainerListener;
 import de.freese.knn.net.trainer.NetTrainer;
-import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 
 /**
  * GUI.
@@ -27,6 +30,7 @@ import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
  * @author Thomas Freese
  */
 public class KnnButtonMain extends JFrame {
+    private static final Logger LOGGER = LoggerFactory.getLogger(KnnButtonMain.class);
     @Serial
     private static final long serialVersionUID = -2245301418603208848L;
 
@@ -58,8 +62,8 @@ public class KnnButtonMain extends JFrame {
         final int maximumIteration = 2000;
 
         final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
-        trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
-        // trainer.addNetTrainerListener(new LoggerNetTrainerListener());
+        // trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out));
+        trainer.addNetTrainerListener(new LoggerNetTrainerListener());
         trainer.train(neuralNet, new KnnButtonTrainingInputSource());
 
         new KnnButtonMain().showGui(neuralNet);
@@ -75,7 +79,7 @@ public class KnnButtonMain extends JFrame {
                     System.exit(0);
                 }
                 catch (Exception ex) {
-                    ex.printStackTrace();
+                    LOGGER.error(ex.getMessage(), ex);
                     System.exit(-1);
                 }
             }

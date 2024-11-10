@@ -92,7 +92,7 @@ public final class ImageUtils {
     }
 
     /**
-     * Liefert das Schwarzweiss Bild.
+     * Liefert das Schwarzweissbild.
      */
     public static BufferedImage toBlackWhiteImage(final Image image) {
         final BufferedImage bufferedImage = ImageUtils.toBufferedImage(image);

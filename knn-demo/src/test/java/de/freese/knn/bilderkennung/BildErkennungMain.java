@@ -5,6 +5,9 @@ import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.freese.knn.bilderkennung.utils.ImageData;
 import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
 import de.freese.knn.net.NeuralNet;
@@ -14,8 +17,8 @@ import de.freese.knn.net.layer.HiddenLayer;
 import de.freese.knn.net.layer.InputLayer;
 import de.freese.knn.net.layer.OutputLayer;
 import de.freese.knn.net.math.KnnMathStream;
+import de.freese.knn.net.trainer.LoggerNetTrainerListener;
 import de.freese.knn.net.trainer.NetTrainer;
-import de.freese.knn.net.trainer.PrintStreamNetTrainerListener;
 import de.freese.knn.net.trainer.TrainingInputSource;
 
 /**
@@ -24,11 +27,13 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * @author Thomas Freese
  */
 public final class BildErkennungMain {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BildErkennungMain.class);
+
     public static void main(final String[] args) throws Exception {
         // final TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
         final TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
 
-        //        final int parallelism = Runtime.getRuntime().availableProcessors();
+        // final int parallelism = Runtime.getRuntime().availableProcessors();
 
         final NeuralNetBuilder builder = new NeuralNetBuilder()
                 // .knnMath(new KnnMathSimple())
@@ -68,8 +73,8 @@ public final class BildErkennungMain {
         final int maximumIteration = 100_000;
 
         final NetTrainer trainer = new NetTrainer(teachFactor, momentum, maximumError, maximumIteration);
-        trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out, 10));
-        // trainer.addNetTrainerListener(new LoggerNetTrainerListener(100));
+        // trainer.addNetTrainerListener(new PrintStreamNetTrainerListener(System.out, 10));
+        trainer.addNetTrainerListener(new LoggerNetTrainerListener(10));
         trainer.train(neuralNet, trainingInputSource);
 
         Toolkit.getDefaultToolkit().beep();
@@ -90,9 +95,8 @@ public final class BildErkennungMain {
             outputs = neuralNet.getOutput(imageData.getPixels());
         }
 
-        System.out.println("TestImage: Expected Index 5");
-        System.out.println(Arrays.stream(outputs).mapToObj(v -> String.format("%7.3f %%", v * 100)).collect(Collectors.joining(",", "[", "]")));
-        System.out.println();
+        LOGGER.info("TestImage: Expected Index 5");
+        LOGGER.info(Arrays.stream(outputs).mapToObj(v -> String.format("%7.3f %%", v * 100)).collect(Collectors.joining(",", "[", "]")));
 
         neuralNet.close();
 

@@ -24,7 +24,7 @@ import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
- * NetPersister für das laden und speichen eines neuralen Netzes im Binärformat.
+ * NetPersister für das Laden und speichen eines neuralen Netzes im Binärformat.
  *
  * @author Thomas Freese
  */

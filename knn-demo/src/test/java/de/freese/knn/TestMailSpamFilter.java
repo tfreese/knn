@@ -8,6 +8,8 @@ import java.util.Objects;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -27,6 +29,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * @author Thomas Freese
  */
 public class TestMailSpamFilter implements TrainingInputSource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestMailSpamFilter.class);
 
     public static void main(final String[] args) throws Exception {
 
@@ -132,7 +135,7 @@ public class TestMailSpamFilter implements TrainingInputSource {
                 int deleted = this.jdbcTemplate.update("delete from message_token where token like %?%", t);
                 deleted += this.jdbcTemplate.update("delete from token where token like %?%", t);
 
-                System.out.printf("%s: %d deleted%n", t, deleted);
+                LOGGER.info("{}: {} deleted", t, deleted);
             }
         }
 

@@ -66,7 +66,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         }
 
         @Override
-        public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) throws Exception {
+        public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) {
             event.runnables[this.ordinal].run();
 
             event.runnables[this.ordinal] = null;

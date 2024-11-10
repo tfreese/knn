@@ -12,6 +12,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.freese.knn.buttons.KnnButtonTrainingInputSource;
 import de.freese.knn.net.NeuralNet;
 import de.freese.knn.net.NeuralNetBuilder;
@@ -31,6 +34,8 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * @author Thomas Freese
  */
 public final class TestPersisterBinary {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestPersisterBinary.class);
+
     public static void main(final String[] args) throws Exception {
         final TrainingInputSource trainingInputSource = new KnnButtonTrainingInputSource();
         final Path knnFile = Paths.get(System.getProperty("java.io.tmpdir"), "ButtonNeuralNet.bin");
@@ -70,7 +75,7 @@ public final class TestPersisterBinary {
             final double[] inputs = trainingInputSource.getInputAt(0);
             final double[] outputs = neuralNet.getOutput(inputs);
 
-            System.out.println(Arrays.toString(outputs));
+            LOGGER.info(Arrays.toString(outputs));
 
             neuralNet.close();
         }

@@ -91,7 +91,7 @@ public class BlackWhiteOp implements BufferedImageOp {
                 // final int alpha = (pixel >> 24) & 0xff;
                 final int red = (pixel >> 16) & 0xff;
                 final int green = (pixel >> 8) & 0xff;
-                final int blue = (pixel >> 0) & 0xff;
+                final int blue = pixel & 0xff;
 
                 if (red > this.colorLimit || green > this.colorLimit || blue > this.colorLimit) {
                     //
