@@ -24,7 +24,7 @@ import de.freese.knn.net.neuron.Neuron;
 import de.freese.knn.net.neuron.NeuronList;
 
 /**
- * NetPersister für das Laden und speichen eines neuralen Netzes im Binärformat.
+ * {@link NetPersister} für das Laden und speichen eines neuralen Netzes im Binärformat.
  *
  * @author Thomas Freese
  */
@@ -85,7 +85,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
         final Class<?> clazz = Class.forName(clazzName);
         Function function = null;
 
-        // Funktions-Parameter
+        // Function-Parameter
         if (FunctionBinary.class.equals(clazz)) {
             final double threshold = input.readDouble();
 
@@ -170,7 +170,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
         // Klassentyp
         output.writeUTF(function.getClass().getName());
 
-        // Funktions-Parameter
+        // Function-Parameter
         if (function instanceof FunctionBinary f) {
             output.writeDouble(f.getThreshold());
         }
