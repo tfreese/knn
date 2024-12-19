@@ -56,7 +56,7 @@ project("knn-net") {
 
 project("knn-demo") {
     apply plugin: "application"
-    description = "Demos für künstliche neurale Netze"
+    description = "Demo for an artificial neural network"
     dependencies {
         implementation(project(":knn-net"))
 
