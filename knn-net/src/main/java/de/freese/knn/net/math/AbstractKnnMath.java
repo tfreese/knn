@@ -103,7 +103,7 @@ public abstract class AbstractKnnMath implements KnnMath {
     }
 
     protected Logger getLogger() {
-        return this.logger;
+        return logger;
     }
 
     /**
@@ -117,7 +117,7 @@ public abstract class AbstractKnnMath implements KnnMath {
     }
 
     protected int getParallelism() {
-        return this.parallelism;
+        return parallelism;
     }
 
     /**
@@ -225,7 +225,7 @@ public abstract class AbstractKnnMath implements KnnMath {
             // So wie es aussieht müssen die Bias-Gewichte nicht angepasst werden.
             //
             // double biasWeight = matrix.getBiasWeights()[i];
-            // double biasDeltaWeight = this.teachFactor * rightErrors[i] * 1;
+            // double biasDeltaWeight = teachFactor * rightErrors[i] * 1;
             // matrix.getBiasWeights()[i] = biasWeight + biasDeltaWeight;
         }
     }

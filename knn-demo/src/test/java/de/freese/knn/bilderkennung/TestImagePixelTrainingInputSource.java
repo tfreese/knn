@@ -41,8 +41,8 @@ public class TestImagePixelTrainingInputSource extends JFrame {
         public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            if (this.image != null) {
-                final int imageHeight = this.image.getHeight(null);
+            if (image != null) {
+                final int imageHeight = image.getHeight(null);
 
                 if (table.getRowHeight(row) < imageHeight) {
                     table.setRowHeight(row, imageHeight);
@@ -56,19 +56,19 @@ public class TestImagePixelTrainingInputSource extends JFrame {
         public void paint(final Graphics g) {
             // super.paint(g);
 
-            if (this.image != null) {
-                final int imageWidth = this.image.getWidth(null);
-                final int imageHeight = this.image.getHeight(null);
+            if (image != null) {
+                final int imageWidth = image.getWidth(null);
+                final int imageHeight = image.getHeight(null);
                 final int x = (getWidth() - imageWidth) / 2;
                 final int y = (getHeight() - imageHeight) / 2;
 
-                g.drawImage(this.image, x, y, imageWidth, imageHeight, this);
+                g.drawImage(image, x, y, imageWidth, imageHeight, this);
             }
         }
 
         @Override
         protected void setValue(final Object value) {
-            this.image = (value instanceof Image) ? (Image) value : null;
+            image = (value instanceof Image) ? (Image) value : null;
         }
     }
 
@@ -93,12 +93,12 @@ public class TestImagePixelTrainingInputSource extends JFrame {
 
         @Override
         public int getRowCount() {
-            return this.dataList.size();
+            return dataList.size();
         }
 
         @Override
         public Object getValueAt(final int rowIndex, final int columnIndex) {
-            final ImageData imageData = this.dataList.get(rowIndex);
+            final ImageData imageData = dataList.get(rowIndex);
 
             return switch (columnIndex) {
                 case 0 -> imageData.getSourceImage();
@@ -109,8 +109,8 @@ public class TestImagePixelTrainingInputSource extends JFrame {
         }
 
         public void setList(final List<ImageData> objects) {
-            this.dataList.clear();
-            this.dataList.addAll(objects);
+            dataList.clear();
+            dataList.addAll(objects);
 
             fireTableDataChanged();
         }

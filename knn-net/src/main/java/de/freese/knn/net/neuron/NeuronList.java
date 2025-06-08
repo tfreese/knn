@@ -24,24 +24,24 @@ public class NeuronList implements Iterable<Neuron> {
 
         @Override
         public boolean hasNext() {
-            return this.position < size();
+            return position < size();
         }
 
         @Override
         public Neuron next() {
             if (hasNext()) {
-                final Neuron neuron = get(this.position);
-                this.position++;
+                final Neuron neuron = get(position);
+                position++;
 
                 return neuron;
             }
 
-            throw new NoSuchElementException("Array index: " + this.position);
+            throw new NoSuchElementException("Array index: " + position);
         }
 
         @Override
         public void remove() {
-            // set(this.position, null);
+            // set(position, null);
             throw new UnsupportedOperationException("remove() method is not supported");
         }
     }
@@ -67,7 +67,7 @@ public class NeuronList implements Iterable<Neuron> {
     }
 
     public Neuron get(final int index) {
-        return this.neurons[index + this.fromIndex];
+        return neurons[index + fromIndex];
     }
 
     @Override
@@ -80,12 +80,12 @@ public class NeuronList implements Iterable<Neuron> {
     }
 
     public int size() {
-        return this.toIndex - this.fromIndex;
+        return toIndex - fromIndex;
     }
 
     @Override
     public Spliterator<Neuron> spliterator() {
-        return Arrays.spliterator(this.neurons, this.fromIndex, this.toIndex);
+        return Arrays.spliterator(neurons, fromIndex, toIndex);
     }
 
     public Stream<Neuron> stream() {
@@ -97,6 +97,6 @@ public class NeuronList implements Iterable<Neuron> {
      * @param toIndex int; exklusive
      */
     public NeuronList subList(final int fromIndex, final int toIndex) {
-        return new NeuronList(this.neurons, fromIndex, toIndex);
+        return new NeuronList(neurons, fromIndex, toIndex);
     }
 }

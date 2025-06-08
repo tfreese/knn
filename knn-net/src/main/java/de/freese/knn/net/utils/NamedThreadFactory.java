@@ -39,12 +39,12 @@ public class NamedThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(final Runnable r) {
-        final Thread thread = this.defaultThreadFactory.newThread(r);
+        final Thread thread = defaultThreadFactory.newThread(r);
 
-        final String threadName = String.format(this.namePattern, this.threadNumber.getAndIncrement());
+        final String threadName = String.format(namePattern, threadNumber.getAndIncrement());
         thread.setName(threadName);
 
-        thread.setDaemon(this.daemon);
+        thread.setDaemon(daemon);
 
         return thread;
     }

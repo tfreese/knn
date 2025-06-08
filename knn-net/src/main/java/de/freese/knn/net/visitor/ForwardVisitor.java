@@ -45,7 +45,7 @@ public class ForwardVisitor extends AbstractKnnVisitor {
      * Setzt die Output-Daten des Layers.
      */
     public void setOutputs(final Layer layer, final double[] outputs) {
-        if (this.trainingMode) {
+        if (trainingMode) {
             getValues().put(layer, outputs);
         }
 
@@ -57,7 +57,7 @@ public class ForwardVisitor extends AbstractKnnVisitor {
      * Liefert die Output-Daten des Layers.
      */
     double[] getOutputs(final Layer layer) {
-        final Layer key = this.trainingMode ? layer : null;
+        final Layer key = trainingMode ? layer : null;
 
         return getValues().get(key);
     }
@@ -69,7 +69,7 @@ public class ForwardVisitor extends AbstractKnnVisitor {
 
     @Override
     protected void visitInputLayer(final InputLayer layer) {
-        setOutputs(layer, this.inputs);
+        setOutputs(layer, inputs);
     }
 
     @Override

@@ -18,27 +18,27 @@ public class Matrix {
         this.inputSize = inputSize;
         this.outputSize = outputSize;
 
-        this.weights = new double[this.inputSize][this.outputSize];
+        weights = new double[inputSize][outputSize];
     }
 
     /**
      * Liefert die Anzahl der Eingangsneuronen.
      */
     public int getInputSize() {
-        return this.inputSize;
+        return inputSize;
     }
 
     /**
      * Liefert die Anzahl der Ausgangsneuronen.
      */
     public int getOutputSize() {
-        return this.outputSize;
+        return outputSize;
     }
 
     /**
      * Gewichte. Die Rows sind die Neuronen des Layers, die Columns die Neuronen des vorherigen Layers.
      */
     public double[][] getWeights() {
-        return this.weights;
+        return weights;
     }
 }

@@ -19,24 +19,24 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource {
     public ImagePixelTrainingInputSource() throws Exception {
         super();
 
-        this.imageDataList.add(new ImageData("Ampel.gif"));
-        this.imageDataList.add(new ImageData("Bahnkreuz.gif"));
-        this.imageDataList.add(new ImageData("BigBrother.jpg"));
-        this.imageDataList.add(new ImageData("Einbahn.gif"));
-        this.imageDataList.add(new ImageData("Klippe.gif"));
-        this.imageDataList.add(new ImageData("Seaside.jpg"));
-        this.imageDataList.add(new ImageData("Stop.gif"));
-        this.imageDataList.add(new ImageData("Sylvester.jpg"));
-        this.imageDataList.add(new ImageData("winnt.bmp"));
+        imageDataList.add(new ImageData("Ampel.gif"));
+        imageDataList.add(new ImageData("Bahnkreuz.gif"));
+        imageDataList.add(new ImageData("BigBrother.jpg"));
+        imageDataList.add(new ImageData("Einbahn.gif"));
+        imageDataList.add(new ImageData("Klippe.gif"));
+        imageDataList.add(new ImageData("Seaside.jpg"));
+        imageDataList.add(new ImageData("Stop.gif"));
+        imageDataList.add(new ImageData("Sylvester.jpg"));
+        imageDataList.add(new ImageData("winnt.bmp"));
     }
 
     public List<ImageData> getImageData() {
-        return this.imageDataList;
+        return imageDataList;
     }
 
     @Override
     public double[] getInputAt(final int index) {
-        final ImageData imageData = this.imageDataList.get(index);
+        final ImageData imageData = imageDataList.get(index);
 
         return imageData.getPixels();
     }
@@ -53,6 +53,6 @@ public class ImagePixelTrainingInputSource implements TrainingInputSource {
 
     @Override
     public int getSize() {
-        return this.imageDataList.size();
+        return imageDataList.size();
     }
 }

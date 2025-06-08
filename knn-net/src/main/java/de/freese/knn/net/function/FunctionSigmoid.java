@@ -36,13 +36,13 @@ public class FunctionSigmoid implements Function {
      * X-Durchgang für y = 0.5.
      */
     public double getDurchgang() {
-        return this.durchgang;
+        return durchgang;
     }
 
     /**
      * Steigung -> 0 Treppenfunktion.
      */
     public double getSteigung() {
-        return this.steigung;
+        return steigung;
     }
 }

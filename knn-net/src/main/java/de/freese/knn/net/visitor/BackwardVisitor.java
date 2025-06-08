@@ -31,7 +31,7 @@ public class BackwardVisitor extends AbstractKnnVisitor {
     public void clear() {
         super.clear();
 
-        this.forwardVisitor.clear();
+        forwardVisitor.clear();
     }
 
     /**
@@ -40,7 +40,7 @@ public class BackwardVisitor extends AbstractKnnVisitor {
     public double[][] getDeltaWeights(final Layer layer) {
         final Matrix matrix = layer.getOutputMatrix();
 
-        return this.trainingContext.getDeltaWeights(matrix);
+        return trainingContext.getDeltaWeights(matrix);
     }
 
     /**
@@ -71,14 +71,14 @@ public class BackwardVisitor extends AbstractKnnVisitor {
      * Liefert die Ausgabeziele der Neuronen, wird im {@link NetTrainer} benötigt.
      */
     public double[] getOutputTargets() {
-        return this.outputTargets;
+        return outputTargets;
     }
 
     /**
      * Setzt die Output-Daten des Layers.
      */
     public double[] getOutputs(final Layer layer) {
-        return this.forwardVisitor.getOutputs(layer);
+        return forwardVisitor.getOutputs(layer);
     }
 
     /**
@@ -129,6 +129,6 @@ public class BackwardVisitor extends AbstractKnnVisitor {
      * Liefert die Output-Daten des letzten Layers.
      */
     private double[] getLastOutputs() {
-        return this.forwardVisitor.getLastOutputs();
+        return forwardVisitor.getLastOutputs();
     }
 }

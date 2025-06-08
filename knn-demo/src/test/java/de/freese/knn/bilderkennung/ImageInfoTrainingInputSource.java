@@ -17,20 +17,20 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource {
     public ImageInfoTrainingInputSource() throws Exception {
         super();
 
-        this.imageInfos.add(new ImageInfo("Ampel.gif"));
-        this.imageInfos.add(new ImageInfo("Bahnkreuz.gif"));
-        this.imageInfos.add(new ImageInfo("BigBrother.jpg"));
-        this.imageInfos.add(new ImageInfo("Einbahn.gif"));
-        this.imageInfos.add(new ImageInfo("Klippe.gif"));
-        this.imageInfos.add(new ImageInfo("Seaside.jpg"));
-        this.imageInfos.add(new ImageInfo("Stop.gif"));
-        this.imageInfos.add(new ImageInfo("Sylvester.jpg"));
-        this.imageInfos.add(new ImageInfo("winnt.bmp"));
+        imageInfos.add(new ImageInfo("Ampel.gif"));
+        imageInfos.add(new ImageInfo("Bahnkreuz.gif"));
+        imageInfos.add(new ImageInfo("BigBrother.jpg"));
+        imageInfos.add(new ImageInfo("Einbahn.gif"));
+        imageInfos.add(new ImageInfo("Klippe.gif"));
+        imageInfos.add(new ImageInfo("Seaside.jpg"));
+        imageInfos.add(new ImageInfo("Stop.gif"));
+        imageInfos.add(new ImageInfo("Sylvester.jpg"));
+        imageInfos.add(new ImageInfo("winnt.bmp"));
     }
 
     @Override
     public double[] getInputAt(final int index) {
-        return this.imageInfos.get(index).getInfoVectorReScaled();
+        return imageInfos.get(index).getInfoVectorReScaled();
     }
 
     @Override
@@ -45,6 +45,6 @@ public class ImageInfoTrainingInputSource implements TrainingInputSource {
 
     @Override
     public int getSize() {
-        return this.imageInfos.size();
+        return imageInfos.size();
     }
 }

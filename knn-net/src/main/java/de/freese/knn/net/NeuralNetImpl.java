@@ -36,17 +36,17 @@ class NeuralNetImpl implements NeuralNet {
 
         getMath().close();
 
-        this.layers = null;
+        layers = null;
     }
 
     @Override
     public Layer[] getLayer() {
-        return this.layers;
+        return layers;
     }
 
     @Override
     public KnnMath getMath() {
-        return this.knnMath;
+        return knnMath;
     }
 
     @Override
@@ -68,10 +68,10 @@ class NeuralNetImpl implements NeuralNet {
      */
     void addLayer(final Layer layer) {
         // Array vergrößern.
-        final Layer[] array = Arrays.copyOf(this.layers, this.layers.length + 1);
+        final Layer[] array = Arrays.copyOf(layers, layers.length + 1);
 
-        array[this.layers.length] = layer;
-        this.layers = array;
+        array[layers.length] = layer;
+        layers = array;
     }
 
     /**
@@ -105,6 +105,6 @@ class NeuralNetImpl implements NeuralNet {
     }
 
     private ValueInitializer getValueInitializer() {
-        return this.valueInitializer;
+        return valueInitializer;
     }
 }

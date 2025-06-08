@@ -26,29 +26,29 @@ public class ImageData {
         final URL url = ClassLoader.getSystemResource(fileName);
         final BufferedImage bufferedImage = ImageIO.read(url);
 
-        this.sourceImage = ImageUtils.scaleImageAbsolut(bufferedImage, 100, 100);
+        sourceImage = ImageUtils.scaleImageAbsolut(bufferedImage, 100, 100);
     }
 
     /**
      * Liefert das Schwarzweissbild.
      */
     public BufferedImage getBlackWhiteImage() {
-        if (this.blackWhiteImage == null) {
-            this.blackWhiteImage = ImageUtils.toBlackWhiteImage(getEdgeImage());
+        if (blackWhiteImage == null) {
+            blackWhiteImage = ImageUtils.toBlackWhiteImage(getEdgeImage());
         }
 
-        return this.blackWhiteImage;
+        return blackWhiteImage;
     }
 
     /**
      * Liefert das Kantenbild.
      */
     public BufferedImage getEdgeImage() {
-        if (this.edgeImage == null) {
-            this.edgeImage = ImageUtils.toEdgeImage(getSourceImage());
+        if (edgeImage == null) {
+            edgeImage = ImageUtils.toEdgeImage(getSourceImage());
         }
 
-        return this.edgeImage;
+        return edgeImage;
     }
 
     /**
@@ -56,14 +56,14 @@ public class ImageData {
      * Schwarze Pixel haben den Wert -1, Weiße die +1.
      */
     public double[] getPixels() {
-        if (this.pixels == null) {
+        if (pixels == null) {
             final BufferedImage image = getBlackWhiteImage();
 
             final int width = image.getWidth();
             final int height = image.getHeight();
 
-            this.pixels = new double[width * height];
-            Arrays.fill(this.pixels, -1.0D);
+            pixels = new double[width * height];
+            Arrays.fill(pixels, -1.0D);
 
             final int rgbWhite = Color.WHITE.getRGB();
 
@@ -72,19 +72,19 @@ public class ImageData {
                     final int pixel = image.getRGB(x, y);
 
                     if (pixel == rgbWhite) {
-                        this.pixels[x + (width * y)] = 1.0D;
+                        pixels[x + (width * y)] = 1.0D;
                     }
                 }
             }
         }
 
-        return this.pixels;
+        return pixels;
     }
 
     /**
      * Liefert das OriginalBild.
      */
     public BufferedImage getSourceImage() {
-        return this.sourceImage;
+        return sourceImage;
     }
 }

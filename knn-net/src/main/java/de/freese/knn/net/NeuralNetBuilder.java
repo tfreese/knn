@@ -32,33 +32,33 @@ public class NeuralNetBuilder {
         final NeuralNetImpl neuralNet = new NeuralNetImpl();
 
         // KnnMath
-        neuralNet.setKnnMath(Objects.requireNonNullElseGet(this.knnMath, KnnMathStream::new));
+        neuralNet.setKnnMath(Objects.requireNonNullElseGet(knnMath, KnnMathStream::new));
 
         // ValueInitializer
-        neuralNet.setValueInitializer(Objects.requireNonNullElseGet(this.valueInitializer, ValueInitializerRandom::new));
+        neuralNet.setValueInitializer(Objects.requireNonNullElseGet(valueInitializer, ValueInitializerRandom::new));
 
         // InputLayer
-        if (this.inputLayer == null) {
+        if (inputLayer == null) {
             throw new IllegalArgumentException("InputLayer required");
         }
 
-        neuralNet.addLayer(this.inputLayer);
+        neuralNet.addLayer(inputLayer);
 
         // HiddenLayer
-        if (this.hiddenLayers.isEmpty()) {
+        if (hiddenLayers.isEmpty()) {
             throw new IllegalArgumentException("HiddenLayer required");
         }
 
-        for (HiddenLayer l : this.hiddenLayers) {
+        for (HiddenLayer l : hiddenLayers) {
             neuralNet.addLayer(l);
         }
 
         // OutputLayer
-        if (this.outputLayer == null) {
+        if (outputLayer == null) {
             throw new IllegalArgumentException("OutputLayer required");
         }
 
-        neuralNet.addLayer(this.outputLayer);
+        neuralNet.addLayer(outputLayer);
 
         if (connectLayer) {
             neuralNet.connectLayer();
@@ -77,7 +77,7 @@ public class NeuralNetBuilder {
     }
 
     public NeuralNetBuilder layerHidden(final HiddenLayer hiddenLayer) {
-        this.hiddenLayers.add(hiddenLayer);
+        hiddenLayers.add(hiddenLayer);
 
         return this;
     }

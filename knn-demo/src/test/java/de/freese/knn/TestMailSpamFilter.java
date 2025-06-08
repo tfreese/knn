@@ -120,10 +120,10 @@ public class TestMailSpamFilter implements TrainingInputSource {
     public TestMailSpamFilter(final DataSource dataSource) {
         super();
 
-        this.jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(dataSource, "dataSource required"));
+        jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(dataSource, "dataSource required"));
 
-        this.messages = this.jdbcTemplate.queryForList("select message_id, is_spam from message");
-        this.token = this.jdbcTemplate.queryForList("select token from token order by token", String.class);
+        messages = jdbcTemplate.queryForList("select message_id, is_spam from message");
+        token = jdbcTemplate.queryForList("select token from token order by token", String.class);
     }
 
     public void cleanUp() {
@@ -132,8 +132,8 @@ public class TestMailSpamFilter implements TrainingInputSource {
         for (char c = 97; c <= 122; c++) {
             for (int i = 3; i < 10; i++) {
                 final String t = ("" + c).repeat(i);
-                int deleted = this.jdbcTemplate.update("delete from message_token where token like %?%", t);
-                deleted += this.jdbcTemplate.update("delete from token where token like %?%", t);
+                int deleted = jdbcTemplate.update("delete from message_token where token like %?%", t);
+                deleted += jdbcTemplate.update("delete from token where token like %?%", t);
 
                 LOGGER.info("{}: {} deleted", t, deleted);
             }
@@ -144,12 +144,12 @@ public class TestMailSpamFilter implements TrainingInputSource {
 
     @Override
     public double[] getInputAt(final int index) {
-        final String messageID = (String) this.messages.get(index).get("MESSAGE_ID");
+        final String messageID = (String) messages.get(index).get("MESSAGE_ID");
 
-        final double[] input = new double[this.token.size()];
+        final double[] input = new double[token.size()];
         Arrays.fill(input, 0.0D);
 
-        this.jdbcTemplate.query("select token from message_token where message_id = ?", rs -> {
+        jdbcTemplate.query("select token from message_token where message_id = ?", rs -> {
             while (rs.next()) {
                 final int i = TestMailSpamFilter.this.token.indexOf(rs.getString("token"));
                 input[i] = 1.0D;
@@ -171,13 +171,13 @@ public class TestMailSpamFilter implements TrainingInputSource {
 
     @Override
     public double[] getOutputAt(final int index) {
-        final Boolean isSpam = (Boolean) this.messages.get(index).get("IS_SPAM");
+        final Boolean isSpam = (Boolean) messages.get(index).get("IS_SPAM");
 
         return new double[]{isSpam ? 1.0D : 0.0D};
     }
 
     @Override
     public int getSize() {
-        return this.messages.size();
+        return messages.size();
     }
 }

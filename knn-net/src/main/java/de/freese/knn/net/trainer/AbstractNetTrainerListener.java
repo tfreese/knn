@@ -29,7 +29,7 @@ public abstract class AbstractNetTrainerListener implements NetTrainerListener {
      * Welches wievielte Event soll geloggt werden ?
      */
     protected int getLogModulo() {
-        return this.logModulo;
+        return logModulo;
     }
 
     protected String toString(final NetTrainerCycleEndedEvent event) {

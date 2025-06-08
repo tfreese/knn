@@ -23,6 +23,6 @@ public class TrainingContext {
      * Liefert die vorherigen Gewichtsänderungen der Matrix-Neuronen.
      */
     public double[][] getDeltaWeights(final Matrix matrix) {
-        return this.deltaWeights.computeIfAbsent(matrix, key -> new double[matrix.getInputSize()][matrix.getOutputSize()]);
+        return deltaWeights.computeIfAbsent(matrix, key -> new double[matrix.getInputSize()][matrix.getOutputSize()]);
     }
 }

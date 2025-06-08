@@ -25,6 +25,6 @@ public class FunctionLinear implements Function {
     }
 
     public double getFactor() {
-        return this.factor;
+        return factor;
     }
 }

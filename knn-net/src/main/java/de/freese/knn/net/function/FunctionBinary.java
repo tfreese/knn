@@ -25,6 +25,6 @@ public class FunctionBinary implements Function {
     }
 
     public double getThreshold() {
-        return this.threshold;
+        return threshold;
     }
 }

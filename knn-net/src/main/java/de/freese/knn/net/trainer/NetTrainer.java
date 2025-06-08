@@ -29,7 +29,7 @@ public class NetTrainer {
     // /**
     // * Anfänglicher Anteil der vorherigen Gewichtsveränderung.
     // */
-    // private double momentumInitial = this.momentum;
+    // private double momentumInitial = .momentum;
     /**
      * Anteil der vorherigen Gewichtsveränderung
      */
@@ -37,7 +37,7 @@ public class NetTrainer {
     // /**
     // * Lernfaktor
     // */
-    // private double teachFactorInitial = this.teachFactor;
+    // private double teachFactorInitial = .teachFactor;
     /**
      * Lernfaktor
      */
@@ -59,11 +59,11 @@ public class NetTrainer {
     }
 
     public void addNetTrainerListener(final NetTrainerListener listener) {
-        this.listenerList.add(NetTrainerListener.class, listener);
+        listenerList.add(NetTrainerListener.class, listener);
     }
 
     public void removeNetTrainerListener(final NetTrainerListener listener) {
-        this.listenerList.remove(NetTrainerListener.class, listener);
+        listenerList.remove(NetTrainerListener.class, listener);
     }
 
     /**
@@ -73,7 +73,7 @@ public class NetTrainer {
         final long start = System.currentTimeMillis();
         final TrainingContext trainingContext = new TrainingContext();
 
-        for (int iteration = 0; iteration < this.maxIterations; iteration++) {
+        for (int iteration = 0; iteration < maxIterations; iteration++) {
             double error = 0.0D;
 
             for (int index = 0; index < inputSource.getSize(); index++) {
@@ -83,19 +83,19 @@ public class NetTrainer {
                 error += train(trainingContext, neuralNet, input, output);
             }
 
-            fireCycleEnded(new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum));
+            fireCycleEnded(new NetTrainerCycleEndedEvent(this, iteration, error, teachFactor, momentum));
 
             // Dynamische Anpassung der Lernrate und Momentum.
             // Da passt was noch nicht !
             //
-            // final double stepLR = (this.teachFactorInitial - this.teachFactor) / this.maxIterations;
-            // final double stepMom = (this.momentumInitial - this.momentum) / this.maxIterations;
-            // final int currCircle = this.maxIterations - iteration;
-            // this.teachFactor = this.teachFactorInitial - (stepLR * currCircle);
-            // this.momentum = this.momentumInitial - (stepMom * currCircle);
-            if (error <= this.maximumError) {
+            // final double stepLR = (teachFactorInitial - teachFactor) / maxIterations;
+            // final double stepMom = (momentumInitial - momentum) / maxIterations;
+            // final int currCircle = maxIterations - iteration;
+            // teachFactor = teachFactorInitial - (stepLR * currCircle);
+            // momentum = momentumInitial - (stepMom * currCircle);
+            if (error <= maximumError) {
                 // Letzter Stand loggen.
-                final NetTrainerCycleEndedEvent event = new NetTrainerCycleEndedEvent(this, iteration, error, this.teachFactor, this.momentum);
+                final NetTrainerCycleEndedEvent event = new NetTrainerCycleEndedEvent(this, iteration, error, teachFactor, momentum);
 
                 if (LOGGER.isInfoEnabled()) {
                     LOGGER.info(event.toString());
@@ -113,7 +113,7 @@ public class NetTrainer {
     }
 
     private void fireCycleEnded(final NetTrainerCycleEndedEvent event) {
-        final Object[] listeners = this.listenerList.getListenerList();
+        final Object[] listeners = listenerList.getListenerList();
 
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == NetTrainerListener.class) {
@@ -145,7 +145,7 @@ public class NetTrainer {
             final Layer rightLayer = layer[i];
             final Layer leftLayer = layer[i - 1];
 
-            neuralNet.getMath().refreshLayerWeights(leftLayer, rightLayer, this.teachFactor, this.momentum, backwardVisitor);
+            neuralNet.getMath().refreshLayerWeights(leftLayer, rightLayer, teachFactor, momentum, backwardVisitor);
         }
 
         final double netzFehler = backwardVisitor.getNetError();

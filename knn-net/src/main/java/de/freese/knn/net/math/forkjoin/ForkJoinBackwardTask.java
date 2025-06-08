@@ -40,16 +40,16 @@ class ForkJoinBackwardTask extends RecursiveAction// RecursiveTask<double[]>
 
     @Override
     protected void compute() {
-        if ((this.to - this.from) < 20) {
-            final NeuronList n = this.neurons.subList(this.from, this.to);
+        if ((to - from) < 20) {
+            final NeuronList n = neurons.subList(from, to);
 
-            n.forEach(neuron -> this.math.backward(neuron, this.errors, this.layerErrors));
+            n.forEach(neuron -> math.backward(neuron, errors, layerErrors));
         }
         else {
-            final int middle = (this.from + this.to) / 2;
+            final int middle = (from + to) / 2;
 
-            final ForkJoinBackwardTask task1 = new ForkJoinBackwardTask(this.math, this.neurons, this.errors, this.layerErrors, this.from, middle);
-            final ForkJoinBackwardTask task2 = new ForkJoinBackwardTask(this.math, this.neurons, this.errors, this.layerErrors, middle, this.to);
+            final ForkJoinBackwardTask task1 = new ForkJoinBackwardTask(math, neurons, errors, layerErrors, from, middle);
+            final ForkJoinBackwardTask task2 = new ForkJoinBackwardTask(math, neurons, errors, layerErrors, middle, to);
 
             invokeAll(task1, task2);
         }

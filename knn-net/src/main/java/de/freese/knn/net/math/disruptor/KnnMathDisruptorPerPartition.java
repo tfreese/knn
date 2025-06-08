@@ -27,16 +27,14 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     // /**
     // * @author Thomas Freese
     // */
-    // private static final class JoiningHandler implements EventHandler<MathEvent>
-    // {
+    // private static final class JoiningHandler implements EventHandler<MathEvent> {
     // private CountDownLatch latch;
     //
     // @Override
-    // public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) throws Exception
-    // {
+    // public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) throws Exception {
     // LoggerFactory.getLogger(JoiningHandler.class).info("onEvent");
     //
-    // this.latch.countDown();
+    // latch.countDown();
     // }
     // }
 
@@ -49,7 +47,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         MathEvent(final int parallelism) {
             super();
 
-            this.runnables = new Runnable[parallelism];
+            runnables = new Runnable[parallelism];
         }
     }
 
@@ -67,9 +65,9 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
 
         @Override
         public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) {
-            event.runnables[this.ordinal].run();
+            event.runnables[ordinal].run();
 
-            event.runnables[this.ordinal] = null;
+            event.runnables[ordinal] = null;
         }
     }
 
@@ -96,7 +94,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
             throw new IllegalArgumentException("bufferSize must be a power of 2");
         }
 
-        this.disruptor = new Disruptor<>(() -> new MathEvent(parallelism), ringBufferSize, new NamedThreadFactory("knn-disruptor-%d"));
+        disruptor = new Disruptor<>(() -> new MathEvent(parallelism), ringBufferSize, new NamedThreadFactory("knn-disruptor-%d"));
 
         final MathHandler[] handlers = new MathHandler[parallelism];
 
@@ -104,10 +102,10 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
             handlers[i] = new MathHandler(i);
         }
 
-        // this.joiningHandler = new JoiningHandler();
+        // joiningHandler = new JoiningHandler();
 
-        this.disruptor.handleEventsWith(handlers); // .then(this.joiningHandler);
-        this.disruptor.start();
+        disruptor.handleEventsWith(handlers); // .then(joiningHandler);
+        disruptor.start();
     }
 
     @Override
@@ -135,10 +133,10 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     @Override
     public void close() {
         // Nur notwendig, wenn die Event-Publizierung noch nicht abgeschlossen ist.
-        // this.disruptor.halt();
+        // disruptor.halt();
 
         try {
-            this.disruptor.shutdown(5, TimeUnit.SECONDS);
+            disruptor.shutdown(5, TimeUnit.SECONDS);
         }
         catch (Exception ex) {
             getLogger().error(ex.getMessage(), ex);
@@ -198,7 +196,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     }
 
     private Disruptor<MathEvent> getDisruptor() {
-        return this.disruptor;
+        return disruptor;
     }
 
     private void publish(final IntFunction<Runnable> functionRunnables) {

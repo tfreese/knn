@@ -17,6 +17,6 @@ public class ValueInitializerConstant implements ValueInitializer {
 
     @Override
     public double createNextValue() {
-        return this.weight;
+        return weight;
     }
 }

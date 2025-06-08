@@ -90,6 +90,6 @@ public final class KnnMathForkJoin extends AbstractKnnMath {
     }
 
     private ForkJoinPool getForkJoinPool() {
-        return this.forkJoinPool;
+        return forkJoinPool;
     }
 }

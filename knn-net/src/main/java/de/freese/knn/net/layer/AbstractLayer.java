@@ -48,27 +48,27 @@ public abstract class AbstractLayer implements Layer {
 
     @Override
     public Function getFunction() {
-        return this.function;
+        return function;
     }
 
     @Override
     public Matrix getInputMatrix() {
-        return this.inputMatrix;
+        return inputMatrix;
     }
 
     @Override
     public NeuronList getNeurons() {
-        return this.neurons;
+        return neurons;
     }
 
     @Override
     public Matrix getOutputMatrix() {
-        return this.outputMatrix;
+        return outputMatrix;
     }
 
     @Override
     public int getSize() {
-        return this.size;
+        return size;
     }
 
     @Override

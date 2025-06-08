@@ -40,18 +40,18 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
 
     @Override
     protected void compute() {
-        if ((this.to - this.from) < 20) {
-            final Layer[] l = Arrays.copyOfRange(this.layers, this.from, this.to);
+        if ((to - from) < 20) {
+            final Layer[] l = Arrays.copyOfRange(layers, from, to);
 
             for (Layer layer : l) {
-                this.math.initialize(layer, this.valueInitializer);
+                math.initialize(layer, valueInitializer);
             }
         }
         else {
-            final int middle = (this.from + this.to) / 2;
+            final int middle = (from + to) / 2;
 
-            final ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, this.from, middle);
-            final ForkJoinInitializeTask task2 = new ForkJoinInitializeTask(this.math, this.layers, this.valueInitializer, middle, this.to);
+            final ForkJoinInitializeTask task1 = new ForkJoinInitializeTask(math, layers, valueInitializer, from, middle);
+            final ForkJoinInitializeTask task2 = new ForkJoinInitializeTask(math, layers, valueInitializer, middle, to);
 
             invokeAll(task1, task2);
         }

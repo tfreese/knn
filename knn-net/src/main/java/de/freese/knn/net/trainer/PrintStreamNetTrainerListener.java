@@ -33,6 +33,6 @@ public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener {
             return;
         }
 
-        this.printStream.println(toString(event));
+        printStream.println(toString(event));
     }
 }

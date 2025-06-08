@@ -119,7 +119,7 @@ public final class ImageUtils {
         //
         // blackWhiteImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_INDEXED, colorModel);
         //
-        // final Graphics2D g2d = this.blackWhiteImage.createGraphics();
+        // final Graphics2D g2d = blackWhiteImage.createGraphics();
         // g2d.drawRenderedImage(getEdgeImage(), null);
         // g2d.dispose();
         //
@@ -128,8 +128,7 @@ public final class ImageUtils {
         // final short[] green = new short[256];
         // final short[] blue = new short[256];
         //
-        // for (int i = 0; i < 255; i++)
-        // {
+        // for (int i = 0; i < 255; i++) {
         // red[i]=255;
         // green[i]=255;
         // blue[i]=255;

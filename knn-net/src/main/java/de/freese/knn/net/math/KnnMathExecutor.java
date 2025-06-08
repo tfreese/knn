@@ -112,7 +112,7 @@ public final class KnnMathExecutor extends AbstractKnnMath {
     }
 
     private Executor getExecutor() {
-        return this.executor;
+        return executor;
     }
 
     /**

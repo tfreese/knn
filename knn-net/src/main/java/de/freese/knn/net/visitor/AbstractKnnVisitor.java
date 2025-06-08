@@ -20,8 +20,8 @@ public abstract class AbstractKnnVisitor implements Visitor {
     private Map<Layer, double[]> values = new HashMap<>();
 
     public void clear() {
-        this.values.clear();
-        this.values = null;
+        values.clear();
+        values = null;
     }
 
     @Override
@@ -41,11 +41,11 @@ public abstract class AbstractKnnVisitor implements Visitor {
     }
 
     protected KnnMath getMath() {
-        return this.knnMath;
+        return knnMath;
     }
 
     protected Map<Layer, double[]> getValues() {
-        return this.values;
+        return values;
     }
 
     protected abstract void visitHiddenLayer(Layer layer);
@@ -53,7 +53,7 @@ public abstract class AbstractKnnVisitor implements Visitor {
     protected abstract void visitInputLayer(InputLayer layer);
 
     protected void visitKnn(final NeuralNet knn) {
-        this.knnMath = knn.getMath();
+        knnMath = knn.getMath();
     }
 
     protected abstract void visitOutputLayer(OutputLayer layer);

@@ -46,12 +46,12 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         @Override
         public void run() {
             while (!Thread.interrupted()) {
-                if (this.stopped) {
+                if (stopped) {
                     break;
                 }
 
                 try {
-                    final Runnable runnable = this.queue.take();
+                    final Runnable runnable = queue.take();
 
                     runnable.run();
                 }
@@ -70,7 +70,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         }
 
         void stopWorker() {
-            this.stopped = true;
+            stopped = true;
 
             interrupt();
         }
@@ -84,11 +84,11 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         super(parallelism);
 
         for (int i = 1; i <= parallelism; i++) {
-            final QueueWorker worker = new QueueWorker(this.queue);
+            final QueueWorker worker = new QueueWorker(queue);
             worker.setName(worker.getClass().getSimpleName() + "-" + i);
             worker.setDaemon(false);
 
-            this.workers.add(worker);
+            workers.add(worker);
             worker.start();
         }
     }
@@ -115,9 +115,9 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
 
     @Override
     public void close() {
-        this.workers.forEach(QueueWorker::stopWorker);
+        workers.forEach(QueueWorker::stopWorker);
 
-        this.workers.clear();
+        workers.clear();
         getQueue().clear();
     }
 
@@ -176,7 +176,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
     }
 
     private BlockingQueue<Runnable> getQueue() {
-        return this.queue;
+        return queue;
     }
 
     /**

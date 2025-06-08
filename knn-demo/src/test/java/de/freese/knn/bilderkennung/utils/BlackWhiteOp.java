@@ -93,7 +93,7 @@ public class BlackWhiteOp implements BufferedImageOp {
                 final int green = (pixel >> 8) & 0xff;
                 final int blue = pixel & 0xff;
 
-                if (red > this.colorLimit || green > this.colorLimit || blue > this.colorLimit) {
+                if (red > colorLimit || green > colorLimit || blue > colorLimit) {
                     //
                     // int rgb = ((255 & 0xFF) << 24) | ((255 & 0xFF) << 16) | ((255 & 0xFF) << 8) |
                     // ((255 & 0xFF) << 0);
@@ -128,6 +128,6 @@ public class BlackWhiteOp implements BufferedImageOp {
 
     @Override
     public RenderingHints getRenderingHints() {
-        return this.hints;
+        return hints;
     }
 }

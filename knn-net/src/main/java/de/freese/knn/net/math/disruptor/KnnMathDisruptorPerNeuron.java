@@ -50,7 +50,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
         public void onEvent(final RunnableEvent event, final long sequence, final boolean endOfBatch) {
             // Load-Balancing auf die Handler über die Sequence.
             // Sonst würden alle Handler gleichzeitig eine Sequence bearbeiten.
-            if (this.ordinal == -1 || this.ordinal == (sequence % this.parallelism)) {
+            if (ordinal == -1 || ordinal == (sequence % parallelism)) {
                 event.runnable.run();
 
                 event.runnable = null;
@@ -79,7 +79,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
             throw new IllegalArgumentException("bufferSize must be a power of 2");
         }
 
-        this.disruptor = new Disruptor<>(RunnableEvent::new, ringBufferSize, new NamedThreadFactory("knn-disruptor-%d"));
+        disruptor = new Disruptor<>(RunnableEvent::new, ringBufferSize, new NamedThreadFactory("knn-disruptor-%d"));
 
         final EventHandler<RunnableEvent>[] handlers = new RunnableHandler[parallelism];
 
@@ -87,9 +87,9 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
             handlers[i] = new RunnableHandler(parallelism, i);
         }
 
-        this.disruptor.handleEventsWith(handlers);
+        disruptor.handleEventsWith(handlers);
 
-        this.disruptor.start();
+        disruptor.start();
     }
 
     @Override
@@ -124,10 +124,10 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
     @Override
     public void close() {
         // Nur notwendig, wenn die Event-Publizierung noch nicht abgeschlossen ist.
-        // this.disruptor.halt();
+        // disruptor.halt();
 
         try {
-            this.disruptor.shutdown(5, TimeUnit.SECONDS);
+            disruptor.shutdown(5, TimeUnit.SECONDS);
         }
         catch (Exception ex) {
             getLogger().error(ex.getMessage(), ex);
@@ -199,7 +199,7 @@ public class KnnMathDisruptorPerNeuron extends AbstractKnnMath {
     }
 
     private Disruptor<RunnableEvent> getDisruptor() {
-        return this.disruptor;
+        return disruptor;
     }
 
     /**

@@ -31,28 +31,28 @@ public class NetTrainerCycleEndedEvent extends EventObject {
      * Netzfehler.
      */
     public double getError() {
-        return this.error;
+        return error;
     }
 
     /**
      * Lernzyklus.
      */
     public int getIteration() {
-        return this.iteration;
+        return iteration;
     }
 
     /**
      * Aktuelles Momentum.
      */
     public double getMomentum() {
-        return this.momentum;
+        return momentum;
     }
 
     /**
      * Aktuelle Lernrate.
      */
     public double getTeachFactor() {
-        return this.teachFactor;
+        return teachFactor;
     }
 
     @Override

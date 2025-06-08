@@ -28,7 +28,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
 
         this.executor = Objects.requireNonNull(executor, "executor required");
 
-        this.completionService = new ExecutorCompletionService<>(executor);
+        completionService = new ExecutorCompletionService<>(executor);
     }
 
     @Override
@@ -111,11 +111,11 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
     }
 
     private CompletionService<Void> getCompletionService() {
-        return this.completionService;
+        return completionService;
     }
 
     @SuppressWarnings("unused")
     private Executor getExecutor() {
-        return this.executor;
+        return executor;
     }
 }

@@ -116,7 +116,7 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
     }
 
     private ExecutorService getExecutorService() {
-        return this.executorService;
+        return executorService;
     }
 
     /**

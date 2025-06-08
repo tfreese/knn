@@ -31,13 +31,13 @@ public final class KnnMathReactor extends AbstractKnnMath {
         // #fromExecutorService(ExecutorService) to create new instances around {@link java.util.concurrent.Executors}
 
         // Recht langsam
-        // this.scheduler = Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-");
+        // scheduler = Schedulers.newBoundedElastic(parallelism, Integer.MAX_VALUE, "knn-scheduler-");
 
         // Recht langsam
-        // this.scheduler = Schedulers.newParallel("knn-scheduler-", parallelism);
+        // scheduler = Schedulers.newParallel("knn-scheduler-", parallelism);
 
         // Recht schnell
-        this.scheduler = Schedulers.fromExecutor(Executors.newFixedThreadPool(parallelism, new NamedThreadFactory("knn-scheduler-%d")));
+        scheduler = Schedulers.fromExecutor(Executors.newFixedThreadPool(parallelism, new NamedThreadFactory("knn-scheduler-%d")));
     }
 
     @Override
@@ -124,7 +124,7 @@ public final class KnnMathReactor extends AbstractKnnMath {
     }
 
     private Scheduler getScheduler() {
-        return this.scheduler;
+        return scheduler;
     }
 
     // @Override

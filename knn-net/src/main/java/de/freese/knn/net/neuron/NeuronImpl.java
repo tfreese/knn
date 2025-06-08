@@ -26,12 +26,12 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public Function getFunction() {
-        return this.layer.getFunction();
+        return layer.getFunction();
     }
 
     @Override
     public double getInputBIAS() {
-        return this.inputBIAS;
+        return inputBIAS;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public int getLayerIndex() {
-        return this.layerIndex;
+        return layerIndex;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public void setInputBIAS(final double value) {
-        this.inputBIAS = value;
+        inputBIAS = value;
     }
 
     @Override
@@ -110,8 +110,8 @@ public class NeuronImpl implements Neuron {
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("Neuron: ");
-        sb.append("layerIndex=").append(this.layerIndex);
-        sb.append("/").append(this.layer.getSize() - 1);
+        sb.append("layerIndex=").append(layerIndex);
+        sb.append("/").append(layer.getSize() - 1);
 
         return sb.toString();
     }
@@ -121,7 +121,7 @@ public class NeuronImpl implements Neuron {
      * Der {@link InputLayer} hat keine Eingangsmatrix !
      */
     protected Matrix getInputMatrix() {
-        return this.layer.getInputMatrix();
+        return layer.getInputMatrix();
     }
 
     /**
@@ -129,6 +129,6 @@ public class NeuronImpl implements Neuron {
      * Der {@link OutputLayer} hat keine Ausgangsmatrix !
      */
     protected Matrix getOutputMatrix() {
-        return this.layer.getOutputMatrix();
+        return layer.getOutputMatrix();
     }
 }

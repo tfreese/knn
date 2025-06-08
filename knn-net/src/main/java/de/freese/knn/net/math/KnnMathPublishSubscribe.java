@@ -42,7 +42,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     //
     // @Override
     // public void onComplete() {
-    // this.latch.countDown();
+    // latch.countDown();
     // }
     //
     // @Override
@@ -123,7 +123,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
 
         for (Layer layer : layers) {
             // InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
-            // this.executorService.execute(task);
+            // executorService.execute(task);
             getExecutor().execute(() -> {
                 initialize(layer, valueInitializer);
 
@@ -153,7 +153,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     }
 
     private Executor getExecutor() {
-        return this.executor;
+        return executor;
     }
 
     /**

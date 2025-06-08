@@ -22,7 +22,7 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
     public KnnMathVirtualThread() {
         super();
 
-        this.threadFactory = Thread.ofVirtual().factory();
+        threadFactory = Thread.ofVirtual().factory();
     }
 
     @Override
@@ -30,7 +30,7 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
         final double[] errors = visitor.getLastErrors();
         final double[] layerErrors = new double[layer.getSize()];
 
-        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
+        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory)) {
             layer.getNeurons().forEach(neuron -> executorService.execute(() -> backward(neuron, errors, layerErrors)));
         }
 
@@ -42,7 +42,7 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
         final double[] inputs = visitor.getLastOutputs();
         final double[] outputs = new double[layer.getSize()];
 
-        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
+        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory)) {
             layer.getNeurons().forEach(neuron -> executorService.execute(() -> forward(neuron, inputs, outputs)));
         }
 
@@ -51,7 +51,7 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
+        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory)) {
             for (Layer layer : layers) {
                 executorService.execute(() -> initialize(layer, valueInitializer));
             }
@@ -64,7 +64,7 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
         final double[][] deltaWeights = visitor.getDeltaWeights(leftLayer);
         final double[] rightErrors = visitor.getErrors(rightLayer);
 
-        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(this.threadFactory)) {
+        try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory)) {
             leftLayer.getNeurons().forEach(neuron -> executorService.execute(() -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)));
         }
     }
