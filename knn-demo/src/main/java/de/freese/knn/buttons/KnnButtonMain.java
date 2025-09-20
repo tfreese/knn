@@ -34,7 +34,7 @@ public class KnnButtonMain extends JFrame {
     @Serial
     private static final long serialVersionUID = -2245301418603208848L;
 
-    public static void main(final String[] args) {
+    static void main() {
         // Training
         // int parallelism = Runtime.getRuntime().availableProcessors();
 

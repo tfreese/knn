@@ -36,7 +36,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
 public final class TestPersisterBinary {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestPersisterBinary.class);
 
-    public static void main(final String[] args) throws Exception {
+    static void main() throws Exception {
         final TrainingInputSource trainingInputSource = new KnnButtonTrainingInputSource();
         final Path knnFile = Paths.get(System.getProperty("java.io.tmpdir"), "ButtonNeuralNet.bin");
 

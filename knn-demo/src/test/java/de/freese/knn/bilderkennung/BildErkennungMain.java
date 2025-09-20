@@ -29,7 +29,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
 public final class BildErkennungMain {
     private static final Logger LOGGER = LoggerFactory.getLogger(BildErkennungMain.class);
 
-    public static void main(final String[] args) throws Exception {
+    static void main() throws Exception {
         // final TrainingInputSource trainingInputSource = new ImageInfoTrainingInputSource();
         final TrainingInputSource trainingInputSource = new ImagePixelTrainingInputSource();
 

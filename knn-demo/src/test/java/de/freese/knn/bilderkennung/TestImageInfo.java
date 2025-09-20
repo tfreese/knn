@@ -14,7 +14,7 @@ import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
  * @author Thomas Freese
  */
 public final class TestImageInfo {
-    public static void main(final String[] args) throws Exception {
+    static void main() throws Exception {
         final String fileName;
         // fileName = "Ampel.gif";
         // fileName = "Bahnkreuz.gif";

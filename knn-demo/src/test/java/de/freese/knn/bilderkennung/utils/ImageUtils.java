@@ -48,7 +48,7 @@ public final class ImageUtils {
         try {
             pg.grabPixels();
         }
-        catch (InterruptedException ex) {
+        catch (InterruptedException _) {
             // Ignore
         }
 
@@ -185,8 +185,8 @@ public final class ImageUtils {
 
             bimage = gc.createCompatibleImage(image.getWidth(null), image.getHeight(null), transparency);
         }
-        catch (HeadlessException ex) {
-            // Keine GUI vorhanden
+        catch (HeadlessException _) {
+            // No GUI.
         }
 
         if (bimage == null) {

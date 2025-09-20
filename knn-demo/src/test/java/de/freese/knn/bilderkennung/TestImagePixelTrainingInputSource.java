@@ -116,7 +116,7 @@ public class TestImagePixelTrainingInputSource extends JFrame {
         }
     }
 
-    public static void main(final String[] args) throws Exception {
+    static void main() throws Exception {
         final TestImagePixelTrainingInputSource imageTest = new TestImagePixelTrainingInputSource();
         imageTest.setVisible(true);
     }

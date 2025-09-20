@@ -31,7 +31,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
 public class TestMailSpamFilter implements TrainingInputSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMailSpamFilter.class);
 
-    public static void main(final String[] args) throws Exception {
+    static void main() throws Exception {
 
         final DataSource dataSource = createDataSource();
 

@@ -49,7 +49,7 @@ public final class KnnUtils {
                 logger.info("ExecutorService terminated");
             }
         }
-        catch (InterruptedException iex) {
+        catch (InterruptedException _) {
             logger.warn("Interrupted while waiting for ExecutorService");
 
             // (Re-)Cancel if current thread also interrupted.
