@@ -68,15 +68,15 @@ project("knn-demo") {
         // testImplementation("org.springframework:spring-jdbc")
     }
     ext {
-        main = "de.freese.knn.buttons.KnnButtonMain"
+        mainClazz = "de.freese.knn.buttons.KnnButtonMain"
     }
     application {
-        mainClass = project.main
+        mainClass = mainClazz
     }
     jar {
         manifest {
             attributes(
-                    "Main-Class": project.main
+                    "Main-Class": mainClazz
             )
         }
     }
