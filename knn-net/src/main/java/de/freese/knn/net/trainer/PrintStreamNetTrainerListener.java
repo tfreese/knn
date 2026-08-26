@@ -1,4 +1,3 @@
-// Created: 11.06.2008
 package de.freese.knn.net.trainer;
 
 import java.io.PrintStream;
@@ -8,6 +7,7 @@ import java.util.Objects;
  * {@link NetTrainerListener} für die Ausgabe auf einen {@link PrintStream}.
  *
  * @author Thomas Freese
+ * @since 11.06.2008
  */
 public class PrintStreamNetTrainerListener extends AbstractNetTrainerListener {
     private final PrintStream printStream;

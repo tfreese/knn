@@ -1,4 +1,3 @@
-// Created: 04.04.2012
 package de.freese.knn.net.math;
 
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ import de.freese.knn.net.visitor.BackwardVisitor;
  * Basisklasse der Mathematik des {@link NeuralNet}.
  *
  * @author Thomas Freese
+ * @since 04.04.2012
  */
 public abstract class AbstractKnnMath implements KnnMath {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -31,11 +31,11 @@ public abstract class AbstractKnnMath implements KnnMath {
     }
 
     protected AbstractKnnMath(final int parallelism) {
-        super();
-
         if (parallelism <= 0) {
             throw new IllegalArgumentException("parallelism must >= 1");
         }
+
+        super();
 
         this.parallelism = parallelism;
     }
@@ -159,7 +159,7 @@ public abstract class AbstractKnnMath implements KnnMath {
         final List<NeuronList> partitions = new ArrayList<>(partitionCount);
         int fromIndex = 0;
 
-        for (int partitionSize : partitionSizes) {
+        for (final int partitionSize : partitionSizes) {
             partitions.add(neurons.subList(fromIndex, fromIndex + partitionSize));
 
             fromIndex += partitionSize;
@@ -190,10 +190,8 @@ public abstract class AbstractKnnMath implements KnnMath {
             // Diese Methode wird selbst schon parallel ausgeführt !
             //            IntStream.range(0, matrix.getOutputSize())
             //                    .parallel()
-            //                    .forEach(column ->
-            //                    {
-            //                        for (int row = 0; row < matrix.getInputSize(); row++)
-            //                        {
+            //                    .forEach(column -> {
+            //                        for (int row = 0; row < matrix.getInputSize(); row++) {
             //                            double weight = valueInitializer.createNextValue();
             //                            matrix.getWeights()[row][column] = weight;
             //                        }

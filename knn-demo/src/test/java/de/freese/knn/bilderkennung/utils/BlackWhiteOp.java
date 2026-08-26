@@ -1,4 +1,3 @@
-// Created: 17.07.2008
 package de.freese.knn.bilderkennung.utils;
 
 import java.awt.Color;
@@ -14,6 +13,7 @@ import java.awt.image.IndexColorModel;
  * Erstellt ein reines Schwarz/Weiß Bild, indem alle Pixel die NICHT Schwarz sind, in Weiß umgewandelt werden.
  *
  * @author Thomas Freese
+ * @since 17.07.2008
  */
 public class BlackWhiteOp implements BufferedImageOp {
     private final int colorLimit;

@@ -1,4 +1,3 @@
-// Created: 17.07.2011
 package de.freese.knn.net.trainer;
 
 import java.io.PrintStream;
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
  * {@link NetTrainerListener} für die Ausgabe auf einen {@link PrintStream}.
  *
  * @author Thomas Freese
+ * @since 17.07.2011
  */
 public class LoggerNetTrainerListener extends AbstractNetTrainerListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggerNetTrainerListener.class);

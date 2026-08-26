@@ -1,4 +1,3 @@
-// Created: 03.07.2020
 package de.freese.knn.neuron;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,12 +21,19 @@ import de.freese.knn.net.neuron.NeuronList;
 
 /**
  * @author Thomas Freese
+ * @since 03.07.2020
  */
 class TestNeuronList {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestNeuronList.class);
 
     static Neuron[] createNeurons() {
-        return new Neuron[]{new NeuronImpl(null, 0), new NeuronImpl(null, 1), new NeuronImpl(null, 2), new NeuronImpl(null, 3), new NeuronImpl(null, 4)};
+        return new Neuron[]{
+                new NeuronImpl(null, 0),
+                new NeuronImpl(null, 1),
+                new NeuronImpl(null, 2),
+                new NeuronImpl(null, 3),
+                new NeuronImpl(null, 4)
+        };
     }
 
     static Stream<Neuron[]> createNeuronsAsStream() {
@@ -69,7 +75,7 @@ class TestNeuronList {
 
         int i = 0;
 
-        for (Neuron neuron : neuronList) {
+        for (final Neuron neuron : neuronList) {
             assertEquals(i++, neuron.getLayerIndex());
         }
 
@@ -239,7 +245,7 @@ class TestNeuronList {
         final List<List<String>> partitions = new ArrayList<>(partitionCount);
         int fromIndex = 0;
 
-        for (int partitionSize : partitionSizes) {
+        for (final int partitionSize : partitionSizes) {
             partitions.add(values.subList(fromIndex, fromIndex + partitionSize));
 
             fromIndex += partitionSize;

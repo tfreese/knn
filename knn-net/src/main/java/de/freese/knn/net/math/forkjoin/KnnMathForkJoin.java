@@ -1,4 +1,3 @@
-// Created: 02.10.2011
 package de.freese.knn.net.math.forkjoin;
 
 import java.util.Objects;
@@ -16,6 +15,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Mathematik des {@link NeuralNet} mit dem ForkJoin-Framework.
  *
  * @author Thomas Freese
+ * @since 02.10.2011
  */
 public final class KnnMathForkJoin extends AbstractKnnMath {
     private final ForkJoinPool forkJoinPool;

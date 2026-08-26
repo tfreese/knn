@@ -1,4 +1,3 @@
-// Created: 15.04.2008
 package de.freese.knn.buttons;
 
 import java.awt.BorderLayout;
@@ -28,6 +27,7 @@ import de.freese.knn.net.trainer.NetTrainer;
  * GUI.
  *
  * @author Thomas Freese
+ * @since 15.04.2008
  */
 public class KnnButtonMain extends JFrame {
     private static final Logger LOGGER = LoggerFactory.getLogger(KnnButtonMain.class);
@@ -78,7 +78,7 @@ public class KnnButtonMain extends JFrame {
                     neuralNet.close();
                     System.exit(0);
                 }
-                catch (Exception ex) {
+                catch (final Exception ex) {
                     LOGGER.error(ex.getMessage(), ex);
                     System.exit(-1);
                 }

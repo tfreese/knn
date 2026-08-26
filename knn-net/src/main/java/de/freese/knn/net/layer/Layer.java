@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net.layer;
 
 import de.freese.knn.net.function.Function;
@@ -10,6 +9,7 @@ import de.freese.knn.net.visitor.Visitable;
  * Interface eines Layers.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public interface Layer extends Visitable {
     /**

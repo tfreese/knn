@@ -1,4 +1,3 @@
-// Created: 13.02.2019
 package de.freese.knn.net;
 
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import de.freese.knn.net.matrix.ValueInitializerRandom;
 
 /**
  * @author Thomas Freese
+ * @since 13.02.2019
  */
 public class NeuralNetBuilder {
     private final List<HiddenLayer> hiddenLayers = new ArrayList<>();
@@ -49,7 +49,7 @@ public class NeuralNetBuilder {
             throw new IllegalArgumentException("HiddenLayer required");
         }
 
-        for (HiddenLayer l : hiddenLayers) {
+        for (final HiddenLayer l : hiddenLayers) {
             neuralNet.addLayer(l);
         }
 

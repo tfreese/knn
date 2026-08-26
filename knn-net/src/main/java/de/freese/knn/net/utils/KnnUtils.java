@@ -1,4 +1,3 @@
-// Created: 03.07.2020
 package de.freese.knn.net.utils;
 
 import java.util.Optional;
@@ -10,6 +9,7 @@ import org.slf4j.Logger;
 
 /**
  * @author Thomas Freese
+ * @since 03.07.2020
  */
 public final class KnnUtils {
     public static final int DEFAULT_POOL_SIZE = Optional.ofNullable(Integer.getInteger("knn.defaultPoolSize")).orElseGet(() -> Runtime.getRuntime().availableProcessors());
@@ -27,7 +27,7 @@ public final class KnnUtils {
 
         try {
             // Wait a while for existing tasks to terminate.
-            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
+            if (!executorService.awaitTermination(10L, TimeUnit.SECONDS)) {
                 logger.warn("Timed out while waiting for ExecutorService");
 
                 // Cancel currently executing tasks.
@@ -37,8 +37,8 @@ public final class KnnUtils {
                         .forEach(future -> future.cancel(true))
                 ;
 
-                // Wait a while for tasks to respond to being cancelled.
-                if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                // Wait a while for tasks to respond to being canceled.
+                if (!executorService.awaitTermination(5L, TimeUnit.SECONDS)) {
                     logger.error("ExecutorService did not terminate");
                 }
                 else {

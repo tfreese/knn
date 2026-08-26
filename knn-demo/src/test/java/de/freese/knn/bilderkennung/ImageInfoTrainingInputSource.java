@@ -1,4 +1,3 @@
-// Created: 02.08.2009
 package de.freese.knn.bilderkennung;
 
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
 
 /**
  * @author Thomas Freese
+ * @since 02.08.2009
  */
 public class ImageInfoTrainingInputSource implements TrainingInputSource {
     private final List<ImageInfo> imageInfos = new ArrayList<>();

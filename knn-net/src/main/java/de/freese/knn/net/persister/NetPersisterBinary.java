@@ -1,4 +1,3 @@
-// Created: 11.06.2008
 package de.freese.knn.net.persister;
 
 import java.io.DataInput;
@@ -27,6 +26,7 @@ import de.freese.knn.net.neuron.NeuronList;
  * {@link NetPersister} für das Laden und speichen eines neuralen Netzes im Binärformat.
  *
  * @author Thomas Freese
+ * @since 11.06.2008
  */
 public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
     @Override
@@ -83,7 +83,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
         final String clazzName = input.readUTF();
 
         final Class<?> clazz = Class.forName(clazzName);
-        Function function = null;
+        final Function function;
 
         // Function-Parameter
         if (FunctionBinary.class.equals(clazz)) {
@@ -143,7 +143,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
         }
 
         // BIAS Gewichte der Neuronen
-        for (Neuron neuron : layer.getNeurons()) {
+        for (final Neuron neuron : layer.getNeurons()) {
             neuron.setInputBIAS(input.readDouble());
         }
 
@@ -171,15 +171,15 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
         output.writeUTF(function.getClass().getName());
 
         // Function-Parameter
-        if (function instanceof FunctionBinary f) {
-            output.writeDouble(f.getThreshold());
+        if (function instanceof FunctionBinary(final double threshold)) {
+            output.writeDouble(threshold);
         }
-        else if (function instanceof FunctionLinear f) {
-            output.writeDouble(f.getFactor());
+        else if (function instanceof FunctionLinear(final double factor)) {
+            output.writeDouble(factor);
         }
-        else if (function instanceof FunctionSigmoid f) {
-            output.writeDouble(f.getDurchgang());
-            output.writeDouble(f.getSteigung());
+        else if (function instanceof FunctionSigmoid(final double durchgang, final double steigung)) {
+            output.writeDouble(durchgang);
+            output.writeDouble(steigung);
         }
     }
 
@@ -195,7 +195,7 @@ public class NetPersisterBinary implements NetPersister<DataInput, DataOutput> {
         saveFunction(output, layer.getFunction());
 
         // BIAS Gewichte
-        for (Neuron neuron : neurons) {
+        for (final Neuron neuron : neurons) {
             output.writeDouble(neuron.getInputBIAS());
         }
     }

@@ -26,16 +26,16 @@ public abstract class AbstractKnnVisitor implements Visitor {
 
     @Override
     public void visitObject(final Object object) {
-        if (object instanceof NeuralNet o) {
+        if (object instanceof final NeuralNet o) {
             visitKnn(o);
         }
-        else if (object instanceof InputLayer o) {
+        else if (object instanceof final InputLayer o) {
             visitInputLayer(o);
         }
-        else if (object instanceof OutputLayer o) {
+        else if (object instanceof final OutputLayer o) {
             visitOutputLayer(o);
         }
-        else if (object instanceof Layer o) {
+        else if (object instanceof final Layer o) {
             visitHiddenLayer(o);
         }
     }

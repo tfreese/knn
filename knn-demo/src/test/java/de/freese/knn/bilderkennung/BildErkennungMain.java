@@ -1,4 +1,3 @@
-// Created: 15.07.2008
 package de.freese.knn.bilderkennung;
 
 import java.awt.Toolkit;
@@ -25,6 +24,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * Testklasse.
  *
  * @author Thomas Freese
+ * @since 15.07.2008
  */
 public final class BildErkennungMain {
     private static final Logger LOGGER = LoggerFactory.getLogger(BildErkennungMain.class);

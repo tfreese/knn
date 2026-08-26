@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net;
 
 import java.util.Arrays;
@@ -16,6 +15,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Basisklasse des neuralen Netzes.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 class NeuralNetImpl implements NeuralNet {
     private KnnMath knnMath;

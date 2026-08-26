@@ -1,10 +1,10 @@
-// Created: 16.04.2008
 package de.freese.knn.net.function;
 
 /**
  * Verrechnen der Eingangswerte durch die Sinus Funktion.
  *
  * @author Thomas Freese
+ * @since 16.04.2008
  */
 public class FunctionSinus implements Function {
     @Override

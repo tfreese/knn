@@ -1,4 +1,3 @@
-// Created: 17.04.2008
 package de.freese.knn.buttons;
 
 import java.awt.BorderLayout;
@@ -19,6 +18,7 @@ import de.freese.knn.net.NeuralNet;
  * Panel der Buttons
  *
  * @author Thomas Freese
+ * @since 17.04.2008
  */
 public class KnnButtonPanel extends JPanel implements ActionListener {
     public static final int MAT_HEIGHT = 9;

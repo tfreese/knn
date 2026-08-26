@@ -1,4 +1,3 @@
-// Created: 02.10.2011
 package de.freese.knn.net.math;
 
 import java.util.List;
@@ -18,6 +17,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Mathematik des {@link NeuralNet} mit dem {@link ExecutorService}-Framework.
  *
  * @author Thomas Freese
+ * @since 02.10.2011
  */
 public final class KnnMathExecutor extends AbstractKnnMath {
     private final Executor executor;
@@ -36,7 +36,7 @@ public final class KnnMathExecutor extends AbstractKnnMath {
         final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         final CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             getExecutor().execute(() -> {
                 partition.forEach(neuron -> backward(neuron, errors, layerErrors));
 
@@ -63,7 +63,7 @@ public final class KnnMathExecutor extends AbstractKnnMath {
         final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         final CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             getExecutor().execute(() -> {
                 partition.forEach(neuron -> forward(neuron, inputs, outputs));
 
@@ -80,7 +80,7 @@ public final class KnnMathExecutor extends AbstractKnnMath {
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         final CountDownLatch latch = new CountDownLatch(layers.length);
 
-        for (Layer layer : layers) {
+        for (final Layer layer : layers) {
             getExecutor().execute(() -> {
                 initialize(layer, valueInitializer);
 
@@ -100,7 +100,7 @@ public final class KnnMathExecutor extends AbstractKnnMath {
         final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
         final CountDownLatch latch = new CountDownLatch(partitions.size());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             getExecutor().execute(() -> {
                 partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
 
@@ -122,16 +122,16 @@ public final class KnnMathExecutor extends AbstractKnnMath {
         try {
             latch.await();
         }
-        catch (RuntimeException rex) {
+        catch (final RuntimeException rex) {
             throw rex;
         }
-        catch (InterruptedException ex) {
+        catch (final InterruptedException ex) {
             getLogger().error(ex.getMessage(), ex);
 
             // Restore interrupted state.
             Thread.currentThread().interrupt();
         }
-        catch (Throwable th) {
+        catch (final Throwable th) {
             throw new RuntimeException(th);
         }
     }

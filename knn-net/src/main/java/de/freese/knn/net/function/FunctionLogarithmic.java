@@ -1,10 +1,10 @@
-// Created: 16.04.2008
 package de.freese.knn.net.function;
 
 /**
  * Verrechnen der Eingangswerte durch die Logarithmusfunktion.
  *
  * @author Thomas Freese
+ * @since 16.04.2008
  */
 public class FunctionLogarithmic implements Function {
     @Override

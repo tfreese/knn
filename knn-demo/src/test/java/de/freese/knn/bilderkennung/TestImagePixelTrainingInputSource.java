@@ -1,4 +1,3 @@
-// Created: 12.07.2008
 package de.freese.knn.bilderkennung;
 
 import java.awt.BorderLayout;
@@ -23,6 +22,7 @@ import de.freese.knn.bilderkennung.utils.ImageData;
  * Testklasse.
  *
  * @author Thomas Freese
+ * @since 12.07.2008
  */
 public class TestImagePixelTrainingInputSource extends JFrame {
     @Serial

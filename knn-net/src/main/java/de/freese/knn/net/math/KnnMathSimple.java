@@ -1,4 +1,3 @@
-// Created: 02.10.2011
 package de.freese.knn.net.math;
 
 import de.freese.knn.net.NeuralNet;
@@ -8,9 +7,10 @@ import de.freese.knn.net.visitor.BackwardVisitor;
 import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
- * Mathematik des {@link NeuralNet} für die sequentielle Verarbeitung im aktuellen Thread.
+ * Mathematik des {@link NeuralNet} für die sequenzielle Verarbeitung im aktuellen Thread.
  *
  * @author Thomas Freese
+ * @since 02.10.2011
  */
 public final class KnnMathSimple extends AbstractKnnMath {
     public KnnMathSimple() {
@@ -39,7 +39,7 @@ public final class KnnMathSimple extends AbstractKnnMath {
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        for (Layer layer : layers) {
+        for (final Layer layer : layers) {
             initialize(layer, valueInitializer);
         }
     }

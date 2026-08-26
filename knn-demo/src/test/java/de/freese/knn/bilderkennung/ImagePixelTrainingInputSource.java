@@ -1,4 +1,3 @@
-// Created: 15.07.2008
 package de.freese.knn.bilderkennung;
 
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * TrainingInputSource für die Mustererkennung von Bildern.
  *
  * @author Thomas Freese
+ * @since 15.07.2008
  */
 public class ImagePixelTrainingInputSource implements TrainingInputSource {
     private final List<ImageData> imageDataList = new ArrayList<>();

@@ -1,4 +1,3 @@
-// 12.07.2008
 package de.freese.knn.bilderkennung.utils;
 
 import java.awt.Color;
@@ -12,6 +11,7 @@ import javax.imageio.ImageIO;
  * Enthält die Bildinformationen.
  *
  * @author Thomas Freese
+ * @since 12.07.2008
  */
 public class ImageData {
     private final BufferedImage sourceImage;

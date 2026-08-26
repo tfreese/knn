@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net.matrix;
 
 /**
@@ -6,6 +5,7 @@ package de.freese.knn.net.matrix;
  * Die Rows sind die Neuronen des 1. Layers, die Columns die Neuronen des 2. Layers.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public class Matrix {
     private final int inputSize;

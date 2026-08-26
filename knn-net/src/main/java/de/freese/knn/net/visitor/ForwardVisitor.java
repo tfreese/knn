@@ -1,4 +1,3 @@
-// Created: 12.06.2011
 package de.freese.knn.net.visitor;
 
 import de.freese.knn.net.NeuralNet;
@@ -10,6 +9,7 @@ import de.freese.knn.net.layer.OutputLayer;
  * Durchläuft vorwärts das Netz und sammelt die Outputs der Layer ein.
  *
  * @author Thomas Freese
+ * @since 12.06.2011
  */
 public class ForwardVisitor extends AbstractKnnVisitor {
     /**

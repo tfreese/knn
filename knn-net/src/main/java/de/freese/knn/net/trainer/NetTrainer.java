@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net.trainer;
 
 import javax.swing.event.EventListenerList;
@@ -15,6 +14,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Trainer für das neurale Netz.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public class NetTrainer {
     private static final Logger LOGGER = LoggerFactory.getLogger(NetTrainer.class);

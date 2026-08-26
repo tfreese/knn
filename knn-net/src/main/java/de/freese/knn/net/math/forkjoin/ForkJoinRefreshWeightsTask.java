@@ -1,4 +1,3 @@
-// Created: 04.04.2012
 package de.freese.knn.net.math.forkjoin;
 
 import java.io.Serial;
@@ -10,6 +9,7 @@ import de.freese.knn.net.neuron.NeuronList;
  * Aktualisiert die Gewichte eines Layers aus den Fehlern und Ausgangswerten des nachfolgenden Layers.
  *
  * @author Thomas Freese
+ * @since 04.04.2012
  */
 class ForkJoinRefreshWeightsTask extends RecursiveAction// RecursiveTask<double[]>
 {

@@ -1,4 +1,3 @@
-// Created: 11.06.2008
 package de.freese.knn;
 
 import java.io.BufferedInputStream;
@@ -32,6 +31,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * Klasse zum Test des BinaryPersisters.
  *
  * @author Thomas Freese
+ * @since 11.06.2008
  */
 public final class TestPersisterBinary {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestPersisterBinary.class);

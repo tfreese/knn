@@ -39,7 +39,7 @@ public final class ImageUtils {
      * Liefert true, wenn das {@link Image} transparente Pixel enthält.
      */
     public static boolean hasAlpha(final Image image) {
-        if (image instanceof BufferedImage bi) {
+        if (image instanceof final BufferedImage bi) {
             return bi.getColorModel().hasAlpha();
         }
 

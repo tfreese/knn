@@ -1,4 +1,3 @@
-// Created: 02.08.2009
 package de.freese.knn.bilderkennung.utils.image.info;
 
 import java.awt.image.BufferedImage;
@@ -8,6 +7,7 @@ import java.awt.image.ColorModel;
  * Klasse für Informationen eines Bild-Farbkanals.
  *
  * @author Thomas Freese
+ * @since 02.08.2009
  */
 public class ImageColorChannelInfo {
     private final BufferedImage bufferedImage;
@@ -99,19 +99,16 @@ public class ImageColorChannelInfo {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("ChannelInfo: ").append(getColorChannel()).append("\n");
-        sb.append("Minimaler Farbwert: ").append(getMinimalerFarbwert()).append("\n");
-        sb.append("Maximaler Farbwert: ").append(getMaximalerFarbwert()).append("\n");
-        sb.append("Mittlerer Farbwert: ").append(getMittlererFarbwert()).append("\n");
-        sb.append("Entropie: ").append(getEntropie()).append("\n");
-        sb.append("Uniformität: ").append(getUniformitaet()).append("\n");
-        sb.append("Unähnlichkeit: ").append(getUnaehnlichkeit()).append("\n");
-        sb.append("Inverse Differenz: ").append(getInverseDifferenz()).append("\n");
-        sb.append("Inverses Differenz Moment: ").append(getInversesDifferenzMoment()).append("\n");
-        sb.append("Kontrast: ").append(getKontrast()).append("\n");
-
-        return sb.toString();
+        return "ChannelInfo: " + getColorChannel() + "\n"
+                + "Minimaler Farbwert: " + getMinimalerFarbwert() + "\n"
+                + "Maximaler Farbwert: " + getMaximalerFarbwert() + "\n"
+                + "Mittlerer Farbwert: " + getMittlererFarbwert() + "\n"
+                + "Entropie: " + getEntropie() + "\n"
+                + "Uniformität: " + getUniformitaet() + "\n"
+                + "Unähnlichkeit: " + getUnaehnlichkeit() + "\n"
+                + "Inverse Differenz: " + getInverseDifferenz() + "\n"
+                + "Inverses Differenz Moment: " + getInversesDifferenzMoment() + "\n"
+                + "Kontrast: " + getKontrast() + "\n";
     }
 
     /**

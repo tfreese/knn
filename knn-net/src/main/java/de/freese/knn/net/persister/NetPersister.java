@@ -1,4 +1,3 @@
-// Created: 11.06.2008
 package de.freese.knn.net.persister;
 
 import de.freese.knn.net.NeuralNet;
@@ -10,6 +9,7 @@ import de.freese.knn.net.NeuralNet;
  * @param <OUT> Output-Type
  *
  * @author Thomas Freese
+ * @since 11.06.2008
  */
 public interface NetPersister<IN, OUT> {
     NeuralNet load(IN input) throws Exception;

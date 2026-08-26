@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net.layer;
 
 import java.util.Objects;
@@ -14,6 +13,7 @@ import de.freese.knn.net.neuron.NeuronList;
  * Basisklasse eines Layers.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public abstract class AbstractLayer implements Layer {
     private final Function function;
@@ -28,11 +28,11 @@ public abstract class AbstractLayer implements Layer {
     }
 
     protected AbstractLayer(final int size, final Function function, final BiFunction<Layer, Integer, Neuron> neuronSupplier) {
-        super();
-
         if (size <= 0) {
             throw new IllegalArgumentException("size <= 0: " + size);
         }
+
+        super();
 
         this.size = size;
         this.function = Objects.requireNonNull(function, "function required");

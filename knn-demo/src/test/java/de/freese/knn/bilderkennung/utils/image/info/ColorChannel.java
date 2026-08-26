@@ -1,4 +1,3 @@
-// Created: 02.08.2009
 package de.freese.knn.bilderkennung.utils.image.info;
 
 import java.awt.Color;
@@ -7,6 +6,7 @@ import java.awt.Color;
  * Enums für verschiedene Farbkanäle.
  *
  * @author Thomas Freese
+ * @since 02.08.2009
  */
 public enum ColorChannel {
     ALPHA(24, Color.GRAY),

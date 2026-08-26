@@ -1,4 +1,3 @@
-// Created: 11.06.2008
 package de.freese.knn;
 
 import java.util.Arrays;
@@ -27,6 +26,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * Klasse zum Test des BinaryPersisters.
  *
  * @author Thomas Freese
+ * @since 11.06.2008
  */
 public class TestMailSpamFilter implements TrainingInputSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMailSpamFilter.class);
@@ -58,7 +58,7 @@ public class TestMailSpamFilter implements TrainingInputSource {
             neuralNet.close();
         }
         finally {
-            if (dataSource instanceof AutoCloseable ds) {
+            if (dataSource instanceof final AutoCloseable ds) {
                 ds.close();
             }
             // else if (dataSource instanceof JDBCPool p) {
@@ -67,7 +67,7 @@ public class TestMailSpamFilter implements TrainingInputSource {
             // else if (dataSource instanceof JdbcConnectionPool p) {
             //     p.dispose();
             // }
-            else if (dataSource instanceof DisposableBean db) {
+            else if (dataSource instanceof final DisposableBean db) {
                 db.destroy();
             }
         }

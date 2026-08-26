@@ -1,4 +1,3 @@
-// Created: 12.06.2011
 package de.freese.knn.bilderkennung;
 
 import javax.swing.ImageIcon;
@@ -12,6 +11,7 @@ import de.freese.knn.bilderkennung.utils.image.info.ImageInfo;
  * TestKlasse für {@link ImageInfo}.
  *
  * @author Thomas Freese
+ * @since 12.06.2011
  */
 public final class TestImageInfo {
     static void main() throws Exception {

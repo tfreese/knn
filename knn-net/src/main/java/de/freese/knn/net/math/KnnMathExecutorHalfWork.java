@@ -1,4 +1,3 @@
-// Created: 02.10.2011
 package de.freese.knn.net.math;
 
 import java.util.Arrays;
@@ -20,6 +19,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Hier wird jedoch die Hälfte der Arbeit im aktuellen Thread verarbeitet.
  *
  * @author Thomas Freese
+ * @since 02.10.2011
  */
 public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
     private final ExecutorService executorService;
@@ -126,13 +126,13 @@ public final class KnnMathExecutorHalfWork extends AbstractKnnMath {
         try {
             future.get();
         }
-        catch (InterruptedException ex) {
+        catch (final InterruptedException ex) {
             getLogger().error(ex.getMessage(), ex);
 
             // Restore interrupted state.
             Thread.currentThread().interrupt();
         }
-        catch (ExecutionException ex) {
+        catch (final ExecutionException ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }

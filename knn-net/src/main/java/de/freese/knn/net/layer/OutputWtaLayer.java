@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net.layer;
 
 import java.util.Arrays;
@@ -11,6 +10,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Das Neuron mit dem höchsten Ausgabewert erhält den Wert 1, alle anderen 0.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public class OutputWtaLayer extends OutputLayer {
     public OutputWtaLayer(final int size) {

@@ -1,4 +1,3 @@
-// Created: 04.04.2012
 package de.freese.knn.net.math.forkjoin;
 
 import java.io.Serial;
@@ -12,6 +11,7 @@ import de.freese.knn.net.matrix.ValueInitializer;
  * Initialisiert die BIAS-Gewichte der Neuronen eines Layers.
  *
  * @author Thomas Freese
+ * @since 04.04.2012
  */
 class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
 {
@@ -43,7 +43,7 @@ class ForkJoinInitializeTask extends RecursiveAction// RecursiveTask<double[]>
         if ((to - from) < 20) {
             final Layer[] l = Arrays.copyOfRange(layers, from, to);
 
-            for (Layer layer : l) {
+            for (final Layer layer : l) {
                 math.initialize(layer, valueInitializer);
             }
         }

@@ -1,10 +1,10 @@
-// Created: 06.06.2008
 package de.freese.knn.net.matrix;
 
 /**
  * Initialisiert die Werte mit einem festen Wert.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public class ValueInitializerConstant implements ValueInitializer {
     private final double weight;

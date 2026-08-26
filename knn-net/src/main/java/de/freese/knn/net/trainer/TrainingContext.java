@@ -1,4 +1,3 @@
-// Created: 27.05.2011
 package de.freese.knn.net.trainer;
 
 import java.util.HashMap;
@@ -10,6 +9,7 @@ import de.freese.knn.net.matrix.Matrix;
  * Enthält Daten des Netzes für den kompletten Trainingslauf.
  *
  * @author Thomas Freese
+ * @since 27.05.2011
  */
 public class TrainingContext {
     private Map<Matrix, double[][]> deltaWeights = new HashMap<>();

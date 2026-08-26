@@ -1,4 +1,3 @@
-// Created: 02.08.2009
 package de.freese.knn.bilderkennung.utils.image.info;
 
 import java.awt.Graphics2D;
@@ -14,6 +13,7 @@ import javax.imageio.ImageIO;
  * Klasse für Bildinformationen.
  *
  * @author Thomas Freese
+ * @since 02.08.2009
  */
 public class ImageInfo {
     private final List<ImageColorChannelInfo> channelInfos = new ArrayList<>();
@@ -47,7 +47,7 @@ public class ImageInfo {
         if (coOccurrenceMatrixImage == null) {
             coOccurrenceMatrixImage = new BufferedImage(510, 510, BufferedImage.TYPE_INT_RGB);
 
-            for (ImageColorChannelInfo channelInfo : channelInfos) {
+            for (final ImageColorChannelInfo channelInfo : channelInfos) {
                 final ColorChannel colorChannel = channelInfo.getColorChannel();
 
                 int xOffset = 0;
@@ -106,12 +106,9 @@ public class ImageInfo {
             // final ImageColorChannelInfo channelInfo = channelInfos.get(1);
             // int[][] matrix = channelInfo.getCoOccurrenceMatrix();
             //
-            // for (int x = 0; x < 255; x++)
-            // {
-            // for (int y = 0; y < 255; y++)
-            // {
-            // if (matrix[x][y] > 0)
-            // {
+            // for (int x = 0; x < 255; x++) {
+            // for (int y = 0; y < 255; y++) {
+            // if (matrix[x][y] > 0) {
             // outputVector[i] = 1;
             // }
             //
@@ -119,7 +116,7 @@ public class ImageInfo {
             // }
             // }
 
-            for (ImageColorChannelInfo channelInfo : channelInfos) {
+            for (final ImageColorChannelInfo channelInfo : channelInfos) {
                 infoVector[i++] = channelInfo.getMinimalerFarbwert();
                 infoVector[i++] = channelInfo.getMaximalerFarbwert();
                 infoVector[i++] = channelInfo.getMittlererFarbwert();
@@ -190,7 +187,7 @@ public class ImageInfo {
     public String toString() {
         final StringBuilder sb = new StringBuilder();
 
-        for (ImageColorChannelInfo channelInfo : channelInfos) {
+        for (final ImageColorChannelInfo channelInfo : channelInfos) {
             sb.append(channelInfo.toString());
             sb.append("\n");
         }

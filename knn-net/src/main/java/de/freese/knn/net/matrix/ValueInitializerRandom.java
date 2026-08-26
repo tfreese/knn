@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net.matrix;
 
 import java.security.SecureRandom;
@@ -8,6 +7,7 @@ import java.util.Random;
  * Initialisiert die Werte mit Zufallszahlen.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public class ValueInitializerRandom implements ValueInitializer {
     private final double lowerLimit;

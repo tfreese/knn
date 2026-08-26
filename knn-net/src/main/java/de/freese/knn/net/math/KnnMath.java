@@ -1,4 +1,3 @@
-// Created: 04.04.2012
 package de.freese.knn.net.math;
 
 import de.freese.knn.net.layer.Layer;
@@ -8,6 +7,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
 
 /**
  * @author Thomas Freese
+ * @since 04.04.2012
  */
 public interface KnnMath {
     /**

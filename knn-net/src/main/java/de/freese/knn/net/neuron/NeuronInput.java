@@ -1,4 +1,3 @@
-// Created: 17.07.2011
 package de.freese.knn.net.neuron;
 
 import de.freese.knn.net.layer.InputLayer;
@@ -9,6 +8,7 @@ import de.freese.knn.net.layer.Layer;
  * InputNeuronen haben keine BIAS Werte.
  *
  * @author Thomas Freese
+ * @since 17.07.2011
  */
 public class NeuronInput extends NeuronImpl {
     public NeuronInput(final Layer layer, final int layerIndex) {

@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net.trainer;
 
 import java.io.Serial;
@@ -8,6 +7,7 @@ import java.util.EventObject;
  * Event, wenn ein Lernzyklus beendet ist.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public class NetTrainerCycleEndedEvent extends EventObject {
     @Serial
@@ -57,12 +57,9 @@ public class NetTrainerCycleEndedEvent extends EventObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("Iteration = ").append(getIteration());
-        sb.append(", Lernrate = ").append(getTeachFactor());
-        sb.append(", Momentum = ").append(getMomentum());
-        sb.append(", Netzfehler = ").append(String.format("%7.3f %%", getError() * 100));
-
-        return sb.toString();
+        return "Iteration = " + getIteration()
+                + ", Lernrate = " + getTeachFactor()
+                + ", Momentum = " + getMomentum()
+                + ", Netzfehler = " + String.format("%7.3f %%", getError() * 100);
     }
 }

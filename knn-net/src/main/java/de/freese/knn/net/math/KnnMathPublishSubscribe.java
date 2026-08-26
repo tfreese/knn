@@ -1,4 +1,3 @@
-// Created: 02.10.2011
 package de.freese.knn.net.math;
 
 import java.util.List;
@@ -22,6 +21,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Mathematik des {@link NeuralNet} mit dem {@link Flow}-Framework.
  *
  * @author Thomas Freese
+ * @since 02.10.2011
  */
 public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     // /**
@@ -121,7 +121,7 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         final CountDownLatch latch = new CountDownLatch(layers.length);
 
-        for (Layer layer : layers) {
+        for (final Layer layer : layers) {
             // InitializeTask task = new InitializeTask(latch, valueInitializer, layer);
             // executorService.execute(task);
             getExecutor().execute(() -> {
@@ -163,13 +163,13 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
         try {
             future.get();
         }
-        catch (InterruptedException ex) {
+        catch (final InterruptedException ex) {
             getLogger().error(ex.getMessage(), ex);
 
             // Restore interrupted state.
             Thread.currentThread().interrupt();
         }
-        catch (ExecutionException ex) {
+        catch (final ExecutionException ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }
@@ -181,16 +181,16 @@ public final class KnnMathPublishSubscribe extends AbstractKnnMath {
         try {
             latch.await();
         }
-        catch (RuntimeException rex) {
+        catch (final RuntimeException rex) {
             throw rex;
         }
-        catch (InterruptedException ex) {
+        catch (final InterruptedException ex) {
             getLogger().error(ex.getMessage(), ex);
 
             // Restore interrupted state.
             Thread.currentThread().interrupt();
         }
-        catch (Throwable th) {
+        catch (final Throwable th) {
             throw new RuntimeException(th);
         }
     }

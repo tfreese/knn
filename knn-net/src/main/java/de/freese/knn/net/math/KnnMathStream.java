@@ -1,4 +1,3 @@
-// Created: 23.05.2016
 package de.freese.knn.net.math;
 
 import java.util.Arrays;
@@ -15,6 +14,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Mathematik des {@link NeuralNet} mit parallelen {@link Stream}s.
  *
  * @author Thomas Freese
+ * @since 23.05.2016
  */
 public final class KnnMathStream extends AbstractKnnMath {
     public KnnMathStream() {

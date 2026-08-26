@@ -1,4 +1,3 @@
-// Created: 12.06.2011
 package de.freese.knn.net.visitor;
 
 import de.freese.knn.net.NeuralNet;
@@ -13,6 +12,7 @@ import de.freese.knn.net.trainer.TrainingContext;
  * Durchläuft rückwärts das Netz und berechnet die Fehler der Layer.
  *
  * @author Thomas Freese
+ * @since 12.06.2011
  */
 public class BackwardVisitor extends AbstractKnnVisitor {
     private final ForwardVisitor forwardVisitor;

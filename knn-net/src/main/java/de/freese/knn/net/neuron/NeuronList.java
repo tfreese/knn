@@ -1,4 +1,3 @@
-// Created: 17.09.2016
 package de.freese.knn.net.neuron;
 
 import java.util.Arrays;
@@ -8,12 +7,15 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.jspecify.annotations.NonNull;
+
 import de.freese.knn.net.layer.Layer;
 
 /**
  * Liste der Neuronen eines {@link Layer}.
  *
  * @author Thomas Freese
+ * @since 17.09.2016
  */
 public class NeuronList implements Iterable<Neuron> {
     /**
@@ -71,7 +73,7 @@ public class NeuronList implements Iterable<Neuron> {
     }
 
     @Override
-    public Iterator<Neuron> iterator() {
+    public @NonNull Iterator<Neuron> iterator() {
         return new NeuronIterator();
     }
 

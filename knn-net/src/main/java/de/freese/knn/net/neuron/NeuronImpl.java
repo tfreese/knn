@@ -1,4 +1,3 @@
-// Created: 17.07.2011
 package de.freese.knn.net.neuron;
 
 import de.freese.knn.net.function.Function;
@@ -11,6 +10,7 @@ import de.freese.knn.net.matrix.Matrix;
  * Default-Neuron des Netzes.
  *
  * @author Thomas Freese
+ * @since 17.07.2011
  */
 public class NeuronImpl implements Neuron {
     private final Layer layer;
@@ -108,17 +108,14 @@ public class NeuronImpl implements Neuron {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("Neuron: ");
-        sb.append("layerIndex=").append(layerIndex);
-        sb.append("/").append(layer.getSize() - 1);
-
-        return sb.toString();
+        return "Neuron: "
+                + "layerIndex=" + layerIndex
+                + "/" + (layer.getSize() - 1);
     }
 
     /**
      * Liefert die Eingangsmatrix des Layers.<br>
-     * Der {@link InputLayer} hat keine Eingangsmatrix !
+     * Der {@link InputLayer} hat keine Eingangsmatrix!
      */
     protected Matrix getInputMatrix() {
         return layer.getInputMatrix();
@@ -126,7 +123,7 @@ public class NeuronImpl implements Neuron {
 
     /**
      * Liefert die Ausgangsmatrix des Layers.<br>
-     * Der {@link OutputLayer} hat keine Ausgangsmatrix !
+     * Der {@link OutputLayer} hat keine Ausgangsmatrix!
      */
     protected Matrix getOutputMatrix() {
         return layer.getOutputMatrix();

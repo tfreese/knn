@@ -1,4 +1,3 @@
-// Created: 23.05.2016
 package de.freese.knn.net.math;
 
 import java.util.concurrent.Executors;
@@ -18,6 +17,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Mathematik des {@link NeuralNet} mit dem Reactor-Framework.
  *
  * @author Thomas Freese
+ * @since 23.05.2016
  */
 public final class KnnMathReactor extends AbstractKnnMath {
     private final Scheduler scheduler;

@@ -1,14 +1,14 @@
-// Created: 11.06.2008
 package de.freese.knn.net.trainer;
 
 /**
  * Basisklasse des {@link NetTrainerListener}.
  *
  * @author Thomas Freese
+ * @since 11.06.2008
  */
 public abstract class AbstractNetTrainerListener implements NetTrainerListener {
     /**
-     * Welches wievielte Event soll geloggt werden ?
+     * Welches wievielte Event soll geloggt werden?
      */
     private final int logModulo;
 
@@ -17,7 +17,7 @@ public abstract class AbstractNetTrainerListener implements NetTrainerListener {
     }
 
     /**
-     * @param logModulo int Welches wievielte Event soll geloggt werden ?
+     * @param logModulo int Welches wievielte Event soll geloggt werden?
      */
     protected AbstractNetTrainerListener(final int logModulo) {
         super();
@@ -26,7 +26,7 @@ public abstract class AbstractNetTrainerListener implements NetTrainerListener {
     }
 
     /**
-     * Welches wievielte Event soll geloggt werden ?
+     * Welches wievielte Event soll geloggt werden?
      */
     protected int getLogModulo() {
         return logModulo;

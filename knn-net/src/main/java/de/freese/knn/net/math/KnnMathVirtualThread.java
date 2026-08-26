@@ -1,4 +1,3 @@
-// Created: 23.05.2016
 package de.freese.knn.net.math;
 
 import java.util.concurrent.ExecutorService;
@@ -15,6 +14,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Mathematik des {@link NeuralNet} mit virtuellen Threads.
  *
  * @author Thomas Freese
+ * @since 23.05.2016
  */
 public final class KnnMathVirtualThread extends AbstractKnnMath {
     private final ThreadFactory threadFactory;
@@ -52,7 +52,7 @@ public final class KnnMathVirtualThread extends AbstractKnnMath {
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         try (ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory)) {
-            for (Layer layer : layers) {
+            for (final Layer layer : layers) {
                 executorService.execute(() -> initialize(layer, valueInitializer));
             }
         }

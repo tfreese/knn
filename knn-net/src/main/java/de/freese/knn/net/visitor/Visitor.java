@@ -10,7 +10,7 @@ public interface Visitor {
             return;
         }
 
-        for (T object : array) {
+        for (final T object : array) {
             visitObject(object);
         }
     }
@@ -20,7 +20,7 @@ public interface Visitor {
             return;
         }
 
-        for (Object object : iterable) {
+        for (final Object object : iterable) {
             visitObject(object);
         }
     }

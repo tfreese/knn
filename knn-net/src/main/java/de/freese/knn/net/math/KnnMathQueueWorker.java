@@ -1,4 +1,3 @@
-// Created: 02.10.2011
 package de.freese.knn.net.math;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Mathematik des {@link NeuralNet} mit QueueWorkers.
  *
  * @author Thomas Freese
+ * @since 02.10.2011
  */
 public final class KnnMathQueueWorker extends AbstractKnnMath {
     /**
@@ -55,13 +55,13 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
 
                     runnable.run();
                 }
-                catch (InterruptedException ex) {
+                catch (final InterruptedException ex) {
                     LOGGER.error(ex.getMessage(), ex);
 
                     // Restore interrupted state.
                     Thread.currentThread().interrupt();
                 }
-                catch (Exception ex) {
+                catch (final Exception ex) {
                     LOGGER.error(ex.getMessage(), ex);
                 }
             }
@@ -101,7 +101,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         final List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             final RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> backward(neuron, errors, layerErrors)), null);
 
             futures.add(future);
@@ -129,7 +129,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
         final List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             final RunnableFuture<Void> future = new FutureTask<>(() -> partition.forEach(neuron -> forward(neuron, inputs, outputs)), null);
 
             futures.add(future);
@@ -145,7 +145,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
         final List<RunnableFuture<Void>> futures = new ArrayList<>(layers.length);
 
-        for (Layer layer : layers) {
+        for (final Layer layer : layers) {
             final RunnableFuture<Void> future = new FutureTask<>(() -> initialize(layer, valueInitializer), null);
 
             futures.add(future);
@@ -164,7 +164,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
         final List<RunnableFuture<Void>> futures = new ArrayList<>(partitions.size());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             final Runnable runnable = () -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors));
             final RunnableFuture<Void> future = new FutureTask<>(runnable, null);
 
@@ -186,13 +186,13 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
         try {
             future.get();
         }
-        catch (InterruptedException ex) {
+        catch (final InterruptedException ex) {
             getLogger().error(ex.getMessage(), ex);
 
             // Restore interrupted state.
             Thread.currentThread().interrupt();
         }
-        catch (ExecutionException ex) {
+        catch (final ExecutionException ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }
@@ -201,7 +201,7 @@ public final class KnnMathQueueWorker extends AbstractKnnMath {
      * Warten bis alle Tasks fertig sind.
      */
     private void waitForFutures(final List<? extends Future<Void>> futures) {
-        for (Future<Void> future : futures) {
+        for (final Future<Void> future : futures) {
             waitForFuture(future);
         }
     }

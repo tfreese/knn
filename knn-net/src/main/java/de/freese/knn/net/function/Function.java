@@ -1,4 +1,3 @@
-// Created: 16.04.2008
 package de.freese.knn.net.function;
 
 import java.util.function.UnaryOperator;
@@ -7,6 +6,7 @@ import java.util.function.UnaryOperator;
  * Interface einer Funktion zum Verrechnen der Eingangswerte von Neuronen.
  *
  * @author Thomas Freese
+ * @since 16.04.2008
  */
 @FunctionalInterface
 public interface Function extends UnaryOperator<Double> {

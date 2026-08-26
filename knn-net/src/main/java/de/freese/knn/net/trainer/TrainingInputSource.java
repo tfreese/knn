@@ -1,10 +1,10 @@
-// Created: 06.06.2008
 package de.freese.knn.net.trainer;
 
 /**
  * Interface um Trainingsdaten für den {@link NetTrainer} zu liefern.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public interface TrainingInputSource {
     /**

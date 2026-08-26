@@ -1,4 +1,3 @@
-// Created: 05.11.2020
 package de.freese.knn.net.math.disruptor;
 
 import java.util.List;
@@ -22,6 +21,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Jeder Handler verarbeitet eine SubList der Neuronen.
  *
  * @author Thomas Freese
+ * @since 05.11.2020
  */
 public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     // /**
@@ -54,14 +54,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
     /**
      * @author Thomas Freese
      */
-    private static final class MathHandler implements EventHandler<MathEvent> {
-        private final int ordinal;
-
-        MathHandler(final int ordinal) {
-            super();
-
-            this.ordinal = ordinal;
-        }
+    private record MathHandler(int ordinal) implements EventHandler<MathEvent> {
 
         @Override
         public void onEvent(final MathEvent event, final long sequence, final boolean endOfBatch) {
@@ -79,8 +72,6 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
      * @param parallelism int; must be a power of 2
      */
     public KnnMathDisruptorPerPartition(final int parallelism) {
-        super(parallelism);
-
         // bufferSize must be a power of 2
         // 32 << 4 = 512<br>
         // 24 << 4 = 256<br>
@@ -93,6 +84,8 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         if (Integer.bitCount(ringBufferSize) != 1) {
             throw new IllegalArgumentException("bufferSize must be a power of 2");
         }
+
+        super(parallelism);
 
         disruptor = new Disruptor<>(() -> new MathEvent(parallelism), ringBufferSize, new NamedThreadFactory("knn-disruptor-%d"));
 
@@ -136,9 +129,9 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         // disruptor.halt();
 
         try {
-            disruptor.shutdown(5, TimeUnit.SECONDS);
+            disruptor.shutdown(5L, TimeUnit.SECONDS);
         }
-        catch (Exception ex) {
+        catch (final Exception ex) {
             getLogger().error(ex.getMessage(), ex);
         }
     }
@@ -168,7 +161,7 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        for (Layer layer : layers) {
+        for (final Layer layer : layers) {
             initialize(layer, valueInitializer);
         }
     }
@@ -223,16 +216,16 @@ public class KnnMathDisruptorPerPartition extends AbstractKnnMath {
         try {
             latch.await();
         }
-        catch (RuntimeException rex) {
+        catch (final RuntimeException rex) {
             throw rex;
         }
-        catch (InterruptedException ex) {
+        catch (final InterruptedException ex) {
             getLogger().error(ex.getMessage(), ex);
 
             // Restore interrupted state.
             Thread.currentThread().interrupt();
         }
-        catch (Throwable th) {
+        catch (final Throwable th) {
             throw new RuntimeException(th);
         }
     }

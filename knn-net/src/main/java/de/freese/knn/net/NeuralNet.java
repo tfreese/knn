@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net;
 
 import org.slf4j.Logger;
@@ -12,6 +11,7 @@ import de.freese.knn.net.visitor.Visitable;
  * Interface des neuralen Netzes.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public interface NeuralNet extends Visitable {
     Logger LOGGER = LoggerFactory.getLogger(NeuralNet.class);

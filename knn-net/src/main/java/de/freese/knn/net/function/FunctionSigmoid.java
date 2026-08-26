@@ -1,48 +1,37 @@
-// Created: 16.04.2008
 package de.freese.knn.net.function;
 
 /**
  * Verrechnen der Eingangswerte durch die Sigmoid/Sprung/Treppen Funktion.
  *
+ * @param durchgang X-Durchgang für y = 0.5
+ * @param steigung Steigung -> 0 Treppenfunktion
+ *
  * @author Thomas Freese
+ * @since 16.04.2008
  */
-public class FunctionSigmoid implements Function {
-    /**
-     * X-Durchgang für y = 0.5
-     */
-    private final double durchgang;
-    /**
-     * Steigung -> 0 Treppenfunktion
-     */
-    private final double steigung;
-
+public record FunctionSigmoid(double durchgang, double steigung) implements Function {
     public FunctionSigmoid() {
         this(0.0D, 1.0D);
     }
 
-    public FunctionSigmoid(final double durchgang, final double steigung) {
-        super();
-
-        this.durchgang = durchgang;
-        this.steigung = steigung;
-    }
-
     @Override
     public double calculate(final double value) {
-        return 1.0D / (1.0D + Math.exp(-((value - getDurchgang()) / getSteigung())));
+        return 1.0D / (1.0D + Math.exp(-((value - durchgang()) / steigung())));
     }
 
     /**
      * X-Durchgang für y = 0.5.
      */
-    public double getDurchgang() {
+    @Override
+    public double durchgang() {
         return durchgang;
     }
 
     /**
      * Steigung -> 0 Treppenfunktion.
      */
-    public double getSteigung() {
+    @Override
+    public double steigung() {
         return steigung;
     }
 }

@@ -1,4 +1,3 @@
-// Created: 17.07.2011
 package de.freese.knn.net.neuron;
 
 import de.freese.knn.net.function.Function;
@@ -9,6 +8,7 @@ import de.freese.knn.net.layer.OutputLayer;
  * Interface eines Neurons.
  *
  * @author Thomas Freese
+ * @since 17.07.2011
  */
 public interface Neuron {
     /**
@@ -28,7 +28,7 @@ public interface Neuron {
 
     /**
      * Liefert das Eingangsgewicht.<br>
-     * Der {@link InputLayer} hat keine Eingangsgewichte !
+     * Der {@link InputLayer} hat keine Eingangsgewichte!
      */
     double getInputWeight(int index);
 
@@ -44,25 +44,25 @@ public interface Neuron {
 
     /**
      * Liefert das Ausgangsgewicht.<br>
-     * Der {@link OutputLayer} hat keine Ausgangsgewichte !
+     * Der {@link OutputLayer} hat keine Ausgangsgewichte!
      */
     double getOutputWeight(int index);
 
     /**
      * Liefert den Bias Gewicht, um Überanpassungen zu vermeiden.<br>
-     * Der {@link InputLayer} hat keine BIAS Gewichte !
+     * Der {@link InputLayer} hat keine BIAS Gewichte!
      */
     void setInputBIAS(double value);
 
     /**
      * Setzt das Eingangsgewicht.<br>
-     * Der {@link InputLayer} hat keine Eingangsgewichte !
+     * Der {@link InputLayer} hat keine Eingangsgewichte!
      */
     void setInputWeight(int index, double weight);
 
     /**
      * Setzt das Ausgangsgewicht.<br>
-     * Der {@link OutputLayer} hat keine Ausgangsgewichte !
+     * Der {@link OutputLayer} hat keine Ausgangsgewichte!
      */
     void setOutputWeight(int index, double weight);
 }

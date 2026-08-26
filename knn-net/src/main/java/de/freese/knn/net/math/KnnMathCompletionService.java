@@ -1,4 +1,3 @@
-// Created: 02.10.2011
 package de.freese.knn.net.math;
 
 import java.util.List;
@@ -18,6 +17,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Mathematik des {@link NeuralNet} mit dem {@link CompletionService}.
  *
  * @author Thomas Freese
+ * @since 02.10.2011
  */
 public final class KnnMathCompletionService extends AbstractKnnMath {
     private final CompletionService<Void> completionService;
@@ -38,7 +38,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
 
         final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             getCompletionService().submit(() -> partition.forEach(neuron -> backward(neuron, errors, layerErrors)), null);
         }
 
@@ -60,7 +60,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
 
         final List<NeuronList> partitions = getPartitions(layer.getNeurons(), getParallelism());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             getCompletionService().submit(() -> partition.forEach(neuron -> forward(neuron, inputs, outputs)), null);
         }
 
@@ -71,7 +71,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
 
     @Override
     public void initialize(final ValueInitializer valueInitializer, final Layer[] layers) {
-        for (Layer layer : layers) {
+        for (final Layer layer : layers) {
             getCompletionService().submit(() -> initialize(layer, valueInitializer), null);
         }
 
@@ -86,7 +86,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
 
         final List<NeuronList> partitions = getPartitions(leftLayer.getNeurons(), getParallelism());
 
-        for (NeuronList partition : partitions) {
+        for (final NeuronList partition : partitions) {
             getCompletionService().submit(() -> partition.forEach(neuron -> refreshLayerWeights(neuron, teachFactor, momentum, leftOutputs, deltaWeights, rightErrors)), null);
         }
 
@@ -101,7 +101,7 @@ public final class KnnMathCompletionService extends AbstractKnnMath {
             try {
                 completionService.take();
             }
-            catch (InterruptedException ex) {
+            catch (final InterruptedException ex) {
                 getLogger().error(ex.getMessage(), ex);
 
                 // Restore interrupted state.

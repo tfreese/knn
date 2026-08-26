@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.net.layer;
 
 import de.freese.knn.net.function.FunctionSigmoid;
@@ -8,6 +7,7 @@ import de.freese.knn.net.visitor.ForwardVisitor;
  * Ausgangslayer.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public class OutputLayer extends AbstractLayer {
     public OutputLayer(final int size) {

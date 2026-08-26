@@ -1,4 +1,3 @@
-// Created: 06.06.2008
 package de.freese.knn.buttons;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import de.freese.knn.net.trainer.TrainingInputSource;
  * Erstellt TestTrainingsDaten für das {@link KnnButtonPanel}.
  *
  * @author Thomas Freese
+ * @since 06.06.2008
  */
 public class KnnButtonTrainingInputSource implements TrainingInputSource {
     private final List<double[]> inputList = new ArrayList<>();
